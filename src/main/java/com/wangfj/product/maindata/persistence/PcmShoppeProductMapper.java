@@ -222,8 +222,6 @@ public interface PcmShoppeProductMapper extends BaseMapper<PcmShoppeProduct> {
 
 	Map<String, Object> getProAndBrandSidByCode(Map<String, Object> map);
 
-	String getCateCodeByProCode(Map<String, Object> map);
-
 	/**
 	 * 根据门店品牌sid查询改门店品牌下的专柜商品的数量
 	 *
@@ -345,7 +343,6 @@ public interface PcmShoppeProductMapper extends BaseMapper<PcmShoppeProduct> {
 	 * @return Integer
 	 */
 	Integer getShoProCountFormPcmToPis1(Map<String, Object> para);
-
 
 	/**
 	 * 按条件查询专柜商品基本信息及统计分类

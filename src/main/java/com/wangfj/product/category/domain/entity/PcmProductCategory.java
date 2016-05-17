@@ -15,7 +15,7 @@ public class PcmProductCategory {
 	/**
 	 * 产品SID(外键)
 	 */
-	private String productSid;
+	private Long productSid;
 
 	/**
 	 * 渠道SID(外键)
@@ -45,11 +45,11 @@ public class PcmProductCategory {
 		this.sid = sid;
 	}
 
-	public String getProductSid() {
+	public Long getProductSid() {
 		return productSid;
 	}
 
-	public void setProductSid(String productSid) {
+	public void setProductSid(Long productSid) {
 		this.productSid = productSid;
 	}
 

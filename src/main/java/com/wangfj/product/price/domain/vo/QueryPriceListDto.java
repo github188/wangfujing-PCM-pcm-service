@@ -15,7 +15,12 @@ public class QueryPriceListDto {
 	/**
 	 * 专柜商品sid
 	 */
-	private List<String> shoppeProSids=new ArrayList<String>();
+	private List<String> shoppeProSids = new ArrayList<String>();
+
+	/**
+	 * 门店编号
+	 */
+	private String storeCode;
 
 	public List<String> getShoppeProSids() {
 		return shoppeProSids;
@@ -25,9 +30,18 @@ public class QueryPriceListDto {
 		this.shoppeProSids = shoppeProSids;
 	}
 
+	public String getStoreCode() {
+		return storeCode;
+	}
+
+	public void setStoreCode(String storeCode) {
+		this.storeCode = storeCode;
+	}
+
 	@Override
 	public String toString() {
-		return "QueryPriceListDto [shoppeProSids=" + shoppeProSids + "]";
+		return "QueryPriceListDto [shoppeProSids=" + shoppeProSids + ", storeCode=" + storeCode
+				+ "]";
 	}
 
 }

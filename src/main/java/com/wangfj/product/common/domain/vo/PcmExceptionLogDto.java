@@ -12,6 +12,11 @@ public class PcmExceptionLogDto {
 	private String exceptionType;
 
 	/**
+	 * 异常编码
+	 */
+	private String errorCode;
+
+	/**
 	 * 异常信息
 	 */
 	private String errorMessage;
@@ -69,11 +74,23 @@ public class PcmExceptionLogDto {
 		this.uuid = uuid;
 	}
 
-	@Override
-	public String toString() {
-		return "PcmExceptionLogDto [interfaceName=" + interfaceName + ", exceptionType="
-				+ exceptionType + ", errorMessage=" + errorMessage + ", dataContent=" + dataContent
-				+ ", uuid=" + uuid + "]";
+	public String getErrorCode() {
+		return errorCode;
 	}
 
+	public void setErrorCode(String errorCode) {
+		this.errorCode = errorCode;
+	}
+
+	@Override
+	public String toString() {
+		return "PcmExceptionLogDto{" +
+				"interfaceName='" + interfaceName + '\'' +
+				", exceptionType='" + exceptionType + '\'' +
+				", errorCode='" + errorCode + '\'' +
+				", errorMessage='" + errorMessage + '\'' +
+				", dataContent='" + dataContent + '\'' +
+				", uuid='" + uuid + '\'' +
+				'}';
+	}
 }

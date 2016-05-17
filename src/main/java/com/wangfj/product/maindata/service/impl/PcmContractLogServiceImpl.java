@@ -59,8 +59,9 @@ public class PcmContractLogServiceImpl implements IPcmContractLogService {
 	private IPcmExceptionLogService exceptionLogService;
 	@Autowired
 	PcmErpProductMapper erpMapper;
-//	@Autowired
-//	private PcmCategoryMapper categoryMapper;//分类
+
+	// @Autowired
+	// private PcmCategoryMapper categoryMapper;//分类
 
 	/**
 	 * 门店erp上传要约信息到合同表
@@ -91,19 +92,18 @@ public class PcmContractLogServiceImpl implements IPcmContractLogService {
 						ErrorCode.SUPPLYINFO_NULL.getMemo());
 			}
 			// 验证管理分类是否存在
-			/*if(StringUtils.isNotBlank(contractLogDto.getCol1())){//管理分类不为空的时候验证有效性
-				parasMap.clear();
-				parasMap.put("categoryCode", contractLogDto.getCol1());// 管理分类编码
-				parasMap.put("categoryType", Constants.MANAGECATEGORY);// 分类类型为 1 管理分类
-				parasMap.put("isLeaf", Constants.Y);// 是否为叶子节点
-				parasMap.put("status", Constants.Y);// 是否启用
-				List<PcmCategory> managecateList = categoryMapper.selectListByParam(parasMap);
-				if (managecateList == null || managecateList.size() != 1) {
-					logger.info("管理分类不存在");
-					throw new BleException(ErrorCode.CATEGORY_GL_NULL.getErrorCode(),
-							ErrorCode.CATEGORY_GL_NULL.getMemo());
-				}
-			}*/
+			/*
+			 * if(StringUtils.isNotBlank(contractLogDto.getCol1())){//
+			 * 管理分类不为空的时候验证有效性 parasMap.clear(); parasMap.put("categoryCode",
+			 * contractLogDto.getCol1());// 管理分类编码 parasMap.put("categoryType",
+			 * Constants.MANAGECATEGORY);// 分类类型为 1 管理分类 parasMap.put("isLeaf",
+			 * Constants.Y);// 是否为叶子节点 parasMap.put("status", Constants.Y);//
+			 * 是否启用 List<PcmCategory> managecateList =
+			 * categoryMapper.selectListByParam(parasMap); if (managecateList ==
+			 * null || managecateList.size() != 1) { logger.info("管理分类不存在");
+			 * throw new BleException(ErrorCode.CATEGORY_GL_NULL.getErrorCode(),
+			 * ErrorCode.CATEGORY_GL_NULL.getMemo()); } }
+			 */
 			if (contractLogDto.getFlag().equals(0)) {
 				PcmContractLog valid = new PcmContractLog();
 				valid.setContractCode(contractLog.getContractCode());
@@ -128,6 +128,8 @@ public class PcmContractLogServiceImpl implements IPcmContractLogService {
 				logger.info("要约信息上传失败：" + JsonUtil.getJSONString(contractLog));
 				PcmExceptionLogDto exceptionLogdto = new PcmExceptionLogDto();
 				exceptionLogdto.setInterfaceName("uploadContractLog");
+				exceptionLogdto.setErrorCode(ComErrorCodeConstants.ErrorCode.CONTRACT_UPLOAD_ERROR
+						.getErrorCode());
 				exceptionLogdto.setExceptionType(StatusCode.EXCEPTION_CONTRACT.getStatus());
 				exceptionLogdto
 						.setErrorMessage(ComErrorCodeConstants.ErrorCode.CONTRACT_UPLOAD_ERROR
@@ -180,12 +182,12 @@ public class PcmContractLogServiceImpl implements IPcmContractLogService {
 	public ContractInfoDto selectContractInfo(PcmContractLogDto dto) {
 		ContractInfoDto res = new ContractInfoDto();
 		PcmSupplyInfo supEntity = new PcmSupplyInfo();
-		if("2".equals(String.valueOf(dto.getBusinessType()))){//如果业态是电商
-			supEntity.setShopSid(dto.getStoreCode());//用门店+先销后采标识查供应商
-			supEntity.setZzxxhcFlag("Y");//先销后采
+		if ("2".equals(String.valueOf(dto.getBusinessType()))) {// 如果业态是电商
+			supEntity.setShopSid(dto.getStoreCode());// 用门店+先销后采标识查供应商
+			supEntity.setZzxxhcFlag("Y");// 先销后采
 			supEntity.setStatus("Y");
-			supEntity.setSupplyCode(dto.getSupplyCode());//供应商编码
-		}else {
+			supEntity.setSupplyCode(dto.getSupplyCode());// 供应商编码
+		} else {
 			supEntity.setShopSid(dto.getStoreCode());
 			supEntity.setSupplyCode(dto.getSupplyCode());
 			supEntity.setBusinessPattern(dto.getManageType());
@@ -266,11 +268,12 @@ public class PcmContractLogServiceImpl implements IPcmContractLogService {
 		if (pageSize != null && pageSize != 0) {
 			resultPage.setPageSize(pageSize);
 		}
-		Integer count = contractLogMapper.getContractLogCountFromPcmToSup(dto);//获取要约数量
+		Integer count = contractLogMapper.getContractLogCountFromPcmToSup(dto);// 获取要约数量
 		resultPage.setCount(count);
 		dto.setLimit(resultPage.getLimit());
 		dto.setStart(resultPage.getStart());
-		List<GetContractLogResultForSupDto> reusltList = contractLogMapper.getContractLogFromPcmToSup(dto);
+		List<GetContractLogResultForSupDto> reusltList = contractLogMapper
+				.getContractLogFromPcmToSup(dto);
 		resultPage.setList(reusltList);
 		logger.info("end GetContractLogFromPcmToSup(),result:" + resultPage.getList().size());
 		return resultPage;
@@ -280,10 +283,9 @@ public class PcmContractLogServiceImpl implements IPcmContractLogService {
 	 * 供应商根据时间段信息获取要约数量
 	 */
 	@Override
-	public Integer getContractLogFromPcmToSupByTime(ContractLogFromPcmToSupDto paraDto){
+	public Integer getContractLogFromPcmToSupByTime(ContractLogFromPcmToSupDto paraDto) {
 		Integer count = contractLogMapper.getContractLogCountFromPcmToSupByTime(paraDto);
 		return count;
 	}
 
-	
 }

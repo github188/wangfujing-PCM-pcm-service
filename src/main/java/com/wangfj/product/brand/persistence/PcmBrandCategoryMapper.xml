@@ -33,6 +33,10 @@
 		JOIN pcm_brand AS brand ON spu.brand_root_sid = brand.sid
 		JOIN pcm_product_category AS ppc ON spu.sid = ppc.product_sid
 		JOIN pcm_category AS cate ON ppc.category_sid = cate.sid
+		AND cate.category_type = 0
+		AND cate.`status` = 'Y'
+		AND cate.is_leaf = 'Y'
+		AND cate.is_display = 1
 		LEFT JOIN pcm_brand_category AS pbc ON cate.sid = pbc.category_sid
 		AND brand.sid = pbc.brand_sid
 		<where>

@@ -84,8 +84,8 @@ public class MqUtil {
 		pcmMq.setUrl(mqDTO.getUrl());
 		pcmMq.setDesturl(mqDTO.getDestUrl());
 		pcmMq.setCallbackurl(mqDTO.getCallbackUrl());
-		// pcmMq.setData(JsonUtil.getJSONString(mqDTO.getData()));
-		// pcmMq.setData(json);
+		pcmMq.setData(JsonUtil.getJSONString(mqDTO.getData()));
+		pcmMq.setData(json);
 		pcmMq.setServiceid(mqDTO.getServiceID());
 		pcmMq.setSourcesysid(mqDTO.getSourceSysID());
 		pcmMq.setCount(Integer.valueOf(mqDTO.getCount()));

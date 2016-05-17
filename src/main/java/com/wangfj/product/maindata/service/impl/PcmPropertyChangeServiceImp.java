@@ -284,7 +284,7 @@ public class PcmPropertyChangeServiceImp implements IPcmPropertyChangeService {
 					PcmProductCategory ppc = new PcmProductCategory();
 
 					ppc.setCategorySid(pcmProductCategoryDto.getCategorySid());// 分类id
-					ppc.setProductSid(productNew.getSid().toString());// SPU产品表sid
+					ppc.setProductSid(productNew.getSid());// SPU产品表sid
 					ppc.setChannelSid(pcmProductCategoryDto.getChannelSid());
 					ppc.setOptUser(changeProductDto.getActionPerson());// 操作人
 					ppc.setOptDate(new Date());// 时间

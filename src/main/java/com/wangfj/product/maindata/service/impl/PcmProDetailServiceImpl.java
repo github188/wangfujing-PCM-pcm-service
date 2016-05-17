@@ -368,7 +368,7 @@ public class PcmProDetailServiceImpl implements IPcmProDetailService {
 		}
 		// 删除之前的品类关联
 		PcmProductCategory ppc = new PcmProductCategory();
-		ppc.setProductSid(pp.getSid().toString());
+		ppc.setProductSid(pp.getSid());
 		productCategoryMapper.deleteZSCateByRecord(ppc);
 		// 关联展示分类
 		for (CategoryDto cate : dto.getChannelCategory()) {
@@ -379,7 +379,7 @@ public class PcmProDetailServiceImpl implements IPcmProDetailService {
 			}
 			PcmProductCategory ppc1 = new PcmProductCategory();
 			ppc1.setCategorySid(cateEntity.getSid());// 统计分类
-			ppc1.setProductSid(pp.getSid().toString());// SPU产品表sid
+			ppc1.setProductSid(pp.getSid());// SPU产品表sid
 			ppc1.setChannelSid(cateEntity.getChannelSid());
 			// ppcTJ.setOptUser("拍照");// 操作人
 			ppc1.setOptDate(new Date());// 时间
@@ -1424,7 +1424,7 @@ public class PcmProDetailServiceImpl implements IPcmProDetailService {
 		pp.setSid(list.get(0).getProductSid());
 		// 删除之前的品类关联
 		PcmProductCategory ppc = new PcmProductCategory();
-		ppc.setProductSid(pp.getSid().toString());
+		ppc.setProductSid(pp.getSid());
 		productCategoryMapper.deleteZSCateByRecord(ppc);
 		PcmProductParameters ppp_1 = new PcmProductParameters();
 		ppp_1.setProductSid(Long.valueOf(pp.getSid()));
@@ -1439,7 +1439,7 @@ public class PcmProDetailServiceImpl implements IPcmProDetailService {
 			}
 			PcmProductCategory ppc1 = new PcmProductCategory();
 			ppc1.setCategorySid(cateEntity.getSid());// 统计分类
-			ppc1.setProductSid(pp.getSid().toString());// SPU产品表sid
+			ppc1.setProductSid(pp.getSid());// SPU产品表sid
 			ppc1.setChannelSid(cateEntity.getChannelSid());
 			// ppcTJ.setOptUser("拍照");// 操作人
 			ppc1.setOptDate(new Date());// 时间

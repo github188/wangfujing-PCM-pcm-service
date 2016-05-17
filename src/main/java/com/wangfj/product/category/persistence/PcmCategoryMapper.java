@@ -12,7 +12,6 @@ import com.wangfj.product.category.domain.vo.CategoryByChannelVo;
 import com.wangfj.product.category.domain.vo.CategoryVO;
 import com.wangfj.product.category.domain.vo.ClassDTO;
 import com.wangfj.product.category.domain.vo.CriteriaVO;
-import com.wangfj.product.category.domain.vo.MwCateVO;
 import com.wangfj.product.category.domain.vo.PcmAddCategoryDto;
 import com.wangfj.product.category.domain.vo.PcmCategoryQueryDto;
 import com.wangfj.product.category.domain.vo.ProductCateVO;
@@ -250,8 +249,6 @@ public interface PcmCategoryMapper extends BaseMapper<PcmCategory> {
 
 	List<PcmCategory> selectByRootSid(PcmCategory category);
 
-	List<MwCateVO> selectMwCategory(Long sid);
-
 	int selectProCount(Long categorySid);
 
 	List<Map<String, Object>> getIndustryCategorys();
@@ -327,11 +324,12 @@ public interface PcmCategoryMapper extends BaseMapper<PcmCategory> {
 	List<Map<String, Object>> findCategoryByParam(PcmCategoryQueryDto dto);
 
 	/**
-	 * 根据管理分类编码获取子节点编码 
+	 * 根据管理分类编码获取子节点编码
+	 * 
 	 * @Methods Name getChildNodeCodeByParentCode
 	 * @Create In 2016-4-12 By wangc
 	 * @param paraMap
 	 * @return List<Map<String,Object>>
 	 */
-	List<Map<String, String>> getChildNodeCodeByParentCode(Map<String,Object> paraMap);
+	List<Map<String, String>> getChildNodeCodeByParentCode(Map<String, Object> paraMap);
 }

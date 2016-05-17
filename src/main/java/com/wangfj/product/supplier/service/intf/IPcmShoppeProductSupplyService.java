@@ -3,6 +3,8 @@ package com.wangfj.product.supplier.service.intf;
 import com.wangfj.product.supplier.domain.entity.PcmShoppeProductSupply;
 import com.wangfj.product.supplier.domain.vo.PcmShoppeProSupplyUploadDto;
 
+import java.util.Map;
+
 public interface IPcmShoppeProductSupplyService {
 
 	/**
@@ -11,9 +13,9 @@ public interface IPcmShoppeProductSupplyService {
 	 * @Methods Name uploadShoppeProSupply
 	 * @Create In 2015-8-28 By wangxuan
 	 * @param dto
-	 * @return Integer
+	 * @return Map<String, Object>
 	 */
-	Integer uploadShoppeProSupply(PcmShoppeProSupplyUploadDto dto);
+	Map<String, Object> uploadShoppeProSupply(PcmShoppeProSupplyUploadDto dto);
 
 	/**
 	 * 判重

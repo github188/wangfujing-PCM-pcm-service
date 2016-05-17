@@ -230,7 +230,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		PcmProductCategory ppc = new PcmProductCategory();
 
 		ppc.setCategorySid(createSpuDto.getCategoryGYSid());// 工业分类
-		ppc.setProductSid(pro.getSid().toString());// SPU产品表sid
+		ppc.setProductSid(pro.getSid());// SPU产品表sid
 		ppc.setChannelSid(0l);
 		ppc.setOptUser(createSpuDto.getOptUser());// 操作人
 		ppc.setOptDate(new Date());// 时间
@@ -505,7 +505,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		// 关联统计分类
 		PcmProductCategory ppcTJ = new PcmProductCategory();
 		ppcTJ.setCategorySid(createShoppePro.getCategoryTJSid());// 统计分类
-		ppcTJ.setProductSid((psp.getShoppeProSid()));// 专柜商品表编码
+		ppcTJ.setProductSid(Long.valueOf(psp.getSid()));// 专柜商品表编码
 		ppcTJ.setChannelSid(0l);
 		// ppcTJ.setOptUser(createShoppePro.getOptUser());// 操作人
 		ppcTJ.setOptDate(new Date());// 时间
@@ -517,6 +517,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		// 添加价格
 		PcmPrice pp = new PcmPrice();
 		pp.setShoppeProSid(psp.getShoppeProSid());// 专柜商品编码
+		pp.setAttribute2(createShoppePro.getShopCode());//门店编码
 		// pp.setProductSid(Long.valueOf(spuCode));// SPU编码
 		// 价格开始,结束时间
 		pp.setPromotionBeginTime(DateUtil.formatDate(DateUtil.formatToStr(new Date(), "yyyyMMdd"),

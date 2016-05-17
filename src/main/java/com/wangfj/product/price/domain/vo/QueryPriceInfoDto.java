@@ -29,6 +29,11 @@ public class QueryPriceInfoDto {
 	 */
 	private Integer priceType;
 
+	/**
+	 * 门店编号
+	 */
+	private String storeCode;
+
 	public String getShoppeProSid() {
 		return shoppeProSid;
 	}
@@ -68,4 +73,13 @@ public class QueryPriceInfoDto {
 	public void setPriceType(Integer priceType) {
 		this.priceType = priceType;
 	}
+
+	public String getStoreCode() {
+		return storeCode;
+	}
+
+	public void setStoreCode(String storeCode) {
+		this.storeCode = storeCode;
+	}
+
 }

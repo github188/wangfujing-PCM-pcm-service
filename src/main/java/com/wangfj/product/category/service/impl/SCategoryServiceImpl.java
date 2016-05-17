@@ -24,7 +24,6 @@ import com.wangfj.product.category.domain.vo.CategoryVO;
 import com.wangfj.product.category.domain.vo.ClassDTO;
 import com.wangfj.product.category.domain.vo.CriteriaVO;
 import com.wangfj.product.category.domain.vo.JsonCate;
-import com.wangfj.product.category.domain.vo.MwCateVO;
 import com.wangfj.product.category.domain.vo.NavigationVO;
 import com.wangfj.product.category.domain.vo.ProductCateVO;
 import com.wangfj.product.category.domain.vo.ProductQueryVO;
@@ -415,7 +414,7 @@ public class SCategoryServiceImpl implements ISCategoryService {
 	 */
 	public String getCateString(Long productSid) {
 		PcmProductCategory spc = new PcmProductCategory();
-		spc.setProductSid((productSid.toString()));
+		spc.setProductSid(Long.valueOf(productSid.toString()));
 		List<PcmProductCategory> list = this.productCategoryMapper.selectList(spc);
 		Set<Long> cateIds = new HashSet<Long>();
 		for (PcmProductCategory pc : list) {
@@ -445,7 +444,7 @@ public class SCategoryServiceImpl implements ISCategoryService {
 	public Map<Long, JsonCate> getCateJSON(Long productSid) {
 		PcmProductCategory spc = new PcmProductCategory();
 		Map<Long, JsonCate> map = new HashMap<Long, JsonCate>();
-		spc.setProductSid((productSid.toString()));
+		spc.setProductSid(Long.valueOf(productSid.toString()));
 		Set<JsonCate> set = new HashSet<JsonCate>();
 		List<PcmProductCategory> list = this.productCategoryMapper.selectList(spc);
 		for (PcmProductCategory pc : list) {
@@ -762,11 +761,6 @@ public class SCategoryServiceImpl implements ISCategoryService {
 		PcmCategory sc = new PcmCategory();
 		sc.setChannelSid(channelSid);
 		return this.categoryMapper.selectPageListByParam(sc);
-	}
-
-	@Override
-	public List<MwCateVO> selectMwCategory(Long sid) {
-		return this.categoryMapper.selectMwCategory(sid);
 	}
 
 	/**

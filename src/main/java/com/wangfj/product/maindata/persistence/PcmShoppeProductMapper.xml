@@ -4686,7 +4686,7 @@
 		AND cate.`status` = 'Y'
 		AND cate.category_type
 		= 0
-		JOIN pcm_product_category AS ppc2 ON pro.shoppe_pro_sid =
+		JOIN pcm_product_category AS ppc2 ON pro.sid =
 		ppc2.product_sid
 		JOIN pcm_category AS cate2 ON cate2.sid =
 		ppc2.category_sid
@@ -4786,7 +4786,7 @@
 			pc.name AS statCategoryName
 		FROM
 			pcm_shoppe_product psp
-		INNER JOIN pcm_product_category ppc ON psp.shoppe_pro_sid = ppc.product_sid
+		INNER JOIN pcm_product_category ppc ON psp.sid = ppc.product_sid
 		INNER JOIN pcm_category pc ON ppc.category_sid = pc.sid AND pc.category_type = 2
 		WHERE
 			psp.shoppe_pro_sid = #{productCode}
@@ -4920,17 +4920,25 @@
 		) AS brandName,
 		(
 		SELECT
-		ppc.category_sid
+		pc.sid
 		FROM
-		pcm_product_category ppc
-		<where>
-			<if test="productCode != null">
-				and ppc.product_sid = #{productCode}
-			</if>
-			<if test="productCode == null">
-				and ppc.product_sid = 0
-			</if>
-		</where>
+		pcm_category pc
+		WHERE
+		pc.category_type = 2
+		AND pc.sid IN (
+			SELECT
+			ppc.category_sid
+			FROM
+			pcm_product_category ppc
+			<where>
+				<if test="sid != null">
+					and ppc.product_sid = #{sid}
+				</if>
+				<if test="sid == null">
+					and ppc.product_sid = 0
+				</if>
+			</where>
+		)
 		LIMIT 0,
 		1
 		) AS statCategory
@@ -5088,13 +5096,12 @@
 		AND pri.channel_sid = '0'
 		AND pri.ifdel = '0'
 		AND NOW() BETWEEN pri.promotion_begin_time AND pri.promotion_end_time
-		LEFT JOIN pcm_product_category ppc
-		ON psp.`code` = ppc.product_sid
-		LEFT JOIN pcm_category cate
-		ON ppc.category_sid = cate.sid
+		LEFT JOIN pcm_product_category ppc ON psp.sid = ppc.product_sid
+		LEFT JOIN pcm_category cate ON ppc.category_sid = cate.sid
 		AND cate.is_leaf = 'Y'
 		AND cate. STATUS = 'Y'
 		AND cate.is_display = 1
+		AND cate.category_type = 2
 		INNER JOIN pcm_brand pbr
 		ON psp.brand_sid = pbr.sid
 		LEFT JOIN pcm_erp_product erp
@@ -5338,7 +5345,7 @@
 				JOIN pcm_brand AS brand ON brand.sid = pro.brand_sid
 				LEFT JOIN pcm_barcode AS bar ON bar.shoppe_pro_sid = pro.shoppe_pro_sid
 				LEFT JOIN pcm_erp_product AS erp ON erp.product_code = pro.rate_code
-				JOIN pcm_product_category AS ppc ON ppc.product_sid = pro.shoppe_pro_sid
+				JOIN pcm_product_category AS ppc ON ppc.product_sid = pro.sid
 				JOIN pcm_category AS cate ON ppc.category_sid = cate.sid
 				AND cate.category_type = 2
 				AND cate.`status` = 'Y'

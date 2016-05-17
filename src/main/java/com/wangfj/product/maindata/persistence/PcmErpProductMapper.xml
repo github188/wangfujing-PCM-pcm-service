@@ -986,6 +986,44 @@
 			#{start}, #{limit}
 		</if>
 	</select>
+	<select id="selectPageListByParam1newPrice" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		erp.sid, erp.store_code, erp.shop_name, erp.shoppe_code, erp.shoppe_name,
+		erp.product_code,
+		erp.code_type, erp.big_code_price,
+		erp.supply_code, erp.offer_no,
+		erp.brand_code, erp.update_time, erp.opt_user_sid, erp.product_name,
+		erp.product_type,
+		erp.product_category, erp.stan_name, erp.article_num, erp.sales_unit,
+		erp.supplier_barcode, pp.promotion_price as sales_price,
+		erp.input_tax, erp.output_tax, erp.sales_tax,
+		erp.pro_status, erp.is_promotion,
+		erp.is_adjust_price, erp.manage_category,
+		erp.discount_limit, erp.origin_land, erp.service_fee_type, erp.format_type,
+		erp.stat_category,erp.notes,erp.product_abbr,
+		erp.commission_rate
+		from pcm_erp_product erp
+		left join pcm_price pp on pp.attribute2 = erp.store_code AND pp.shoppe_pro_sid = erp.product_code 
+		<where>
+			<if test="sidList != null">
+				and erp.sid in
+				<foreach collection="sidList" item="itemSid" index="index"
+					open="(" close=")" separator=",">
+					#{itemSid,jdbcType=VARCHAR}
+				</foreach>
+			</if>
+			<if test="sid != null">
+				and erp.sid = #{sid,jdbcType=BIGINT}
+			</if>
+		</where>
+		order by
+		sid asc
+		<if test="limit != null">
+			limit
+			#{start}, #{limit}
+		</if>
+	</select>
 	<select id="selectPageListByParam" resultMap="BaseResultMap"
 		parameterType="java.util.Map">
 		select
@@ -1310,7 +1348,8 @@
 		articleNum,
 		ifnull(erp.sales_unit,"") as salesUnit,
 		ifnull(erp.supplier_barcode,"") as supplierBarcode,
-		ifnull(erp.sales_price,"") as salesPrice,
+		<!-- ifnull(erp.sales_price,"") as salesPrice, -->
+		ifnull(pp.promotion_price,"") as salesPrice,
 		ifnull(erp.input_tax,"") as
 		inputTax,
 		ifnull(erp.output_tax,"") as outputTax,
@@ -1339,6 +1378,7 @@
 		LEFT JOIN pcm_brand brg ON brg.brand_sid = erp.brand_code AND org.store_type = brg.shop_type
 		LEFT JOIN
 		pcm_supply_info supply ON erp.supply_code = supply.supply_code
+		LEFT JOIN pcm_price pp ON pp.attribute2 = erp.store_code AND pp.shoppe_pro_sid = erp.product_code
 		<where>
 			1=1
 			<if test="cateList != null" >

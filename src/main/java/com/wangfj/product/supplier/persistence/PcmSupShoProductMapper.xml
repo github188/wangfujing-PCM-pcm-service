@@ -66,7 +66,7 @@
 	<select id="getShoProductCount"
 		parameterType="com.wangfj.product.supplier.domain.entity.GetShoProductSup"
 		resultType="java.lang.Integer">
-		SELECT count(*)
+		SELECT count(1)
 		FROM
 		(
 		SELECT
@@ -77,9 +77,14 @@
 		INNER JOIN pcm_supply_info sup ON
 		psp1.supply_sid = sup.sid
 		<where>
-			<if test="supplierCode != null"><!-- 供应商编码 -->
+			<!-- <if test="supplierCode != null">供应商编码
 				sup.supply_code = #{supplierCode,jdbcType=VARCHAR}
-			</if>
+			</if> -->
+			AND supply_code IN
+			<foreach collection="supplierCodeList" item="supplierCode"
+	        index="index" open="(" close=")" separator=",">
+	        #{supplierCode,jdbcType=VARCHAR}
+            </foreach>
 			<if test="counterProCode != null"><!-- 专柜商品编码 -->
 				AND psp1.shoppe_pro_sid = #{counterProCode,jdbcType=VARCHAR}
 			</if>
@@ -147,9 +152,14 @@
 		FROM
 		pcm_supply_info
 		<where>
-			<if test="supplierCode != null"><!-- 供应商编码 -->
+			<!-- <if test="supplierCode != null">供应商编码
 				AND supply_code = #{supplierCode,jdbcType=VARCHAR}
-			</if>
+			</if> -->
+			AND supply_code IN
+			<foreach collection="supplierCodeList" item="supplierCode"
+	        index="index" open="(" close=")" separator=",">
+	        #{supplierCode,jdbcType=VARCHAR}
+            </foreach>
 			<if test="operaterMode != null"><!-- 经营方式 -->
 				AND business_pattern = #{operaterMode,jdbcType=VARCHAR}
 			</if>
@@ -325,8 +335,10 @@
 		JOIN pcm_category cate1 ON tjcate.category_sid = cate1.sid
 		AND
 		cate1.category_type = 2
+		AND cate1.is_display = 1
+		AND cate1.`status` = 'Y'
 		) tjcate ON tjcate.product_sid =
-		pspsi.shoppe_pro_sid
+		pspsi.sid
 		LEFT JOIN (
 		SELECT
 		product_sid,

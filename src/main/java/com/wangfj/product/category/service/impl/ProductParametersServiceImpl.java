@@ -216,13 +216,13 @@ public class ProductParametersServiceImpl implements IProductParametersService {
 		if (sppdList.get(0).getCategoryType().equals("3")) {
 			// 删除产品分类的关系
 			PcmProductCategory record = new PcmProductCategory();
-			record.setProductSid((sppdList.get(0).getSpuSid()));
+			record.setProductSid(Long.valueOf(sppdList.get(0).getSpuSid()));
 			proCateMapper.deleteZSCateByRecord(record);
 		}
 		if (sppdList.get(0).getCategoryType().equals("0")) {
 			// 删除产品分类的关系
 			PcmProductCategory record = new PcmProductCategory();
-			record.setProductSid((sppdList.get(0).getSpuSid()));
+			record.setProductSid(Long.valueOf(sppdList.get(0).getSpuSid()));
 			proCateMapper.deleteGYCateByRecord(record);
 		}
 		// 添加之前删除表中数据
@@ -242,7 +242,7 @@ public class ProductParametersServiceImpl implements IProductParametersService {
 				record_2.setCategorySid(Long.parseLong(sppd.getCategorySid()));
 			}
 			if (sppd.getSpuSid() != null && sppd.getSpuSid() != "") {
-				record_2.setProductSid((sppd.getSpuSid()));
+				record_2.setProductSid(Long.valueOf(sppd.getSpuSid()));
 			}
 			if (sppd.getChannelSid() != null && sppd.getChannelSid() != "") {
 				record_2.setChannelSid(Long.parseLong(sppd.getChannelSid()));
@@ -253,7 +253,7 @@ public class ProductParametersServiceImpl implements IProductParametersService {
 			if (sppd.getParameters() != null && sppd.getParameters().size() != 0) {
 
 				PcmProductCategory record1 = new PcmProductCategory();
-				record1.setProductSid((sppd.getSpuSid()));
+				record1.setProductSid(Long.valueOf(sppd.getSpuSid()));
 				record1.setCategorySid(Long.valueOf(sppd.getCategorySid()));
 				record1.setChannelSid(Long.valueOf(sppd.getChannelSid()));
 				int ppci = proCateMapper.insertSelective(record1);

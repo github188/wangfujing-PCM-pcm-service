@@ -7,6 +7,8 @@
  */
 package com.wangfj.product.supplier.domain.entity;
 
+import java.util.List;
+
 /**
  * @Class Name GetShoProductSupDto
  * @Author wangc
@@ -15,6 +17,7 @@ package com.wangfj.product.supplier.domain.entity;
 public class GetShoProductSup {
 
 	private String supplierCode;//供应商编码
+    private List<String> supplierCodeList;//供应商编码列表
 	private String counterProCode;//专柜商品编码
 	private String counterName;//专柜名称
 	private String countProName;//商品名称
@@ -35,6 +38,12 @@ public class GetShoProductSup {
 	private int limit = 10;
 	
 	
+	public List<String> getSupplierCodeList() {
+		return supplierCodeList;
+	}
+	public void setSupplierCodeList(List<String> supplierCodeList) {
+		this.supplierCodeList = supplierCodeList;
+	}
 	public String getStoreName() {
 		return storeName;
 	}

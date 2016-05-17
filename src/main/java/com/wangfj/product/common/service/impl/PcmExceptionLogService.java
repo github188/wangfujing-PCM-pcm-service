@@ -15,6 +15,7 @@ import com.wangfj.core.framework.base.controller.BaseController;
 import com.wangfj.core.framework.base.page.Page;
 import com.wangfj.core.framework.exception.BleException;
 import com.wangfj.core.utils.DateUtil;
+import com.wangfj.core.utils.StringUtils;
 import com.wangfj.product.common.domain.entity.PcmExceptionLog;
 import com.wangfj.product.common.domain.entity.PcmJCOLog;
 import com.wangfj.product.common.domain.vo.PcmExceptionLogDto;
@@ -32,7 +33,7 @@ import com.wangfj.product.common.service.intf.IPcmExceptionLogService;
  */
 @Service
 public class PcmExceptionLogService implements IPcmExceptionLogService {
-	private static final Logger logger = LoggerFactory.getLogger(PcmRedisService.class);
+	private static final Logger logger = LoggerFactory.getLogger(PcmExceptionLogService.class);
 
 	@Autowired
 	private PcmExceptionLogMapper pcmExceptionLogMapper;
@@ -51,13 +52,21 @@ public class PcmExceptionLogService implements IPcmExceptionLogService {
 	 */
 	@Override
 	public int saveExceptionLogInfo(PcmExceptionLogDto pcmExceptionLogdto) {
-		logger.info(pcmExceptionLogdto.toString());
 		try {
-			BaseController
-					.sendException(new BleException(ErrorCode.APPLICATION_OPER_ERROR.getErrorCode(),
-							pcmExceptionLogdto.getErrorMessage()));
+			String errorCode = null;
+			if (StringUtils.isNotEmpty(pcmExceptionLogdto.getErrorCode())) {
+				errorCode = pcmExceptionLogdto.getErrorCode();
+			} else {
+				if (StringUtils.isNotEmpty(pcmExceptionLogdto.getExceptionType())) {
+					errorCode = pcmExceptionLogdto.getExceptionType();
+				} else {
+					errorCode = ErrorCode.APPLICATION_OPER_ERROR.getErrorCode();
+				}
+			}
+			BaseController.sendException(
+					new BleException(errorCode, pcmExceptionLogdto.getErrorMessage()));
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		int result = 0;
 		try {

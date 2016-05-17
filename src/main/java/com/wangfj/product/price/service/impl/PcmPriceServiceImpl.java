@@ -154,23 +154,29 @@ public class PcmPriceServiceImpl implements IPcmPriceService {
 		List<SelectPriceDto> listDto = new ArrayList<SelectPriceDto>();
 		SelectPriceDto dto = null;
 		QueryPriceDto queryPriceDto = null;
+		String storeCode = StringUtils.EMPTY;
+		if (StringUtils.isNotBlank(queryPriceListDto.getStoreCode())) {
+			storeCode = queryPriceListDto.getStoreCode();
+		}
 		for (String key : queryPriceListDto.getShoppeProSids()) {
 			dto = new SelectPriceDto();
-			String salePrice = redisUtil.get(DomainName.getPrice + key, "0000");
+			String salePrice = redisUtil.get(DomainName.getPrice + storeCode + key, "0000");
 			if (!"0000".equals(salePrice)) {
 				dto.setShoppeProSid(key);
 				dto.setSalePrice(new BigDecimal(salePrice));
 			} else {
 				queryPriceDto = new QueryPriceDto();
 				queryPriceDto.setShoppeProSid(key);
+				queryPriceDto.setStoreCode(storeCode);
 				dto = queryPriceInfoByPara(key, queryPriceDto);
+
 				if (dto != null) {
 					if (dto.getExpireDate() > new Long(Constants.expireDate)) {
-						redisUtil.set(DomainName.getPrice + key, String.valueOf(dto.getSalePrice()),
-								Constants.expireDate);
+						redisUtil.set(DomainName.getPrice + storeCode + key,
+								String.valueOf(dto.getSalePrice()), Constants.expireDate);
 					} else {
-						redisUtil.set(DomainName.getPrice + key, String.valueOf(dto.getSalePrice()),
-								dto.getExpireDate().intValue());
+						redisUtil.set(DomainName.getPrice + storeCode + key,
+								String.valueOf(dto.getSalePrice()), dto.getExpireDate().intValue());
 					}
 				}
 			}
@@ -235,69 +241,72 @@ public class PcmPriceServiceImpl implements IPcmPriceService {
 		boolean flag = true;
 		boolean isShoppePro = true;
 		int count = 0;
+
 		if (Constants.EFUTUREERP.equals(fromSystem)) {
 			if (StringUtils.isBlank(pcmpricedto.getSupplierprodcode())) {
 				isShoppePro = false;
 			}
 		}
-		if (isShoppePro) {
-			PcmPriceChangeDto pcmPriceChangeDto = new PcmPriceChangeDto();
-			PcmPrice queryPcmPrice = new PcmPrice();
-			queryPcmPrice = getPcmPriceEntityV3(pcmpricedto);
-			pcmPriceChangeDto = getChangePcmPriceERPDtoListV2(queryPcmPrice, upperLimit,
-					lowerLimit);
-			logger.info("start pcmPriceChangeDto,param:" + pcmPriceChangeDto.toString());
 
-			if (StringUtils.isNotEmpty(pcmPriceChangeDto.getShoppeProSid())
-					&& pcmPriceChangeDto.getPromotionBeginTime() != null
-					&& pcmPriceChangeDto.getPromotionEndTime() != null) {
-				count = pcmPriceMapper.deletePriceInfoByPara(pcmPriceChangeDto);
+		// if (isShoppePro) {
+		PcmPriceChangeDto pcmPriceChangeDto = new PcmPriceChangeDto();
+		PcmPrice queryPcmPrice = new PcmPrice();
+		queryPcmPrice = getPcmPriceEntityV3(pcmpricedto, fromSystem);
+		pcmPriceChangeDto = getChangePcmPriceERPDtoListV2(queryPcmPrice, upperLimit, lowerLimit);
+		logger.info("start pcmPriceChangeDto,param:" + pcmPriceChangeDto.toString());
+
+		if (StringUtils.isNotEmpty(pcmPriceChangeDto.getShoppeProSid())
+				&& pcmPriceChangeDto.getPromotionBeginTime() != null
+				&& pcmPriceChangeDto.getPromotionEndTime() != null) {
+			count = pcmPriceMapper.deletePriceInfoByPara(pcmPriceChangeDto);
+			if (0 == count) {
+				flag = false;
+			}
+			logger.info("start deletePriceInfoByPara(),result:" + flag);
+		}
+		if (flag && pcmPriceChangeDto.getPcmPriceListN() != null
+				&& pcmPriceChangeDto.getPcmPriceListN().size() > 0) {
+			String redisKey = "";
+			for (PcmPrice pp : pcmPriceChangeDto.getPcmPriceListN()) {
+				count = pcmPriceMapper.insertSelective(pp);
+				redisKey = pp.getShoppeProSid();
 				if (0 == count) {
 					flag = false;
 				}
-				logger.info("start deletePriceInfoByPara(),result:" + flag);
 			}
-			if (flag && pcmPriceChangeDto.getPcmPriceListN() != null
-					&& pcmPriceChangeDto.getPcmPriceListN().size() > 0) {
-				String redisKey = "";
-				for (PcmPrice pp : pcmPriceChangeDto.getPcmPriceListN()) {
-					count = pcmPriceMapper.insertSelective(pp);
-					redisKey = pp.getShoppeProSid();
-					if (0 == count) {
-						flag = false;
-					}
+			if (flag) {
+				String key = "";
+				if (isShoppePro) {
+					key = DomainName.getPrice + redisKey;
+				} else {
+					key = DomainName.getPrice + queryPcmPrice.getAttribute2() + redisKey;
 				}
-				if (flag) {
-					redisUtil.del(DomainName.getPrice + redisKey);
-					if (!CacheUtils.cacheFlag) {
-						PcmRedis pcmRedisDto = new PcmRedis();
-						pcmRedisDto.setRedisffield(DomainName.getPrice);
-						pcmRedisDto.setKeyname(DomainName.getPrice + redisKey);
-						redisService.savePcmRedis(pcmRedisDto);
-					}
+				redisUtil.del(key);
+				if (!CacheUtils.cacheFlag) {
+					PcmRedis pcmRedisDto = new PcmRedis();
+					pcmRedisDto.setRedisffield(DomainName.getPrice);
+					pcmRedisDto.setKeyname(key);
+					redisService.savePcmRedis(pcmRedisDto);
 				}
-			}
-		} else {
-			Map<String, Object> erpMap = new HashMap<String, Object>();
-			erpMap.put("productCode", pcmpricedto.getMatnr());
-			erpMap.put("storeCode", pcmpricedto.getStorecode());
-			Integer rowNum = pcmErpProductMapper.getCountByParam(erpMap);
-			if (1 == rowNum) {
-				PcmErpProduct erpProductInfo = new PcmErpProduct();
-				erpProductInfo.setBigCodePrice(new BigDecimal(pcmpricedto.getZsprice()));
-				erpProductInfo.setSalesPrice(erpProductInfo.getBigCodePrice());
-				erpProductInfo.setProductCode(pcmpricedto.getMatnr());
-				erpProductInfo.setStoreCode(pcmpricedto.getStorecode());
-
-				count = pcmErpProductMapper.updateByCodeSelective(erpProductInfo);
-				if (0 == count) {
-					flag = false;
-				}
-			} else {
-				throw new BleException(ErrorCode.PRICE_ERPPROCODE_NOT_EXISTS.getErrorCode(),
-						ErrorCode.PRICE_ERPPROCODE_NOT_EXISTS.getMemo());
 			}
 		}
+		/*
+		 * } else { Map<String, Object> erpMap = new HashMap<String, Object>();
+		 * erpMap.put("productCode", pcmpricedto.getMatnr());
+		 * erpMap.put("storeCode", pcmpricedto.getStorecode()); Integer rowNum =
+		 * pcmErpProductMapper.getCountByParam(erpMap); if (1 == rowNum) {
+		 * PcmErpProduct erpProductInfo = new PcmErpProduct();
+		 * erpProductInfo.setBigCodePrice(new
+		 * BigDecimal(pcmpricedto.getZsprice()));
+		 * erpProductInfo.setSalesPrice(erpProductInfo.getBigCodePrice());
+		 * erpProductInfo.setProductCode(pcmpricedto.getMatnr());
+		 * erpProductInfo.setStoreCode(pcmpricedto.getStorecode());
+		 * 
+		 * count = pcmErpProductMapper.updateByCodeSelective(erpProductInfo); if
+		 * (0 == count) { flag = false; } } else { throw new
+		 * BleException(ErrorCode.PRICE_ERPPROCODE_NOT_EXISTS.getErrorCode(),
+		 * ErrorCode.PRICE_ERPPROCODE_NOT_EXISTS.getMemo()); } }
+		 */
 		if (!flag) {
 			throw new BleException(ErrorCode.ADD_CHANGE_PRICE_ERROR.getErrorCode(),
 					ErrorCode.ADD_CHANGE_PRICE_ERROR.getMemo());
@@ -1449,9 +1458,14 @@ public class PcmPriceServiceImpl implements IPcmPriceService {
 	 * @Methods Name getPcmPriceEntityV3
 	 * @Create In 2015年11月4日 By kongqf
 	 */
-	public PcmPrice getPcmPriceEntityV3(PcmPriceERPDto pcmPriceDto) {
+	public PcmPrice getPcmPriceEntityV3(PcmPriceERPDto pcmPriceDto, String fromSystem) {
 		PcmPrice pcmPrice = new PcmPrice();
 		pcmPrice.setShoppeProSid(pcmPriceDto.getSupplierprodcode());
+		if (Constants.EFUTUREERP.equals(fromSystem)) {
+			if (StringUtils.isBlank(pcmPriceDto.getSupplierprodcode())) {
+				pcmPrice.setShoppeProSid(pcmPriceDto.getMatnr());
+			}
+		}
 		// 渠道
 		if (StringUtils.isNotBlank(pcmPriceDto.getChannelsid())) {
 			pcmPrice.setChannelSid(pcmPriceDto.getChannelsid());
@@ -1489,6 +1503,7 @@ public class PcmPriceServiceImpl implements IPcmPriceService {
 				|| Constants.PRICE_RETAIL_DATE.equals(pcmPriceDto.getEdate())) {
 			pcmPrice.setPriceType(Constants.PRICE_TYPE_1);
 		}
+		pcmPrice.setAttribute2(pcmPriceDto.getStorecode());
 
 		return pcmPrice;
 	}
@@ -1818,7 +1833,7 @@ public class PcmPriceServiceImpl implements IPcmPriceService {
 		if (Constants.PRICE_RETAIL_DATE.equals(pcmPricePISDto.getEdate())) {
 			pcmPrice.setPriceType(Constants.PRICE_TYPE_1);
 		}
-
+		pcmPrice.setAttribute2(pcmPricePISDto.getStorecode());
 		return pcmPrice;
 	}
 
@@ -2120,6 +2135,7 @@ public class PcmPriceServiceImpl implements IPcmPriceService {
 			queryPriceInfoDto.setChannelSid(Constants.DEFAULT_CHANNEL_SID);
 		}
 		queryPriceInfoDto.setPromotionBeginTime(pcmPrice.getPromotionBeginTime());
+		queryPriceInfoDto.setStoreCode(pcmPrice.getAttribute2());
 		return queryPriceInfoDto;
 	}
 
@@ -2398,13 +2414,15 @@ public class PcmPriceServiceImpl implements IPcmPriceService {
 	 * @Create In 2016年4月12日 By wangxuan
 	 */
 	@Override
-	public List<SelectProductPriceInfoDto> findPriceInfoByParaForShoppeProduct(QueryProductPriceInfoDto dto) {
+	public List<SelectProductPriceInfoDto> findPriceInfoByParaForShoppeProduct(
+			QueryProductPriceInfoDto dto) {
 		logger.info("start findPriceInfoByParaForShoppeProduct(),param:" + dto.toString());
 		List<String> productCodeList = dto.getProductCodeList();
-		if (productCodeList != null && productCodeList.size() == 0){
+		if (productCodeList != null && productCodeList.size() == 0) {
 			dto.setProductCodeList(null);
 		}
-		List<SelectProductPriceInfoDto> list = pcmPriceMapper.findPriceInfoByParaForShoppeProduct(dto);
+		List<SelectProductPriceInfoDto> list = pcmPriceMapper
+				.findPriceInfoByParaForShoppeProduct(dto);
 		logger.info("end findPriceInfoByParaForShoppeProduct(),return:" + list.toString());
 		return list;
 	}

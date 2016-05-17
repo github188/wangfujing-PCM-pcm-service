@@ -1365,21 +1365,20 @@
 	<select id="selectSpuByIsLeaf" resultMap="BaseResultMap"
 		parameterType="com.wangfj.product.category.domain.vo.SelectCategoryParamDto">
 		SELECT
-		pp.*
+			pp.*
 		FROM
-		pcm_product AS pp,
-		pcm_category c,
-		pcm_product_category pc
-		WHERE
-		pp.sid = pc.product_sid
-		AND pc.category_sid
-		= c.sid
+			pcm_product as pp 
+		JOIN
+			pcm_product_category as pc ON pp.sid = pc.product_sid
+		JOIN
+			pcm_category as c on pc.category_sid = c.sid
 		AND c.is_leaf = 'Y'
-		AND c.sid = #{sid,jdbcType=BIGINT}
-		order by
-		c.sid asc
-		limit
-		#{start}, #{limit}
+		AND c.`status` = 'Y'
+		WHERE
+			c.sid = #{sid,jdbcType=BIGINT}
+		ORDER BY
+			c.sid ASC
+		LIMIT #{start}, #{limit}
 	</select>
 	<!-- 根据末级节点查询spu商品条数 -->
 	<select id="selectSpuCountByIsLeaf" resultType="java.lang.Integer"

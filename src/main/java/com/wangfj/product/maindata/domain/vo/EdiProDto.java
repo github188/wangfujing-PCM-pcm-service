@@ -5,7 +5,7 @@ public class EdiProDto {
 	private String EDIProCode;// EDI商品编码
 	private String channelCode;// 渠道编码
 	private String isPresell;// 是否预售0否
-	private String isPayReduceStock;// 是否支持支付减库存0否
+	private String isPayReduceStock;// 是否支付减库存(1否/2是)
 	private String actionCode;// 操作类型
 	private String actionDate;// 操作时间
 	private String actionPerson;// 操作人

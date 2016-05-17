@@ -335,11 +335,12 @@ public interface ICategoryService {
 	void deleteCateCache(String key);
 
 	/**
-	 * 根据管理分类编码获取子节点编码 
+	 * 根据管理分类编码获取子节点编码
+	 * 
 	 * @Methods Name getChildNodeCode
 	 * @Create In 2016-4-12 By wangc
 	 * @param paraMap
 	 * @return List<Map<String,Object>>
 	 */
-	List<Map<String, String>> getChildNodeCode(Map<String,Object> paraMap);
+	List<Map<String, String>> getChildNodeCode(Map<String, Object> paraMap);
 }

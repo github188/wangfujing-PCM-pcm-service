@@ -23,8 +23,11 @@ public class QueryPriceDto {
 	 * 渠道id
 	 */
 	private String channelSid;
-	
 
+	/**
+	 * 门店编号
+	 */
+	private String storeCode;
 
 	public String getChannelSid() {
 		return channelSid;
@@ -50,9 +53,18 @@ public class QueryPriceDto {
 		this.priceChannel = priceChannel;
 	}
 
+	public String getStoreCode() {
+		return storeCode;
+	}
+
+	public void setStoreCode(String storeCode) {
+		this.storeCode = storeCode;
+	}
+
 	@Override
 	public String toString() {
 		return "QueryPriceDto [shoppeProSid=" + shoppeProSid + ", priceChannel=" + priceChannel
-				+ "]";
+				+ ", channelSid=" + channelSid + ", storeCode=" + storeCode + "]";
 	}
+
 }

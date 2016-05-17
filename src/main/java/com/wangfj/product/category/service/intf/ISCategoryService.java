@@ -6,7 +6,6 @@ import java.util.Map;
 import com.wangfj.product.category.domain.entity.PcmCategory;
 import com.wangfj.product.category.domain.vo.ClassDTO;
 import com.wangfj.product.category.domain.vo.JsonCate;
-import com.wangfj.product.category.domain.vo.MwCateVO;
 import com.wangfj.product.category.domain.vo.NavigationVO;
 import com.wangfj.product.category.domain.vo.ProductCateVO;
 import com.wangfj.product.category.domain.vo.ProductQueryVO;
@@ -75,14 +74,6 @@ public interface ISCategoryService {
 	PcmCategory getByCategorySidChannelSid(PcmCategory record);
 
 	List<PcmCategory> selectCategoryList(Long channelSid);
-
-	/**
-	 * moblie 5
-	 * 
-	 * @param sid
-	 * @return
-	 */
-	public List<MwCateVO> selectMwCategory(Long sid);
 
 	/**
 	 * 门店系统,Pad系统专用接口 返回当前节点的父节点或子节点

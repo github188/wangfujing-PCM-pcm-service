@@ -46,6 +46,8 @@ import com.wangfj.product.organization.domain.entity.PcmOrganization;
 import com.wangfj.product.organization.domain.entity.PcmShoppe;
 import com.wangfj.product.organization.persistence.PcmOrganizationMapper;
 import com.wangfj.product.organization.persistence.PcmShoppeMapper;
+import com.wangfj.product.price.domain.entity.PcmPrice;
+import com.wangfj.product.price.service.intf.IPcmPriceService;
 import com.wangfj.product.supplier.domain.entity.PcmSupplyInfo;
 import com.wangfj.product.supplier.persistence.PcmSupplyInfoMapper;
 import com.wangfj.util.Constants;
@@ -79,9 +81,12 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 	IPcmChangeProductService cpService;
 	@Autowired
 	IPcmProductService pService;
+	// 价格service
+	@Autowired
+	private IPcmPriceService priceService;
 	@Autowired
 	private PcmErpProductChangeMapper erpProductChangeMapper;
-
+	
 	/**
 	 * 根据DTO创建实体
 	 * 
@@ -360,6 +365,25 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 		return entity;
 	}
 
+	private Integer addPriceRecord(PcmErpProduct entity){
+		PcmPrice pp = new PcmPrice();
+		pp.setShoppeProSid(entity.getProductCode());// 大码商品编码
+		pp.setAttribute2(entity.getStoreCode());//门店编码
+		// 价格开始,结束时间
+		pp.setPromotionBeginTime(DateUtil.formatDate(DateUtil.formatToStr(new Date(), "yyyyMMdd"),
+				"yyyyMMdd")); // 开始时间
+		pp.setPromotionEndTime(DateUtil.formatDate("99991231235959", "yyyyMMddHHmmss"));// 结束时间
+		pp.setPriceType(Constants.PRICE_TYPE_1);// 永久变价
+		pp.setAttribute1(Constants.DEFAULT_CHANGE_CODE);// 变价号
+		pp.setChannelSid(Constants.DEFAULT_CHANNEL_SID); // 渠道
+		pp.setCurrentPrice(entity.getSalesPrice());// 现价
+		pp.setPromotionPrice(entity.getSalesPrice());// 促销价格
+		pp.setOriginalPrice(entity.getSalesPrice());// 原价
+		pp.setOffValue(new BigDecimal(1));// 折扣值，后台程序计算
+		pp.setUnit("RMB");// 货币单位
+		int i = priceService.initProductPriceInfo(pp);
+		return i;
+	}
 	/**
 	 * 从门店ERP上传到PCM
 	 * 
@@ -404,6 +428,11 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 						throw new BleException(ErrorCode.DATA_OPER_ERROR.getErrorCode(),
 								ErrorCode.DATA_OPER_ERROR.getMemo());
 					}
+					Integer resultPrice = addPriceRecord(entity);//创建价格信息
+					if (resultPrice == Constants.PUBLIC_0) {
+						throw new BleException(ErrorCode.ADD_PRODUCT_PRICE_ERROR.getErrorCode(),
+								ErrorCode.ADD_PRODUCT_PRICE_ERROR.getMemo());
+					}
 					sidDto.setSid(entity.getSid());
 					sidDto.setType(0);
 				} else {
@@ -420,32 +449,12 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 			List<PcmErpProduct> listPro = erpProductMapper.selectListByParam(map);
 			if (listPro != null && listPro.size() == Constants.PUBLIC_1) {
 				// ERP商品已存在
-				if (dto.getBrandCode() != null
-						&& !dto.getBrandCode().equals(listPro.get(0).getBrandCode())) {
-					logger.error(dto.getStoreCode() + "-" + dto.getProductCode() + "--"
-							+ ErrorCode.UNSUPPORT_ACTION.getErrorCode()
-							+ ErrorCode.UNSUPPORT_ACTION.getMemo() + "品牌");
-					throw new BleException(ErrorCode.UNSUPPORT_ACTION.getErrorCode(),
-							ErrorCode.UNSUPPORT_ACTION.getMemo());
-				}
-				if (dto.getCounterCode() != null
-						&& !dto.getCounterCode().equals(listPro.get(0).getShoppeCode())) {
-					logger.error(dto.getStoreCode() + "-" + dto.getProductCode() + "--"
-							+ ErrorCode.UNSUPPORT_ACTION.getErrorCode()
-							+ ErrorCode.UNSUPPORT_ACTION.getMemo() + "专柜");
-					throw new BleException(ErrorCode.UNSUPPORT_ACTION.getErrorCode(),
-							ErrorCode.UNSUPPORT_ACTION.getMemo());
-				}
-				if (dto.getSupplierCode() != null
-						&& !dto.getSupplierCode().equals(listPro.get(0).getSupplyCode())) {
-					logger.error(dto.getStoreCode() + "-" + dto.getProductCode() + "--"
-							+ ErrorCode.UNSUPPORT_ACTION.getErrorCode()
-							+ ErrorCode.UNSUPPORT_ACTION.getMemo() + "供应商");
-					throw new BleException(ErrorCode.UNSUPPORT_ACTION.getErrorCode(),
-							ErrorCode.UNSUPPORT_ACTION.getMemo());
-				}
 				PcmErpProduct entity = createEntity(dto);// 创建实体
 				entity.setSid(listPro.get(0).getSid());// sid
+				entity.setBrandCode(null);
+				entity.setShoppeCode(null);
+				entity.setShoppeName(null);
+				entity.setSupplyCode(null);
 				Integer result = erpProductMapper.updateByPrimaryKeySelective(entity);
 				if (result.intValue() != Constants.PUBLIC_1) {
 					logger.error(dto.getStoreCode() + "-" + dto.getProductCode() + "--"
@@ -830,13 +839,13 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 	public ModifyErpProductDto modifyErpChangeFromEFuture(ErpChangeDto dto) throws BleException {
 		logger.info("start modifyErpChangeFromEFuture(),param:" + dto.toString());
 		// 判断生效日期是等于当前日期
-		String dateStr = dto.getDATE();
-		Date date = DateUtil.formatDate(dateStr, "yyyyMMdd");
-		Date nowDate = new Date();
-		String nowDateStr = DateUtil.formatToStr(nowDate, "yyyyMMdd");
+//		String dateStr = dto.getDATE();
+//		Date date = DateUtil.formatDate(dateStr, "yyyyMMdd");
+//		Date nowDate = new Date();
+//		String nowDateStr = DateUtil.formatToStr(nowDate, "yyyyMMdd");
 		ModifyErpProductDto proDto = new ModifyErpProductDto();
 		boolean conFalg = true;
-		if (nowDateStr.equals(dateStr)) {
+//		if (nowDateStr.equals(dateStr)) {
 			// 判断大码信息是否存在
 			Map<String, Object> para = new HashMap<String, Object>();
 			para.put("storeCode", dto.getSTORE());
@@ -913,13 +922,13 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 				throw new BleException(ErrorCode.PRODUCT_NULL.getErrorCode(),
 						ErrorCode.PRODUCT_NULL.getMemo());
 			}
-		} else {
-			// 超过生效日期
-			logger.error("modifyErpChangeFromEFuture()," + ErrorCode.DATE_ERROR.getMemo()
-					+ dto.toString());
-			throw new BleException(ErrorCode.DATE_ERROR.getErrorCode(),
-					ErrorCode.DATE_ERROR.getMemo());
-		}
+//		} else {
+//			// 超过生效日期
+//			logger.error("modifyErpChangeFromEFuture()," + ErrorCode.DATE_ERROR.getMemo()
+//					+ dto.toString());
+//			throw new BleException(ErrorCode.DATE_ERROR.getErrorCode(),
+//					ErrorCode.DATE_ERROR.getMemo());
+//		}
 		logger.info("end modifyErpChangeFromEFuture(),return:" + proDto.toString());
 		return proDto;
 	}
@@ -1131,7 +1140,7 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 	 */
 	public List<PcmSearchErpProductDto> getErpProductInfoBySidList(Map<String, Object> paramMap) {
 		logger.info("start getErpProductInfoBySidList() 通过门店编码获取ERP商品信息");
-		List<PcmErpProduct> erpList = erpProductMapper.selectPageListByParam(paramMap);
+		List<PcmErpProduct> erpList = erpProductMapper.selectPageListByParam1newPrice(paramMap);
 		List<PcmSearchErpProductDto> resList = erpProductInfoToSearch(erpList);
 		return resList;
 	}

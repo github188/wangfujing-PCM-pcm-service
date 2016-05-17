@@ -1411,13 +1411,13 @@ public class PcmProductServiceImpl implements IPcmProductService {
 				}
 				// 修改SPU-分类关联关系
 				PcmProductCategory proCate_1 = new PcmProductCategory();
-				proCate_1.setProductSid(spuList.get(0).getSid().toString());
+				proCate_1.setProductSid(spuList.get(0).getSid());
 				List<PcmProductCategory> cateList = productCategoryMapper
 						.selectListByParam(proCate_1);
 				for (PcmProductCategory cate : cateList) {
 					PcmProductCategory proCate_2 = new PcmProductCategory();
 					BeanUtils.copyProperties(cate, proCate_2);
-					proCate_2.setProductSid(spuNew_1.getSid().toString());
+					proCate_2.setProductSid(spuNew_1.getSid());
 					proCate_2.setSid(null);
 					int insertCate = productCategoryMapper.insertSelective(proCate_2);
 					if (insertCate != 1) {// 数据库错误
@@ -1638,14 +1638,14 @@ public class PcmProductServiceImpl implements IPcmProductService {
 				}
 				// 修改SPU-分类关联关系
 				PcmProductCategory proCate_1 = new PcmProductCategory();
-				proCate_1.setProductSid(spuList.get(0).getSid().toString());
+				proCate_1.setProductSid(spuList.get(0).getSid());
 				List<PcmProductCategory> cateList = productCategoryMapper
 						.selectListByParam(proCate_1);
 				for (PcmProductCategory cate : cateList) {
 					PcmProductCategory proCate_2 = new PcmProductCategory();
 					BeanUtils.copyProperties(cate, proCate_2);
 					proCate_2.setSid(null);
-					proCate_2.setProductSid(spuNew_1.getSid().toString());
+					proCate_2.setProductSid(spuNew_1.getSid());
 					int insertCate = productCategoryMapper.insertSelective(proCate_2);
 					if (insertCate != 1) {// 数据库错误
 						logger.info("数据库错误6");
@@ -1846,14 +1846,14 @@ public class PcmProductServiceImpl implements IPcmProductService {
 				}
 				// 修改SPU-分类关联关系
 				PcmProductCategory proCate_1 = new PcmProductCategory();
-				proCate_1.setProductSid(spuList.get(0).getSid().toString());
+				proCate_1.setProductSid(spuList.get(0).getSid());
 				List<PcmProductCategory> cateList = productCategoryMapper
 						.selectListByParam(proCate_1);
 				for (PcmProductCategory cate : cateList) {
 					PcmProductCategory proCate_2 = new PcmProductCategory();
 					BeanUtils.copyProperties(cate, proCate_2);
 					proCate_2.setSid(null);
-					proCate_2.setProductSid(spuNew_1.getSid().toString());
+					proCate_2.setProductSid(spuNew_1.getSid());
 					int insertCate = productCategoryMapper.insertSelective(proCate_2);
 					if (insertCate != 1) {// 数据库错误
 						logger.info("数据库错误6");
