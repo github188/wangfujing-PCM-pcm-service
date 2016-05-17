@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.price.persistence.PcmPaymentOrganMapper">
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.price.domain.entity.PcmPaymentOrgan">
+		insert into pcm_payment_organ
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="shopSid != null">
+				shop_sid,
+			</if>
+			<if test="code != null">
+				code,
+			</if>
+			<if test="bankBin != null">
+				bank_bin,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="shopSid != null">
+				#{shopSid,jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				#{code,jdbcType=VARCHAR},
+			</if>
+			<if test="bankBin != null">
+				#{bankBin,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER}
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.price.domain.entity.PcmPaymentOrgan">
+		update pcm_payment_organ
+		<set>
+			<if test="shopSid != null">
+				shop_sid = #{shopSid,jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				code = #{code,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="bankBin != null">
+				#{bank_bin,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where shop_sid = #{shopSid,jdbcType=VARCHAR} and code =
+		#{code,jdbcType=VARCHAR}
+	</update>
+</mapper>

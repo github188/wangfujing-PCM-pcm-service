@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.core.persistence.PcmMqMapper">
+	<resultMap id="BaseResultMap" type="com.wangfj.product.core.domain.entity.PcmMq">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="messageID" property="messageid" jdbcType="VARCHAR" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+		<result column="destUrl" property="desturl" jdbcType="VARCHAR" />
+		<result column="callbackUrl" property="callbackurl" jdbcType="VARCHAR" />
+		<result column="serviceID" property="serviceid" jdbcType="VARCHAR" />
+		<result column="count" property="count" jdbcType="INTEGER" />
+		<result column="sourceSysID" property="sourcesysid" jdbcType="VARCHAR" />
+		<result column="createDate" property="createdate" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="bizDesc" property="bizdesc" jdbcType="VARCHAR" />
+		<result column="bizCode" property="bizcode" jdbcType="VARCHAR" />
+		<result column="data" property="data" jdbcType="LONGVARCHAR" />
+		<result column="c1" property="c1" jdbcType="VARCHAR" />
+		<result column="c2" property="c2" jdbcType="INTEGER" />
+		<result column="c3" property="c3" jdbcType="INTEGER" />
+		<result column="c4" property="c4" jdbcType="VARCHAR" />
+		<result column="c5" property="c5" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, messageID, url, destUrl, callbackUrl, serviceID,
+		count, sourceSysID,
+		createDate,
+		status, bizDesc, bizCode, c1, c2, c3,
+		c4, c5,data
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_mq
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+
+	<select id="pcmMqInfoSendAgainJob" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM
+		pcm_mq AS mq
+		WHERE
+		mq.createDate &lt;= CURDATE() + 1
+		AND
+		mq.createDate &gt;= CURDATE() - 1
+		AND
+		mq.c1 = 0
+	</select>
+
+
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.core.domain.dto.PcmMqDto">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_mq
+		<where>
+			<if test="messageid != null">
+				and messageID = #{messageid,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				and url = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="desturl != null">
+				and destUrl = #{desturl,jdbcType=VARCHAR},
+			</if>
+			<if test="callbackurl != null">
+				and callbackUrl = #{callbackurl,jdbcType=VARCHAR},
+			</if>
+			<if test="serviceid != null">
+				and serviceID = #{serviceid,jdbcType=VARCHAR},
+			</if>
+			<if test="sourcesysid != null">
+				and sourceSysID = #{sourcesysid,jdbcType=VARCHAR},
+			</if>
+			<if test="createdate != null">
+				and createDate = #{createdate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="bizdesc != null">
+				and bizDesc = #{bizdesc,jdbcType=VARCHAR},
+			</if>
+			<if test="bizcode != null">
+				and bizCode = #{bizcode,jdbcType=VARCHAR},
+			</if>
+			<if test="c1 != null">
+				and c1 = #{c1,jdbcType=VARCHAR},
+			</if>
+			<if test="c2 != null">
+				and c2 = #{c2,jdbcType=INTEGER},
+			</if>
+			<if test="c3 != null">
+				and c3 = #{c3,jdbcType=INTEGER},
+			</if>
+			<if test="c4 != null">
+				and c4 = #{c4,jdbcType=VARCHAR},
+			</if>
+			<if test="c5 != null">
+				and c5 = #{c5,jdbcType=VARCHAR},
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="com.wangfj.product.core.domain.dto.PcmMqDto">
+		select count(*)
+		from pcm_mq
+		<where>
+			<if test="messageid != null">
+				and messageID = #{messageid,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				and url = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="desturl != null">
+				and destUrl = #{desturl,jdbcType=VARCHAR},
+			</if>
+			<if test="callbackurl != null">
+				and callbackUrl = #{callbackurl,jdbcType=VARCHAR},
+			</if>
+			<if test="serviceid != null">
+				and serviceID = #{serviceid,jdbcType=VARCHAR},
+			</if>
+			<if test="sourcesysid != null">
+				and sourceSysID = #{sourcesysid,jdbcType=VARCHAR},
+			</if>
+			<if test="createdate != null">
+				and createDate = #{createdate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="bizdesc != null">
+				and bizDesc = #{bizdesc,jdbcType=VARCHAR},
+			</if>
+			<if test="bizcode != null">
+				and bizCode = #{bizcode,jdbcType=VARCHAR},
+			</if>
+			<if test="c1 != null">
+				and c1 = #{c1,jdbcType=VARCHAR},
+			</if>
+			<if test="c2 != null">
+				and c2 = #{c2,jdbcType=INTEGER},
+			</if>
+			<if test="c3 != null">
+				and c3 = #{c3,jdbcType=INTEGER},
+			</if>
+			<if test="c4 != null">
+				and c4 = #{c4,jdbcType=VARCHAR},
+			</if>
+			<if test="c5 != null">
+				and c5 = #{c5,jdbcType=VARCHAR},
+			</if>
+		</where>
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from pcm_mq
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.wangfj.product.core.domain.entity.PcmMq">
+		insert into pcm_mq (sid,
+		messageID, url,
+		destUrl, callbackUrl, serviceID,
+		count, sourceSysID,
+		createDate,
+		status, bizDesc, bizCode,
+		c1, c2, c3, c4,
+		c5, data)
+		values
+		(#{sid,jdbcType=BIGINT}, #{messageid,jdbcType=VARCHAR},
+		#{url,jdbcType=VARCHAR},
+		#{desturl,jdbcType=VARCHAR},
+		#{callbackurl,jdbcType=VARCHAR}, #{serviceid,jdbcType=VARCHAR},
+		#{count,jdbcType=INTEGER}, #{sourcesysid,jdbcType=VARCHAR},
+		#{createdate,jdbcType=TIMESTAMP},
+		#{status,jdbcType=INTEGER},
+		#{bizdesc,jdbcType=VARCHAR}, #{bizcode,jdbcType=VARCHAR},
+		#{c1,jdbcType=VARCHAR}, #{c2,jdbcType=INTEGER},
+		#{c3,jdbcType=INTEGER}, #{c4,jdbcType=VARCHAR},
+		#{c5,jdbcType=VARCHAR}, #{data,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.wangfj.product.core.domain.entity.PcmMq">
+		insert into pcm_mq
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="messageid != null">
+				messageID,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+			<if test="desturl != null">
+				destUrl,
+			</if>
+			<if test="callbackurl != null">
+				callbackUrl,
+			</if>
+			<if test="serviceid != null">
+				serviceID,
+			</if>
+			<if test="count != null">
+				count,
+			</if>
+			<if test="sourcesysid != null">
+				sourceSysID,
+			</if>
+			<if test="createdate != null">
+				createDate,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="bizdesc != null">
+				bizDesc,
+			</if>
+			<if test="bizcode != null">
+				bizCode,
+			</if>
+			<if test="c1 != null">
+				c1,
+			</if>
+			<if test="c2 != null">
+				c2,
+			</if>
+			<if test="c3 != null">
+				c3,
+			</if>
+			<if test="c4 != null">
+				c4,
+			</if>
+			<if test="c5 != null">
+				c5,
+			</if>
+			<if test="data != null">
+				data,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="messageid != null">
+				#{messageid,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				#{url,jdbcType=VARCHAR},
+			</if>
+			<if test="desturl != null">
+				#{desturl,jdbcType=VARCHAR},
+			</if>
+			<if test="callbackurl != null">
+				#{callbackurl,jdbcType=VARCHAR},
+			</if>
+			<if test="serviceid != null">
+				#{serviceid,jdbcType=VARCHAR},
+			</if>
+			<if test="count != null">
+				#{count,jdbcType=INTEGER},
+			</if>
+			<if test="sourcesysid != null">
+				#{sourcesysid,jdbcType=VARCHAR},
+			</if>
+			<if test="createdate != null">
+				#{createdate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="bizdesc != null">
+				#{bizdesc,jdbcType=VARCHAR},
+			</if>
+			<if test="bizcode != null">
+				#{bizcode,jdbcType=VARCHAR},
+			</if>
+			<if test="c1 != null">
+				#{c1,jdbcType=VARCHAR},
+			</if>
+			<if test="c2 != null">
+				#{c2,jdbcType=INTEGER},
+			</if>
+			<if test="c3 != null">
+				#{c3,jdbcType=INTEGER},
+			</if>
+			<if test="c4 != null">
+				#{c4,jdbcType=VARCHAR},
+			</if>
+			<if test="c5 != null">
+				#{c5,jdbcType=VARCHAR},
+			</if>
+			<if test="data != null">
+				#{data,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.core.domain.entity.PcmMq">
+		update pcm_mq
+		<set>
+			<if test="messageid != null">
+				messageID = #{messageid,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="desturl != null">
+				destUrl = #{desturl,jdbcType=VARCHAR},
+			</if>
+			<if test="callbackurl != null">
+				callbackUrl = #{callbackurl,jdbcType=VARCHAR},
+			</if>
+			<if test="serviceid != null">
+				serviceID = #{serviceid,jdbcType=VARCHAR},
+			</if>
+			<if test="count != null">
+				count = #{count,jdbcType=INTEGER},
+			</if>
+			<if test="sourcesysid != null">
+				sourceSysID = #{sourcesysid,jdbcType=VARCHAR},
+			</if>
+			<if test="createdate != null">
+				createDate = #{createdate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="bizdesc != null">
+				bizDesc = #{bizdesc,jdbcType=VARCHAR},
+			</if>
+			<if test="bizcode != null">
+				bizCode = #{bizcode,jdbcType=VARCHAR},
+			</if>
+			<if test="c1 != null">
+				c1 = #{c1,jdbcType=VARCHAR},
+			</if>
+			<if test="c2 != null">
+				c2 = #{c2,jdbcType=INTEGER},
+			</if>
+			<if test="c3 != null">
+				c3 = #{c3,jdbcType=INTEGER},
+			</if>
+			<if test="c4 != null">
+				c4 = #{c4,jdbcType=VARCHAR},
+			</if>
+			<if test="c5 != null">
+				c5 = #{c5,jdbcType=VARCHAR},
+			</if>
+			<if test="data != null">
+				data = #{data,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wangfj.product.core.domain.entity.PcmMq">
+		update
+		pcm_mq
+		set messageID = #{messageid,jdbcType=VARCHAR},
+		url =
+		#{url,jdbcType=VARCHAR},
+		destUrl = #{desturl,jdbcType=VARCHAR},
+		callbackUrl = #{callbackurl,jdbcType=VARCHAR},
+		serviceID =
+		#{serviceid,jdbcType=VARCHAR},
+		count = #{count,jdbcType=INTEGER},
+		sourceSysID = #{sourcesysid,jdbcType=VARCHAR},
+		createDate =
+		#{createdate,jdbcType=TIMESTAMP},
+		status = #{status,jdbcType=INTEGER},
+		bizDesc = #{bizdesc,jdbcType=VARCHAR},
+		bizCode =
+		#{bizcode,jdbcType=VARCHAR},
+		c1 = #{c1,jdbcType=VARCHAR},
+		c2 =
+		#{c2,jdbcType=INTEGER},
+		c3 = #{c3,jdbcType=INTEGER},
+		c4 =
+		#{c4,jdbcType=VARCHAR},
+		c5 = #{c5,jdbcType=VARCHAR},
+		data =
+		#{data,jdbcType=LONGVARCHAR}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+
+	<!-- 页面展示 分页查询 chenhu -->
+	<select id="selectPageByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_mq
+		<where>
+			<if test="messageid != null">
+				and messageID = #{messageid,jdbcType=VARCHAR}
+			</if>
+			<if test="desturl != null">
+				and destUrl = #{desturl,jdbcType=VARCHAR}
+			</if>
+			<if test="serviceid != null">
+				and serviceID = #{serviceid,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+			<if test="data != null">
+				data like "%"#{data,jdbcType=LONGVARCHAR}"%"
+			</if>
+		</where>
+		order by
+		sid desc
+		<if test="start != null and limit != null">
+			limit #{start}, #{limit}
+		</if>
+	</select>
+
+	<!-- 页面展示 分页查询总数量 chenhu -->
+	<select id="getPageCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select count(*)
+		from pcm_mq
+		<where>
+			<if test="messageid != null">
+				and messageID = #{messageid,jdbcType=VARCHAR}
+			</if>
+			<if test="desturl != null">
+				and destUrl = #{desturl,jdbcType=VARCHAR}
+			</if>
+			<if test="serviceid != null">
+				and serviceID = #{serviceid,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+			<if test="data != null">
+				data like "%"#{data,jdbcType=LONGVARCHAR}"%"
+			</if>
+		</where>
+	</select>
+
+
+
+
+
+
+
+
+
+
+</mapper>

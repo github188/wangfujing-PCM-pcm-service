@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.organization.persistence.PcmRegionMapper">
+    <resultMap id="BaseResultMap"
+               type="com.wangfj.product.organization.domain.entity.PcmRegion">
+        <id column="sid" property="sid" jdbcType="BIGINT"/>
+        <result column="region_code" property="regionCode" jdbcType="VARCHAR"/>
+        <result column="region_inner_code" property="regionInnerCode"
+                jdbcType="VARCHAR"/>
+        <result column="region_name" property="regionName" jdbcType="VARCHAR"/>
+        <result column="parent_id" property="parentId" jdbcType="BIGINT"/>
+        <result column="region_level" property="regionLevel" jdbcType="INTEGER"/>
+        <result column="region_order" property="regionOrder" jdbcType="INTEGER"/>
+        <result column="region_name_en" property="regionNameEn"
+                jdbcType="VARCHAR"/>
+        <result column="region_shortname_en" property="regionShortnameEn"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+		sid,
+		region_code,
+		region_inner_code,
+		region_name,
+		parent_id,
+		region_level,
+		region_order,
+		region_name_en,
+		region_shortname_en
+	</sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_region
+        where sid = #{sid,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_region
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+    <insert id="insertSelective"
+            parameterType="com.wangfj.product.organization.domain.entity.PcmRegion"
+            useGeneratedKeys="true" keyProperty="sid">
+        insert into pcm_region
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                sid,
+            </if>
+            <if test="regionCode != null">
+                region_code,
+            </if>
+            <if test="regionInnerCode != null">
+                region_inner_code,
+            </if>
+            <if test="regionName != null">
+                region_name,
+            </if>
+            <if test="parentId != null">
+                parent_id,
+            </if>
+            <if test="regionLevel != null">
+                region_level,
+            </if>
+            <if test="regionOrder != null">
+                region_order,
+            </if>
+            <if test="regionNameEn != null">
+                region_name_en,
+            </if>
+            <if test="regionShortnameEn != null">
+                region_shortname_en,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                #{sid,jdbcType=BIGINT},
+            </if>
+            <if test="regionCode != null">
+                #{regionCode,jdbcType=VARCHAR},
+            </if>
+            <if test="regionInnerCode != null">
+                #{regionInnerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="regionName != null">
+                #{regionName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                #{parentId,jdbcType=BIGINT},
+            </if>
+            <if test="regionLevel != null">
+                #{regionLevel,jdbcType=INTEGER},
+            </if>
+            <if test="regionOrder != null">
+                #{regionOrder,jdbcType=INTEGER},
+            </if>
+            <if test="regionNameEn != null">
+                #{regionNameEn,jdbcType=VARCHAR},
+            </if>
+            <if test="regionShortnameEn != null">
+                #{regionShortnameEn,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.wangfj.product.organization.domain.entity.PcmRegion">
+        update pcm_region
+        <set>
+            <if test="regionCode != null">
+                region_code = #{regionCode,jdbcType=VARCHAR},
+            </if>
+            <if test="regionInnerCode != null">
+                region_inner_code = #{regionInnerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="regionName != null">
+                region_name = #{regionName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                parent_id = #{parentId,jdbcType=BIGINT},
+            </if>
+            <if test="regionLevel != null">
+                region_level = #{regionLevel,jdbcType=INTEGER},
+            </if>
+            <if test="regionOrder != null">
+                region_order = #{regionOrder,jdbcType=INTEGER},
+            </if>
+            <if test="regionNameEn != null">
+                region_name_en = #{regionNameEn,jdbcType=VARCHAR},
+            </if>
+            <if test="regionShortnameEn != null">
+                region_shortname_en =
+                #{regionShortnameEn,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+
+    <select id="getCountByParam" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        select
+        count(*)
+        from
+        pcm_region
+        <where>
+            <if test="regionCode != null">
+                and region_code = #{regionCode,jdbcType=VARCHAR}
+            </if>
+            <if test="regionName != null">
+                and region_name = #{regionName,jdbcType=VARCHAR}
+            </if>
+            <if test="parentId != null">
+                and parent_id = #{parentId,jdbcType=BIGINT}
+            </if>
+            <if test="regionLevel != null">
+                and region_level = #{regionLevel,jdbcType=INTEGER}
+            </if>
+            <if test="regionNameEn != null">
+                and region_name_en = #{regionNameEn,jdbcType=VARCHAR}
+            </if>
+            <if test="regionShortnameEn != null">
+                and region_shortname_en =
+                #{regionShortnameEn,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="pushRegionData" parameterType="java.util.Map"
+            resultType="java.util.Map">
+        SELECT
+        pr.sid AS sid,
+        pr.parent_id AS parentId,
+        pr.region_inner_code AS code,
+        pr.region_name AS name,
+        prp.region_inner_code AS superCode,
+        pr.region_level AS areaLib
+        FROM pcm_region pr
+        LEFT JOIN pcm_region prp ON pr.parent_id = prp.sid
+        <where>
+            <if test="sid != null">
+                AND pr.sid = #{sid}
+            </if>
+            <if test="regionLevel != null">
+                and pr.region_level = #{regionLevel}
+            </if>
+        </where>
+        <if test="start != null and limit != null">
+            LIMIT #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="selectListByParam" parameterType="java.util.Map"
+            resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        pcm_region
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="regionCode != null">
+                and region_code = #{regionCode,jdbcType=VARCHAR}
+            </if>
+            <if test="regionInnerCode != null">
+                and region_inner_code =
+                #{regionInnerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="regionName != null">
+                and region_name = #{regionName,jdbcType=VARCHAR}
+            </if>
+            <if test="parentId != null">
+                and parent_id = #{parentId,jdbcType=BIGINT}
+            </if>
+            <if test="regionLevel != null">
+                and region_level = #{regionLevel,jdbcType=INTEGER}
+            </if>
+            <if test="regionOrder != null">
+                and region_order = #{regionOrder,jdbcType=INTEGER}
+            </if>
+            <if test="regionNameEn != null">
+                and region_name_en = #{regionNameEn,jdbcType=VARCHAR}
+            </if>
+            <if test="regionShortnameEn != null">
+                and region_shortname_en =
+                #{region_shortname_en,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <!-- 分页查询总数量 -->
+    <select id="getPageCountByParam"
+            parameterType="com.wangfj.product.organization.domain.vo.PcmRegionQueryDto"
+            resultType="java.lang.Integer">
+        SELECT
+        COUNT(*)
+        FROM
+        (SELECT
+        <include refid="Base_Column_List"/>
+        FROM pcm_region
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="regionCode != null">
+                and region_code = #{regionCode,jdbcType=VARCHAR}
+            </if>
+            <if test="regionInnerCode != null">
+                and region_inner_code =
+                #{regionInnerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="regionName != null">
+                and region_name like "%"#{regionName,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="parentId != null">
+                and parent_id = #{parentId,jdbcType=BIGINT}
+            </if>
+            <if test="regionLevel != null">
+                and region_level = #{regionLevel,jdbcType=INTEGER}
+            </if>
+        </where>
+        ) pr
+        LEFT JOIN
+        pcm_region prp ON pr.parent_id = prp.sid
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="findPageRegionByParam"
+            parameterType="com.wangfj.product.organization.domain.vo.PcmRegionQueryDto"
+            resultType="com.wangfj.product.organization.domain.vo.PcmRegionResultDto">
+        SELECT
+        pr.sid AS sid,
+        pr.region_code AS regionCode,
+        pr.region_inner_code
+        AS regionInnerCode,
+        pr.region_name AS
+        regionName,pr.parent_id AS
+        parentId,
+        pr.region_level AS regionLevel,
+        pr.region_order AS
+        regionOrder,
+        pr.region_name_en AS regionNameEn,
+        pr.region_shortname_en
+        AS regionShortnameEn
+        FROM
+        (SELECT
+        <include refid="Base_Column_List"/>
+        FROM pcm_region
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="regionCode != null">
+                and region_code = #{regionCode,jdbcType=VARCHAR}
+            </if>
+            <if test="regionInnerCode != null">
+                and region_inner_code =
+                #{regionInnerCode,jdbcType=VARCHAR}
+            </if>
+            <if test="regionName != null">
+                and region_name like "%"#{regionName,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="parentId != null">
+                and parent_id = #{parentId,jdbcType=BIGINT}
+            </if>
+            <if test="regionLevel != null">
+                and region_level = #{regionLevel,jdbcType=INTEGER}
+            </if>
+        </where>
+        ) pr
+        LEFT JOIN
+        pcm_region prp ON pr.parent_id = prp.sid
+        ORDER BY
+        CONVERT(pr.region_name USING gbk) ASC
+        <if test="start != null and limit != null">
+            LIMIT #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="getRegionChildrenListByCode"
+            parameterType="com.wangfj.product.organization.domain.vo.PcmRegionQueryDto"
+            resultType="com.wangfj.product.organization.domain.vo.PcmRegionResultDto">
+        SELECT
+        pr.sid AS sid,
+        pr.region_code AS regionCode,
+        pr.region_inner_code
+        AS regionInnerCode,
+        pr.region_name AS regionName,
+        pr.parent_id AS
+        parentId,
+        pr.region_level AS regionLevel,
+        pr.region_order AS
+        regionOrder,
+        pr.region_name_en AS regionNameEn,
+        pr.region_shortname_en
+        AS regionShortnameEn
+        FROM
+        pcm_region pr
+        <where>
+            <if test="regionCode != null and regionCode != ''">
+                pr.parent_id = (
+                SELECT
+                sid
+                FROM
+                pcm_region
+                WHERE
+                region_code =
+                #{regionCode}
+                )
+            </if>
+        </where>
+        ORDER BY
+        CONVERT(pr.region_name USING gbk) ASC
+    </select>
+
+
+</mapper>

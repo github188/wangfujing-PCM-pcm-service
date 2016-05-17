@@ -1,0 +1,875 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+        namespace="com.wangfj.product.organization.persistence.PcmOrganizationMapper">
+    <resultMap id="BaseResultMap"
+               type="com.wangfj.product.organization.domain.entity.PcmOrganization">
+        <id column="sid" property="sid" jdbcType="BIGINT"/>
+        <result column="parent_sid" property="parentSid" jdbcType="VARCHAR"/>
+        <result column="group_sid" property="groupSid" jdbcType="BIGINT"/>
+        <result column="organization_name" property="organizationName"
+                jdbcType="VARCHAR"/>
+        <result column="organization_code" property="organizationCode"
+                jdbcType="VARCHAR"/>
+        <result column="organization_type" property="organizationType"
+                jdbcType="INTEGER"/>
+        <result column="organization_status" property="organizationStatus"
+                jdbcType="INTEGER"/>
+        <result column="create_name" property="createName" jdbcType="VARCHAR"/>
+        <result column="update_name" property="updateName" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="store_type" property="storeType" jdbcType="INTEGER"/>
+        <result column="shipping_point" property="shippingPoint"
+                jdbcType="VARCHAR"/>
+        <result column="area_code" property="areaCode" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		sid, parent_sid, group_sid, organization_name,
+		organization_code,
+		organization_type,
+		organization_status,
+		create_name,
+		update_name,
+		create_time,
+		update_time,store_type,shipping_point,area_code
+	</sql>
+
+    <select id="pushOrgData" resultType="java.util.HashMap"
+            parameterType="java.util.Map">
+        SELECT
+        po.organization_code AS code,
+        po.organization_name
+        AS name,
+        po.organization_type AS type,
+        pop.organization_code AS
+        superCode,
+        po.store_type AS storeType,
+        po.shipping_point AS
+        shippingPoint,
+        po.create_name AS actionPerson
+        FROM
+        (
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        pcm_organization
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="organizationStatus != null">
+                and organization_status =
+                #{organizationStatus,jdbcType=INTEGER}
+            </if>
+            <if test="organizationType != null">
+                and organization_type = #{organizationType}
+            </if>
+        </where>
+        ) po
+        LEFT JOIN pcm_organization pop ON CONVERT
+        (po.parent_sid, UNSIGNED)
+        =
+        pop.sid
+    </select>
+
+    <select id="findOrganizationByParamFromPcm" resultType="java.util.HashMap"
+            parameterType="java.util.Map">
+        select
+        organization_code as code,
+        organization_name as name,
+        organization_type as type,
+        parent_sid as superCode,
+        store_type as
+        storeType,
+        area_code as areaCode,
+        shipping_point as shippingPoint
+        from
+        pcm_organization
+        <where>
+            <if test="storeCode != null">
+                and organization_code = #{storeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="areaCode != null">
+                and area_code = #{areaCode,jdbcType=VARCHAR}
+            </if>
+            <if test="code != null">
+                and organization_code = #{code,jdbcType=VARCHAR}
+            </if>
+            <if test="name != null">
+                and organization_name like
+                '%${name}%'
+                <!-- '%'||#{name,jdbcType=VARCHAR}||'%' -->
+            </if>
+            <if test="type != null">
+                and organization_type = #{type,jdbcType=INTEGER}
+            </if>
+            <if test="superCode != null">
+                and parent_sid = #{superCode,jdbcType=VARCHAR}
+            </if>
+            <if test="storeType != null">
+                and store_type = #{storeType,jdbcType=INTEGER}
+            </if>
+            <if test="shippingPoint != null">
+                and shipping_point = #{shippingPoint,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationStatus != null">
+                and organization_status =
+                #{organizationStatus,jdbcType=INTEGER}
+            </if>
+        </where>
+        <if test="start != null">
+            <if test="limit != null">
+                limit
+                #{start}, #{limit}
+            </if>
+        </if>
+    </select>
+    <select id="get" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_organization
+        where sid = #{sid,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_organization
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+
+    <insert id="insert"
+            parameterType="com.wangfj.product.organization.domain.entity.PcmOrganization">
+		insert into pcm_organization (sid, parent_sid,
+		organization_name,
+		organization_code, organization_type,
+		organization_status,
+		create_name, update_name, create_time,
+		update_time)
+		values (#{sid,jdbcType=BIGINT},
+		#{parentSid,jdbcType=VARCHAR},
+		#{organizationName,jdbcType=VARCHAR},
+		#{organizationCode,jdbcType=VARCHAR},
+		#{organizationType,jdbcType=INTEGER},
+		#{organizationStatus,jdbcType=INTEGER},
+		#{createName,jdbcType=VARCHAR}, #{updateName,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP})
+	</insert>
+    <insert id="insertSelective"
+            parameterType="com.wangfj.product.organization.domain.entity.PcmOrganization"
+            useGeneratedKeys="true" keyProperty="sid">
+        insert into pcm_organization
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                sid,
+            </if>
+            <if test="parentSid != null">
+                parent_sid,
+            </if>
+            <if test="groupSid != null">
+                group_sid,
+            </if>
+            <if test="organizationName != null">
+                organization_name,
+            </if>
+            <if test="organizationCode != null">
+                organization_code,
+            </if>
+            <if test="organizationType != null">
+                organization_type,
+            </if>
+            <if test="organizationStatus != null">
+                organization_status,
+            </if>
+            <if test="createName != null">
+                create_name,
+            </if>
+            <if test="updateName != null">
+                update_name,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <!-- store_type,shipping_point,area_code -->
+            <if test="storeType != null">
+                store_type,
+            </if>
+            <if test="shippingPoint != null">
+                shipping_point,
+            </if>
+            <if test="areaCode != null">
+                area_code,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                #{sid,jdbcType=BIGINT},
+            </if>
+            <if test="parentSid != null">
+                #{parentSid,jdbcType=VARCHAR},
+            </if>
+            <if test="groupSid != null">
+                #{groupSid,jdbcType=BIGINT},
+            </if>
+            <if test="organizationName != null">
+                #{organizationName,jdbcType=VARCHAR},
+            </if>
+            <if test="organizationCode != null">
+                #{organizationCode,jdbcType=VARCHAR},
+            </if>
+            <if test="organizationType != null">
+                #{organizationType,jdbcType=INTEGER},
+            </if>
+            <if test="organizationStatus != null">
+                #{organizationStatus,jdbcType=INTEGER},
+            </if>
+            <if test="createName != null">
+                #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="updateName != null">
+                #{updateName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="storeType != null">
+                #{storeType,jdbcType=INTEGER},
+            </if>
+            <if test="shippingPoint != null">
+                #{shippingPoint,jdbcType=VARCHAR},
+            </if>
+            <if test="areaCode != null">
+                #{areaCode,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.wangfj.product.organization.domain.entity.PcmOrganization">
+        update pcm_organization
+        <set>
+            <if test="parentSid != null">
+                parent_sid = #{parentSid,jdbcType=VARCHAR},
+            </if>
+            <if test="groupSid != null">
+                group_sid = #{groupSid,jdbcType=BIGINT},
+            </if>
+            <if test="organizationName != null">
+                organization_name = #{organizationName,jdbcType=VARCHAR},
+            </if>
+            <if test="organizationCode != null">
+                organization_code = #{organizationCode,jdbcType=VARCHAR},
+            </if>
+            <if test="organizationType != null">
+                organization_type = #{organizationType,jdbcType=INTEGER},
+            </if>
+            <if test="organizationStatus != null">
+                organization_status =
+                #{organizationStatus,jdbcType=INTEGER},
+            </if>
+            <if test="createName != null">
+                create_name = #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="updateName != null">
+                update_name = #{updateName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="storeType != null">
+                store_type = #{storeType,jdbcType=INTEGER},
+            </if>
+            <if test="shippingPoint != null">
+                shipping_point = #{shippingPoint,jdbcType=VARCHAR},
+            </if>
+            <if test="areaCode != null">
+                area_code = #{areaCode,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPcmOrganizationDto"
+            parameterType="com.wangfj.product.organization.domain.vo.PcmOrganizationDto">
+        update pcm_organization
+        <set>
+            <if test="organizationStatus != null">
+                organization_status =
+                #{organizationStatus,jdbcType=INTEGER},
+            </if>
+        </set>
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey"
+            parameterType="com.wangfj.product.organization.domain.entity.PcmOrganization">
+		update pcm_organization
+		set parent_sid =
+		#{parentSid,jdbcType=VARCHAR},
+		organization_name =
+		#{organizationName,jdbcType=VARCHAR},
+		organization_code =
+		#{organizationCode,jdbcType=VARCHAR},
+		organization_type =
+		#{organizationType,jdbcType=INTEGER},
+		organization_status =
+		#{organizationStatus,jdbcType=INTEGER},
+		create_name =
+		#{createName,jdbcType=VARCHAR},
+		update_name =
+		#{updateName,jdbcType=VARCHAR},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+
+    <!-- 多条件查询 -->
+    <select id="selectListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_organization
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=VARCHAR}
+            </if>
+            <if test="groupSid != null">
+                and group_sid = #{groupSid,jdbcType=BIGINT}
+            </if>
+            <if test="organizationName != null">
+                and organization_name =
+                #{organizationName,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationCode != null">
+                and organization_code =
+                #{organizationCode,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationType != null">
+                and organization_type =
+                #{organizationType,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus != null">
+                and organization_status =
+                #{organizationStatus,jdbcType=INTEGER}
+            </if>
+            <if test="createName != null">
+                and create_name = #{createName,jdbcType=VARCHAR}
+            </if>
+            <if test="updateName != null">
+                and update_name = #{updateName,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectListByParamOrg" resultMap="BaseResultMap"
+            parameterType="com.wangfj.product.organization.domain.vo.PcmOrganizationDto">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_organization
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationName != null">
+                and organization_name =
+                #{organizationName,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationCode != null">
+                and organization_code =
+                #{organizationCode,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationType != null">
+                and organization_type =
+                #{organizationType,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus != null">
+                and organization_status =
+                #{organizationStatus,jdbcType=INTEGER}
+            </if>
+            <if test="createName != null">
+                and create_name = #{createName,jdbcType=VARCHAR}
+            </if>
+            <if test="updateName != null">
+                and update_name = #{updateName,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+        <if test="start != null">
+            <if test="limit != null">
+                limit
+                #{start}, #{limit}
+            </if>
+        </if>
+    </select>
+    <select id="selectPageListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_organization
+        <where>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=VARCHAR}
+            </if>
+            <if test="groupSid != null">
+                and group_sid = #{groupSid,jdbcType=BIGINT}
+            </if>
+            <if test="organizationName != null">
+                and organization_name =
+                #{organizationName,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationCode != null">
+                and organization_code =
+                #{organizationCode,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationType != null">
+                and organization_type =
+                #{organizationType,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus != null">
+                and organization_status =
+                #{organizationStatus,jdbcType=INTEGER}
+            </if>
+            <if test="createName != null">
+                and create_name = #{createName,jdbcType=VARCHAR}
+            </if>
+            <if test="updateName != null">
+                and update_name = #{updateName,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+        order by
+        sid asc
+        limit
+        #{start}, #{limit}
+    </select>
+    <select id="getCountByParam" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        select
+        count(*)
+        from pcm_organization
+        <where>
+            <if test="storeCode != null">
+                and organization_code = #{storeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="areaCode != null">
+                and area_code = #{areaCode,jdbcType=VARCHAR}
+            </if>
+            <if test="code != null">
+                and organization_code = #{code,jdbcType=VARCHAR}
+            </if>
+            <if test="name != null">
+                and organization_name like
+                '%'||#{name,jdbcType=VARCHAR}||'%'
+            </if>
+            <if test="type != null">
+                and organization_type = #{type,jdbcType=INTEGER}
+            </if>
+            <if test="superCode != null">
+                and parent_sid = #{superCode,jdbcType=VARCHAR}
+            </if>
+            <if test="storeType != null">
+                and store_type = #{storeType,jdbcType=INTEGER}
+            </if>
+            <if test="shippingPoint != null">
+                and shipping_point = #{shippingPoint,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationStatus != null">
+                and organization_status =
+                #{organizationStatus,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <select id="getPOrganizationByOrganizationCode" resultMap="BaseResultMap"
+            parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_organization
+        where
+        organization_code =
+        #{organizationCode,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getCountByParamOrg" resultType="java.lang.Integer"
+            parameterType="com.wangfj.product.organization.domain.vo.PcmOrganizationDto">
+        select
+        count(*)
+        from pcm_organization
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationName != null">
+                and organization_name =
+                #{organizationName,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationCode != null">
+                and organization_code =
+                #{organizationCode,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationType != null">
+                and organization_type =
+                #{organizationType,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus != null">
+                and organization_status =
+                #{organizationStatus,jdbcType=INTEGER}
+            </if>
+            <if test="createName != null">
+                and create_name = #{createName,jdbcType=VARCHAR}
+            </if>
+            <if test="updateName != null">
+                and update_name = #{updateName,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
+
+    <!-- 只查询部分信息 -->
+    <select id="selectPagePartInfoByPara"
+            resultType="com.wangfj.product.organization.domain.vo.PcmOrgPartInfoDto"
+            parameterType="com.wangfj.product.organization.domain.vo.SelectPcmOrganizationDto">
+        select
+        sid AS sid,group_sid AS
+        groupSid,
+        organization_name
+        AS
+        organizationName,organization_code AS organizationCode
+        from
+        pcm_organization
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=VARCHAR}
+            </if>
+            <if test="groupSid != null">
+                and group_sid = #{groupSid,jdbcType=BIGINT}
+            </if>
+            <if test="organizationName != null">
+                and organization_name like
+                "%"#{organizationName,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="organizationCode != null">
+                and organization_code =
+                #{organizationCode,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationType != null">
+                and organization_type =
+                #{organizationType,jdbcType=INTEGER}
+            </if>
+            <if test="storeType != null">
+                and store_type =
+                #{storeType,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus != null">
+                and organization_status =
+                #{organizationStatus,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus == null">
+                and organization_status = 0
+            </if>
+        </where>
+        ORDER BY
+        CONVERT(organization_name USING gbk) ASC
+    </select>
+
+    <!-- 分页查询 wangxuan -->
+    <select id="selectPageByPara"
+            resultType="com.wangfj.product.organization.domain.vo.PcmOrganizationResultDto"
+            parameterType="com.wangfj.product.organization.domain.vo.SelectPcmOrganizationDto">
+        SELECT po.sid AS sid, po.parent_sid AS parentSid,po.group_sid AS
+        groupSid, po.organization_name
+        AS organizationName,
+        po.organization_code AS
+        organizationCode,pos.organization_name AS
+        organizationFatherName,
+        pos.organization_code AS
+        organizationFatherCode, po.organization_type
+        AS organizationType,
+        po.organization_status AS organizationStatus,
+        po.create_name AS
+        createName, po.update_name
+        AS updateName,
+        po.create_time AS createTimes,
+        po.update_time AS updateTimes,
+        po.store_type AS
+        storeType,
+        po.area_code
+        AS areaCode, po.shipping_point
+        AS shippingPoint
+        FROM
+        (SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        pcm_organization
+        <where>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=VARCHAR}
+            </if>
+            <if test="groupSid != null">
+                and group_sid = #{groupSid,jdbcType=BIGINT}
+            </if>
+            <if test="organizationName != null">
+                and organization_name like
+                "%"#{organizationName,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="organizationCode != null">
+                and organization_code =
+                #{organizationCode,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationType != null">
+                and organization_type =
+                #{organizationType,jdbcType=INTEGER}
+            </if>
+            <if test="storeType != null">
+                and store_type =
+                #{storeType,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus != null">
+                and organization_status =
+                #{organizationStatus,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus == null">
+                and organization_status = 0
+            </if>
+        </where>
+        ) po
+        LEFT JOIN pcm_organization
+        pos
+        ON
+        CONVERT(po.parent_sid,UNSIGNED) =
+        pos.sid
+        order by
+        sid desc
+        <if test="start != null and limit != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+    <!-- 分页查询总数量 wangxuan -->
+    <select id="getPageCountByPara" resultType="java.lang.Integer"
+            parameterType="com.wangfj.product.organization.domain.vo.SelectPcmOrganizationDto">
+        SELECT COUNT(po.sid)
+        FROM (SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        pcm_organization
+        <where>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=VARCHAR}
+            </if>
+            <if test="groupSid != null">
+                and group_sid = #{groupSid,jdbcType=BIGINT}
+            </if>
+            <if test="organizationName != null">
+                and organization_name like
+                "%"#{organizationName,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="organizationCode != null">
+                and organization_code =
+                #{organizationCode,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationType != null">
+                and organization_type =
+                #{organizationType,jdbcType=INTEGER}
+            </if>
+            <if test="storeType != null">
+                and store_type =
+                #{storeType,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus != null">
+                and organization_status =
+                #{organizationStatus,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus == null">
+                and organization_status = 0
+            </if>
+        </where>
+        ) po LEFT JOIN
+        pcm_organization pos
+        ON CONVERT(po.parent_sid,UNSIGNED) =
+        pos.sid
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_organization
+        where sid = #{sid,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByShopSid" resultType="java.util.Map"
+            parameterType="com.wangfj.product.organization.domain.vo.PcmOrganizationDto">
+        SELECT
+        sid,
+        organization_name,
+        organization_code
+        FROM
+        pcm_organization
+        WHERE
+        organization_type = 3
+        AND organization_status = 0
+        AND parent_sid IN
+        (
+        SELECT
+        sid
+        FROM
+        pcm_organization
+        WHERE
+        organization_type = 2
+        AND
+        organization_status = 0
+        AND parent_sid = (
+        SELECT
+        parent_sid
+        FROM
+        pcm_organization
+        WHERE
+        organization_type = 2
+        AND sid = (
+        SELECT
+        parent_sid
+        FROM
+        pcm_organization
+        WHERE
+        organization_type = 3
+        <if test="sid!=null">
+            and sid=#{sid,jdbcType=BIGINT}
+        </if>
+        <if test="organizationName!=null">
+            and organization_name=#{organizationName,jdbcType=VARCHAR}
+        </if>
+        <if test="organizationCode!=null">
+            and organization_code=#{organizationCode,jdbcType=VARCHAR}
+        </if>
+        )))
+
+    </select>
+    <select id="selectShopPageByPara" resultType="java.util.Map">
+		select
+		organization_code as storeCode
+		from pcm_organization where
+		organization_type=3 and organization_status = 0 order by
+		sid desc
+	</select>
+    <!--移动工作台调用主数据获取组织机构信息 -->
+    <select id="findOrganizationByParamFromPAD"
+            resultType="com.wangfj.product.organization.domain.vo.PcmOrganizationPAD"
+            parameterType="java.util.Map">
+        select
+        organization_code as code,
+        organization_name as name,
+        organization_type as type,
+        parent_sid as superCode,
+        store_type as
+        storeType,
+        shipping_point as shippingPoint
+        from
+        pcm_organization
+        <where>
+            <if test="storeCode != null">
+                and organization_code = #{storeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="code != null">
+                and organization_code = #{code,jdbcType=VARCHAR}
+            </if>
+            <if test="name != null">
+                and organization_name like
+                '%'||#{name,jdbcType=VARCHAR}||'%'
+            </if>
+            <if test="type != null">
+                and organization_type = #{type,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <select id="searchOnlineShopList" resultType="java.util.Map">
+		SELECT
+		organization_code AS shopId,
+		organization_name AS shopName
+		FROM
+		pcm_organization
+		WHERE
+		organization_type = 3
+		AND organization_status = 0
+	</select>
+
+    <!-- CMS 渠道下对应的门店 -->
+    <select id="findShopByChannelParamToCMS"
+            parameterType="com.wangfj.product.organization.domain.vo.PcmInfoQueryDto"
+            resultType="com.wangfj.product.organization.domain.vo.PcmInfoResultDto">
+        SELECT DISTINCT
+        po.organization_code AS shopCode,
+        po.organization_name
+        AS shopName
+        FROM
+        pcm_organization po
+        INNER JOIN
+        pcm_shoppe ps ON po.sid =
+        ps.shop_sid
+        AND po.organization_type = 3
+        AND
+        po.organization_status = 0
+        AND
+        ps.shoppe_status = 1
+        INNER JOIN
+        pcm_channel_sale_config pcsc ON
+        pcsc.shoppe_pro_sid = ps.sid
+        AND
+        pcsc.sale_stauts = 0
+        INNER JOIN
+        pcm_channel pc ON pcsc.channel_sid =
+        pc.channel_code
+        AND pc.status = 0
+        AND pcsc.sale_stauts = 0
+        <where>
+            <if test="channelCode != null and channelCode != ''">
+                and pc.channel_code = #{channelCode}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

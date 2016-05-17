@@ -1,0 +1,2321 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmProDetailMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.maindata.domain.entity.PcmProDetail">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="product_detail_sid" property="productDetailSid"
+			jdbcType="VARCHAR" />
+		<result column="pro_detail_name" property="proDetailName"
+			jdbcType="VARCHAR" />
+		<result column="product_sid" property="productSid" jdbcType="BIGINT" />
+		<result column="pro_stan_sid" property="proStanSid" jdbcType="VARCHAR" />
+		<result column="pro_color_sid" property="proColorSid" jdbcType="BIGINT" />
+		<result column="pro_color_name" property="proColorName"
+			jdbcType="VARCHAR" />
+		<result column="pro_color_alias" property="proColorAlias"
+			jdbcType="VARCHAR" />
+		<result column="pro_stan_name" property="proStanName" jdbcType="VARCHAR" />
+		<result column="memo" property="memo" jdbcType="VARCHAR" />
+		<result column="barcode" property="barcode" jdbcType="VARCHAR" />
+		<result column="pro_wri_time" property="proWriTime" jdbcType="TIMESTAMP" />
+		<result column="photo_sale_code_sid" property="photoSaleCodeSid"
+			jdbcType="VARCHAR" />
+		<result column="photo_status" property="photoStatus" jdbcType="INTEGER" />
+		<result column="opt_user_sid" property="optUserSid" jdbcType="BIGINT" />
+		<result column="opt_real_name" property="optRealName" jdbcType="VARCHAR" />
+		<result column="opt_update_time" property="optUpdateTime"
+			jdbcType="TIMESTAMP" />
+		<result column="plan_maker" property="planMaker" jdbcType="VARCHAR" />
+		<result column="plan_time" property="planTime" jdbcType="TIMESTAMP" />
+		<result column="photo_plan_sid" property="photoPlanSid"
+			jdbcType="VARCHAR" />
+		<result column="pro_active_bit" property="proActiveBit"
+			jdbcType="INTEGER" />
+		<result column="pro_type" property="proType" jdbcType="INTEGER" />
+		<result column="selling_status" property="sellingStatus"
+			jdbcType="INTEGER" />
+		<result column="search_key" property="searchKey" jdbcType="VARCHAR" />
+		<result column="key_word" property="keyWord" jdbcType="VARCHAR" />
+		<result column="size_picture_url" property="sizePictureUrl"
+			jdbcType="VARCHAR" />
+		<result column="features" property="features" jdbcType="VARCHAR" />
+		<result column="article_num" property="articleNum" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="SkuListResultMap"
+		type="com.wangfj.product.maindata.domain.vo.SearchOnlineSkuInfoDto">
+		<id column="skuId" property="skuId"></id>
+		<result column="spuId" property="spuId" />
+		<result column="type" property="type" />
+		<result column="onSell" property="onSell" />
+		<result column="colorId" property="colorId" />
+		<result column="colorName" property="colorName" />
+		<result column="colorAlias" property="colorAlias" />
+		<result column="standardId" property="standardId" />
+		<result column="standardName" property="standardName" />
+		<result column="upTime" property="upTime" />
+		<result column="title" property="title" />
+		<collection property="pictures" resultMap="goodsImgResult" />
+	</resultMap>
+	<resultMap
+		type="com.wangfj.product.maindata.domain.vo.SearchOnlineUrlInfoDto"
+		id="goodsImgResult">
+		<id column="pictureSid" property="pictureSid" />
+		<result column="picture" property="picture" />
+		<result column="colorId" property="colorId" />
+		<result column="order" property="order" />
+		<result column="colorAlias" property="colorAlias" />
+		<result column="colorMaster" property="colorMaster" />
+		<result column="size" property="size" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, product_detail_sid, pro_detail_name,
+		product_sid,
+		pro_stan_sid,
+		pro_color_sid, pro_color_name,
+		pro_color_alias,
+		pro_stan_name, memo,
+		barcode,
+		pro_wri_time, photo_sale_code_sid,
+		photo_status, opt_user_sid,
+		opt_real_name, opt_update_time,
+		plan_maker,
+		plan_time,
+		photo_plan_sid,
+		pro_active_bit, pro_type, selling_status,
+		search_key, key_word,
+		size_picture_url,features,article_num
+	</sql>
+
+
+	<resultMap type="java.util.HashMap" id="selectStockPriceResultMap">
+		<id column="spsid" property="spsid" /> <!-- 专柜商品编码 -->
+		<result column="skuCode" property="skuCode" /> <!-- SKU编码 -->
+		<result column="stock" property="stock" /> <!-- 库存 -->
+		<result column="price" property="price" /> <!-- 价格 /促销价格 -->
+		<result column="isSoldOut" property="isSoldOut" /> <!-- 是否售罄 -->
+		<collection property="tags" javaType="java.util.List"
+			ofType="java.util.HashMap">
+			<id column="tagSid" property="tagSid" />
+			<result column="tagName" property="tagName" />
+			<result column="tagStatus" property="tagStatus" />
+			<result column="tagBegin" property="tagBegin" />
+			<result column="tagEnd" property="tagEnd" />
+		</collection>
+	</resultMap>
+
+	<select id="selectStockAndPriceBySkuCode" parameterType="java.util.Map"
+		resultMap="selectStockPriceResultMap">
+		SELECT sku.product_detail_sid as skuCode <!-- SKU编码 -->
+		,ifnull(sp.shoppe_pro_sid,"") as spsid<!-- 专柜商品编码 -->
+		,ifnull(st.pro_sum,"") as stock <!-- 库存 -->
+		,ifnull(pr.promotion_price,"") as price <!-- 价格 /促销价格 -->
+		<!-- ,pr.original_price as origin '原价' -->
+		,tag.sid as tagSid<!-- '标签sid' -->
+		,tag.tag_name as tagName <!-- '标签名' -->
+		,tag.`status` as tagStatus <!-- 标签状态 -->
+		,tag.begin_date as tagBegin<!-- '标签活动开始时间' -->
+		,tag.end_date as tagEnd<!-- '标签活动结束时间' -->
+		,sku.size_picture_url as isSoldOut <!-- 是否售罄 -->
+		FROM pcm_pro_detail sku
+		left join pcm_shoppe_product sp
+		on
+		sp.product_detail_sid = sku.sid
+		left join pcm_stock st
+		on
+		sp.shoppe_pro_sid = st.shoppe_pro_sid
+		<if test="stockType != null">  <!-- 库存类型 -->
+			AND st.stock_type_sid = #{stockType,jdbcType=INTEGER}
+		</if>
+		left join pcm_price pr
+		on
+		sp.shoppe_pro_sid = pr.shoppe_pro_sid
+		<if test="channel != null"> <!-- 渠道 -->
+			AND pr.channel_sid = #{channel,jdbcType=VARCHAR}
+		</if>
+		<if test="promotion != null"> <!-- 促销有效时间状态 -->
+			AND NOW() BETWEEN
+			pr.promotion_begin_time AND pr.promotion_end_time
+			AND pr.ifdel = 0
+		</if>
+		left join pcm_product_tag pt
+		on
+		sp.shoppe_pro_sid = pt.product_sid
+		LEFT
+		JOIN pcm_tag tag
+		on pt.tag_sid =
+		tag.sid
+		<if test="tagFlag != null">
+			AND pt.flag = #{tagFlag,jdbcType=INTEGER}  <!-- 产品-标签状态 -->
+		</if>
+		<if test="tagType != null">
+			AND tag.tag_type = #{tagType,jdbcType=INTEGER}<!-- 标签类型 -->
+		</if>
+		<if test="tagStatus != null">
+			AND tag.`status` = #{tagStatus,jdbcType=INTEGER}<!-- 标签状态 -->
+		</if>
+		<if test="tagTime != null">  <!-- 标签有效时间 -->
+			AND NOW() BETWEEN tag.begin_date
+			AND tag.end_date
+		</if>
+		LEFT JOIN pcm_shoppe shp
+		ON sp.shoppe_sid = shp.sid
+		<if test="shoppeStatus != null"> <!-- 专柜状态 -->
+			AND shp.shoppe_status = #{shoppeStatus,jdbcType=INTEGER}
+		</if>
+		where
+		sku.product_detail_sid = #{skuCode,jdbcType=VARCHAR}
+		and
+		sku.pro_active_bit = 1
+	</select>
+
+
+
+	<select id="searchItemCodeBySkuCode" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT
+		pro.shoppe_pro_sid as itemId
+		FROM
+		pcm_shoppe_product AS pro
+		JOIN
+		pcm_pro_detail AS sku ON pro.product_detail_sid = sku.sid
+		<where>
+			<if test="skuId != null">
+				and sku.product_detail_sid = #{skuId,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectSkuItemByCode" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		FROM
+		pcm_pro_detail
+		WHERE
+		product_sid = (
+		SELECT
+		product_sid
+		FROM
+		pcm_pro_detail
+		WHERE
+		product_detail_sid = #{skuCode,jdbcType=VARCHAR}
+		)
+	</select>
+
+	<select id="searchSkuCodeBySpuCode" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT
+		sku.product_detail_sid as skuId
+		FROM
+		pcm_pro_detail AS sku
+		JOIN
+		pcm_product AS spu
+		ON sku.product_sid = spu.sid
+		<where>
+			<if test="spuId != null">
+				and spu.product_sid = #{spuId,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectPhotoBySpuColor" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT
+		sku.photo_plan_sid as photoPlanSid,
+		sku.photo_status
+		photoStatus,
+		sku.selling_status AS sellingStatus
+		FROM
+		pcm_pro_detail AS
+		sku
+		JOIN pcm_product AS spu ON sku.product_sid = spu.sid
+		WHERE
+		spu.sid =
+		#{spuSid,jdbcType=VARCHAR}
+		AND pro_color_sid =
+		#{colorSid,jdbcType=VARCHAR}
+	</select>
+
+	<select id="searchOnlineSkuInfoByCode" resultMap="SkuListResultMap"
+		parameterType="java.util.Map">
+		<![CDATA[SELECT
+		sku.product_detail_sid as skuId,
+		sku.pro_detail_name AS title,
+		spu.product_sid as spuId,	
+		sku.plan_time AS upTime,
+		sku.pro_type as type,
+		if(sku.pro_active_bit = '0',false,true) as onSell,
+		sku.pro_color_sid as
+		colorId,
+		color.color_name as colorName,
+		sku.pro_color_name as
+		colorAlias,
+		sku.pro_stan_sid as standardId,
+		sku.pro_stan_name as
+		standardName,
+		url.sid as pictureSid,
+		url.picture_url as picture,
+		url.sort as 'order',
+		concat(stan.picture_width,'*',stan.picture_height) AS size,
+		if(url.is_primary = '0',true,false) as colorMaster
+		FROM
+		pcm_pro_detail AS
+		sku
+		JOIN pcm_product AS spu ON spu.sid = sku.product_sid
+		JOIN
+		pcm_color_dict AS color ON sku.pro_color_sid = color.sid
+		LEFT JOIN
+		pcm_picture_url url ON spu.product_sid = url.sku_sid and url.if_delete = 0 
+		AND
+		sku.pro_color_sid = url.color_code AND url.is_primary = 0
+		LEFT JOIN pcm_picture_stan AS stan ON stan.sid = url.stan_sid
+		]]>
+		<where>
+			sku.selling_status = 1
+			<if test="skuId != null">
+				and sku.product_detail_sid = #{skuId,jdbcType=VARCHAR}
+			</if>
+			<if test="skuList != null">
+				and sku.sid in
+				<foreach collection="skuList" item="skuSid" index="index"
+					open="(" close=")" separator=",">
+					#{skuSid,jdbcType=VARCHAR}
+				</foreach>
+			</if>
+		</where>
+	</select>
+
+	<select id="selectShoppeByPara"
+		parameterType="com.wangfj.product.maindata.domain.vo.PcmPhotoShoppeDto"
+		resultType="com.wangfj.product.maindata.domain.vo.PcmProPhotoSubDto">
+		SELECT DISTINCT
+		shoppe.shoppe_name as specialCounterName,
+		shoppe.shoppe_code as
+		specialCounterCode,
+		shoppe.floor_sid as levelss
+		FROM
+		pcm_shoppe AS shoppe
+		JOIN
+		pcm_shoppe_product AS pro ON shoppe.sid =
+		pro.shoppe_sid
+		JOIN
+		pcm_pro_detail AS sku ON sku.sid =
+		pro.product_detail_sid
+		JOIN
+		pcm_product AS spu ON spu.sid =
+		sku.product_sid
+		JOIN pcm_organization
+		as org ON shoppe.shop_sid =
+		org.sid
+		<where>
+			<if test="colorCode != null">
+				AND sku.pro_color_sid = #{colorCode,jdbcType=VARCHAR}
+			</if>
+			<if test="size != null">
+				AND sku.pro_stan_sid = #{size,jdbcType=VARCHAR}
+			</if>
+			<if test="product_sid != null">
+				AND spu.product_sid = #{product_sid,jdbcType=VARCHAR}
+			</if>
+			<if test="storeCode != null">
+				AND org.organization_code = #{storeCode,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_pro_detail
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_pro_detail
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmProDetail">
+		insert into pcm_pro_detail (sid, product_detail_sid,
+		pro_detail_name,product_sid,
+		pro_stan_sid, pro_color_sid,
+		pro_color_name,
+		pro_color_alias, pro_stan_name, memo,
+		barcode,
+		pro_wri_time,
+		photo_sale_code_sid,
+		photo_status, opt_user_sid,
+		opt_real_name,
+		opt_update_time, plan_maker, plan_time,
+		photo_plan_sid,
+		pro_active_bit,
+		pro_type,
+		selling_status, search_key, key_word,
+		size_picture_url,
+		features,article_num)
+		values (#{sid,jdbcType=BIGINT},
+		#{productDetailSid,jdbcType=VARCHAR},
+		#{proDetailName,jdbcType=VARCHAR},
+		#{productSid,jdbcType=BIGINT},
+		#{proStanSid,jdbcType=VARCHAR},
+		#{proColorSid,jdbcType=BIGINT},
+		#{proColorName,jdbcType=VARCHAR},
+		#{proColorAlias,jdbcType=VARCHAR},
+		#{proStanName,jdbcType=VARCHAR},
+		#{memo,jdbcType=VARCHAR},
+		#{barcode,jdbcType=VARCHAR},
+		#{proWriTime,jdbcType=TIMESTAMP},
+		#{photoSaleCodeSid,jdbcType=VARCHAR},
+		#{photoStatus,jdbcType=INTEGER},
+		#{optUserSid,jdbcType=BIGINT}, #{optRealName,jdbcType=VARCHAR},
+		#{optUpdateTime,jdbcType=TIMESTAMP}, #{planMaker,jdbcType=VARCHAR},
+		#{planTime,jdbcType=TIMESTAMP},
+		#{photoPlanSid,jdbcType=VARCHAR},
+		#{proActiveBit,jdbcType=INTEGER}, #{proType,jdbcType=INTEGER},
+		#{sellingStatus,jdbcType=INTEGER},#{searchKey,jdbcType=VARCHAR},#{keyWord,jdbcType=VARCHAR},
+		#{sizePictureUrl,jdbcType=VARCHAR},
+		#{features,jdbcType=VARCHAR},#{articleNum,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" useGeneratedKeys="true"
+		keyProperty="sid" parameterType="com.wangfj.product.maindata.domain.entity.PcmProDetail">
+		insert into pcm_pro_detail
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="productDetailSid != null">
+				product_detail_sid,
+			</if>
+			<if test="proDetailName != null">
+				pro_detail_name,
+			</if>
+			<if test="productSid != null">
+				product_sid,
+			</if>
+			<if test="proStanSid != null">
+				pro_stan_sid,
+			</if>
+			<if test="proColorSid != null">
+				pro_color_sid,
+			</if>
+			<if test="proColorName != null">
+				pro_color_name,
+			</if>
+			<if test="proColorAlias != null">
+				pro_color_alias,
+			</if>
+			<if test="proStanName != null">
+				pro_stan_name,
+			</if>
+			<if test="memo != null">
+				memo,
+			</if>
+			<if test="barcode != null">
+				barcode,
+			</if>
+			<if test="proWriTime != null">
+				pro_wri_time,
+			</if>
+			<if test="photoSaleCodeSid != null">
+				photo_sale_code_sid,
+			</if>
+			<if test="photoStatus != null">
+				photo_status,
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid,
+			</if>
+			<if test="optRealName != null">
+				opt_real_name,
+			</if>
+			<if test="optUpdateTime != null">
+				opt_update_time,
+			</if>
+			<if test="planMaker != null">
+				plan_maker,
+			</if>
+			<if test="planTime != null">
+				plan_time,
+			</if>
+			<if test="photoPlanSid != null">
+				photo_plan_sid,
+			</if>
+			<if test="proActiveBit != null">
+				pro_active_bit,
+			</if>
+			<if test="proType != null">
+				pro_type,
+			</if>
+			<if test="sellingStatus != null">
+				selling_status,
+			</if>
+			<if test="searchKey != null">
+				search_key,
+			</if>
+			<if test="keyWord != null">
+				key_word,
+			</if>
+			<if test="sizePictureUrl != null">
+				size_picture_url,
+			</if>
+			<if test="features != null">
+				features,
+			</if>
+			<if test="articleNum != null">
+				article_num,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="productDetailSid != null">
+				#{productDetailSid,jdbcType=VARCHAR},
+			</if>
+			<if test="proDetailName != null">
+				#{proDetailName,jdbcType=VARCHAR},
+			</if>
+			<if test="productSid != null">
+				#{productSid,jdbcType=BIGINT},
+			</if>
+			<if test="proStanSid != null">
+				#{proStanSid,jdbcType=VARCHAR},
+			</if>
+			<if test="proColorSid != null">
+				#{proColorSid,jdbcType=BIGINT},
+			</if>
+			<if test="proColorName != null">
+				#{proColorName,jdbcType=VARCHAR},
+			</if>
+			<if test="proColorAlias != null">
+				#{proColorAlias,jdbcType=VARCHAR},
+			</if>
+			<if test="proStanName != null">
+				#{proStanName,jdbcType=VARCHAR},
+			</if>
+			<if test="memo != null">
+				#{memo,jdbcType=VARCHAR},
+			</if>
+			<if test="barcode != null">
+				#{barcode,jdbcType=VARCHAR},
+			</if>
+			<if test="proWriTime != null">
+				#{proWriTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="photoSaleCodeSid != null">
+				#{photoSaleCodeSid,jdbcType=VARCHAR},
+			</if>
+			<if test="photoStatus != null">
+				#{photoStatus,jdbcType=INTEGER},
+			</if>
+			<if test="optUserSid != null">
+				#{optUserSid,jdbcType=BIGINT},
+			</if>
+			<if test="optRealName != null">
+				#{optRealName,jdbcType=VARCHAR},
+			</if>
+			<if test="optUpdateTime != null">
+				#{optUpdateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="planMaker != null">
+				#{planMaker,jdbcType=VARCHAR},
+			</if>
+			<if test="planTime != null">
+				#{planTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="photoPlanSid != null">
+				#{photoPlanSid,jdbcType=VARCHAR},
+			</if>
+			<if test="proActiveBit != null">
+				#{proActiveBit,jdbcType=INTEGER},
+			</if>
+			<if test="proType != null">
+				#{proType,jdbcType=INTEGER},
+			</if>
+			<if test="sellingStatus != null">
+				#{sellingStatus,jdbcType=INTEGER},
+			</if>
+			<if test="searchKey != null">
+				#{searchKey,jdbcType=VARCHAR},
+			</if>
+			<if test="keyWord != null">
+				#{keyWord,jdbcType=VARCHAR},
+			</if>
+			<if test="sizePictureUrl != null">
+				#{sizePictureUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="features != null">
+				#{features,jdbcType=VARCHAR},
+			</if>
+			<if test="articleNum != null">
+				#{articleNum,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmProDetail">
+		update pcm_pro_detail
+		<set>
+			<if test="productDetailSid != null">
+				product_detail_sid =
+				#{productDetailSid,jdbcType=VARCHAR},
+			</if>
+			<if test="proDetailName != null">
+				pro_detail_name = #{proDetailName,jdbcType=VARCHAR},
+			</if>
+			<if test="productSid != null">
+				product_sid = #{productSid,jdbcType=BIGINT},
+			</if>
+			<if test="proStanSid != null">
+				pro_stan_sid = #{proStanSid,jdbcType=VARCHAR},
+			</if>
+			<if test="proColorSid != null">
+				pro_color_sid = #{proColorSid,jdbcType=BIGINT},
+			</if>
+			<if test="proColorName != null">
+				pro_color_name = #{proColorName,jdbcType=VARCHAR},
+			</if>
+			<if test="proColorAlias != null">
+				pro_color_alias = #{proColorAlias,jdbcType=VARCHAR},
+			</if>
+			<if test="proStanName != null">
+				pro_stan_name = #{proStanName,jdbcType=VARCHAR},
+			</if>
+			<if test="memo != null">
+				memo = #{memo,jdbcType=VARCHAR},
+			</if>
+			<if test="barcode != null">
+				barcode = #{barcode,jdbcType=VARCHAR},
+			</if>
+			<if test="proWriTime != null">
+				pro_wri_time = #{proWriTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="photoSaleCodeSid != null">
+				photo_sale_code_sid =
+				#{photoSaleCodeSid,jdbcType=VARCHAR},
+			</if>
+			<if test="photoStatus != null">
+				photo_status = #{photoStatus,jdbcType=INTEGER},
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid = #{optUserSid,jdbcType=BIGINT},
+			</if>
+			<if test="optRealName != null">
+				opt_real_name = #{optRealName,jdbcType=VARCHAR},
+			</if>
+			<if test="optUpdateTime != null">
+				opt_update_time = #{optUpdateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="planMaker != null">
+				plan_maker = #{planMaker,jdbcType=VARCHAR},
+			</if>
+			<if test="planTime != null">
+				plan_time = #{planTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="photoPlanSid != null">
+				photo_plan_sid = #{photoPlanSid,jdbcType=VARCHAR},
+			</if>
+			<if test="proActiveBit != null">
+				pro_active_bit = #{proActiveBit,jdbcType=INTEGER},
+			</if>
+			<if test="proType != null">
+				pro_type = #{proType,jdbcType=INTEGER},
+			</if>
+			<if test="sellingStatus != null">
+				selling_status = #{sellingStatus,jdbcType=INTEGER},
+			</if>
+			<if test="searchKey != null">
+				search_key = #{searchKey,jdbcType=VARCHAR},
+			</if>
+			<if test="keyWord != null">
+				key_word = #{keyWord,jdbcType=VARCHAR},
+			</if>
+			<if test="sizePictureUrl != null">
+				size_picture_url = #{sizePictureUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="features != null">
+				features = #{features,jdbcType=VARCHAR},
+			</if>
+			<if test="articleNum != null">
+				article_num = #{articleNum,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<!--修改图片状态 -->
+	<update id="updatePhotoStatusByProSidColorSid"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmProDetail">
+		update pcm_pro_detail sku
+		join pcm_product spu on
+		spu.sid=sku.product_sid
+		<set>
+			<if test="photoStatus != null">
+				photo_status = #{photoStatus,jdbcType=INTEGER},
+			</if>
+			<if test="photoPlanSid != null">
+				photo_plan_sid = #{photoPlanSid,jdbcType=INTEGER},
+			</if>
+		</set>
+		where spu.product_sid = #{productSid,jdbcType=BIGINT}
+		and
+		pro_color_sid = #{proColorSid,jdbcType=BIGINT}
+	</update>
+	<!--修改SKU库存状态 -->
+	<update id="updateStockStatusBySkuSid" parameterType="java.util.Map">
+		update
+		pcm_pro_detail
+		set size_picture_url=#{stockStatus,jdbcType=VARCHAR}
+		where sid=#{productDetailSid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmProDetail">
+		update pcm_pro_detail
+		set product_detail_sid =
+		#{productDetailSid,jdbcType=VARCHAR},
+		product_sid =
+		#{productSid,jdbcType=BIGINT},
+		pro_stan_sid =
+		#{proStanSid,jdbcType=VARCHAR},
+		pro_color_sid =
+		#{proColorSid,jdbcType=BIGINT},
+		pro_color_name =
+		#{proColorName,jdbcType=VARCHAR},
+		pro_color_alias =
+		#{proColorAlias,jdbcType=VARCHAR},
+		pro_stan_name =
+		#{proStanName,jdbcType=VARCHAR},
+		memo = #{memo,jdbcType=VARCHAR},
+		barcode = #{barcode,jdbcType=VARCHAR},
+		pro_wri_time =
+		#{proWriTime,jdbcType=TIMESTAMP},
+		photo_sale_code_sid =
+		#{photoSaleCodeSid,jdbcType=VARCHAR},
+		photo_status =
+		#{photoStatus,jdbcType=INTEGER},
+		opt_user_sid =
+		#{optUserSid,jdbcType=BIGINT},
+		opt_real_name =
+		#{optRealName,jdbcType=VARCHAR},
+		opt_update_time =
+		#{optUpdateTime,jdbcType=TIMESTAMP},
+		plan_maker =
+		#{planMaker,jdbcType=VARCHAR},
+		plan_time =
+		#{planTime,jdbcType=TIMESTAMP},
+		photo_plan_sid =
+		#{photoPlanSid,jdbcType=VARCHAR},
+		pro_active_bit =
+		#{proActiveBit,jdbcType=INTEGER},
+		pro_type =
+		#{proType,jdbcType=INTEGER},
+		selling_status =
+		#{sellingStatus,jdbcType=INTEGER},
+		search_key =
+		#{searchKey,jdbcType=VARCHAR},
+		key_word = #{keyWord,jdbcType=VARCHAR},
+		size_picture_url = #{sizePictureUrl,jdbcType=VARCHAR},
+		features =
+		#{features,jdbcType=VARCHAR},
+		article_num =
+		#{articleNum,jdbcType=VARCHAR},
+		pro_detail_name =
+		#{proDetailName,jdbcType=VARCHAR},
+		where sid =
+		#{sid,jdbcType=BIGINT}
+	</update>
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_pro_detail
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productDetailSid != null">
+				and product_detail_sid =
+				#{productDetailSid,jdbcType=VARCHAR}
+			</if>
+			<if test="proDetailName != null">
+				and pro_detail_name = #{proDetailName,jdbcType=VARCHAR}
+			</if>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=BIGINT}
+			</if>
+			<if test="proStanSid != null">
+				and pro_stan_sid = #{proStanSid,jdbcType=VARCHAR}
+			</if>
+			<if test="proColorSid != null">
+				and pro_color_sid = #{proColorSid,jdbcType=BIGINT}
+			</if>
+			<if test="proColorName != null">
+				and pro_color_name = #{proColorName,jdbcType=VARCHAR}
+			</if>
+			<if test="proColorAlias != null">
+				and pro_color_alias = #{proColorAlias,jdbcType=VARCHAR}
+			</if>
+			<if test="proStanName != null">
+				and pro_stan_name = #{proStanName,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null">
+				and memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="barcode != null">
+				and barcode = #{barcode,jdbcType=VARCHAR}
+			</if>
+			<if test="proWriTime != null">
+				and pro_wri_time = #{proWriTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="photoSaleCodeSid != null">
+				and photo_sale_code_sid =
+				#{photoSaleCodeSid,jdbcType=VARCHAR}
+			</if>
+			<if test="photoStatus != null">
+				and photo_status = #{photoStatus,jdbcType=INTEGER}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+			<if test="optRealName != null">
+				and opt_real_name = #{optRealName,jdbcType=VARCHAR}
+			</if>
+			<if test="optUpdateTime != null">
+				and opt_update_time = #{optUpdateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="planMaker != null">
+				and plan_maker = #{planMaker,jdbcType=VARCHAR}
+			</if>
+			<if test="planTime != null">
+				and plan_time = #{planTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="photoPlanSid != null">
+				and photo_plan_sid = #{photoPlanSid,jdbcType=VARCHAR}
+			</if>
+			<if test="proActiveBit != null">
+				and pro_active_bit = #{proActiveBit,jdbcType=INTEGER}
+			</if>
+			<if test="proType != null">
+				and pro_type = #{proType,jdbcType=INTEGER}
+			</if>
+			<if test="sellingStatus != null">
+				and selling_status = #{sellingStatus,jdbcType=INTEGER}
+			</if>
+			<if test="searchKey != null">
+				and search_key = #{searchKey,jdbcType=VARCHAR}
+			</if>
+			<if test="keyWord != null">
+				and key_word = #{keyWord,jdbcType=VARCHAR}
+			</if>
+			<if test="sizePictureUrl != null">
+				and size_picture_url = #{sizePictureUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="features != null">
+				and features = #{features,jdbcType=VARCHAR}
+			</if>
+			<if test="articleNum != null">
+				and article_num = #{articleNum,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="getPushPromotionDtoBySid"
+		resultType="com.wangfj.product.maindata.domain.vo.PushPromotionDto"
+		parameterType="Map">
+		select
+		spu.product_sid as baseNumber,
+		sku.product_detail_sid as productCode,
+		sku.pro_detail_name as
+		productName,
+		sku.pro_stan_sid as sizeCode,
+		sku.pro_color_name as
+		styleCode,
+		sku.search_key as searchKey,
+		sku.key_word as keyword,
+		sku.size_picture_url as sizeImageUrl,
+		sku.selling_status as
+		isPublished,
+		pd.content as packDesE
+		from
+		pcm_pro_detail sku
+		join
+		pcm_product spu on sku.product_sid=spu.sid
+		join
+		pcm_product_category ppc
+		on ppc.product_sid=spu.sid
+		join
+		pcm_category
+		cate on cate.sid =
+		ppc.category_sid and
+		cate.category_type=0 and
+		cate.is_leaf='Y' and
+		cate.status='Y' and cate.is_display = 1 and cate.is_display = 1
+		left
+		join
+		pcm_product_desc pd on
+		pd.product_sid=spu.product_sid and
+		pd.color=sku.pro_color_sid
+		where sku.sid in 
+		<foreach collection="sidList" index="index" item="skuSid" open="("
+			separator="," close=")">
+			#{skuSid}
+		</foreach>
+		<if test="num != null">
+			limit #{num}
+		</if>
+	</select>
+	<select id="validSku" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT
+		sku.*
+		FROM
+		pcm_pro_detail AS sku
+		JOIN pcm_color_dict AS color ON
+		sku.pro_color_sid = color.sid
+		<where>
+			<if test="productSid != null">
+				and sku.product_sid = #{productSid,jdbcType=BIGINT}
+			</if>
+			<if test="proStanSid != null">
+				and sku.pro_stan_sid = #{proStanSid,jdbcType=VARCHAR}
+			</if>
+			<if test="proColorName != null">
+				and sku.pro_color_name = #{proColorName,jdbcType=VARCHAR}
+			</if>
+			<if test="proColorSid != null">
+				and sku.pro_color_sid = #{proColorSid,jdbcType=VARCHAR}
+			</if>
+			<if test="colorName != null">
+				and color.color_name = #{colorName,jdbcType=VARCHAR}
+			</if>
+			<if test="features != null">
+				and sku.features = #{features,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_pro_detail
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productDetailSid != null">
+				and product_detail_sid =
+				#{productDetailSid,jdbcType=VARCHAR}
+			</if>
+			<if test="proDetailName != null">
+				and pro_detail_name = #{proDetailName,jdbcType=VARCHAR}
+			</if>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=BIGINT}
+			</if>
+			<if test="proStanSid != null">
+				and pro_stan_sid = #{proStanSid,jdbcType=VARCHAR}
+			</if>
+			<if test="proColorSid != null">
+				and pro_color_sid = #{proColorSid,jdbcType=BIGINT}
+			</if>
+			<if test="proColorName != null">
+				and pro_color_name = #{proColorName,jdbcType=VARCHAR}
+			</if>
+			<if test="proColorAlias != null">
+				and pro_color_alias = #{proColorAlias,jdbcType=VARCHAR}
+			</if>
+			<if test="proStanName != null">
+				and pro_stan_name = #{proStanName,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null">
+				and memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="barcode != null">
+				and barcode = #{barcode,jdbcType=VARCHAR}
+			</if>
+			<if test="proWriTime != null">
+				and pro_wri_time = #{proWriTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="photoSaleCodeSid != null">
+				and photo_sale_code_sid =
+				#{photoSaleCodeSid,jdbcType=VARCHAR}
+			</if>
+			<if test="photoStatus != null">
+				and photo_status = #{photoStatus,jdbcType=INTEGER}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+			<if test="optRealName != null">
+				and opt_real_name = #{optRealName,jdbcType=VARCHAR}
+			</if>
+			<if test="optUpdateTime != null">
+				and opt_update_time = #{optUpdateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="planMaker != null">
+				and plan_maker = #{planMaker,jdbcType=VARCHAR}
+			</if>
+			<if test="planTime != null">
+				and plan_time = #{planTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="photoPlanSid != null">
+				and photo_plan_sid = #{photoPlanSid,jdbcType=VARCHAR}
+			</if>
+			<if test="proActiveBit != null">
+				and pro_active_bit = #{proActiveBit,jdbcType=INTEGER}
+			</if>
+			<if test="proType != null">
+				and pro_type = #{proType,jdbcType=INTEGER}
+			</if>
+			<if test="sellingStatus != null">
+				and selling_status = #{sellingStatus,jdbcType=INTEGER}
+			</if>
+			<if test="searchKey != null">
+				and search_key = #{searchKey,jdbcType=VARCHAR}
+			</if>
+			<if test="keyWord != null">
+				and key_word = #{keyWord,jdbcType=VARCHAR}
+			</if>
+			<if test="sizePictureUrl != null">
+				and size_picture_url = #{sizePictureUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="features != null">
+				and features = #{features,jdbcType=VARCHAR}
+			</if>
+			<if test="articleNum != null">
+				and article_num = #{articleNum,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by
+		sid desc
+		limit
+		#{start}, #{limit}
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_pro_detail
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productDetailSid != null">
+				and product_detail_sid =
+				#{productDetailSid,jdbcType=VARCHAR}
+			</if>
+			<if test="proDetailName != null">
+				and pro_detail_name = #{proDetailName,jdbcType=VARCHAR}
+			</if>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=BIGINT}
+			</if>
+			<if test="proStanSid != null">
+				and pro_stan_sid = #{proStanSid,jdbcType=VARCHAR}
+			</if>
+			<if test="proColorSid != null">
+				and pro_color_sid = #{proColorSid,jdbcType=BIGINT}
+			</if>
+			<if test="proColorName != null">
+				and pro_color_name = #{proColorName,jdbcType=VARCHAR}
+			</if>
+			<if test="proColorAlias != null">
+				and pro_color_alias = #{proColorAlias,jdbcType=VARCHAR}
+			</if>
+			<if test="proStanName != null">
+				and pro_stan_name = #{proStanName,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null">
+				and memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="barcode != null">
+				and barcode = #{barcode,jdbcType=VARCHAR}
+			</if>
+			<if test="proWriTime != null">
+				and pro_wri_time = #{proWriTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="photoSaleCodeSid != null">
+				and photo_sale_code_sid =
+				#{photoSaleCodeSid,jdbcType=VARCHAR}
+			</if>
+			<if test="photoStatus != null">
+				and photo_status = #{photoStatus,jdbcType=INTEGER}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+			<if test="optRealName != null">
+				and opt_real_name = #{optRealName,jdbcType=VARCHAR}
+			</if>
+			<if test="optUpdateTime != null">
+				and opt_update_time = #{optUpdateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="planMaker != null">
+				and plan_maker = #{planMaker,jdbcType=VARCHAR}
+			</if>
+			<if test="planTime != null">
+				and plan_time = #{planTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="photoPlanSid != null">
+				and photo_plan_sid = #{photoPlanSid,jdbcType=VARCHAR}
+			</if>
+			<if test="proActiveBit != null">
+				and pro_active_bit = #{proActiveBit,jdbcType=INTEGER}
+			</if>
+			<if test="proType != null">
+				and pro_type = #{proType,jdbcType=INTEGER}
+			</if>
+			<if test="sellingStatus != null">
+				and selling_status = #{sellingStatus,jdbcType=INTEGER}
+			</if>
+			<if test="searchKey != null">
+				and search_key = #{searchKey,jdbcType=VARCHAR}
+			</if>
+			<if test="keyWord != null">
+				and key_word = #{keyWord,jdbcType=VARCHAR}
+			</if>
+			<if test="sizePictureUrl != null">
+				and size_picture_url = #{sizePictureUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="features != null">
+				and features = #{features,jdbcType=VARCHAR}
+			</if>
+			<if test="articleNum != null">
+				and article_num = #{articleNum,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="selectSkuPageByPara" resultType="hashMap"
+		parameterType="hashMap">
+		select
+		*
+		from
+		pcm_pro_detail sku
+		join
+		pcm_product spu on
+		sku.product_sid = spu.product_sid
+	</select>
+	<!-- 验证SKU是否存在 -->
+	<select id="selectPDByProductSidAndColorAndSizeIsExists"
+		resultMap="BaseResultMap" parameterType="java.util.Map">
+		select
+		pd.sid as sid,
+		pd.product_detail_sid as productDetailSid,
+		pd.pro_detail_name as proDetailName,
+		pd.product_sid as productSid,
+		pd.pro_stan_sid as proStanSid,
+		pd.pro_color_sid as proColorSid,
+		pd.pro_color_name as
+		proColorName,
+		pd.pro_color_alias as proColorAlias,
+		pd.pro_stan_name as
+		proStanName,
+		pd.memo as memo,
+		pd.barcode as barcode,
+		pd.pro_wri_time as proWriTime,
+		pd.photo_sale_code_sid as
+		photoSaleCodeSid,
+		pd.photo_status as
+		photoStatus,
+		pd.opt_user_sid as
+		optUserSid,
+		pd.opt_real_name as
+		optRealName,
+		pd.opt_update_time as
+		optUpdateTime,
+		pd.plan_maker as
+		planMaker,
+		pd.plan_time as planTime,
+		pd.photo_plan_sid
+		as photoPlanSid,
+		pd.pro_active_bit as proActiveBit,
+		pd.pro_type as
+		proType,
+		pd.selling_status as sellingStatus,
+		pd.search_key as searchKey,
+		pd.key_word as keyWord,
+		pd.size_picture_url
+		as sizePictureUrl,
+		pd.features as features,
+		pd.article_num as articleNum
+		from
+		pcm_pro_detail pd,
+		pcm_product p
+		where
+		pd.product_sid =
+		p.sid
+		<if test="productSid != null">
+			and p.product_sid = #{productSid}
+		</if>
+		<if test="proColorName != null">
+			and pd.pro_color_name = #{proColorName}
+		</if>
+		<if test="proStanName != null">
+			and pd.pro_stan_name = #{proStanName}
+		</if>
+		<if test="features != null">
+			and pd.features = #{features}
+		</if>
+	</select>
+	
+	<select id="getskuSidList" parameterType="com.wangfj.product.maindata.domain.vo.SkuPageDto"
+		resultType="String">
+		select
+		sku.sid
+		from
+		pcm_pro_detail sku
+		join
+		pcm_product spu on sku.product_sid=spu.sid
+		left join
+		pcm_color_dict cd
+		on sku.pro_color_sid=cd.sid
+		left join
+		pcm_season_dict psd on
+		psd.sid=spu.season_code
+		join
+		pcm_product_category ppc on
+		ppc.product_sid=spu.sid
+		join
+		pcm_category cate on cate.sid =
+		ppc.category_sid
+		and cate.category_type=0 and cate.is_leaf='Y' and
+		cate.status='Y' and cate.is_display = 1
+		<where>
+			1=1
+			<if test="sid != null">
+				and sku.sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="spuSid != null">
+				and spu.sid = #{spuSid,jdbcType=VARCHAR}
+			</if>
+			<if test="skuCode != null">
+				and sku.product_detail_sid = #{skuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="minSkuCode != null">
+				and sku.product_detail_sid <![CDATA[>=]]> #{minSkuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="maxSkuCode != null">
+				and sku.product_detail_sid <![CDATA[<=]]> #{maxSkuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="skuName != null">
+				and sku.pro_detail_name like '%${skuName}%'
+			</if>
+			<if test="stanCode != null">
+				and sku.pro_stan_sid like '%${stanCode}%'
+			</if>
+			<if test="colorCode != null">
+				and sku.pro_color_name like '%${colorCode}%'
+			</if>
+			<if test="colorSid != null">
+				and cd.sid = #{colorSid,jdbcType=VARCHAR}
+			</if>
+			<if test="colorName != null">
+				and cd.color_name = #{colorName,jdbcType=VARCHAR}
+			</if>
+			<if test="features != null">
+				and sku.features = #{features,jdbcType=VARCHAR}
+			</if>
+			<if test="spuCode != null">
+				and spu.product_sid = #{spuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="modelCode != null">
+				and spu.product_sku = #{modelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="brandGroupCode != null">
+				and spu.brand_sid = #{brandGroupCode,jdbcType=VARCHAR}
+			</if>
+			<if test="spuSale != null">
+				and spu.pro_selling = #{spuSale,jdbcType=INTEGER}
+			</if>
+			<if test="skuSale != null">
+				and sku.selling_status = #{skuSale,jdbcType=INTEGER}
+			</if>
+			<if test="searchKey != null">
+				and sku.search_key like '%${searchKey}%'
+			</if>
+			<if test="keyWord != null">
+				and sku.key_word like '%${keyWord}%'
+			</if>
+			<if test="proActiveBit != null">
+				and sku.pro_active_bit = #{proActiveBit}
+			</if>
+			<if test="proType != null">
+				and sku.pro_type = #{proType}
+			</if>
+			<if test="industryCondition != null">
+				and spu.industry_condition =
+				#{industryCondition,jdbcType=VARCHAR}
+			</if>
+			<if test="photoStatus != null">
+				and photo_status = #{photoStatus,jdbcType=INTEGER}
+			</if>
+		</where>
+		order by
+		sku.sid desc
+		<if test="limit !=null">
+			limit
+			<if test="start !=null">
+				#{start}
+			</if>
+			<if test="start ==null">
+				0
+			</if>
+			,#{limit}
+		</if>
+	</select>
+	
+	<select id="selectProductPageByPara2" parameterType="com.wangfj.product.maindata.domain.vo.SkuPageDto"
+		resultType="com.wangfj.product.maindata.domain.vo.SkuPageDto">
+		select
+		sku.sid,
+		spu.sid as spuSid,
+		sku.product_detail_sid as skuCode,
+		sku.pro_detail_name as skuName,
+		spu.product_sid as spuCode,
+		sku.pro_stan_sid as stanCode,
+		sku.pro_stan_name as stanName,
+		sku.pro_color_name as colorCode,
+		sku.pro_color_alias as colorCodeName,
+		cate.category_sid as category,
+		cate.name as categoryName,
+		sku.memo as
+		memo,
+		sku.barcode as barcode,
+		sku.pro_wri_time as
+		proWriTime,
+		sku.photo_sale_code_sid as photoSaleCodeSid,
+		sku.photo_status as
+		photoStatus,
+		sku.plan_maker as planMaker,
+		sku.plan_time as planTime,
+		sku.photo_plan_sid as photoPlanSid,
+		sku.pro_active_bit as proActiveBit,
+		sku.pro_type as proType,
+		sku.selling_status as skuSale,
+		sku.search_key
+		as searchKey,
+		sku.key_word as keyWord,
+		sku.size_picture_url as
+		sizePictureUrl,
+		sku.features as features,
+		sku.article_num as articleNum,
+		spu.product_sku as modelCode,
+		spu.primary_attr as primaryAttr,
+		spu.product_name as spuName,
+		spu.brand_sid as brandGroupCode,
+		spu.brand_name as brandGroupName,
+		spu.pro_selling as spuSale,
+		psd.season_code as seasonCode,
+		psd.season as season,
+		spu.year_to_market
+		as onMarketDate,
+		spu.activity_flg as activityFlg,
+		spu.sex_sid as sexSid,
+		spu.awesome as awesome,
+		spu.pro_selling_time as proSellingTime,
+		spu.short_des as shortDes,
+		spu.edit_flag as editFlag,
+		spu.special_des as
+		specialDes,
+		cd.sid as colorSid,
+		cd.color_name as colorName,
+		spu.industry_condition as industryCondition
+		from
+		pcm_pro_detail sku
+		join
+		pcm_product spu on sku.product_sid=spu.sid
+		left join
+		pcm_color_dict cd
+		on sku.pro_color_sid=cd.sid
+		left join
+		pcm_season_dict psd on
+		psd.sid=spu.season_code
+		join
+		pcm_product_category ppc on
+		ppc.product_sid=spu.sid
+		join
+		pcm_category cate on cate.sid =
+		ppc.category_sid
+		and cate.category_type=0 and cate.is_leaf='Y' and
+		cate.status='Y' and cate.is_display = 1 and cate.is_display = 1
+		<where>
+			1=1
+			<if test="sidList != null">
+				and sku.sid in 
+				<foreach collection="sidList" index="index" item="skuSid" open="("
+					separator="," close=")">
+					#{skuSid}
+				</foreach>
+			</if>
+			<if test="sid != null">
+				and sku.sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="spuSid != null">
+				and spu.sid = #{spuSid,jdbcType=VARCHAR}
+			</if>
+			<if test="skuCode != null">
+				and sku.product_detail_sid = #{skuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="minSkuCode != null">
+				and sku.product_detail_sid <![CDATA[>=]]> #{minSkuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="maxSkuCode != null">
+				and sku.product_detail_sid <![CDATA[<=]]> #{maxSkuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="skuName != null">
+				and sku.pro_detail_name like '%${skuName}%'
+			</if>
+			<if test="stanCode != null">
+				and sku.pro_stan_sid like '%${stanCode}%'
+			</if>
+			<if test="colorCode != null">
+				and sku.pro_color_name like '%${colorCode}%'
+			</if>
+			<if test="colorSid != null">
+				and cd.sid = #{colorSid,jdbcType=VARCHAR}
+			</if>
+			<if test="colorName != null">
+				and cd.color_name = #{colorName,jdbcType=VARCHAR}
+			</if>
+			<if test="features != null">
+				and sku.features = #{features,jdbcType=VARCHAR}
+			</if>
+			<if test="spuCode != null">
+				and spu.product_sid = #{spuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="modelCode != null">
+				and spu.product_sku = #{modelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="brandGroupCode != null">
+				and spu.brand_sid = #{brandGroupCode,jdbcType=VARCHAR}
+			</if>
+			<if test="spuSale != null">
+				and spu.pro_selling = #{spuSale,jdbcType=INTEGER}
+			</if>
+			<if test="skuSale != null">
+				and sku.selling_status = #{skuSale,jdbcType=INTEGER}
+			</if>
+			<if test="searchKey != null">
+				and sku.search_key like '%${searchKey}%'
+			</if>
+			<if test="keyWord != null">
+				and sku.key_word like '%${keyWord}%'
+			</if>
+			<if test="proActiveBit != null">
+				and sku.pro_active_bit = #{proActiveBit}
+			</if>
+			<if test="proType != null">
+				and sku.pro_type = #{proType}
+			</if>
+			<if test="industryCondition != null">
+				and spu.industry_condition =
+				#{industryCondition,jdbcType=VARCHAR}
+			</if>
+			<if test="photoStatus != null">
+				and photo_status = #{photoStatus,jdbcType=INTEGER}
+			</if>
+		</where>
+		order by
+		sku.sid desc
+	</select>
+	
+	
+	
+	
+	
+	
+	<select id="selectProductPageByPara" parameterType="com.wangfj.product.maindata.domain.vo.SkuPageDto"
+		resultType="com.wangfj.product.maindata.domain.vo.SkuPageDto">
+		select
+		sku.sid,
+		spu.sid as spuSid,
+		sku.product_detail_sid as skuCode,
+		sku.pro_detail_name as skuName,
+		spu.product_sid as spuCode,
+		sku.pro_stan_sid as stanCode,
+		sku.pro_stan_name as stanName,
+		sku.pro_color_name as colorCode,
+		sku.pro_color_alias as colorCodeName,
+		cate.category_sid as category,
+		cate.name as categoryName,
+		sku.memo as
+		memo,
+		sku.barcode as barcode,
+		sku.pro_wri_time as
+		proWriTime,
+		sku.photo_sale_code_sid as photoSaleCodeSid,
+		sku.photo_status as
+		photoStatus,
+		sku.plan_maker as planMaker,
+		sku.plan_time as planTime,
+		sku.photo_plan_sid as photoPlanSid,
+		sku.pro_active_bit as proActiveBit,
+		sku.pro_type as proType,
+		sku.selling_status as skuSale,
+		sku.search_key
+		as searchKey,
+		sku.key_word as keyWord,
+		sku.size_picture_url as
+		sizePictureUrl,
+		sku.features as features,
+		sku.article_num as articleNum,
+		spu.product_sku as modelCode,
+		spu.primary_attr as primaryAttr,
+		spu.product_name as spuName,
+		spu.brand_sid as brandGroupCode,
+		spu.brand_name as brandGroupName,
+		spu.pro_selling as spuSale,
+		psd.season_code as seasonCode,
+		psd.season as season,
+		spu.year_to_market
+		as onMarketDate,
+		spu.activity_flg as activityFlg,
+		spu.sex_sid as sexSid,
+		spu.awesome as awesome,
+		spu.pro_selling_time as proSellingTime,
+		spu.short_des as shortDes,
+		spu.edit_flag as editFlag,
+		spu.special_des as
+		specialDes,
+		cd.sid as colorSid,
+		cd.color_name as colorName,
+		spu.industry_condition as industryCondition
+		from
+		pcm_pro_detail sku
+		join
+		pcm_product spu on sku.product_sid=spu.sid
+		left join
+		pcm_color_dict cd
+		on sku.pro_color_sid=cd.sid
+		left join
+		pcm_season_dict psd on
+		psd.sid=spu.season_code
+		join
+		pcm_product_category ppc on
+		ppc.product_sid=spu.sid
+		join
+		pcm_category cate on cate.sid =
+		ppc.category_sid
+		and cate.category_type=0 and cate.is_leaf='Y' and
+		cate.status='Y' and cate.is_display = 1 and cate.is_display = 1
+		<where>
+			1=1
+			<if test="sid != null">
+				and sku.sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="spuSid != null">
+				and spu.sid = #{spuSid,jdbcType=VARCHAR}
+			</if>
+			<if test="skuCode != null">
+				and sku.product_detail_sid = #{skuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="skuName != null">
+				and sku.pro_detail_name like '%${skuName}%'
+			</if>
+			<if test="stanCode != null">
+				and sku.pro_stan_sid like '%${stanCode}%'
+			</if>
+			<if test="colorCode != null">
+				and sku.pro_color_name like '%${colorCode}%'
+			</if>
+			<if test="colorSid != null">
+				and cd.sid = #{colorSid,jdbcType=VARCHAR}
+			</if>
+			<if test="colorName != null">
+				and cd.color_name = #{colorName,jdbcType=VARCHAR}
+			</if>
+			<if test="features != null">
+				and sku.features = #{features,jdbcType=VARCHAR}
+			</if>
+			<if test="spuCode != null">
+				and spu.product_sid = #{spuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="modelCode != null">
+				and spu.product_sku = #{modelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="brandGroupCode != null">
+				and spu.brand_sid = #{brandGroupCode,jdbcType=VARCHAR}
+			</if>
+			<if test="spuSale != null">
+				and spu.pro_selling = #{spuSale,jdbcType=INTEGER}
+			</if>
+			<if test="skuSale != null">
+				and sku.selling_status = #{skuSale,jdbcType=INTEGER}
+			</if>
+			<if test="searchKey != null">
+				and sku.search_key like '%${searchKey}%'
+			</if>
+			<if test="keyWord != null">
+				and sku.key_word like '%${keyWord}%'
+			</if>
+			<if test="proActiveBit != null">
+				and sku.pro_active_bit = #{proActiveBit}
+			</if>
+			<if test="proType != null">
+				and sku.pro_type = #{proType}
+			</if>
+			<if test="industryCondition != null">
+				and spu.industry_condition =
+				#{industryCondition,jdbcType=VARCHAR}
+			</if>
+			<if test="photoStatus != null">
+				and photo_status = #{photoStatus,jdbcType=INTEGER}
+			</if>
+		</where>
+		order by
+		sku.sid desc
+		<if test="limit !=null">
+			limit
+			<if test="start !=null">
+				#{start}
+			</if>
+			<if test="start ==null">
+				0
+			</if>
+			,#{limit}
+		</if>
+	</select>
+	<select id="getProductCountByPara" parameterType="com.wangfj.product.maindata.domain.vo.SkuPageDto"
+		resultType="java.lang.Integer">
+		select
+		count(sku.sid)
+		from
+		pcm_pro_detail sku
+        <if test="spuSid != null or spuCode != null or modelCode != null or brandGroupCode != null or spuSale != null or industryCondition != null">
+            join pcm_product spu on sku.product_sid=spu.sid
+        </if>
+		<where>
+			1=1
+			<if test="sid != null">
+				and sku.sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="spuSid != null">
+				and spu.sid = #{spuSid,jdbcType=VARCHAR}
+			</if>
+			<if test="skuCode != null">
+				and sku.product_detail_sid = #{skuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="minSkuCode != null">
+				and sku.product_detail_sid <![CDATA[>=]]> #{minSkuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="maxSkuCode != null">
+				and sku.product_detail_sid <![CDATA[<=]]> #{maxSkuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="skuName != null">
+				and sku.pro_detail_name like '%${skuName}%'
+			</if>
+			<if test="stanCode != null">
+				and sku.pro_stan_sid like '%${stanCode}%'
+			</if>
+			<if test="colorCode != null">
+				and sku.pro_color_name like '%${colorCode}%'
+			</if>
+			<if test="colorSid != null">
+				and sku.pro_color_sid = #{colorSid,jdbcType=VARCHAR}
+			</if>
+			<if test="features != null">
+				and sku.features = #{features,jdbcType=VARCHAR}
+			</if>
+			<if test="spuCode != null">
+				and spu.product_sid = #{spuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="modelCode != null">
+				and spu.product_sku = #{modelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="brandGroupCode != null">
+				and spu.brand_sid = #{brandGroupCode,jdbcType=VARCHAR}
+			</if>
+			<if test="spuSale != null">
+				and spu.pro_selling = #{spuSale,jdbcType=INTEGER}
+			</if>
+			<if test="skuSale != null">
+				and sku.selling_status = #{skuSale,jdbcType=INTEGER}
+			</if>
+			<if test="searchKey != null">
+				and sku.search_key like '%${searchKey}%'
+			</if>
+			<if test="keyWord != null">
+				and sku.key_word like '%${keyWord}%'
+			</if>
+			<if test="proActiveBit != null">
+				and sku.pro_active_bit = #{proActiveBit}
+			</if>
+			<if test="proType != null">
+				and sku.pro_type = #{proType}
+			</if>
+			<if test="industryCondition != null">
+				and spu.industry_condition =
+				#{industryCondition,jdbcType=VARCHAR}
+			</if>
+			<if test="photoStatus != null">
+				and photo_status = #{photoStatus,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+	<select id="selectProductPhotoByPara"
+		parameterType="com.wangfj.product.maindata.domain.vo.ProductPhotoDto"
+		resultType="com.wangfj.product.maindata.domain.vo.ProductPhotoDto">
+		select distinct
+		spu.sid as spuSid,
+		spu.product_sid as product_sid,
+		cd.sid as colorSid,
+		spu.product_name as product_name,
+		cd.color_name as
+		colorName,
+		spu.product_sku as modelCode,
+		spu.brand_sid as brandCode,
+		spu.brand_name as brandName,
+		cate.category_sid as category,
+		spu.edit_flag as editFlag,
+		spu.sex_sid as sex,
+		spu.special_des as
+		specialDes
+		from
+		pcm_pro_detail sku
+		join
+		pcm_product spu on
+		sku.product_sid=spu.sid
+		left join
+		pcm_color_dict cd on
+		sku.pro_color_sid=cd.sid
+		join
+		pcm_product_category ppc on
+		ppc.product_sid=spu.sid
+		join
+		pcm_category cate on cate.sid =
+		ppc.category_sid
+		and
+		cate.category_type=0 and cate.is_leaf='Y' and
+		cate.status='Y' and cate.is_display = 1
+		<where>
+			1=1
+			<if test="colorSid != null">
+				and cd.sid = #{colorSid,jdbcType=VARCHAR}
+			</if>
+			<if test="modelCode != null">
+				and spu.product_sku = #{modelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="brandCode != null">
+				and spu.brand_sid = #{brandCode,jdbcType=VARCHAR}
+			</if>
+			<if test="category != null">
+				and cate.category_sid = #{category,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectStanByPara" parameterType="com.wangfj.product.maindata.domain.vo.ProStanDto"
+		resultType="java.util.Map">
+		SELECT DISTINCT
+		sku.pro_stan_sid AS size
+		FROM
+		pcm_pro_detail AS sku
+		JOIN
+		pcm_shoppe_product as pro on pro.product_detail_sid = sku.sid
+		JOIN
+		pcm_shoppe as shoppe on pro.shoppe_sid = shoppe.sid
+		JOIN
+		pcm_organization as org on org.sid = shoppe.shop_sid
+		JOIN pcm_product
+		AS spu ON sku.product_sid = spu.sid
+		LEFT JOIN pcm_color_dict cd ON
+		sku.pro_color_sid = cd.sid
+		<where>
+			1=1
+			<if test="colorCode != null">
+				and cd.sid = #{colorCode,jdbcType=VARCHAR}
+			</if>
+			<if test="product_sid != null">
+				and spu.product_sid = #{product_sid,jdbcType=VARCHAR}
+			</if>
+			<if test="storeCode != null">
+				and org.organization_code = #{storeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeCode != null">
+				and shoppe.shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="selectProductEditByPara"
+		parameterType="com.wangfj.product.maindata.domain.vo.ProductEditDto"
+		resultMap="BaseResultMap">
+		select
+		sku.sid as sid,
+		sku.product_detail_sid as productDetailSid,
+		spu.sid as productSid
+		from
+		pcm_pro_detail sku
+		join
+		pcm_product spu on
+		sku.product_sid=spu.sid
+		left join
+		pcm_color_dict cd
+		on
+		sku.pro_color_sid=cd.sid
+		join
+		pcm_product_category ppc on
+		ppc.product_sid=spu.sid
+		join
+		pcm_category cate on cate.sid =
+		ppc.category_sid
+		and
+		cate.category_type=0 and cate.is_leaf='Y' and
+		cate.status='Y' and cate.is_display = 1
+		<where>
+			1=1
+			<if test="colorCode != null">
+				and cd.sid = #{colorCode,jdbcType=VARCHAR}
+			</if>
+			<if test="product_sid != null">
+				and spu.product_sid = #{product_sid,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="searchSku"
+		parameterType="com.wangfj.product.maindata.domain.vo.PcmSearchSkuDto"
+		resultType="java.util.Map">
+		select
+		sku.product_detail_sid as skuCode,
+		spu.product_sid as
+		spuCode,
+		sku.pro_stan_sid as standardCode,
+		sku.pro_stan_name as
+		standardName,
+		sku.pro_color_alias as colorAlias
+		from pcm_pro_detail as
+		sku
+		join pcm_product as spu on sku.product_sid = spu.sid
+		left join
+		pcm_color_dict as
+		color on sku.pro_color_sid = color.sid
+		where
+		sku.product_detail_sid
+		= #{skuCode,jdbcType=VARCHAR}
+	</select>
+
+	<select id="cmsProductInfo" parameterType="com.wangfj.product.maindata.domain.vo.CmsProductDto"
+		resultType="com.wangfj.product.maindata.domain.vo.CmsProductResultDto">
+		SELECT DISTINCT
+		sku_1.product_detail_sid AS productSid,
+		sku_1.pro_detail_name AS productName,
+		(
+		SELECT
+		min(price.promotion_price)
+		FROM
+		pcm_pro_detail AS sku
+		JOIN
+		pcm_shoppe_product AS spro ON spro.product_detail_sid =
+		sku.sid
+		JOIN
+		pcm_price AS price ON price.shoppe_pro_sid =
+		spro.shoppe_pro_sid
+		AND
+		NOW() BETWEEN price.promotion_begin_time
+		AND
+		price.promotion_end_time
+		WHERE
+		sku.product_detail_sid = sku_1.product_detail_sid
+		) AS price,
+		ifnull(
+		photo.picture_url,
+		(
+		SELECT
+		photo.picture_url
+		FROM
+		pcm_pro_detail AS
+		sku
+		JOIN pcm_product AS spu ON sku.product_sid = spu.sid
+		JOIN
+		pcm_picture_url AS photo ON spu.product_sid = photo.sku_sid
+		AND
+		sku.pro_color_sid = photo.color_code
+		and photo.if_delete = 0
+		WHERE
+		sku.product_detail_sid =
+		sku_1.product_detail_sid
+		LIMIT 0,
+		1
+		)
+		) AS pict,
+		channel.channel_code,
+		shoppe.shoppe_code,
+		org.organization_code
+		FROM
+		pcm_shoppe_product AS spro
+		JOIN pcm_pro_detail AS sku_1 ON
+		spro.product_detail_sid = sku_1.sid
+		JOIN pcm_product AS spu ON
+		sku_1.product_sid = spu.sid
+		JOIN pcm_brand
+		AS brand ON
+		spu.brand_root_sid = brand.sid
+		JOIN pcm_product_category AS
+		ppc ON
+		ppc.product_sid = spu.sid
+		JOIN pcm_category AS cate ON cate.sid
+		=
+		ppc.category_sid
+		AND cate.category_type = 0
+		AND cate.is_leaf = 'Y'
+		AND
+		cate. STATUS = 'Y'
+		AND cate.is_display = 1
+		JOIN pcm_shoppe AS shoppe ON
+		spro.shoppe_sid = shoppe.sid
+		AND shoppe.shoppe_status = 1
+		JOIN
+		pcm_organization AS org ON org.sid = shoppe.shop_sid
+		LEFT JOIN
+		pcm_channel_sale_config AS pcsc ON pcsc.shoppe_pro_sid =
+		shoppe.sid
+		AND
+		pcsc.sale_stauts = 0
+		LEFT JOIN pcm_channel as channel ON
+		channel.channel_code =
+		pcsc.channel_sid
+		LEFT JOIN pcm_picture_url AS
+		photo ON spu.product_sid = photo.sku_sid
+		AND sku_1.pro_color_sid =
+		photo.color_code
+		AND photo.is_primary = 0
+		and photo.if_delete = 0
+		<if test="proSku != null">
+			AND spu.product_sku = #{proSku,jdbcType=VARCHAR}
+		</if>
+		<if test="cateName != null">
+			AND brand.brand_name like '%${cateName}%'
+		</if>
+		<if test="brandName != null">
+			AND cate.name like '%{brandName}%'
+		</if>
+		<if test="proSellongBeginTime != null">
+			<!-- AND spu.pro_selling_time &gt; #{proSellongBeginTime,jdbcType=VARCHAT} -->
+			AND spu.pro_selling_time = #{proSellongBeginTime,jdbcType=VARCHAR}
+			<!-- AND spu.pro_selling_time &lt; date_sub(#{proSellongBeginTime,jdbcType=VARCHAT}, 
+				INTERVAL - 1 DAY) -->
+		</if>
+		<if test="channelCode != null">
+			AND channel.channel_code =
+			#{proSellongBeginTime,jdbcType=VARCHAR}
+		</if>
+		<if test="shoppeCode != null">
+			AND shoppe.shoppe_code =
+			#{proSellongBeginTime,jdbcType=VARCHAR}
+		</if>
+		<if test="shopCode != null">
+			AND org.organization_code =
+			#{proSellongBeginTime,jdbcType=VARCHAR}
+		</if>
+		<if test="cateCode != null">
+			AND cate.category_code =
+			#{proSellongBeginTime,jdbcType=VARCHAR}
+		</if>
+	</select>
+	<select id="cmsProductInfoBySid" parameterType="list"
+		resultType="com.wangfj.product.maindata.domain.vo.CmsProductResultDto">
+		SELECT
+		sku_1.product_detail_sid AS productSid,
+		sku_1.pro_detail_name AS
+		productName,
+		(
+		SELECT
+		min(price.current_price)
+		FROM
+		pcm_pro_detail AS sku
+		JOIN pcm_shoppe_product AS spro ON spro.product_detail_sid =
+		sku.sid
+		JOIN pcm_price AS price ON price.shoppe_pro_sid =
+		spro.shoppe_pro_sid
+		AND NOW() BETWEEN price.promotion_begin_time
+		AND
+		price.promotion_end_time
+		WHERE
+		sku.product_detail_sid =
+		sku_1.product_detail_sid
+		) AS price,
+		ifnull(
+		photo.picture_url,
+		(
+		SELECT
+		photo.picture_url
+		FROM
+		pcm_pro_detail AS sku
+		JOIN pcm_product AS spu ON
+		sku.product_sid = spu.sid
+		JOIN pcm_picture_url AS photo ON
+		spu.product_sid = photo.sku_sid
+		AND sku.pro_color_sid =
+		photo.color_code
+		and photo.if_delete = 0
+		WHERE
+		sku.product_detail_sid =
+		sku_1.product_detail_sid
+		LIMIT 0,1
+		)
+		) AS pict
+		FROM
+		pcm_shoppe_product AS
+		spro
+		JOIN pcm_pro_detail
+		AS sku_1 ON spro.product_detail_sid = sku_1.sid
+		JOIN pcm_product AS spu
+		ON sku_1.product_sid = spu.sid
+		JOIN pcm_brand AS
+		brand ON
+		spu.brand_root_sid = brand.sid
+		JOIN pcm_product_category AS ppc
+		ON
+		ppc.product_sid = spu.sid
+		JOIN pcm_category AS cate ON cate.sid =
+		ppc.category_sid
+		AND cate.category_type = 0
+		AND cate.is_leaf = 'Y'
+		AND
+		cate. STATUS = 'Y'
+		JOIN pcm_shoppe AS shoppe ON spro.shoppe_sid =
+		shoppe.sid
+		AND shoppe.shoppe_status = 1
+		LEFT JOIN pcm_picture_url AS
+		photo ON spu.product_sid = photo.sku_sid
+		AND sku_1.pro_color_sid =
+		photo.color_code AND photo.is_primary = 0
+		and photo.if_delete = 0
+		where
+		sku_1.selling_status=1
+		and sku_1.product_detail_sid in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	<!-- <select id="selectColorProBySpuColor" resultType="com.wangfj.product.maindata.domain.vo.ProductOnSellDto" 
+		parameterType="java.util.Map"> SELECT p.product_sid as spuSid, pd.product_sid 
+		as spuCode, p.pro_color_sid as color, p.photo_status as photoStatus, pd.brand_root_sid 
+		as brandSid, c.sid as categorySid, IFNULL(SUM(ps.pro_sum), 0) AS saleSum 
+		FROM pcm_shoppe_product psp LEFT JOIN pcm_stock ps ON psp.shoppe_pro_sid 
+		= ps.shoppe_pro_sid AND ps.stock_type_sid = 1001 AND psp.sale_status = 0 
+		JOIN pcm_pro_detail p ON psp.product_detail_sid = p.sid <if test="color != 
+		null"> <if test="spuSid != null"> AND p.product_sid = #{spuSid} </if> AND 
+		p.pro_color_sid = #{color} </if> <if test="list != null"> AND p.sid in <foreach 
+		collection="list" index="index" item="item" open="(" separator="," close=")"> 
+		#{item} </foreach> </if> JOIN pcm_product pd on p.product_sid=pd.sid <if 
+		test="spuCode != null"> AND pd.product_sid = #{spuCode} </if> JOIN pcm_product_category 
+		pc on pc.product_sid=pd.sid JOIN pcm_category c on c.sid=pc.category_sid 
+		and c.category_type=0 and c.`status` ='Y' group by spuSid,color </select> -->
+	<select id="selectSkuSidBySpuCodeColor" parameterType="java.util.Map"
+		resultType="com.wangfj.util.mq.PublishDTO">
+		SELECT
+		sku.sid as sid,
+		1 as type
+		FROM
+		pcm_pro_detail AS sku
+		JOIN pcm_product AS spu ON spu.sid = sku.product_sid
+		WHERE spu.product_sid = #{spuCode}
+		AND sku.pro_color_sid = #{colorSid}
+	</select>
+	<select id="selectColorProBySpuColor"
+		resultType="com.wangfj.product.maindata.domain.vo.ProductOnSellDto"
+		parameterType="java.util.Map">
+		SELECT
+		p.product_sid AS spuSid,
+		pd.product_sid AS spuCode,
+		p.pro_color_sid AS color,
+		p.photo_status AS photoStatus,
+		pd.brand_root_sid AS brandSid,
+		c.sid AS categorySid,
+		IFNULL(SUM(ps.pro_sum), 0) AS saleSum,
+		IFNULL(MAX(psp.original_price),
+		0) AS orgPrice,
+		p.pro_type AS proType,
+		p.pro_active_bit AS skuSell
+		FROM
+		pcm_pro_detail p
+		LEFT JOIN
+		pcm_shoppe_product psp ON psp.product_detail_sid = p.sid
+		AND psp.sale_status = 0
+		LEFT JOIN
+		pcm_stock ps ON psp.shoppe_pro_sid = ps.shoppe_pro_sid
+		AND
+		ps.stock_type_sid = 1001
+		AND psp.sale_status = 0
+		JOIN pcm_product pd ON
+		p.product_sid = pd.sid
+		JOIN pcm_product_category pc ON pc.product_sid =
+		pd.sid
+		JOIN pcm_category c ON c.sid = pc.category_sid
+		AND
+		c.category_type = 0
+		AND c.`status` = 'Y'
+		<where>
+			<if test="color != null">
+				<if test="spuSid != null">
+					AND p.product_sid = #{spuSid}
+				</if>
+				AND p.pro_color_sid = #{color}
+			</if>
+			<if test="spuCode != null">
+				AND pd.product_sid = #{spuCode}
+			</if>
+			<if test="spuList != null">
+				AND p.product_sid IN
+				<foreach collection="spuList" index="index" item="item1"
+					open="(" separator="," close=")">
+					#{item1}
+				</foreach>
+			</if>
+			<if test="colorList != null">
+				AND p.pro_color_sid IN
+				<foreach collection="colorList" index="index" item="item2"
+					open="(" separator="," close=")">
+					#{item2}
+				</foreach>
+			</if>
+		</where>
+		GROUP BY
+		p.product_sid,
+		p.pro_color_sid
+	</select>
+	<select id="getSpuColorBySkuSids" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT DISTINCT
+		sku.pro_color_sid as colorSid,
+		sku.product_sid as spuSid
+		FROM
+		pcm_pro_detail AS sku
+		<where>
+			<if test="list != null">
+				AND sku.sid in
+				<foreach collection="list" index="index" item="item" open="("
+					separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	<select id="selectLimitValueByBrandCategory" resultType="int"
+		parameterType="com.wangfj.product.maindata.domain.vo.ProductOnSellDto">
+		SELECT
+		limit_value
+		FROM
+		pcm_product_online_limit
+		WHERE
+		(
+		category_sid = #{categorySid}
+		AND brand_sid = #{brandSid}
+		)
+		OR (
+		brand_sid = #{brandSid}
+		AND category_sid IS NULL
+		)
+		OR brand_sid = 0
+		ORDER
+		BY
+		category_sid DESC
+		LIMIT 1
+	</select>
+	<update id="updateSelectiveByList" parameterType="hashMap">
+		update pcm_pro_detail
+		<set>
+			<if test="productDetailSid != null">
+				product_detail_sid =
+				#{productDetailSid,jdbcType=VARCHAR},
+			</if>
+			<if test="proDetailName != null">
+				pro_detail_name = #{proDetailName,jdbcType=VARCHAR},
+			</if>
+			<if test="productSid != null">
+				product_sid = #{productSid,jdbcType=BIGINT},
+			</if>
+			<if test="proStanSid != null">
+				pro_stan_sid = #{proStanSid,jdbcType=VARCHAR},
+			</if>
+			<if test="proColorSid != null">
+				pro_color_sid = #{proColorSid,jdbcType=BIGINT},
+			</if>
+			<if test="proColorName != null">
+				pro_color_name = #{proColorName,jdbcType=VARCHAR},
+			</if>
+			<if test="proColorAlias != null">
+				pro_color_alias = #{proColorAlias,jdbcType=VARCHAR},
+			</if>
+			<if test="proStanName != null">
+				pro_stan_name = #{proStanName,jdbcType=VARCHAR},
+			</if>
+			<if test="memo != null">
+				memo = #{memo,jdbcType=VARCHAR},
+			</if>
+			<if test="barcode != null">
+				barcode = #{barcode,jdbcType=VARCHAR},
+			</if>
+			<if test="proWriTime != null">
+				pro_wri_time = #{proWriTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="photoSaleCodeSid != null">
+				photo_sale_code_sid =
+				#{photoSaleCodeSid,jdbcType=VARCHAR},
+			</if>
+			<if test="photoStatus != null">
+				photo_status = #{photoStatus,jdbcType=INTEGER},
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid = #{optUserSid,jdbcType=BIGINT},
+			</if>
+			<if test="optRealName != null">
+				opt_real_name = #{optRealName,jdbcType=VARCHAR},
+			</if>
+			<if test="optUpdateTime != null">
+				opt_update_time = #{optUpdateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="planMaker != null">
+				plan_maker = #{planMaker,jdbcType=VARCHAR},
+			</if>
+			<if test="planTime != null">
+				plan_time = #{planTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="photoPlanSid != null">
+				photo_plan_sid = #{photoPlanSid,jdbcType=VARCHAR},
+			</if>
+			<if test="proActiveBit != null">
+				pro_active_bit = #{proActiveBit,jdbcType=INTEGER},
+			</if>
+			<if test="proType != null">
+				pro_type = #{proType,jdbcType=INTEGER},
+			</if>
+			<if test="sellingStatus != null">
+				selling_status = #{sellingStatus,jdbcType=INTEGER},
+			</if>
+			<if test="searchKey != null">
+				search_key = #{searchKey,jdbcType=VARCHAR},
+			</if>
+			<if test="keyWord != null">
+				key_word = #{keyWord,jdbcType=VARCHAR},
+			</if>
+			<if test="sizePictureUrl != null">
+				size_picture_url = #{sizePictureUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="features != null">
+				features = #{features,jdbcType=VARCHAR},
+			</if>
+			<if test="articleNum != null">
+				article_num = #{articleNum,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item.sid}
+		</foreach>
+	</update>
+	<!-- 单品页商品漏出 -->
+	<select id="selectTagsPriceStockBySku" parameterType="hashMap"
+		resultType="com.wangfj.product.maindata.domain.vo.TagsPriceStockDto">
+		SELECT
+		ppd.sid,
+		ppd.pro_detail_name as productName,
+		pr.promotion_price AS
+		price,
+		sum(IFNULL(st.pro_sum, 0)) AS stock,
+		tag.count,
+		GROUP_CONCAT(DISTINCT tag.tag_name separator '|') as tags
+		FROM
+		pcm_shoppe_product psp
+		JOIN pcm_pro_detail ppd ON ppd.sid =
+		psp.product_detail_sid
+		AND
+		psp.product_detail_sid = #{skuSid}
+		AND
+		psp.sale_status = 0
+		AND
+		ppd.selling_status = 1
+		AND ppd.pro_active_bit = 1
+		JOIN pcm_shoppe ps ON
+		ps.sid = psp.shoppe_sid
+		AND ps.shoppe_status = 1
+		JOIN
+		pcm_channel_sale_config pcsc ON pcsc.shoppe_pro_sid = ps.sid
+		<if test="channelSid != null">
+			AND pcsc.channel_sid = #{channelSid}
+		</if>
+		<if test="channelSid == null">
+			AND pcsc.channel_sid = '0'
+		</if>
+		AND pcsc.sale_stauts = 0
+		JOIN pcm_price pr ON pr.shoppe_pro_sid =
+		psp.shoppe_pro_sid
+		<if test="channelSid != null">
+			AND pr.channel_sid = #{channelSid}
+		</if>
+		<if test="channelSid == null">
+			AND pr.channel_sid = '0'
+		</if>
+		AND NOW() BETWEEN pr.promotion_begin_time
+		AND pr.promotion_end_time
+		AND
+		pr.ifdel = 0
+		AND pr.promotion_price = (
+		SELECT
+		min(promotion_price)
+		FROM
+		pcm_price pr2
+		JOIN pcm_shoppe_product psp1 ON psp1.product_detail_sid =
+		#{skuSid}
+		AND pr2.shoppe_pro_sid = psp1.shoppe_pro_sid
+		AND NOW() BETWEEN
+		pr2.promotion_begin_time
+		AND pr2.promotion_end_time
+		AND pr2.ifdel = 0
+		)
+		JOIN pcm_stock st ON st.shoppe_pro_sid =
+		psp.shoppe_pro_sid
+		AND
+		stock_type_sid = 1001
+		<if test="channelSid != null">
+			AND st.channel_sid = #{channelSid}
+		</if>
+		<if test="channelSid == null">
+			AND st.channel_sid = '0'
+		</if>
+		LEFT JOIN (
+		SELECT
+		ppt1.product_sid,
+		GROUP_CONCAT(pt1.tag_name separator
+		'|') as tag_name,
+		count(*) AS count
+		FROM
+		pcm_product_tag ppt1
+		JOIN pcm_tag
+		pt1 ON ppt1.tag_sid = pt1.sid
+		AND pt1.tag_type = 1
+		AND ppt1.flag = 0
+		AND
+		pt1. STATUS = 0
+		GROUP BY
+		ppt1.product_sid
+		) tag ON tag.product_sid =
+		psp.sid
+		GROUP BY
+		tag.count
+		ORDER BY
+		tag.count DESC
+		LIMIT 1
+	</select>
+	<select id="judgeproDetailRepeat" parameterType="Map" resultType="Map">
+		SELECT
+			sku.product_detail_sid,
+			count(1)
+		FROM
+			pcm_pro_detail AS sku
+		GROUP BY
+			sku.product_sid,
+			sku.pro_stan_sid
+			<if test="industryCondition == 0 || industryCondition == 2">
+				,sku.pro_color_sid
+				,sku.pro_color_name
+			</if>
+			<if test="industryCondition == 1">
+				,sku.features
+			</if>
+		HAVING
+			count(1) > 1
+	</select>
+</mapper>

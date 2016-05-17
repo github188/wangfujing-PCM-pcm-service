@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmPictureStanMapper" >
+  <resultMap id="BaseResultMap" type="com.wangfj.product.maindata.domain.entity.PcmPictureStan" >
+    <id column="sid" property="sid" jdbcType="BIGINT" />
+    <result column="picture_width" property="pictureWidth" jdbcType="VARCHAR" />
+    <result column="picture_height" property="pictureHeight" jdbcType="VARCHAR" />
+    <result column="is_original_image" property="isOriginalImage" jdbcType="INTEGER" />
+    <result column="is_default_stan" property="isDefaultStan" jdbcType="INTEGER" />
+    <result column="c1" property="c1" jdbcType="VARCHAR" />
+    <result column="c2" property="c2" jdbcType="VARCHAR" />
+    <result column="c3" property="c3" jdbcType="VARCHAR" />
+    <result column="c4" property="c4" jdbcType="VARCHAR" />
+    <result column="c5" property="c5" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sid, picture_width, picture_height, is_original_image, is_default_stan, c1, c2, c3, 
+    c4, c5
+  </sql>
+  
+  <select id="selectListByParam" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    	<include refid="Base_Column_List" />
+    from pcm_picture_stan
+    <where>
+      <if test="pictureWidth != null" >
+        and picture_width = #{pictureWidth,jdbcType=VARCHAR}
+      </if>
+      <if test="pictureHeight != null" >
+        and picture_height = #{pictureHeight,jdbcType=VARCHAR}
+      </if>
+      <if test="isOriginalImage != null" >
+        and is_original_image = #{isOriginalImage,jdbcType=INTEGER}
+      </if>
+      <if test="isDefaultStan != null" >
+        and is_default_stan = #{isDefaultStan,jdbcType=INTEGER}
+      </if>
+      <if test="c1 != null" >
+        and c1 = #{c1,jdbcType=VARCHAR} 
+      </if>
+      <if test="c2 != null" >
+        and c2 = #{c2,jdbcType=VARCHAR}
+      </if>
+      <if test="c3 != null" >
+        and c3 = #{c3,jdbcType=VARCHAR}
+      </if>
+      <if test="c4 != null" >
+        and c4 = #{c4,jdbcType=VARCHAR}
+      </if>
+      <if test="c5 != null" >
+        and c5 = #{c5,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="selectPageListByParam" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    	<include refid="Base_Column_List" />
+    from pcm_picture_stan
+    <where>
+      <if test="pictureWidth != null" >
+        and picture_width = #{pictureWidth,jdbcType=VARCHAR}
+      </if>
+      <if test="pictureHeight != null" >
+        and picture_height = #{pictureHeight,jdbcType=VARCHAR}
+      </if>
+      <if test="isOriginalImage != null" >
+        and is_original_image = #{isOriginalImage,jdbcType=INTEGER}
+      </if>
+      <if test="isDefaultStan != null" >
+        and is_default_stan = #{isDefaultStan,jdbcType=INTEGER}
+      </if>
+      <if test="c1 != null" >
+        and c1 = #{c1,jdbcType=VARCHAR} 
+      </if>
+      <if test="c2 != null" >
+        and c2 = #{c2,jdbcType=VARCHAR}
+      </if>
+      <if test="c3 != null" >
+        and c3 = #{c3,jdbcType=VARCHAR}
+      </if>
+      <if test="c4 != null" >
+        and c4 = #{c4,jdbcType=VARCHAR}
+      </if>
+      <if test="c5 != null" >
+        and c5 = #{c5,jdbcType=VARCHAR}
+      </if>
+    </where>
+        order by
+			sid asc
+		limit
+			#{start}, #{limit}
+  </select>
+  <select id="getCountByParam" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select 
+    	count(*)
+    from pcm_picture_stan
+    <where>
+      <if test="pictureWidth != null" >
+        and picture_width = #{pictureWidth,jdbcType=VARCHAR}
+      </if>
+      <if test="pictureHeight != null" >
+        and picture_height = #{pictureHeight,jdbcType=VARCHAR}
+      </if>
+      <if test="isOriginalImage != null" >
+        and is_original_image = #{isOriginalImage,jdbcType=INTEGER}
+      </if>
+      <if test="isDefaultStan != null" >
+        and is_default_stan = #{isDefaultStan,jdbcType=INTEGER}
+      </if>
+      <if test="c1 != null" >
+        and c1 = #{c1,jdbcType=VARCHAR} 
+      </if>
+      <if test="c2 != null" >
+        and c2 = #{c2,jdbcType=VARCHAR}
+      </if>
+      <if test="c3 != null" >
+        and c3 = #{c3,jdbcType=VARCHAR}
+      </if>
+      <if test="c4 != null" >
+        and c4 = #{c4,jdbcType=VARCHAR}
+      </if>
+      <if test="c5 != null" >
+        and c5 = #{c5,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from pcm_picture_stan
+    where sid = #{sid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pcm_picture_stan
+    where sid = #{sid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangfj.product.maindata.domain.entity.PcmPictureStan" >
+    insert into pcm_picture_stan (sid, picture_width, picture_height, 
+      is_original_image, is_default_stan, c1, 
+      c2, c3, c4, c5
+      )
+    values (#{sid,jdbcType=BIGINT}, #{pictureWidth,jdbcType=VARCHAR}, #{pictureHeight,jdbcType=VARCHAR}, 
+      #{isOriginalImage,jdbcType=INTEGER}, #{isDefaultStan,jdbcType=INTEGER}, #{c1,jdbcType=VARCHAR}, 
+      #{c2,jdbcType=VARCHAR}, #{c3,jdbcType=VARCHAR}, #{c4,jdbcType=VARCHAR}, #{c5,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true"
+		keyProperty="sid" parameterType="com.wangfj.product.maindata.domain.entity.PcmPictureStan" >
+    insert into pcm_picture_stan
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="pictureWidth != null" >
+        picture_width,
+      </if>
+      <if test="pictureHeight != null" >
+        picture_height,
+      </if>
+      <if test="isOriginalImage != null" >
+        is_original_image,
+      </if>
+      <if test="isDefaultStan != null" >
+        is_default_stan,
+      </if>
+      <if test="c1 != null" >
+        c1,
+      </if>
+      <if test="c2 != null" >
+        c2,
+      </if>
+      <if test="c3 != null" >
+        c3,
+      </if>
+      <if test="c4 != null" >
+        c4,
+      </if>
+      <if test="c5 != null" >
+        c5,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        #{sid,jdbcType=BIGINT},
+      </if>
+      <if test="pictureWidth != null" >
+        #{pictureWidth,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureHeight != null" >
+        #{pictureHeight,jdbcType=VARCHAR},
+      </if>
+      <if test="isOriginalImage != null" >
+        #{isOriginalImage,jdbcType=INTEGER},
+      </if>
+      <if test="isDefaultStan != null" >
+        #{isDefaultStan,jdbcType=INTEGER},
+      </if>
+      <if test="c1 != null" >
+        #{c1,jdbcType=VARCHAR},
+      </if>
+      <if test="c2 != null" >
+        #{c2,jdbcType=VARCHAR},
+      </if>
+      <if test="c3 != null" >
+        #{c3,jdbcType=VARCHAR},
+      </if>
+      <if test="c4 != null" >
+        #{c4,jdbcType=VARCHAR},
+      </if>
+      <if test="c5 != null" >
+        #{c5,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmPictureStan" >
+    update pcm_picture_stan
+    <set >
+      <if test="pictureWidth != null" >
+        picture_width = #{pictureWidth,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureHeight != null" >
+        picture_height = #{pictureHeight,jdbcType=VARCHAR},
+      </if>
+      <if test="isOriginalImage != null" >
+        is_original_image = #{isOriginalImage,jdbcType=INTEGER},
+      </if>
+      <if test="isDefaultStan != null" >
+        is_default_stan = #{isDefaultStan,jdbcType=INTEGER},
+      </if>
+      <if test="c1 != null" >
+        c1 = #{c1,jdbcType=VARCHAR},
+      </if>
+      <if test="c2 != null" >
+        c2 = #{c2,jdbcType=VARCHAR},
+      </if>
+      <if test="c3 != null" >
+        c3 = #{c3,jdbcType=VARCHAR},
+      </if>
+      <if test="c4 != null" >
+        c4 = #{c4,jdbcType=VARCHAR},
+      </if>
+      <if test="c5 != null" >
+        c5 = #{c5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangfj.product.maindata.domain.entity.PcmPictureStan" >
+    update pcm_picture_stan
+    set picture_width = #{pictureWidth,jdbcType=VARCHAR},
+      picture_height = #{pictureHeight,jdbcType=VARCHAR},
+      is_original_image = #{isOriginalImage,jdbcType=INTEGER},
+      is_default_stan = #{isDefaultStan,jdbcType=INTEGER},
+      c1 = #{c1,jdbcType=VARCHAR},
+      c2 = #{c2,jdbcType=VARCHAR},
+      c3 = #{c3,jdbcType=VARCHAR},
+      c4 = #{c4,jdbcType=VARCHAR},
+      c5 = #{c5,jdbcType=VARCHAR}
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.wangfj.product.maindata.persistence.PcmShoppeProductEdiRelationMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.maindata.domain.entity.PcmShoppeProductEdiRelation">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="shoppe_pro_sid" property="shoppeProSid"
+			jdbcType="VARCHAR" />
+		<result column="channel_pro_sid" property="channelProSid"
+			jdbcType="VARCHAR" />
+		<result column="channel_code" property="channelCode" jdbcType="VARCHAR" />
+		<result column="is_presell" property="isPresell" jdbcType="INTEGER" />
+		<result column="is_pay_reducestock" property="isPayReducestock"
+			jdbcType="INTEGER" />
+		<result column="ifdel" property="ifdel" jdbcType="INTEGER" />
+		<result column="field1" property="field1" jdbcType="VARCHAR" />
+		<result column="field2" property="field2" jdbcType="VARCHAR" />
+		<result column="field3" property="field3" jdbcType="VARCHAR" />
+		<result column="field4" property="field4" jdbcType="VARCHAR" />
+		<result column="field5" property="field5" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BaseResultMapStock"
+		type="com.wangfj.product.maindata.domain.vo.PcmEdiProductStockDto">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="shoppe_pro_sid" property="shoppeProSid"
+			jdbcType="VARCHAR" />
+		<result column="channel_pro_sid" property="channelProSid"
+			jdbcType="VARCHAR" />
+		<result column="channel_code" property="channelCode" jdbcType="VARCHAR" />
+		<result column="is_presell" property="isPresell" jdbcType="INTEGER" />
+		<result column="is_pay_reducestock" property="isPayReducestock"
+			jdbcType="INTEGER" />
+		<result column="ifdel" property="ifdel" jdbcType="INTEGER" />
+		<result column="field1" property="field1" jdbcType="VARCHAR" />
+		<result column="field2" property="field2" jdbcType="VARCHAR" />
+		<result column="field3" property="field3" jdbcType="VARCHAR" />
+		<result column="field4" property="field4" jdbcType="VARCHAR" />
+		<result column="field5" property="field5" jdbcType="VARCHAR" />
+		<result column="pro_sum" property="proSum" jdbcType="VARCHAR" />
+		<result column="stock_type_sid" property="stockTypeSid"
+			jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, shoppe_pro_sid, channel_pro_sid, channel_code,
+		is_presell,
+		is_pay_reducestock,
+		ifdel, field1, field2, field3, field4,
+		field5
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_shoppe_product_edi_relation
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<select id="getProIsPayReduceInfo" resultMap="BaseResultMap"
+		parameterType="Map">
+		SELECT
+		edi.*
+		FROM
+		pcm_shoppe_product AS pro
+		JOIN pcm_shoppe AS shoppe ON
+		shoppe.sid = pro.shoppe_sid
+		JOIN pcm_channel_sale_config AS sale ON
+		sale.shoppe_pro_sid = shoppe.sid
+		AND sale.sale_stauts = 0
+		JOIN
+		pcm_channel AS channel ON sale.channel_sid = channel.channel_code
+		AND
+		channel.`status` = 0
+		JOIN pcm_shoppe_product_edi_relation AS edi ON
+		channel.channel_code =
+		edi.channel_code
+		AND edi.field1 =
+		pro.shoppe_pro_sid
+		AND edi.ifdel = 1
+		<where>
+			<if test="shoppeProCode != null">
+				and pro.shoppe_pro_sid =
+				#{shoppeProCode,jdbcType=VARCHAR}
+			</if>
+			<if test="channelCode != null">
+				and channel.channel_code =
+				#{channelCode,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_shoppe_product_edi_relation
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmShoppeProductEdiRelation">
+		insert into pcm_shoppe_product_edi_relation (sid,
+		shoppe_pro_sid,
+		channel_pro_sid,
+		channel_code, is_presell,
+		is_pay_reducestock,
+		ifdel, field1, field2,
+		field3, field4, field5
+		)
+		values (#{sid,jdbcType=BIGINT}, #{shoppeProSid,jdbcType=VARCHAR},
+		#{channelProSid,jdbcType=VARCHAR},
+		#{channelCode,jdbcType=VARCHAR},
+		#{isPresell,jdbcType=INTEGER}, #{isPayReducestock,jdbcType=INTEGER},
+		#{ifdel,jdbcType=INTEGER}, #{field1,jdbcType=VARCHAR},
+		#{field2,jdbcType=VARCHAR},
+		#{field3,jdbcType=VARCHAR},
+		#{field4,jdbcType=VARCHAR}, #{field5,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmShoppeProductEdiRelation">
+		insert into pcm_shoppe_product_edi_relation
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid,
+			</if>
+			<if test="channelProSid != null">
+				channel_pro_sid,
+			</if>
+			<if test="channelCode != null">
+				channel_code,
+			</if>
+			<if test="isPresell != null">
+				is_presell,
+			</if>
+			<if test="isPayReducestock != null">
+				is_pay_reducestock,
+			</if>
+			<if test="ifdel != null">
+				ifdel,
+			</if>
+			<if test="field1 != null">
+				field1,
+			</if>
+			<if test="field2 != null">
+				field2,
+			</if>
+			<if test="field3 != null">
+				field3,
+			</if>
+			<if test="field4 != null">
+				field4,
+			</if>
+			<if test="field5 != null">
+				field5,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="shoppeProSid != null">
+				#{shoppeProSid,jdbcType=VARCHAR},
+			</if>
+			<if test="channelProSid != null">
+				#{channelProSid,jdbcType=VARCHAR},
+			</if>
+			<if test="channelCode != null">
+				#{channelCode,jdbcType=VARCHAR},
+			</if>
+			<if test="isPresell != null">
+				#{isPresell,jdbcType=INTEGER},
+			</if>
+			<if test="isPayReducestock != null">
+				#{isPayReducestock,jdbcType=INTEGER},
+			</if>
+			<if test="ifdel != null">
+				#{ifdel,jdbcType=INTEGER},
+			</if>
+			<if test="field1 != null">
+				#{field1,jdbcType=VARCHAR},
+			</if>
+			<if test="field2 != null">
+				#{field2,jdbcType=VARCHAR},
+			</if>
+			<if test="field3 != null">
+				#{field3,jdbcType=VARCHAR},
+			</if>
+			<if test="field4 != null">
+				#{field4,jdbcType=VARCHAR},
+			</if>
+			<if test="field5 != null">
+				#{field5,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmShoppeProductEdiRelation">
+		update pcm_shoppe_product_edi_relation
+		<set>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR},
+			</if>
+			<if test="channelProSid != null">
+				channel_pro_sid = #{channelProSid,jdbcType=VARCHAR},
+			</if>
+			<if test="channelCode != null">
+				channel_code = #{channelCode,jdbcType=VARCHAR},
+			</if>
+			<if test="isPresell != null">
+				is_presell = #{isPresell,jdbcType=INTEGER},
+			</if>
+			<if test="isPayReducestock != null">
+				is_pay_reducestock =
+				#{isPayReducestock,jdbcType=INTEGER},
+			</if>
+			<if test="ifdel != null">
+				ifdel = #{ifdel,jdbcType=INTEGER},
+			</if>
+			<if test="field1 != null">
+				field1 = #{field1,jdbcType=VARCHAR},
+			</if>
+			<if test="field2 != null">
+				field2 = #{field2,jdbcType=VARCHAR},
+			</if>
+			<if test="field3 != null">
+				field3 = #{field3,jdbcType=VARCHAR},
+			</if>
+			<if test="field4 != null">
+				field4 = #{field4,jdbcType=VARCHAR},
+			</if>
+			<if test="field5 != null">
+				field5 = #{field5,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmShoppeProductEdiRelation">
+		update pcm_shoppe_product_edi_relation
+		set shoppe_pro_sid
+		= #{shoppeProSid,jdbcType=VARCHAR},
+		channel_pro_sid =
+		#{channelProSid,jdbcType=VARCHAR},
+		channel_code =
+		#{channelCode,jdbcType=VARCHAR},
+		is_presell =
+		#{isPresell,jdbcType=INTEGER},
+		is_pay_reducestock =
+		#{isPayReducestock,jdbcType=INTEGER},
+		ifdel =
+		#{ifdel,jdbcType=INTEGER},
+		field1 = #{field1,jdbcType=VARCHAR},
+		field2 =
+		#{field2,jdbcType=VARCHAR},
+		field3 = #{field3,jdbcType=VARCHAR},
+		field4
+		= #{field4,jdbcType=VARCHAR},
+		field5 = #{field5,jdbcType=VARCHAR}
+		where
+		sid = #{sid,jdbcType=BIGINT}
+	</update>
+
+	<!-- 根据专柜商品查询库存 -->
+	<select id="selectProStoctListByParam" resultMap="BaseResultMapStock"
+		parameterType="com.wangfj.product.maindata.domain.vo.QueryEdiProductStockDto">
+		select
+		psper.sid, psper.shoppe_pro_sid, psper.channel_pro_sid,
+		psper.channel_code,
+		psper.is_presell,
+		psper.is_pay_reducestock,
+		ps.pro_sum,
+		ps.stock_type_sid
+		from pcm_shoppe_product_edi_relation
+		psper
+		INNER JOIN pcm_stock ps ON psper.field1 = ps.shoppe_pro_sid
+		<where>
+			<if test="shoppeProSid != null ">
+				and psper.field1=
+				#{shoppeProSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelCode != null">
+				and psper.channel_code = #{channelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="stockChannelCode != null">
+				and ps.channel_sid = #{stockChannelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="stockTypeSid != null">
+				and ps.stock_type_sid =
+				#{stockTypeSid,jdbcType=INTEGER}
+			</if>
+			<if test="stockTypeSid == null">
+				and ps.stock_type_sid =1001
+			</if>
+			and psper.ifdel = 1
+		</where>
+	</select>
+	<!-- 根据专柜商品查询库存 -->
+	<select id="selectProStoctListByParam2" resultMap="BaseResultMapStock"
+		parameterType="com.wangfj.product.maindata.domain.vo.QueryEdiProductStockDto">
+		select
+		psper.sid, psper.shoppe_pro_sid, psper.channel_pro_sid,
+		psper.channel_code,
+		psper.is_presell,
+		psper.is_pay_reducestock,
+		ps.pro_sum,
+		ps.stock_type_sid
+		from pcm_shoppe_product_edi_relation
+		psper
+		INNER JOIN pcm_stock ps ON psper.shoppe_pro_sid = ps.shoppe_pro_sid
+		AND psper.channel_code = ps.channel_sid
+		<where>
+			<if test="shoppeProSids != null and shoppeProSids.size>0">
+				<foreach collection="shoppeProSids" open=" and psper.shoppe_pro_sid in("
+					close=")" item="proSid" separator=",">
+					#{proSid}
+				</foreach>
+			</if>
+			<if test="channelCode != null">
+				and channel_code = #{channelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="stockTypeSid != null">
+				and ps.stock_type_sid =
+				#{stockTypeSid,jdbcType=INTEGER}
+			</if>
+			<if test="stockTypeSid == null">
+				and ps.stock_type_sid =1001
+			</if>
+			and psper.ifdel = 1
+		</where>
+	</select>
+
+	<!-- 查询EDI商品编码 -->
+	<select id="selectEdiProtListByProCode" resultMap="BaseResultMapStock"
+		parameterType="com.wangfj.product.maindata.domain.vo.QueryEdiProductStockDto">
+		select
+		psper.sid, psper.shoppe_pro_sid, psper.channel_pro_sid,
+		psper.channel_code,
+		psper.is_presell,
+		psper.is_pay_reducestock,
+		field1
+		from pcm_shoppe_product_edi_relation
+		psper
+		<where>
+			<if test="shoppeProSid != null ">
+				and psper.field1=
+				#{shoppeProSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelCode != null">
+				and psper.channel_code = #{channelCode,jdbcType=VARCHAR}
+			</if>
+			and psper.ifdel = 1
+		</where>
+	</select>
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_shoppe_product_edi_relation
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelProSid != null">
+				and channel_pro_sid = #{channelProSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelCode != null">
+				and channel_code = #{channelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="isPresell != null">
+				and is_presell = #{isPresell,jdbcType=INTEGER}
+			</if>
+			<if test="isPayReducestock != null">
+				and is_pay_reducestock =
+				#{isPayReducestock,jdbcType=INTEGER}
+			</if>
+			<if test="ifdel != null">
+				and ifdel = #{ifdel,jdbcType=INTEGER}
+			</if>
+			<if test="field1 != null">
+				and field1 = #{field1,jdbcType=VARCHAR}
+			</if>
+			<if test="field2 != null">
+				and field2 = #{field2,jdbcType=VARCHAR}
+			</if>
+			<if test="field3 != null">
+				and field3 = #{field3,jdbcType=VARCHAR}
+			</if>
+			<if test="field4 != null">
+				and field4 = #{field4,jdbcType=VARCHAR}
+			</if>
+			<if test="field5 != null">
+				and field5 = #{field5,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_shoppe_product_edi_relation
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelProSid != null">
+				and channel_pro_sid = #{channelProSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelCode != null">
+				and channel_code = #{channelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="isPresell != null">
+				and is_presell = #{isPresell,jdbcType=INTEGER}
+			</if>
+			<if test="isPayReducestock != null">
+				and is_pay_reducestock =
+				#{isPayReducestock,jdbcType=INTEGER}
+			</if>
+			<if test="ifdel != null">
+				and ifdel = #{ifdel,jdbcType=INTEGER}
+			</if>
+			<if test="field1 != null">
+				and field1 = #{field1,jdbcType=VARCHAR}
+			</if>
+			<if test="field2 != null">
+				and field2 = #{field2,jdbcType=VARCHAR}
+			</if>
+			<if test="field3 != null">
+				and field3 = #{field3,jdbcType=VARCHAR}
+			</if>
+			<if test="field4 != null">
+				and field4 = #{field4,jdbcType=VARCHAR}
+			</if>
+			<if test="field5 != null">
+				and field5 = #{field5,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_shoppe_product_edi_relation
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelProSid != null">
+				and channel_pro_sid = #{channelProSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelCode != null">
+				and channel_code = #{channelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="isPresell != null">
+				and is_presell = #{isPresell,jdbcType=INTEGER}
+			</if>
+			<if test="isPayReducestock != null">
+				and is_pay_reducestock =
+				#{isPayReducestock,jdbcType=INTEGER}
+			</if>
+			<if test="ifdel != null">
+				and ifdel = #{ifdel,jdbcType=INTEGER}
+			</if>
+			<if test="field1 != null">
+				and field1 = #{field1,jdbcType=VARCHAR}
+			</if>
+			<if test="field2 != null">
+				and field2 = #{field2,jdbcType=VARCHAR}
+			</if>
+			<if test="field3 != null">
+				and field3 = #{field3,jdbcType=VARCHAR}
+			</if>
+			<if test="field4 != null">
+				and field4 = #{field4,jdbcType=VARCHAR}
+			</if>
+			<if test="field5 != null">
+				and field5 = #{field5,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+</mapper>

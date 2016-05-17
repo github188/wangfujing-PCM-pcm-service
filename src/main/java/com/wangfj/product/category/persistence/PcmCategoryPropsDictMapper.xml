@@ -1,0 +1,813 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.wangfj.product.category.persistence.PcmCategoryPropsDictMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.category.domain.entity.PcmCategoryPropsDict">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="props_sid" property="propsSid" jdbcType="BIGINT" />
+		<result column="props_name" property="propsName" jdbcType="VARCHAR" />
+		<result column="is_key_prop" property="isKeyProp" jdbcType="INTEGER" />
+		<result column="is_enum_prop" property="isEnumProp" jdbcType="INTEGER" />
+		<result column="props_desc" property="propsDesc" jdbcType="VARCHAR" />
+		<result column="props_code" property="propsCode" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="BIGINT" />
+		<result column="sort_order" property="sortOrder" jdbcType="BIGINT" />
+		<result column="channel_sid" property="channelSid" jdbcType="BIGINT" />
+		<result column="is_erp_prop" property="isErpProp" jdbcType="INTEGER" />
+		<result column="erp_type" property="erpType" jdbcType="INTEGER" />
+		<result column="erp_prop_code" property="erpPropCode" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="opt_user_sid" property="optUserSid" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="PageVO"
+		type="com.wangfj.product.category.domain.vo.PcmCategoryPropsDictDto">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="props_sid" property="propsSid" jdbcType="BIGINT" />
+		<result column="props_name" property="propsName" jdbcType="VARCHAR" />
+		<result column="channel_name" property="channelName" jdbcType="VARCHAR" />
+		<result column="props_desc" property="propsDesc" jdbcType="VARCHAR" />
+		<result column="props_code" property="propsCode" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="BIGINT" />
+		<result column="is_key_prop" property="isKeyProp" jdbcType="BIGINT" />
+		<result column="is_enum_prop" property="isEnumProp" jdbcType="INTEGER" />
+		<result column="is_erp_prop" property="isErpProp" jdbcType="BIGINT" />
+		<result column="sort_order" property="sortOrder" jdbcType="BIGINT" />
+		<result column="channel_sid" property="channelSid" jdbcType="BIGINT" />
+		<result column="erp_type" property="erpType" jdbcType="BIGINT" />
+	</resultMap>
+
+
+
+	<sql id="Base_Column_List">
+		sid, props_sid, props_name, is_key_prop, is_enum_prop,
+		props_desc,
+		props_code, status,
+		sort_order, channel_sid, is_erp_prop,
+		erp_type, erp_prop_code, create_time,
+		opt_user_sid
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_props_dict
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+
+
+	<select id="selectList" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropsDict">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_props_dict
+		<where>
+			1=1
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name LIKE '%${propsName}%'
+			</if>
+			<if test="isKeyProp != null">
+				and is_key_prop = #{isKeyProp,jdbcType=INTEGER}
+			</if>
+			<if test="isEnumProp != null">
+				and is_enum_prop = #{isEnumProp,jdbcType=INTEGER}
+			</if>
+			<if test="propsDesc != null">
+				and props_desc = #{propsDesc,jdbcType=VARCHAR}
+			</if>
+			<if test="propsCode != null">
+				and props_code = #{propsCode,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=BIGINT}
+			</if>
+			<if test="sortOrder != null">
+				and sort_order = #{sortOrder,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="isErpProp != null">
+				and is_erp_prop = #{isErpProp,jdbcType=INTEGER}
+			</if>
+			<if test="erpType != null">
+				and erp_type = #{erpType,jdbcType=INTEGER}
+			</if>
+			<if test="erpPropCode != null">
+				and erp_prop_code = #{erpPropCode,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+	<!-- 查询属性值列表,因为需要根据渠道查询所以改为in() -->
+	<select id="selectListInChannelSid" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.category.domain.vo.CategoryPropsDictVO">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_props_dict
+		<where>
+			1=1
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name LIKE '%${propsName}%'
+			</if>
+			<if test="isKeyProp != null">
+				and is_key_prop = #{isKeyProp,jdbcType=INTEGER}
+			</if>
+			<if test="isEnumProp != null">
+				and is_enum_prop = #{isEnumProp,jdbcType=INTEGER}
+			</if>
+			<if test="propsDesc != null">
+				and props_desc = #{propsDesc,jdbcType=VARCHAR}
+			</if>
+			<if test="propsCode != null">
+				and props_code = #{propsCode,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=BIGINT}
+			</if>
+			<if test="sortOrder != null">
+				and sort_order = #{sortOrder,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid in
+				<foreach item="item" index="index" collection="channelSid"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="isErpProp != null">
+				and is_erp_prop = #{isErpProp,jdbcType=INTEGER}
+			</if>
+			<if test="erpType != null">
+				and erp_type = #{erpType,jdbcType=INTEGER}
+			</if>
+			<if test="erpPropCode != null">
+				and erp_prop_code = #{erpPropCode,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectPage" resultMap="PageVO"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropsDict">
+		select
+		<include refid="Base_Column_List" />,
+		ifNull((select channel_name from pcm_channel where sid = channel_sid),'全渠道') as
+		channel_name
+		from pcm_category_props_dict
+		<where>
+			1=1
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+
+				and props_name like '%${propsName}%'
+			</if>
+			<if test="isKeyProp != null">
+				and is_key_prop = #{isKeyProp,jdbcType=INTEGER}
+			</if>
+			<if test="isEnumProp != null">
+				and is_enum_prop = #{isEnumProp,jdbcType=INTEGER}
+			</if>
+			<if test="propsDesc != null">
+				and props_desc = #{propsDesc,jdbcType=VARCHAR}
+			</if>
+			<if test="propsCode != null">
+				and props_code = #{propsCode,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=BIGINT}
+			</if>
+			<if test="sortOrder != null">
+				and sort_order = #{sortOrder,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="isErpProp != null">
+				and is_erp_prop = #{isErpProp,jdbcType=INTEGER}
+			</if>
+			<if test="erpType != null">
+				and erp_type = #{erpType,jdbcType=INTEGER}
+			</if>
+			<if test="erpPropCode != null">
+				and erp_prop_code = #{erpPropCode,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+		</where>
+		order by sid desc
+		limit #{start},#{pageSize}
+	</select>
+	<select id="selectPageTotal" resultType="int"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropsDict">
+		select count(1)
+		from pcm_category_props_dict
+		<where>
+			1=1
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name = #{propsName,jdbcType=VARCHAR}
+			</if>
+			<if test="isKeyProp != null">
+				and is_key_prop = #{isKeyProp,jdbcType=INTEGER}
+			</if>
+			<if test="isEnumProp != null">
+				and is_enum_prop = #{isEnumProp,jdbcType=INTEGER}
+			</if>
+			<if test="propsDesc != null">
+				and props_desc = #{propsDesc,jdbcType=VARCHAR}
+			</if>
+			<if test="propsCode != null">
+				and props_code = #{propsCode,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=BIGINT}
+			</if>
+			<if test="sortOrder != null">
+				and sort_order = #{sortOrder,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="isErpProp != null">
+				and is_erp_prop = #{isErpProp,jdbcType=INTEGER}
+			</if>
+			<if test="erpType != null">
+				and erp_type = #{erpType,jdbcType=INTEGER}
+			</if>
+			<if test="erpPropCode != null">
+				and erp_prop_code = #{erpPropCode,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+	<select id="selectPageLikeTotal" resultType="int"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropsDict">
+		select count(1)
+		from pcm_category_props_dict
+		<where>
+			1=1
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name like '%${propsName}%'
+			</if>
+			<if test="isKeyProp != null">
+				and is_key_prop = #{isKeyProp,jdbcType=INTEGER}
+			</if>
+			<if test="isEnumProp != null">
+				and is_enum_prop = #{isEnumProp,jdbcType=INTEGER}
+			</if>
+			<if test="propsDesc != null">
+				and props_desc = #{propsDesc,jdbcType=VARCHAR}
+			</if>
+			<if test="propsCode != null">
+				and props_code = #{propsCode,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=BIGINT}
+			</if>
+			<if test="sortOrder != null">
+				and sort_order = #{sortOrder,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="isErpProp != null">
+				and is_erp_prop = #{isErpProp,jdbcType=INTEGER}
+			</if>
+			<if test="erpType != null">
+				and erp_type = #{erpType,jdbcType=INTEGER}
+			</if>
+			<if test="erpPropCode != null">
+				and erp_prop_code = #{erpPropCode,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_category_props_dict
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropsDict">
+		insert into pcm_category_props_dict (sid, props_sid,
+		props_name,
+		is_key_prop, is_enum_prop, props_desc,
+		props_code, status,
+		sort_order,
+		channel_sid, is_erp_prop, erp_type,
+		erp_prop_code,
+		create_time, opt_user_sid
+		)
+		values (#{sid,jdbcType=BIGINT},
+		#{propsSid,jdbcType=BIGINT},
+		#{propsName,jdbcType=VARCHAR},
+		#{isKeyProp,jdbcType=INTEGER}, #{isEnumProp,jdbcType=INTEGER},
+		#{propsDesc,jdbcType=VARCHAR},
+		#{propsCode,jdbcType=VARCHAR},
+		#{status,jdbcType=BIGINT},
+		#{sortOrder,jdbcType=BIGINT},
+		#{channelSid,jdbcType=BIGINT}, #{isErpProp,jdbcType=INTEGER},
+		#{erpType,jdbcType=INTEGER},
+		#{erpPropCode,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{optUserSid,jdbcType=BIGINT}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropsDict"
+		useGeneratedKeys="true" keyProperty="sid">
+		insert into pcm_category_props_dict
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="propsSid != null">
+				props_sid,
+			</if>
+			<if test="propsName != null">
+				props_name,
+			</if>
+			<if test="isKeyProp != null">
+				is_key_prop,
+			</if>
+			<if test="isEnumProp != null">
+				is_enum_prop,
+			</if>
+			<if test="propsDesc != null">
+				props_desc,
+			</if>
+			<if test="propsCode != null">
+				props_code,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="sortOrder != null">
+				sort_order,
+			</if>
+			<if test="channelSid != null">
+				channel_sid,
+			</if>
+			<if test="isErpProp != null">
+				is_erp_prop,
+			</if>
+			<if test="erpType != null">
+				erp_type,
+			</if>
+			<if test="erpPropCode != null">
+				erp_prop_code,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="propsSid != null">
+				#{propsSid,jdbcType=BIGINT},
+			</if>
+			<if test="propsName != null">
+				#{propsName,jdbcType=VARCHAR},
+			</if>
+			<if test="isKeyProp != null">
+				#{isKeyProp,jdbcType=INTEGER},
+			</if>
+			<if test="isEnumProp != null">
+				#{isEnumProp,jdbcType=INTEGER},
+			</if>
+			<if test="propsDesc != null">
+				#{propsDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="propsCode != null">
+				#{propsCode,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=BIGINT},
+			</if>
+			<if test="sortOrder != null">
+				#{sortOrder,jdbcType=BIGINT},
+			</if>
+			<if test="channelSid != null">
+				#{channelSid,jdbcType=BIGINT},
+			</if>
+			<if test="isErpProp != null">
+				#{isErpProp,jdbcType=INTEGER},
+			</if>
+			<if test="erpType != null">
+				#{erpType,jdbcType=INTEGER},
+			</if>
+			<if test="erpPropCode != null">
+				#{erpPropCode,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optUserSid != null">
+				#{optUserSid,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropsDict">
+		update pcm_category_props_dict
+		<set>
+			<if test="propsSid != null">
+				props_sid = #{propsSid,jdbcType=BIGINT},
+			</if>
+			<if test="propsName != null">
+				props_name = #{propsName,jdbcType=VARCHAR},
+			</if>
+			<if test="isKeyProp != null">
+				is_key_prop = #{isKeyProp,jdbcType=INTEGER},
+			</if>
+			<if test="isEnumProp != null">
+				is_enum_prop = #{isEnumProp,jdbcType=INTEGER},
+			</if>
+			<if test="propsDesc != null">
+				props_desc = #{propsDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="propsCode != null">
+				props_code = #{propsCode,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=BIGINT},
+			</if>
+			<if test="sortOrder != null">
+				sort_order = #{sortOrder,jdbcType=BIGINT},
+			</if>
+			<if test="channelSid != null">
+				channel_sid = #{channelSid,jdbcType=BIGINT},
+			</if>
+			<if test="isErpProp != null">
+				is_erp_prop = #{isErpProp,jdbcType=INTEGER},
+			</if>
+			<if test="erpType != null">
+				erp_type = #{erpType,jdbcType=INTEGER},
+			</if>
+			<if test="erpPropCode != null">
+				erp_prop_code = #{erpPropCode,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid = #{optUserSid,jdbcType=BIGINT},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropsDict">
+		update pcm_category_props_dict
+		set props_sid =
+		#{propsSid,jdbcType=BIGINT},
+		props_name =
+		#{propsName,jdbcType=VARCHAR},
+		is_key_prop =
+		#{isKeyProp,jdbcType=INTEGER},
+		is_enum_prop =
+		#{isEnumProp,jdbcType=INTEGER},
+		props_desc =
+		#{propsDesc,jdbcType=VARCHAR},
+		props_code =
+		#{propsCode,jdbcType=VARCHAR},
+		status = #{status,jdbcType=BIGINT},
+		sort_order = #{sortOrder,jdbcType=BIGINT},
+		channel_sid =
+		#{channelSid,jdbcType=BIGINT},
+		is_erp_prop =
+		#{isErpProp,jdbcType=INTEGER},
+		erp_type = #{erpType,jdbcType=INTEGER},
+		erp_prop_code = #{erpPropCode,jdbcType=VARCHAR},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		opt_user_sid =
+		#{optUserSid,jdbcType=BIGINT}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_props_dict
+		<where>
+			1=1
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name = #{propsName,jdbcType=VARCHAR}
+			</if>
+			<if test="isKeyProp != null">
+				and is_key_prop = #{isKeyProp,jdbcType=INTEGER}
+			</if>
+			<if test="isEnumProp != null">
+				and is_enum_prop = #{isEnumProp,jdbcType=INTEGER}
+			</if>
+			<if test="propsDesc != null">
+				and props_desc = #{propsDesc,jdbcType=VARCHAR}
+			</if>
+			<if test="propsCode != null">
+				and props_code = #{propsCode,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=BIGINT}
+			</if>
+			<if test="sortOrder != null">
+				and sort_order = #{sortOrder,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="isErpProp != null">
+				and is_erp_prop = #{isErpProp,jdbcType=INTEGER}
+			</if>
+			<if test="erpType != null">
+				and erp_type = #{erpType,jdbcType=INTEGER}
+			</if>
+			<if test="erpPropCode != null">
+				and erp_prop_code = #{erpPropCode,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_props_dict
+		<where>
+			1=1
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name = #{propsName,jdbcType=VARCHAR}
+			</if>
+			<if test="isKeyProp != null">
+				and is_key_prop = #{isKeyProp,jdbcType=INTEGER}
+			</if>
+			<if test="isEnumProp != null">
+				and is_enum_prop = #{isEnumProp,jdbcType=INTEGER}
+			</if>
+			<if test="propsDesc != null">
+				and props_desc = #{propsDesc,jdbcType=VARCHAR}
+			</if>
+			<if test="propsCode != null">
+				and props_code = #{propsCode,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=BIGINT}
+			</if>
+			<if test="sortOrder != null">
+				and sort_order = #{sortOrder,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="isErpProp != null">
+				and is_erp_prop = #{isErpProp,jdbcType=INTEGER}
+			</if>
+			<if test="erpType != null">
+				and erp_type = #{erpType,jdbcType=INTEGER}
+			</if>
+			<if test="erpPropCode != null">
+				and erp_prop_code = #{erpPropCode,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_category_props_dict
+		<where>
+			1=1
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name = #{propsName,jdbcType=VARCHAR}
+			</if>
+			<if test="isKeyProp != null">
+				and is_key_prop = #{isKeyProp,jdbcType=INTEGER}
+			</if>
+			<if test="isEnumProp != null">
+				and is_enum_prop = #{isEnumProp,jdbcType=INTEGER}
+			</if>
+			<if test="propsDesc != null">
+				and props_desc = #{propsDesc,jdbcType=VARCHAR}
+			</if>
+			<if test="propsCode != null">
+				and props_code = #{propsCode,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=BIGINT}
+			</if>
+			<if test="sortOrder != null">
+				and sort_order = #{sortOrder,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="isErpProp != null">
+				and is_erp_prop = #{isErpProp,jdbcType=INTEGER}
+			</if>
+			<if test="erpType != null">
+				and erp_type = #{erpType,jdbcType=INTEGER}
+			</if>
+			<if test="erpPropCode != null">
+				and erp_prop_code = #{erpPropCode,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectPropsDictByParentSid" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.category.domain.vo.PcmPropsDictsDto">
+		SELECT pcpd.* from pcm_category_props_dict AS
+		pcpd INNER
+		JOIN pcm_category_prop_values AS pcpv
+		ON pcpd.props_sid=pcpv.props_sid
+		INNER JOIN pcm_category as pc ON pcpv.category_sid=pc.category_sid
+		WHERE
+		pc.parent_sid=#{parentSid,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectCountPropsDictByParentSid" resultType="java.lang.Integer"
+		parameterType="com.wangfj.product.category.domain.vo.PcmPropsDictsDto">
+		SELECT count(1) from pcm_category_props_dict AS
+		pcpd
+		INNER JOIN pcm_category_prop_values AS pcpv
+		ON
+		pcpd.props_sid=pcpv.props_sid
+		INNER JOIN pcm_category as pc ON
+		pcpv.category_sid=pc.category_sid WHERE
+		pc.parent_sid=#{parentSid,jdbcType=VARCHAR}
+	</select>
+
+	<!-- 添加商品使用[根据叶子节点查询属性字典] -->
+	<select id="selectPropsDictByCateSid" resultType="com.wangfj.product.category.domain.vo.PropsVO"
+		parameterType="com.wangfj.product.category.domain.vo.PcmPropsDictsDto">
+		SELECT
+		DISTINCT
+		pcpd.sid as sid,
+		pcpd.props_sid as
+		propsSid,
+		pcpd.props_name as propsName,
+		pcpd.is_enum_prop as isEnumProp,
+		pcpv.not_null as notNull
+		from pcm_category_props_dict as pcpd INNER
+		JOIN
+		pcm_category_prop_values as
+		pcpv ON pcpd.props_sid=pcpv.props_sid
+		INNER
+		JOIN pcm_category AS pct ON
+		pcpv.category_sid=pct.sid
+		where
+		pct.is_leaf='Y'
+		and pct.sid=#{sid,jdbcType=BIGINT}
+	</select>
+	<!-- 针对查询所有展示分类属性 -->
+	<select id="selectPropsDictByCateSidZSFL" resultType="com.wangfj.product.category.domain.vo.PropsVO"
+		parameterType="com.wangfj.product.category.domain.vo.PcmPropsDictsDto">
+		SELECT
+		DISTINCT
+		pcpd.sid as sid,
+		pcpd.props_sid as
+		propsSid,
+		pcpd.props_name as propsName,
+		pcpd.is_enum_prop as isEnumProp,
+		pcpv.not_null as notNull
+		from pcm_category_props_dict as pcpd INNER
+		JOIN
+		pcm_category_prop_values as
+		pcpv ON pcpd.props_sid=pcpv.props_sid
+		INNER
+		JOIN pcm_category AS pct ON
+		pcpv.category_sid=pct.sid
+		where
+		pct.is_leaf='Y'
+		and pct.sid in (
+		select
+		sid
+		from pcm_category
+		where
+		category_type=3
+		and
+		is_leaf = 'Y'
+		order by
+		sort_order asc
+		)
+	</select>
+
+	<!-- 根据叶子节点查询属性字典 -->
+	<select id="selectCountPropsDictByCateSid" resultType="java.lang.Integer"
+		parameterType="com.wangfj.product.category.domain.vo.PcmPropsDictsDto">
+		SELECT count(1) from pcm_category_props_dict as pcpd
+		INNER JOIN
+		pcm_category_prop_values as
+		pcpv ON
+		pcpd.props_sid=pcpv.props_sid INNER JOIN pcm_category AS pct ON
+		pcpv.category_sid=pct.sid WHERE pct.is_leaf='Y' and
+		pct.sid=#{sid,jdbcType=BIGINT}
+	</select>
+
+	<!-- 根据叶子节点查询属性字典 -->
+	<select id="selectPropsDictByCategorySid" resultType="com.wangfj.product.category.domain.vo.PropsVO"
+		parameterType="com.wangfj.product.category.domain.vo.PcmCategoryPropsDictPara">
+		SELECT
+		DISTINCT
+		pcpd.sid as sid,
+		pcpd.props_sid as propsSid,
+		pcpd.props_name as propsName,
+		pcpd.is_enum_prop as isEnumProp,
+		pcpv.not_null as notNull,
+		pct.category_sid as categorySid,
+		pct.category_type as categoryType
+		from pcm_category_props_dict as pcpd
+		INNER
+		JOIN
+		pcm_category_prop_values as
+		pcpv ON
+		pcpd.props_sid=pcpv.props_sid
+		INNER
+		JOIN pcm_category AS pct ON
+		pcpv.category_sid=pct.sid WHERE
+		pct.is_leaf='Y'
+		<if test="categoryType != null">
+			and pct.category_type= #{categoryType,jdbcType=BIGINT}
+		</if>
+		<if test="categorySid != null">
+			and pct.category_sid= #{categorySid,jdbcType=BIGINT}
+		</if>
+		and pcpd.`status` = 1
+	</select>
+
+</mapper>

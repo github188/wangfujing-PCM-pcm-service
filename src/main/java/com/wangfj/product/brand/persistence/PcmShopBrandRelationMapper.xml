@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.wangfj.product.brand.persistence.PcmShopBrandRelationMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.brand.domain.entity.PcmShopBrandRelation">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="shop_sid" property="shopSid" jdbcType="VARCHAR" />
+		<result column="brand_sid" property="brandSid" jdbcType="VARCHAR" />
+		<result column="brand_group_code" property="brandGroupCode"
+			jdbcType="VARCHAR" />
+		<result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, shop_sid, brand_sid, brand_group_code, brand_name,
+		status
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_shop_brand_relation
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_shop_brand_relation
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmShopBrandRelation">
+		insert into pcm_shop_brand_relation (sid, shop_sid,
+		brand_sid,
+		brand_group_code, brand_name, status)
+		values
+		(#{sid,jdbcType=BIGINT}, #{shopSid,jdbcType=VARCHAR},
+		#{brandSid,jdbcType=VARCHAR},
+		#{brandGroupCode,jdbcType=VARCHAR},
+		#{brandName,jdbcType=VARCHAR},#{status,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmShopBrandRelation">
+		insert into pcm_shop_brand_relation
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="shopSid != null">
+				shop_sid,
+			</if>
+			<if test="brandSid != null">
+				brand_sid,
+			</if>
+			<if test="brandGroupCode != null">
+				brand_group_code,
+			</if>
+			<if test="brandName != null">
+				brand_name,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="shopSid != null">
+				#{shopSid,jdbcType=VARCHAR},
+			</if>
+			<if test="brandSid != null">
+				#{brandSid,jdbcType=VARCHAR},
+			</if>
+			<if test="brandGroupCode != null">
+				#{brandGroupCode,jdbcType=VARCHAR},
+			</if>
+			<if test="brandName != null">
+				#{brandName,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmShopBrandRelation">
+		update pcm_shop_brand_relation
+		<set>
+			<if test="shopSid != null">
+				shop_sid = #{shopSid,jdbcType=VARCHAR},
+			</if>
+			<if test="brandSid != null">
+				brand_sid = #{brandSid,jdbcType=VARCHAR},
+			</if>
+			<if test="brandGroupCode != null">
+				brand_group_code = #{brandGroupCode,jdbcType=VARCHAR},
+			</if>
+			<if test="brandName != null">
+				brand_name = #{brandName,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmShopBrandRelation">
+		update pcm_shop_brand_relation
+		set shop_sid =
+		#{shopSid,jdbcType=VARCHAR},
+		brand_sid =
+		#{brandSid,jdbcType=VARCHAR},
+		brand_group_code =
+		#{brandGroupCode,jdbcType=VARCHAR},
+		brand_name =
+		#{brandName,jdbcType=VARCHAR},
+		status =
+		#{status,jdbcType=INTEGER}
+		where
+		sid = #{sid,jdbcType=BIGINT}
+	</update>
+
+	<!-- 查询所有 selectListByParam wangxuan -->
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_shop_brand_relation
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="shopSid != null">
+				and shop_sid = #{shopSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandGroupCode != null">
+				and brand_group_code = #{brandGroupCode,jdbcType=VARCHAR}
+			</if>
+			<if test="brandName != null">
+				and brand_name = #{brandName,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+
+	<!-- 分页查询 wangxuan -->
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_shop_brand_relation
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="shopSid != null">
+				and shop_sid = #{shopSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandGroupCode != null">
+				and brand_group_code = #{brandGroupCode,jdbcType=VARCHAR}
+			</if>
+			<if test="brandName != null">
+				and brand_name = #{brandName,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+		</where>
+		order by
+		sid asc
+		<if test="start != null and limit != null">
+			limit #{start}, #{limit}
+		</if>
+	</select>
+
+	<!-- 查询数量 wangxuan -->
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_shop_brand_relation
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="shopSid != null">
+				and shop_sid = #{shopSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandGroupCode != null">
+				and brand_group_code = #{brandGroupCode,jdbcType=VARCHAR}
+			</if>
+			<if test="brandName != null">
+				and brand_name = #{brandName,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+
+	<!-- 门店与门店品牌关系上传时的查询所需数据 getShopBrandRelationUpload wangxuan -->
+	<select id="getShopBrandRelationUpload" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT pb.sid AS brandSid, pb.brand_name AS brandName,
+		po.sid AS
+		shopSid
+		FROM pcm_brand pb LEFT JOIN pcm_organization po
+		ON pb.shop_type
+		= po.store_type
+		<where>
+			po.organization_status = 0
+			AND po.organization_type = 3
+			AND pb.status =
+			0
+			AND pb.brand_type = 1
+			<if test="brandSid != null">
+				AND pb.brand_sid = #{brandSid}
+			</if>
+			<if test="shopCode != null">
+				AND po.organization_code = #{shopCode}
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据门店与门店品牌查询 getListShopBrandFromRelation -->
+	<select id="getListShopBrandFromRelation" parameterType="java.util.Map"
+		resultType="com.wangfj.product.brand.domain.vo.PcmShopBrandResultDto">
+		SELECT DISTINCT
+		pb.sid AS sid, pb.brand_sid AS brandSid, pb.brand_name
+		AS
+		brandName,po.sid AS shopSid
+		FROM pcm_brand pb INNER JOIN
+		pcm_shop_brand_relation psb
+		ON
+		pb.sid =
+		psb.brand_sid
+		INNER JOIN (
+		SELECT
+		*
+		FROM
+		pcm_organization
+		WHERE
+		organization_type = 3
+		AND
+		organization_status =
+		0
+		<if test="shopCode != null">
+			AND organization_code = #{shopCode}
+		</if>
+		) po ON psb.shop_sid = po.sid
+		<where>
+			pb.status = 0 AND psb.status = 0 AND
+			pb.brand_type = 1
+			<if test="parentSid != null">
+				AND pb.parent_sid = #{parentSid,jdbcType=BIGINT}
+			</if>
+			<if test="brandSid != null">
+				AND pb.brand_sid = #{brandSid}
+			</if>
+			<if test="shopSid != null">
+				AND psb.shop_sid = #{shopSid,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+
+
+
+
+</mapper>

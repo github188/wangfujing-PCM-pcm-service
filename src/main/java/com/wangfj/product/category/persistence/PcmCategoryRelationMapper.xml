@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.wangfj.product.category.persistence.PcmCategoryRelationMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.category.domain.entity.PcmCategoryRelation">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="gy_category_sid" property="gyCategorySid"
+			jdbcType="BIGINT" />
+		<result column="gl_category_sid" property="glCategorySid"
+			jdbcType="BIGINT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, gy_category_sid, gl_category_sid
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_relation
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectList" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryRelation">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_relation
+		<where>
+			1=1
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="gyCategorySid != null">
+				and gy_category_sid = #{gyCategorySid,jdbcType=BIGINT}
+			</if>
+			<if test="glCategorySid != null">
+				and gl_category_sid = #{glCategorySid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_category_relation
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryRelation">
+		insert into pcm_category_relation (sid, gy_category_sid,
+		gl_category_sid
+		)
+		values (#{sid,jdbcType=BIGINT},
+		#{gyCategorySid,jdbcType=BIGINT},
+		#{glCategorySid,jdbcType=BIGINT}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryRelation">
+		insert into pcm_category_relation
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="gyCategorySid != null">
+				gy_category_sid,
+			</if>
+			<if test="glCategorySid != null">
+				gl_category_sid,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="gyCategorySid != null">
+				#{gyCategorySid,jdbcType=BIGINT},
+			</if>
+			<if test="glCategorySid != null">
+				#{glCategorySid,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryRelation">
+		update pcm_category_relation
+		<set>
+			<if test="gyCategorySid != null">
+				gy_category_sid = #{gyCategorySid,jdbcType=BIGINT},
+			</if>
+			<if test="glCategorySid != null">
+				gl_category_sid = #{glCategorySid,jdbcType=BIGINT},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryRelation">
+		update pcm_category_relation
+		set gy_category_sid =
+		#{gyCategorySid,jdbcType=BIGINT},
+		gl_category_sid =
+		#{glCategorySid,jdbcType=BIGINT}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_relation
+		<where>
+			1=1
+			<if test="gyCategorySid != null">
+				and gy_category_sid = #{gyCategorySid,jdbcType=BIGINT}
+			</if>
+			<if test="glCategorySid != null">
+				and gl_category_sid = #{glCategorySid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_relation
+		<where>
+			1=1
+			<if test="gyCategorySid != null">
+				and gy_category_sid = #{gyCategorySid,jdbcType=BIGINT}
+			</if>
+			<if test="glCategorySid != null">
+				and gl_category_sid = #{glCategorySid,jdbcType=BIGINT}
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_category_relation
+		<where>
+			1=1
+			<if test="gyCategorySid != null">
+				and gy_category_sid = #{gyCategorySid,jdbcType=BIGINT},
+			</if>
+			<if test="glCategorySid != null">
+				and gl_category_sid = #{glCategorySid,jdbcType=BIGINT},
+			</if>
+		</where>
+	</select>
+
+</mapper>

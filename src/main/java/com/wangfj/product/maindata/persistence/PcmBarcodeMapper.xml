@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmBarcodeMapper" >
+  <resultMap id="BaseResultMap" type="com.wangfj.product.maindata.domain.entity.PcmBarcode" >
+    <id column="sid" property="sid" jdbcType="BIGINT" />
+    <result column="barcode" property="barcode" jdbcType="VARCHAR" />
+    <result column="barcode_name" property="barcodeName" jdbcType="VARCHAR" />
+    <result column="barcode_unit" property="barcodeUnit" jdbcType="VARCHAR" />
+    <result column="barcode_rate" property="barcodeRate" jdbcType="DECIMAL" />
+    <result column="code_type" property="codeType" jdbcType="INTEGER" />
+    <result column="shoppe_pro_sid" property="shoppeProSid" jdbcType="VARCHAR" />
+    <result column="store_code" property="storeCode" jdbcType="VARCHAR" />
+    <result column="product_code" property="productCode" jdbcType="VARCHAR" />
+    <result column="supply_code" property="supplyCode" jdbcType="VARCHAR" />
+    <result column="shoppe_code" property="shoppeCode" jdbcType="VARCHAR" />
+    <result column="sale_mount" property="saleMount" jdbcType="DECIMAL" />
+    <result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
+    <result column="origin_land" property="originLand" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="barcodeRes" type="com.wangfj.product.maindata.domain.vo.BarcodeListDto" >
+    <result column="shoppe_pro_sid" property="productCode" jdbcType="VARCHAR" />
+    <collection property="barcodeList" column="productCode" ofType="java.lang.String">
+   		<result column="barcode" property="barcode" jdbcType="VARCHAR" />
+    </collection>
+  </resultMap>
+  <resultMap id="barcodeListMap" type="com.wangfj.product.maindata.domain.vo.PcmBarodeListDto" >
+    <result column="shoppe_pro_sid" property="productCode" jdbcType="VARCHAR" />
+    <collection property="barcodeList" column="productCode" ofType="com.wangfj.product.maindata.domain.entity.PcmBarcode">
+   		<id column="sid" property="sid" jdbcType="BIGINT" />
+	    <result column="barcode" property="barcode" jdbcType="VARCHAR" />
+	    <result column="barcode_name" property="barcodeName" jdbcType="VARCHAR" />
+	    <result column="barcode_unit" property="barcodeUnit" jdbcType="VARCHAR" />
+	    <result column="barcode_rate" property="barcodeRate" jdbcType="DECIMAL" />
+	    <result column="code_type" property="codeType" jdbcType="INTEGER" />
+	    <result column="shoppe_pro_sid" property="shoppeProSid" jdbcType="VARCHAR" />
+	    <result column="store_code" property="storeCode" jdbcType="VARCHAR" />
+	    <result column="product_code" property="productCode" jdbcType="VARCHAR" />
+	    <result column="supply_code" property="supplyCode" jdbcType="VARCHAR" />
+	    <result column="shoppe_code" property="shoppeCode" jdbcType="VARCHAR" />
+	    <result column="sale_mount" property="saleMount" jdbcType="DECIMAL" />
+	    <result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
+	    <result column="origin_land" property="originLand" jdbcType="VARCHAR" />
+    </collection>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sid, barcode, barcode_name, barcode_unit, barcode_rate, code_type, shoppe_pro_sid, 
+    store_code, product_code, supply_code, shoppe_code, sale_mount, sale_price,origin_land
+  </sql>
+  <select id="getBarcodeByList" resultMap="barcodeListMap"
+		parameterType="list">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			pcm_barcode
+		where 
+			shoppe_pro_sid in
+		<foreach collection="list" item="item" open="(" separator=","
+			close=")">
+			#{item.productCode}
+		</foreach>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from pcm_barcode
+    where sid = #{sid,jdbcType=BIGINT}
+  </select>
+	<select id="selectBarcodeByErp" resultType="java.lang.String"
+		parameterType="hashMap">
+		select
+			barcode from pcm_barcode b1 
+		where 
+			store_code=#{storeCode,jdbcType=VARCHAR}
+		<if test="shoppeProSid != null">
+			and b1.shoppe_pro_sid=#{shoppeProSid,jdbcType=VARCHAR} 
+		</if>
+		<if test="productCode != null">
+			and b1.product_code=#{productCode,jdbcType=VARCHAR} 
+		</if>
+	</select>
+	<select id="selectBarcodeByList" resultMap="barcodeRes"
+		parameterType="list">
+		select
+			shoppe_pro_sid,
+			barcode
+		from 
+			pcm_barcode
+		where 
+			shoppe_pro_sid in
+		<foreach collection="list" item="item" open="(" separator=","
+			close=")">
+			#{item.productCode}
+		</foreach>
+	</select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pcm_barcode
+    where sid = #{sid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangfj.product.maindata.domain.entity.PcmBarcode" >
+    insert into pcm_barcode (sid, barcode, barcode_name, 
+      barcode_unit, barcode_rate, code_type, 
+      shoppe_pro_sid, store_code, product_code, 
+      supply_code, shoppe_code, sale_mount, 
+      sale_price,origin_land)
+    values (#{sid,jdbcType=BIGINT}, #{barcode,jdbcType=VARCHAR}, #{barcodeName,jdbcType=VARCHAR}, 
+      #{barcodeUnit,jdbcType=VARCHAR}, #{barcodeRate,jdbcType=DECIMAL}, #{codeType,jdbcType=INTEGER}, 
+      #{shoppeProSid,jdbcType=VARCHAR}, #{storeCode,jdbcType=VARCHAR}, #{productCode,jdbcType=VARCHAR}, 
+      #{supplyCode,jdbcType=VARCHAR}, #{shoppeCode,jdbcType=VARCHAR}, #{saleMount,jdbcType=DECIMAL}, 
+      #{salePrice,jdbcType=DECIMAL},#{originLand,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmBarcode" >
+    insert into pcm_barcode
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="barcode != null" >
+        barcode,
+      </if>
+      <if test="barcodeName != null" >
+        barcode_name,
+      </if>
+      <if test="barcodeUnit != null" >
+        barcode_unit,
+      </if>
+      <if test="barcodeRate != null" >
+        barcode_rate,
+      </if>
+      <if test="codeType != null" >
+        code_type,
+      </if>
+      <if test="shoppeProSid != null" >
+        shoppe_pro_sid,
+      </if>
+      <if test="storeCode != null" >
+        store_code,
+      </if>
+      <if test="productCode != null" >
+        product_code,
+      </if>
+      <if test="supplyCode != null" >
+        supply_code,
+      </if>
+      <if test="shoppeCode != null" >
+        shoppe_code,
+      </if>
+      <if test="saleMount != null" >
+        sale_mount,
+      </if>
+      <if test="salePrice != null" >
+        sale_price,
+      </if>
+      <if test="originLand != null" >
+        origin_land
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        #{sid,jdbcType=BIGINT},
+      </if>
+      <if test="barcode != null" >
+        #{barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="barcodeName != null" >
+        #{barcodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="barcodeUnit != null" >
+        #{barcodeUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="barcodeRate != null" >
+        #{barcodeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="codeType != null" >
+        #{codeType,jdbcType=INTEGER},
+      </if>
+      <if test="shoppeProSid != null" >
+        #{shoppeProSid,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCode != null" >
+        #{storeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null" >
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyCode != null" >
+        #{supplyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shoppeCode != null" >
+        #{shoppeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="saleMount != null" >
+        #{saleMount,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null" >
+        #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="originLand != null" >
+       #{originLand,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmBarcode" >
+    update pcm_barcode
+    <set >
+      <if test="barcode != null" >
+        barcode = #{barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="barcodeName != null" >
+        barcode_name = #{barcodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="barcodeUnit != null" >
+        barcode_unit = #{barcodeUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="barcodeRate != null" >
+        barcode_rate = #{barcodeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="codeType != null" >
+        code_type = #{codeType,jdbcType=INTEGER},
+      </if>
+      <if test="shoppeProSid != null" >
+        shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCode != null" >
+        store_code = #{storeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null" >
+        product_code = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyCode != null" >
+        supply_code = #{supplyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shoppeCode != null" >
+        shoppe_code = #{shoppeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="saleMount != null" >
+        sale_mount = #{saleMount,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null" >
+        sale_price = #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="originLand != null" >
+      	origin_land = #{originLand,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangfj.product.maindata.domain.entity.PcmBarcode" >
+    update pcm_barcode
+    set barcode = #{barcode,jdbcType=VARCHAR},
+      barcode_name = #{barcodeName,jdbcType=VARCHAR},
+      barcode_unit = #{barcodeUnit,jdbcType=VARCHAR},
+      barcode_rate = #{barcodeRate,jdbcType=DECIMAL},
+      code_type = #{codeType,jdbcType=INTEGER},
+      shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR},
+      store_code = #{storeCode,jdbcType=VARCHAR},
+      product_code = #{productCode,jdbcType=VARCHAR},
+      supply_code = #{supplyCode,jdbcType=VARCHAR},
+      shoppe_code = #{shoppeCode,jdbcType=VARCHAR},
+      sale_mount = #{saleMount,jdbcType=DECIMAL},
+      sale_price = #{salePrice,jdbcType=DECIMAL},
+      origin_land = #{originLand,jdbcType=VARCHAR},
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  <select id="selectListByParam" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    	<include refid="Base_Column_List" />
+    from pcm_barcode
+    <where>
+      <if test="sid != null" >
+        and sid = #{sid,jdbcType=BIGINT}
+      </if>
+      <if test="barcode != null" >
+        and barcode = #{barcode,jdbcType=VARCHAR}
+      </if>
+      <if test="barcodeName != null" >
+        and barcode_name = #{barcodeName,jdbcType=VARCHAR}
+      </if>
+      <if test="barcodeUnit != null" >
+        and barcode_unit = #{barcodeUnit,jdbcType=VARCHAR}
+      </if>
+      <if test="barcodeRate != null" >
+        and barcode_rate = #{barcodeRate,jdbcType=DECIMAL}
+      </if>
+      <if test="codeType != null" >
+        and code_type = #{codeType,jdbcType=INTEGER}
+      </if>
+      <if test="shoppeProSid != null" >
+        and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+      </if>
+      <if test="storeCode != null" >
+        and store_code = #{storeCode,jdbcType=VARCHAR}
+      </if>
+      <if test="productCode != null" >
+        and product_code = #{productCode,jdbcType=VARCHAR}
+      </if>
+      <if test="supplyCode != null" >
+        and supply_code = #{supplyCode,jdbcType=VARCHAR}
+      </if>
+      <if test="shoppeCode != null" >
+        and shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+      </if>
+      <if test="saleMount != null" >
+        and sale_mount = #{saleMount,jdbcType=DECIMAL}
+      </if>
+      <if test="salePrice != null" >
+        and sale_price = #{salePrice,jdbcType=DECIMAL}
+      </if>
+      <if test="originLand != null" >
+        and origin_land = #{originLand,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="selectPageListByParam" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    	<include refid="Base_Column_List" />
+    from pcm_barcode
+    <where>
+      <if test="sid != null" >
+        and sid = #{sid,jdbcType=BIGINT}
+      </if>
+      <if test="barcode != null" >
+        and barcode = #{barcode,jdbcType=VARCHAR}
+      </if>
+      <if test="barcodeName != null" >
+        and barcode_name = #{barcodeName,jdbcType=VARCHAR}
+      </if>
+      <if test="barcodeUnit != null" >
+        and barcode_unit = #{barcodeUnit,jdbcType=VARCHAR}
+      </if>
+      <if test="barcodeRate != null" >
+        and barcode_rate = #{barcodeRate,jdbcType=DECIMAL}
+      </if>
+      <if test="codeType != null" >
+        and code_type = #{codeType,jdbcType=INTEGER}
+      </if>
+      <if test="shoppeProSid != null" >
+        and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+      </if>
+      <if test="storeCode != null" >
+        and store_code = #{storeCode,jdbcType=VARCHAR}
+      </if>
+      <if test="productCode != null" >
+        and product_code = #{productCode,jdbcType=VARCHAR}
+      </if>
+      <if test="supplyCode != null" >
+        and supply_code = #{supplyCode,jdbcType=VARCHAR}
+      </if>
+      <if test="shoppeCode != null" >
+        and shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+      </if>
+      <if test="saleMount != null" >
+        and sale_mount = #{saleMount,jdbcType=DECIMAL}
+      </if>
+      <if test="salePrice != null" >
+        and sale_price = #{salePrice,jdbcType=DECIMAL}
+      </if>
+      <if test="originLand != null" >
+        and origin_land = #{originLand,jdbcType=VARCHAR}
+      </if>
+    </where>
+        order by
+			sid asc
+		limit
+			#{start}, #{limit}
+  </select>
+  <select id="getCountByParam" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select 
+    	count(*)
+    from pcm_barcode
+    <where>
+      <if test="sid != null" >
+        and sid = #{sid,jdbcType=BIGINT}
+      </if>
+      <if test="barcode != null" >
+        and barcode = #{barcode,jdbcType=VARCHAR}
+      </if>
+      <if test="barcodeName != null" >
+        and barcode_name = #{barcodeName,jdbcType=VARCHAR}
+      </if>
+      <if test="barcodeUnit != null" >
+        and barcode_unit = #{barcodeUnit,jdbcType=VARCHAR}
+      </if>
+      <if test="barcodeRate != null" >
+        and barcode_rate = #{barcodeRate,jdbcType=DECIMAL}
+      </if>
+      <if test="codeType != null" >
+        and code_type = #{codeType,jdbcType=INTEGER}
+      </if>
+      <if test="shoppeProSid != null" >
+        and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+      </if>
+      <if test="storeCode != null" >
+        and store_code = #{storeCode,jdbcType=VARCHAR}
+      </if>
+      <if test="productCode != null" >
+        and product_code = #{productCode,jdbcType=VARCHAR}
+      </if>
+      <if test="supplyCode != null" >
+        and supply_code = #{supplyCode,jdbcType=VARCHAR}
+      </if>
+      <if test="shoppeCode != null" >
+        and shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+      </if>
+      <if test="saleMount != null" >
+        and sale_mount = #{saleMount,jdbcType=DECIMAL}
+      </if>
+      <if test="salePrice != null" >
+        and sale_price = #{salePrice,jdbcType=DECIMAL}
+      </if>
+      <if test="originLand != null" >
+        and origin_land = #{originLand,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+</mapper>

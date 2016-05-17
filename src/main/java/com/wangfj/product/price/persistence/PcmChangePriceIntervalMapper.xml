@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.price.persistence.PcmChangePriceIntervalMapper" >
+  <resultMap id="BaseResultMap" type="com.wangfj.product.price.domain.entity.PcmChangePriceInterval" >
+    <id column="sid" property="sid" jdbcType="BIGINT" />
+    <result column="change_price_unit" property="changePriceUnit" jdbcType="VARCHAR" />
+    <result column="valence_type" property="valenceType" jdbcType="INTEGER" />
+    <result column="priority" property="priority" jdbcType="INTEGER" />
+    <result column="lowerLimit" property="lowerlimit" jdbcType="DOUBLE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sid, change_price_unit, valence_type, priority, lowerLimit
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from pcm_change_price_interval
+    where sid = #{sid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pcm_change_price_interval
+    where sid = #{sid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangfj.product.price.domain.entity.PcmChangePriceInterval" >
+    insert into pcm_change_price_interval (sid, change_price_unit, valence_type, 
+      priority, lowerLimit)
+    values (#{sid,jdbcType=BIGINT}, #{changePriceUnit,jdbcType=VARCHAR}, #{valenceType,jdbcType=INTEGER}, 
+      #{priority,jdbcType=INTEGER}, #{lowerlimit,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangfj.product.price.domain.entity.PcmChangePriceInterval" >
+    insert into pcm_change_price_interval
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="changePriceUnit != null" >
+        change_price_unit,
+      </if>
+      <if test="valenceType != null" >
+        valence_type,
+      </if>
+      <if test="priority != null" >
+        priority,
+      </if>
+      <if test="lowerlimit != null" >
+        lowerLimit,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        #{sid,jdbcType=BIGINT},
+      </if>
+      <if test="changePriceUnit != null" >
+        #{changePriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="valenceType != null" >
+        #{valenceType,jdbcType=INTEGER},
+      </if>
+      <if test="priority != null" >
+        #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="lowerlimit != null" >
+        #{lowerlimit,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.price.domain.entity.PcmChangePriceInterval" >
+    update pcm_change_price_interval
+    <set >
+      <if test="changePriceUnit != null" >
+        change_price_unit = #{changePriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="valenceType != null" >
+        valence_type = #{valenceType,jdbcType=INTEGER},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="lowerlimit != null" >
+        lowerLimit = #{lowerlimit,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangfj.product.price.domain.entity.PcmChangePriceInterval" >
+    update pcm_change_price_interval
+    set change_price_unit = #{changePriceUnit,jdbcType=VARCHAR},
+      valence_type = #{valenceType,jdbcType=INTEGER},
+      priority = #{priority,jdbcType=INTEGER},
+      lowerLimit = #{lowerlimit,jdbcType=DOUBLE}
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  
+   <select id="selectListByParam" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    	<include refid="Base_Column_List" />
+    from pcm_change_price_interval
+    <where>
+    <if test="changePriceUnit != null" >
+        change_price_unit = #{changePriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="valenceType != null" >
+        valence_type = #{valenceType,jdbcType=INTEGER},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="lowerlimit != null" >
+        lowerLimit = #{lowerlimit,jdbcType=DOUBLE},
+      </if>
+    </where>
+  </select>
+  
+  <select id="selectPageListByParam" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    	<include refid="Base_Column_List" />
+    from pcm_change_price_interval
+    <where>
+    	<if test="changePriceUnit != null" >
+        change_price_unit = #{changePriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="valenceType != null" >
+        valence_type = #{valenceType,jdbcType=INTEGER},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="lowerlimit != null" >
+        lowerLimit = #{lowerlimit,jdbcType=DOUBLE},
+      </if>
+    </where>
+    order by
+			sid asc
+		limit
+			#{start}, #{limit}
+  </select>
+  <select id="getCountByParam" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select 
+    	count(*)
+    from pcm_change_price_interval
+    <where>
+      <if test="changePriceUnit != null" >
+        change_price_unit = #{changePriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="valenceType != null" >
+        valence_type = #{valenceType,jdbcType=INTEGER},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="lowerlimit != null" >
+        lowerLimit = #{lowerlimit,jdbcType=DOUBLE},
+      </if>
+    </where>
+  </select>
+  
+</mapper>

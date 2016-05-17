@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmStanDictMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.maindata.domain.entity.PcmStanDict">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="pro_stan_name" property="proStanName" jdbcType="VARCHAR" />
+		<result column="pro_stan_sid" property="proStanSid" jdbcType="VARCHAR" />
+		<result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+		<result column="brand_root_sid" property="brandRootSid"
+			jdbcType="VARCHAR" />
+		<result column="brand_sid" property="brandSid" jdbcType="VARCHAR" />
+		<result column="atinn" property="atinn" jdbcType="VARCHAR" />
+		<result column="category_sid" property="categorySid" jdbcType="BIGINT" />
+		<result column="clint" property="clint" jdbcType="VARCHAR" />
+		<result column="file_name" property="fileName" jdbcType="VARCHAR" />
+		<result column="file_sid" property="fileSid" jdbcType="VARCHAR" />
+		<result column="category_name" property="categoryName"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, pro_stan_name, pro_stan_sid, brand_name,
+		brand_root_sid, brand_sid,
+		atinn, category_sid,
+		clint, file_name,
+		file_sid, category_name
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_stan_dict
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_stan_dict
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmStanDict">
+		insert into pcm_stan_dict (sid, pro_stan_name,
+		pro_stan_sid,
+		brand_name, brand_root_sid, brand_sid,
+		atinn,
+		category_sid, clint,
+		file_name, file_sid, category_name
+		)
+		values
+		(#{sid,jdbcType=BIGINT}, #{proStanName,jdbcType=VARCHAR},
+		#{proStanSid,jdbcType=VARCHAR},
+		#{brandName,jdbcType=VARCHAR},
+		#{brandRootSid,jdbcType=VARCHAR}, #{brandSid,jdbcType=VARCHAR},
+		#{atinn,jdbcType=VARCHAR}, #{categorySid,jdbcType=BIGINT},
+		#{clint,jdbcType=VARCHAR},
+		#{fileName,jdbcType=VARCHAR},
+		#{fileSid,jdbcType=VARCHAR}, #{categoryName,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmStanDict">
+		insert into pcm_stan_dict
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="proStanName != null">
+				pro_stan_name,
+			</if>
+			<if test="proStanSid != null">
+				pro_stan_sid,
+			</if>
+			<if test="brandName != null">
+				brand_name,
+			</if>
+			<if test="brandRootSid != null">
+				brand_root_sid,
+			</if>
+			<if test="brandSid != null">
+				brand_sid,
+			</if>
+			<if test="atinn != null">
+				atinn,
+			</if>
+			<if test="categorySid != null">
+				category_sid,
+			</if>
+			<if test="clint != null">
+				clint,
+			</if>
+			<if test="fileName != null">
+				file_name,
+			</if>
+			<if test="fileSid != null">
+				file_sid,
+			</if>
+			<if test="categoryName != null">
+				category_name,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="proStanName != null">
+				#{proStanName,jdbcType=VARCHAR},
+			</if>
+			<if test="proStanSid != null">
+				#{proStanSid,jdbcType=VARCHAR},
+			</if>
+			<if test="brandName != null">
+				#{brandName,jdbcType=VARCHAR},
+			</if>
+			<if test="brandRootSid != null">
+				#{brandRootSid,jdbcType=VARCHAR},
+			</if>
+			<if test="brandSid != null">
+				#{brandSid,jdbcType=VARCHAR},
+			</if>
+			<if test="atinn != null">
+				#{atinn,jdbcType=VARCHAR},
+			</if>
+			<if test="categorySid != null">
+				#{categorySid,jdbcType=BIGINT},
+			</if>
+			<if test="clint != null">
+				#{clint,jdbcType=VARCHAR},
+			</if>
+			<if test="fileName != null">
+				#{fileName,jdbcType=VARCHAR},
+			</if>
+			<if test="fileSid != null">
+				#{fileSid,jdbcType=VARCHAR},
+			</if>
+			<if test="categoryName != null">
+				#{categoryName,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmStanDict">
+		update pcm_stan_dict
+		<set>
+			<if test="proStanName != null">
+				pro_stan_name = #{proStanName,jdbcType=VARCHAR},
+			</if>
+			<if test="proStanSid != null">
+				pro_stan_sid = #{proStanSid,jdbcType=VARCHAR},
+			</if>
+			<if test="brandName != null">
+				brand_name = #{brandName,jdbcType=VARCHAR},
+			</if>
+			<if test="brandRootSid != null">
+				brand_root_sid = #{brandRootSid,jdbcType=VARCHAR},
+			</if>
+			<if test="brandSid != null">
+				brand_sid = #{brandSid,jdbcType=VARCHAR},
+			</if>
+			<if test="atinn != null">
+				atinn = #{atinn,jdbcType=VARCHAR},
+			</if>
+			<if test="categorySid != null">
+				category_sid = #{categorySid,jdbcType=BIGINT},
+			</if>
+			<if test="clint != null">
+				clint = #{clint,jdbcType=VARCHAR},
+			</if>
+			<if test="fileName != null">
+				file_name = #{fileName,jdbcType=VARCHAR},
+			</if>
+			<if test="fileSid != null">
+				file_sid = #{fileSid,jdbcType=VARCHAR},
+			</if>
+			<if test="categoryName != null">
+				category_name = #{categoryName,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmStanDict">
+		update pcm_stan_dict
+		set pro_stan_name =
+		#{proStanName,jdbcType=VARCHAR},
+		pro_stan_sid =
+		#{proStanSid,jdbcType=VARCHAR},
+		brand_name =
+		#{brandName,jdbcType=VARCHAR},
+		brand_root_sid =
+		#{brandRootSid,jdbcType=VARCHAR},
+		brand_sid =
+		#{brandSid,jdbcType=VARCHAR},
+		atinn = #{atinn,jdbcType=VARCHAR},
+		category_sid = #{categorySid,jdbcType=BIGINT},
+		clint =
+		#{clint,jdbcType=VARCHAR},
+		file_name = #{fileName,jdbcType=VARCHAR},
+		file_sid = #{fileSid,jdbcType=VARCHAR},
+		category_name =
+		#{categoryName,jdbcType=VARCHAR}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_stan_dict
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="proStanName != null">
+				and pro_stan_name = #{proStanName,jdbcType=VARCHAR}
+			</if>
+			<if test="proStanSid != null">
+				and pro_stan_sid = #{proStanSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandName != null">
+				and brand_name = #{brandName,jdbcType=VARCHAR}
+			</if>
+			<if test="brandRootSid != null">
+				and brand_root_sid = #{brandRootSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="atinn != null">
+				and atinn = #{atinn,jdbcType=VARCHAR}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="clint != null">
+				and clint = #{clint,jdbcType=VARCHAR}
+			</if>
+			<if test="fileName != null">
+				and file_name = #{fileName,jdbcType=VARCHAR}
+			</if>
+			<if test="fileSid != null">
+				and file_sid = #{fileSid,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_stan_dict
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="proStanName != null">
+				and pro_stan_name = #{proStanName,jdbcType=VARCHAR}
+			</if>
+			<if test="proStanSid != null">
+				and pro_stan_sid = #{proStanSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandName != null">
+				and brand_name = #{brandName,jdbcType=VARCHAR}
+			</if>
+			<if test="brandRootSid != null">
+				and brand_root_sid = #{brandRootSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="atinn != null">
+				and atinn = #{atinn,jdbcType=VARCHAR}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="clint != null">
+				and clint = #{clint,jdbcType=VARCHAR}
+			</if>
+			<if test="fileName != null">
+				and file_name = #{fileName,jdbcType=VARCHAR}
+			</if>
+			<if test="fileSid != null">
+				and file_sid = #{fileSid,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by
+		sid asc
+		<if test="limit!=null">
+			limit
+			#{start}, #{limit}
+		</if>
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_stan_dict
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="proStanName != null">
+				and pro_stan_name = #{proStanName,jdbcType=VARCHAR}
+			</if>
+			<if test="proStanSid != null">
+				and pro_stan_sid = #{proStanSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandName != null">
+				and brand_name = #{brandName,jdbcType=VARCHAR}
+			</if>
+			<if test="brandRootSid != null">
+				and brand_root_sid = #{brandRootSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="atinn != null">
+				and atinn = #{atinn,jdbcType=VARCHAR}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="clint != null">
+				and clint = #{clint,jdbcType=VARCHAR}
+			</if>
+			<if test="fileName != null">
+				and file_name = #{fileName,jdbcType=VARCHAR}
+			</if>
+			<if test="fileSid != null">
+				and file_sid = #{fileSid,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<!-- 移动工作台调用主数据获取尺码信息 wangxuan -->
+	<select id="selectListByParamForPad" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_stan_dict
+		<where>
+			<if test="proStanSid != null">
+				and pro_stan_sid like
+				"%"#{proStanSid,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+
+
+
+
+
+
+
+
+
+</mapper>

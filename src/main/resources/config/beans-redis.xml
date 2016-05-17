@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+                           
+	<bean id="clusterClient" class="com.lambdaworks.redis.cluster.RedisClusterClient" destroy-method="shutdown">
+    <constructor-arg>
+        <list>
+            <bean class="com.wangfj.core.utils.RedisURIFactory">
+            	<property name="host" value="${redis1.host}"/>
+            	<property name="port" value="${redis1.port}"/>
+            	<property name="password" value="${redis1.password}"/>
+            	<property name="timeout" value="${redis1.timeout}"/>
+            </bean>
+            <bean class="com.wangfj.core.utils.RedisURIFactory">
+                <property name="host" value="${redis2.host}"/>
+                <property name="port" value="${redis2.port}"/>
+                <property name="password" value="${redis2.password}"/>
+                <property name="timeout" value="${redis2.timeout}"/>
+            </bean>
+            <bean class="com.wangfj.core.utils.RedisURIFactory">
+                <property name="host" value="${redis3.host}"/>
+                <property name="port" value="${redis3.port}"/>
+                <property name="password" value="${redis3.password}"/>
+                <property name="timeout" value="${redis3.timeout}"/>
+            </bean>
+            <bean class="com.wangfj.core.utils.RedisURIFactory">
+                <property name="host" value="${redis4.host}"/>
+                <property name="port" value="${redis4.port}"/>
+                <property name="password" value="${redis4.password}"/>
+                <property name="timeout" value="${redis4.timeout}"/>
+            </bean>
+            <bean class="com.wangfj.core.utils.RedisURIFactory">
+                <property name="host" value="${redis5.host}"/>
+                <property name="port" value="${redis5.port}"/>
+                <property name="password" value="${redis5.password}"/>
+                <property name="timeout" value="${redis5.timeout}"/>
+            </bean>
+            <bean class="com.wangfj.core.utils.RedisURIFactory">
+                <property name="host" value="${redis6.host}"/>
+                <property name="port" value="${redis6.port}"/>
+                <property name="password" value="${redis6.password}"/>
+                <property name="timeout" value="${redis6.timeout}"/>
+            </bean>
+        </list>
+    </constructor-arg>
+	</bean>
+	<bean id="connectionCluster" class="com.lambdaworks.redis.cluster.RedisAdvancedClusterConnection" factory-bean="clusterClient" factory-method="connectCluster" destroy-method="close"/>
+	<bean id="redisUtil" class="com.wangfj.core.utils.RedisUtil"/>
+</beans>

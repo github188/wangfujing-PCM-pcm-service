@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmErpTypeDictMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.maindata.domain.entity.PcmErpTypeDict">
+		<id column="sid" property="sid" jdbcType="INTEGER" />
+		<result column="erp_type" property="erpType" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, erp_type
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_erp_type_dict
+		where sid = #{sid,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from pcm_erp_type_dict
+		where sid = #{sid,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmErpTypeDict">
+		insert into pcm_erp_type_dict (sid, erp_type)
+		values (#{sid,jdbcType=INTEGER}, #{erpType,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmErpTypeDict">
+		insert into pcm_erp_type_dict
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="erpType != null">
+				erp_type,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=INTEGER},
+			</if>
+			<if test="erpType != null">
+				#{erpType,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmErpTypeDict">
+		update pcm_erp_type_dict
+		<set>
+			<if test="erpType != null">
+				erp_type = #{erpType,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmErpTypeDict">
+		update pcm_erp_type_dict
+		set erp_type = #{erpType,jdbcType=VARCHAR}
+		where sid = #{sid,jdbcType=INTEGER}
+	</update>
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_erp_type_dict
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="erpType != null">
+				and erp_type = #{erpType,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_erp_type_dict
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="erpType != null">
+				and erp_type = #{erpType,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_erp_type_dict
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="erpType != null">
+				and erp_type = #{erpType,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+</mapper>

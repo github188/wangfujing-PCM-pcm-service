@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.wangfj.product.supplier.persistence.PcmSupplyShoppeRelationMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.supplier.domain.entity.PcmSupplyShoppeRelation">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="shoppe_sid" property="shoppeSid" jdbcType="VARCHAR" />
+		<result column="supply_sid" property="supplySid" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, shoppe_sid, supply_sid, status
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_supply_shoppe_relation
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_supply_shoppe_relation
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.supplier.domain.entity.PcmSupplyShoppeRelation">
+		insert into pcm_supply_shoppe_relation (sid, shoppe_sid,
+		supply_sid,
+		status)
+		values (#{sid,jdbcType=BIGINT},
+		#{shoppeSid,jdbcType=VARCHAR},
+		#{supplySid,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.supplier.domain.entity.PcmSupplyShoppeRelation">
+		insert into pcm_supply_shoppe_relation
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="shoppeSid != null">
+				shoppe_sid,
+			</if>
+			<if test="supplySid != null">
+				supply_sid,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="shoppeSid != null">
+				#{shoppeSid,jdbcType=VARCHAR},
+			</if>
+			<if test="supplySid != null">
+				#{supplySid,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.supplier.domain.entity.PcmSupplyShoppeRelation">
+		update pcm_supply_shoppe_relation
+		<set>
+			<if test="shoppeSid != null">
+				shoppe_sid = #{shoppeSid,jdbcType=VARCHAR},
+			</if>
+			<if test="supplySid != null">
+				supply_sid = #{supplySid,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.supplier.domain.entity.PcmSupplyShoppeRelation">
+		update pcm_supply_shoppe_relation
+		set shoppe_sid =
+		#{shoppeSid,jdbcType=VARCHAR},
+		supply_sid =
+		#{supplySid,jdbcType=VARCHAR},
+		status = #{status,jdbcType=INTEGER}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+
+	<!-- <select id="selectListByParam" parameterType="com.wangfj.product.supplier.domain.entity.PcmSupplyShoppeRelation" 
+		resultType="com.wangfj.product.supplier.domain.entity.PcmSupplyShoppeRelation"> 
+		select <include refid="Base_Column_List" /> from pcm_supply_shoppe_relation 
+		<where> <if test="sid != null and sid != ''"> and sid = #{sid,jdbcType=BIGINT} 
+		</if> <if test="shoppeSid != null and shoppeSid != ''"> and shoppe_sid = 
+		#{shoppeSid,jdbcType=VARCHAR} </if> <if test="supplySid != null and supplySid 
+		!= ''"> and supply_sid = #{supplySid,VARCHAR} </if> <if test="status != null 
+		and status != ''"> and status = #{status,INTEGER} </if> </where> </select> -->
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.supplier.domain.entity.PcmSupplyShoppeRelation">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_supply_shoppe_relation
+		<where>
+			<if test="sid != null and sid != ''">
+				and sid = #{sid}
+			</if>
+			<if test="shoppeSid != null and shoppeSid != ''">
+				and shoppe_sid = #{shoppeSid}
+			</if>
+			<if test="supplySid != null and supplySid != ''">
+				and supply_sid = #{supplySid}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+		</where>
+	</select>
+
+	<select id="findShoppeSupplierInfoByParam"
+		parameterType="com.wangfj.product.supplier.domain.vo.PcmShoppeSupplierQueryDto"
+		resultType="com.wangfj.product.supplier.domain.vo.PcmShoppeSupplierResultDto">
+		SELECT
+		po.organization_code AS shopCode,
+		po.organization_name AS
+		shopName,
+		ps.shoppe_name AS shoppeName,
+		ps.shoppe_code AS shoppeCode,
+		ps.shoppe_type AS shoppeType,
+		ps.shoppe_status AS shoppeStatus,
+		ps.industry_condition_sid AS
+		industryConditionSid,
+		psi.supply_name AS
+		supplyName,
+		psi.supply_code AS
+		supplyCode,
+		psi.supply_type AS supplyType,
+		psi.status AS status,
+		psi.business_pattern AS businessPattern
+		FROM
+		pcm_shoppe ps
+		INNER JOIN
+		pcm_supply_shoppe_relation pssr ON ps.sid =
+		pssr.shoppe_sid
+		AND
+		pssr.status = 0
+		INNER JOIN pcm_supply_info psi ON
+		psi.sid =
+		pssr.supply_sid
+		AND pssr.status = 0
+		INNER JOIN pcm_organization
+		po ON
+		po.sid = ps.shop_sid
+		AND po.organization_type = 3
+		AND
+		po.organization_status = 0
+		<where>
+			<if test="shopSid != null and shopSid != ''">
+				and po.sid = #{shopSid}
+			</if>
+			<if test="shopCode != null and shopCode != ''">
+				and po.organization_code = #{shopCode}
+			</if>
+			<if test="shoppeSid != null and shoppeSid != ''">
+				and ps.sid = #{shoppeSid}
+			</if>
+			<if test="shoppeCode != null and shoppeCode != ''">
+				and ps.shoppe_code = #{shoppeCode}
+			</if>
+			<if test="supplySid != null and supplySid != ''">
+				and psi.sid = #{supplySid}
+			</if>
+			<if test="shopCode != null and shopCode != ''">
+				and psi.shop_sid = #{shopCode}
+			</if>
+			<if test="supplyCode != null and supplyCode != ''">
+				and psi.supply_code = #{supplyCode}
+			</if>
+		</where>
+	</select>
+
+	<select id="findShoppeSupplierInfoCountByParam"
+		parameterType="com.wangfj.product.supplier.domain.vo.PcmShoppeSupplierQueryDto"
+		resultType="java.lang.Integer">
+		SELECT
+		COUNT(ps.sid)
+		FROM
+		pcm_shoppe ps
+		INNER JOIN
+		pcm_supply_shoppe_relation pssr ON ps.sid =
+		pssr.shoppe_sid
+		AND
+		pssr.status = 0
+		INNER JOIN pcm_supply_info psi ON
+		psi.sid =
+		pssr.supply_sid
+		AND pssr.status = 0
+		INNER JOIN pcm_organization
+		po ON
+		po.sid = ps.shop_sid
+		AND po.organization_type = 3
+		AND
+		po.organization_status = 0
+		<where>
+			<if test="shopSid != null and shopSid != ''">
+				and po.sid = #{shopSid}
+			</if>
+			<if test="shopCode != null and shopCode != ''">
+				and po.organization_code = #{shopCode}
+			</if>
+			<if test="shoppeSid != null and shoppeSid != ''">
+				and ps.sid = #{shoppeSid}
+			</if>
+			<if test="shoppeCode != null and shoppeCode != ''">
+				and ps.shoppe_code = #{shoppeCode}
+			</if>
+			<if test="supplySid != null and supplySid != ''">
+				and psi.sid = #{supplySid}
+			</if>
+			<if test="shopCode != null and shopCode != ''">
+				and psi.shop_sid = #{shopCode}
+			</if>
+			<if test="supplyCode != null and supplyCode != ''">
+				and psi.supply_code = #{supplyCode}
+			</if>
+		</where>
+	</select>
+
+
+
+</mapper>

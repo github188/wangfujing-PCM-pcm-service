@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmProductTagMapper">
+    <resultMap id="BaseResultMap"
+               type="com.wangfj.product.maindata.domain.entity.PcmProductTag">
+        <id column="sid" property="sid" jdbcType="BIGINT"/>
+        <result column="product_sid" property="productSid" jdbcType="VARCHAR"/>
+        <result column="tag_sid" property="tagSid" jdbcType="BIGINT"/>
+        <result column="flag" property="flag" jdbcType="INTEGER"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="opt_user_sid" property="optUserSid" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        sid, product_sid, tag_sid, flag, update_time, opt_user_sid
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_product_tag
+        where sid = #{sid,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from
+        pcm_product_tag
+        where sid = #{sid,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert"
+            parameterType="com.wangfj.product.maindata.domain.entity.PcmProductTag">
+        insert into pcm_product_tag (sid, product_sid, tag_sid,
+        flag, update_time, opt_user_sid
+        )
+        values (#{sid,jdbcType=BIGINT},
+        #{productSid,jdbcType=VARCHAR},
+        #{tagSid,jdbcType=BIGINT},
+        #{flag,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP},
+        #{optUserSid,jdbcType=BIGINT}
+        )
+    </insert>
+    <insert id="insertSelective"
+            parameterType="com.wangfj.product.maindata.domain.entity.PcmProductTag">
+        insert into pcm_product_tag
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                sid,
+            </if>
+            <if test="productSid != null">
+                product_sid,
+            </if>
+            <if test="tagSid != null">
+                tag_sid,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="optUserSid != null">
+                opt_user_sid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                #{sid,jdbcType=BIGINT},
+            </if>
+            <if test="productSid != null">
+                #{productSid,jdbcType=VARCHAR},
+            </if>
+            <if test="tagSid != null">
+                #{tagSid,jdbcType=BIGINT},
+            </if>
+            <if test="flag != null">
+                #{flag,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="optUserSid != null">
+                #{optUserSid,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.wangfj.product.maindata.domain.entity.PcmProductTag">
+        update pcm_product_tag
+        <set>
+            <if test="productSid != null">
+                product_sid = #{productSid,jdbcType=VARCHAR},
+            </if>
+            <if test="tagSid != null">
+                tag_sid = #{tagSid,jdbcType=BIGINT},
+            </if>
+            <if test="flag != null">
+                flag = #{flag,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="optUserSid != null">
+                opt_user_sid = #{optUserSid,jdbcType=BIGINT},
+            </if>
+        </set>
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey"
+            parameterType="com.wangfj.product.maindata.domain.entity.PcmProductTag">
+        update pcm_product_tag
+        set product_sid =
+        #{productSid,jdbcType=VARCHAR},
+        tag_sid = #{tagSid,jdbcType=BIGINT},
+        flag = #{flag,jdbcType=INTEGER},
+        update_time =
+        #{updateTime,jdbcType=TIMESTAMP},
+        opt_user_sid =
+        #{optUserSid,jdbcType=BIGINT}
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+    <select id="selectListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_product_tag
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="productSid != null">
+                and product_sid = #{productSid,jdbcType=VARCHAR}
+            </if>
+            <if test="tagSid != null">
+                and tag_sid = #{tagSid,jdbcType=BIGINT}
+            </if>
+            <if test="flag != null">
+                and flag = #{flag,jdbcType=INTEGER}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="optUserSid != null">
+                and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+            </if>
+        </where>
+    </select>
+    <select id="selectPageListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_product_tag
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="productSid != null">
+                and product_sid = #{productSid,jdbcType=VARCHAR}
+            </if>
+            <if test="tagSid != null">
+                and tag_sid = #{tagSid,jdbcType=BIGINT}
+            </if>
+            <if test="flag != null">
+                and flag = #{flag,jdbcType=INTEGER}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="optUserSid != null">
+                and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+            </if>
+        </where>
+        order by
+        sid asc
+        limit
+        #{start}, #{limit}
+    </select>
+    <select id="getCountByParam" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        select
+        count(*)
+        from pcm_product_tag
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="productSid != null">
+                and product_sid = #{productSid,jdbcType=VARCHAR}
+            </if>
+            <if test="tagSid != null">
+                and tag_sid = #{tagSid,jdbcType=BIGINT}
+            </if>
+            <if test="flag != null">
+                and flag = #{flag,jdbcType=INTEGER}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="optUserSid != null">
+                and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+            </if>
+        </where>
+    </select>
+
+    <!-- 分页查询专柜商品根据条件 -->
+    <select id="selectProductPageByPara" resultType="hashMap"
+		parameterType="hashMap">
+		SELECT
+			psp.sid AS sid,
+			psp.shoppe_pro_sid AS productCode,
+			psp.shoppe_pro_name AS productName,
+			org.organization_name AS storeName,
+			ps.shoppe_name AS counterName,
+			psi.supply_name AS supplierName,
+			br.brand_name AS brandName,
+			psp.sale_status AS isSale,
+			psp.category_sid AS categorySid,
+			cate.name AS glCategoryName,
+			cate.category_code AS manageCategoryCode
+		FROM
+			pcm_shoppe_product psp
+		INNER JOIN pcm_supply_info psi ON psi.sid = psp.supply_sid
+		INNER JOIN pcm_shoppe ps ON ps.sid = psp.shoppe_sid
+		INNER JOIN pcm_organization org ON ps.shop_sid = org.sid
+		AND org.organization_type = 3 AND org.organization_status = 0
+		INNER JOIN pcm_brand br ON br.sid = psp.brand_sid
+		AND br.brand_type = 1 AND br.status = 0
+		LEFT JOIN pcm_category cate ON psp.category_sid = cate.category_code
+		AND cate.category_type = 1 AND cate.is_display = 1
+		<where>
+			<if test="sid != null">
+				and psp.sid = #{sid,jdbcType=VARCHAR}
+			</if>
+			<if test="productCode != null">
+				and psp.shoppe_pro_sid = #{productCode,jdbcType=VARCHAR}
+			</if>
+			<if test="productName != null">
+				and psp.shoppe_pro_name like '%${productName}%'
+			</if>
+			<if test="isSale != null">
+				and psp.sale_status = #{isSale,jdbcType=INTEGER}
+			</if>
+			<if test="field4 != null">
+				AND psp.field4 = #{field4}
+			</if>
+			<if test="counterCode != null">
+				and ps.shoppe_code = #{counterCode,jdbcType=VARCHAR}
+			</if>
+			<if test="storeCode != null">
+				and org.organization_code = #{storeCode}
+			</if>
+			<if test="supplierCode != null">
+				AND ( psi.supply_code = #{supplierCode} OR psi.sid = #{supplierCode} )
+			</if>
+			<if test="brandSid != null">
+				AND br.sid = #{brandSid}
+			</if>
+			<if test="manageCategory != null">
+				AND cate.sid = #{manageCategory}
+			</if>
+			<if test="isAddTag != null">
+				AND psp.shoppe_pro_sid
+				<if test="isAddTag == 0">
+					IN
+				</if>
+				<if test="isAddTag == 1">
+					NOT IN
+				</if>
+				(
+				SELECT
+				tag.product_sid
+				FROM
+				pcm_product_tag tag
+				WHERE
+				tag.flag = 0
+				AND tag.tag_sid = #{tagSid}
+				)
+			</if>
+		</where>
+		<if test="limit != null and start != null">
+			limit
+			#{start}, #{limit}
+		</if>
+	</select>
+    
+
+    <!-- 按条件查询专柜商品信息计数 -->
+    <select id="getProductCountByPara" resultType="java.lang.Integer"
+            parameterType="hashMap">
+        SELECT
+			COUNT(psp.sid)
+		FROM
+			pcm_shoppe_product psp
+		<if test="supplierCode != null">
+			INNER JOIN pcm_supply_info psi ON psi.sid = psp.supply_sid
+		</if>
+		<if test="storeCode == null and counterCode != null">
+			INNER JOIN pcm_shoppe ps ON ps.sid = psp.shoppe_sid
+		</if>
+		<if test="storeCode != null">
+			INNER JOIN pcm_shoppe ps ON ps.sid = psp.shoppe_sid
+			INNER JOIN pcm_organization org ON ps.shop_sid = org.sid
+			AND org.organization_type = 3 AND org.organization_status = 0
+		</if>
+		<if test="brandSid != null">
+			INNER JOIN pcm_brand br ON br.sid = psp.brand_sid
+			AND br.brand_type = 1 AND br.status = 0
+		</if>
+		<if test="manageCategory != null">
+			LEFT JOIN pcm_category cate ON psp.category_sid = cate.category_code
+			AND cate.category_type = 1 AND cate.is_display = 1
+		</if>
+		<where>
+			<if test="sid != null">
+				AND psp.sid = #{sid,jdbcType=VARCHAR}
+			</if>
+			<if test="productCode != null">
+				AND psp.shoppe_pro_sid = #{productCode,jdbcType=VARCHAR}
+			</if>
+			<if test="productName != null">
+				AND psp.shoppe_pro_name like '%${productName}%'
+			</if>
+			<if test="isSale != null">
+				AND psp.sale_status = #{isSale,jdbcType=INTEGER}
+			</if>
+			<if test="field4 != null">
+				AND psp.field4 = #{field4}
+			</if>
+			<if test="counterCode != null">
+				and ps.shoppe_code = #{counterCode,jdbcType=VARCHAR}
+			</if>
+			<if test="storeCode != null">
+				and org.organization_code = #{storeCode}
+			</if>
+			<if test="supplierCode != null">
+				AND ( psi.supply_code = #{supplierCode} OR psi.sid = #{supplierCode} )
+			</if>
+			<if test="brandSid != null">
+				AND br.sid = #{brandSid}
+			</if>
+			<if test="manageCategory != null">
+				AND cate.sid = #{manageCategory}
+			</if>
+			<if test="isAddTag != null">
+				AND psp.shoppe_pro_sid
+				<if test="isAddTag == 0">
+					IN
+				</if>
+				<if test="isAddTag == 1">
+					NOT IN
+				</if>
+				(
+				SELECT
+				tag.product_sid
+				FROM
+				pcm_product_tag tag
+				WHERE
+				tag.flag = 0
+				AND tag.tag_sid = #{tagSid}
+				)
+			</if>
+		</where>
+    </select>
+
+    <select id="getProDetialCountByPara"
+            parameterType="com.wangfj.product.maindata.domain.vo.LabelSkuPageQueryDto"
+            resultType="java.lang.Integer">
+        SELECT
+			count(sku.sid)
+		FROM
+			pcm_pro_detail sku
+		JOIN pcm_product spu ON sku.product_sid = spu.sid
+		LEFT JOIN pcm_color_dict cd ON sku.pro_color_sid = cd.sid
+		<where>
+			<if test="skuCode != null">
+				and sku.product_detail_sid = #{skuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="skuName != null">
+				and sku.pro_detail_name like '%${skuName}%'
+			</if>
+			<if test="proType != null">
+				and sku.pro_type = #{proType}
+			</if>
+			<if test="colorSid != null">
+				and cd.sid = #{colorSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandGroupCode != null">
+				and spu.brand_sid = #{brandGroupCode,jdbcType=VARCHAR}
+			</if>
+			<if test="modelCode != null">
+				and spu.product_sku = #{modelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="skuSale != null">
+				and sku.selling_status = #{skuSale,jdbcType=INTEGER}
+			</if>
+			<if test="proActiveBit != null">
+				and sku.pro_active_bit = #{proActiveBit}
+			</if>
+			<if test="photoStatus != null">
+				and photo_status = #{photoStatus,jdbcType=INTEGER}
+			</if>
+			<if test="isAddTag != null">
+				and sku.product_detail_sid
+				<if test="isAddTag == 0">
+					IN
+				</if>
+				<if test="isAddTag == 1">
+					NOT IN
+				</if>
+				(SELECT tag.product_sid FROM pcm_product_tag tag WHERE tag.flag=0
+				AND tag.tag_sid=#{tagSid})
+			</if>
+		</where>
+    </select>
+
+    <select id="selectProDetialPageByPara"
+            parameterType="com.wangfj.product.maindata.domain.vo.LabelSkuPageQueryDto"
+            resultType="com.wangfj.product.maindata.domain.vo.SkuPageDto">
+        SELECT
+			sku.sid,
+			sku.product_detail_sid AS skuCode,
+			sku.pro_detail_name AS skuName,
+			spu.brand_name AS brandGroupName,
+			sku.pro_type AS proType,
+			spu.product_sku AS modelCode,
+			spu.primary_attr as primaryAttr,
+			sku.pro_color_alias AS colorCodeName,
+			cd.color_name AS colorName,
+			sku.photo_status AS photoStatus,
+			sku.pro_stan_name AS stanName,
+			sku.selling_status AS skuSale,
+			sku.pro_active_bit AS proActiveBit
+		FROM
+			pcm_pro_detail sku
+		JOIN pcm_product spu ON sku.product_sid = spu.sid
+		LEFT JOIN pcm_color_dict cd ON sku.pro_color_sid = cd.sid
+		<where>
+			<if test="skuCode != null">
+				and sku.product_detail_sid = #{skuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="skuName != null">
+				and sku.pro_detail_name like '%${skuName}%'
+			</if>
+			<if test="proType != null">
+				and sku.pro_type = #{proType}
+			</if>
+			<if test="colorSid != null">
+				and cd.sid = #{colorSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandGroupCode != null">
+				and spu.brand_sid = #{brandGroupCode,jdbcType=VARCHAR}
+			</if>
+			<if test="modelCode != null">
+				and spu.product_sku = #{modelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="skuSale != null">
+				and sku.selling_status = #{skuSale,jdbcType=INTEGER}
+			</if>
+			<if test="proActiveBit != null">
+				and sku.pro_active_bit = #{proActiveBit}
+			</if>
+			<if test="photoStatus != null">
+				and photo_status = #{photoStatus,jdbcType=INTEGER}
+			</if>
+			<if test="isAddTag != null">
+				and sku.product_detail_sid
+				<if test="isAddTag == 0">
+					IN
+				</if>
+				<if test="isAddTag == 1">
+					NOT IN
+				</if>
+				(SELECT tag.product_sid FROM pcm_product_tag tag WHERE tag.flag=0
+				AND tag.tag_sid=#{tagSid})
+			</if>
+		</where>
+        <if test="limit !=null">
+            limit
+            <if test="start !=null">
+                #{start}
+            </if>
+            <if test="start ==null">
+                0
+            </if>
+            ,#{limit}
+        </if>
+    </select>
+
+    <select id="findShoppeProductByParamForTag"
+            parameterType="com.wangfj.product.maindata.domain.vo.PcmShoppeProductQueryDto"
+            resultType="java.util.Map">
+        SELECT
+        ssu.shoppe_pro_sid AS shoppeProSid
+        FROM
+        pcm_shoppe_product ssu
+        INNER JOIN pcm_shoppe ps ON ssu.shoppe_sid = ps.sid
+        AND ps.shoppe_status = 1
+        INNER JOIN pcm_organization po ON ps.shop_sid = po.sid
+        AND po.organization_status = 0
+        AND po.organization_type = 3
+        INNER JOIN pcm_supply_info psi ON ssu.supply_sid = psi.sid
+        INNER JOIN pcm_brand pb ON ssu.brand_sid = pb.sid
+        LEFT JOIN pcm_category pc ON ssu.category_sid = pc.category_code
+        AND pc.category_type = 1
+        <where>
+            ssu.sale_status = 0
+			<if test="productCode != null">
+				AND ssu.shoppe_pro_sid = #{productCode}
+			</if>
+            <if test="storeCode != null">
+                AND po.organization_code = #{storeCode}
+            </if>
+            <if test="counterCode != null">
+                AND ps.shoppe_code = #{counterCode}
+            </if>
+            <if test="supplierCode != null">
+				AND ( psi.supply_code = #{supplierCode} OR psi.sid = #{supplierCode} )
+            </if>
+            <if test="brandSid != null">
+                AND pb.sid = #{brandSid}
+            </if>
+            <if test="manageCategory != null">
+                AND pc.sid = #{manageCategory}
+            </if>
+        </where>
+        ORDER BY
+        ssu.sid ASC
+        <if test="limit != null and start != null">
+            LIMIT #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="findSkuByParamForTag"
+            parameterType="com.wangfj.product.maindata.domain.vo.PcmSkuQueryDto"
+            resultType="java.util.Map">
+        SELECT
+        sku.product_detail_sid AS skuCode
+        FROM
+        pcm_pro_detail sku
+        JOIN pcm_product spu ON sku.product_sid = spu.sid
+        LEFT JOIN pcm_color_dict cd ON sku.pro_color_sid = cd.sid
+        WHERE
+        sku.pro_active_bit = 1
+        AND sku.photo_status = 4
+        AND sku.selling_status = 1
+        <if test="brandGroupCode != null">
+            AND spu.brand_sid = #{brandGroupCode}
+        </if>
+        <if test="colorSid != null">
+            AND cd.sid = #{colorSid}
+        </if>
+        <if test="modelCode != null">
+            AND spu.product_sku = #{modelCode}
+        </if>
+        <if test="proType != null">
+            AND sku.pro_type = #{proType}
+        </if>
+        <if test="skuCode != null">
+            AND sku.product_detail_sid = #{skuCode}
+        </if>
+        <if test="skuName != null">
+            AND sku.pro_detail_name = #{skuName}
+        </if>
+        ORDER BY
+        sku.sid ASC
+        <if test="limit != null and start != null">
+            LIMIT #{start},#{limit}
+        </if>
+    </select>
+
+
+</mapper>

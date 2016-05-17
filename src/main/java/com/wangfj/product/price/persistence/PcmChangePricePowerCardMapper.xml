@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.price.persistence.PcmChangePricePowerCardMapper" >
+  <resultMap id="BaseResultMap" type="com.wangfj.product.price.domain.entity.PcmChangePricePowerCard" >
+    <id column="sid" property="sid" jdbcType="BIGINT" />
+    <result column="ka_num" property="kaNum" jdbcType="VARCHAR" />
+    <result column="ka_pwd" property="kaPwd" jdbcType="VARCHAR" />
+    <result column="ka_state" property="kaState" jdbcType="INTEGER" />
+    <result column="ka_user" property="kaUser" jdbcType="VARCHAR" />
+    <result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="change_price_unit" property="changePriceUnit" jdbcType="VARCHAR" />
+    <result column="valence_type" property="valenceType" jdbcType="INTEGER" />
+    <result column="priority" property="priority" jdbcType="INTEGER" />
+    <result column="upperLimit" property="upperlimit" jdbcType="DOUBLE" />
+    <result column="lowerLimit" property="lowerlimit" jdbcType="DOUBLE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sid, ka_num, ka_pwd, ka_state, ka_user, begin_time, end_time, change_price_unit, 
+    valence_type, priority, upperLimit, lowerLimit
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from pcm_change_price_power_card
+    where sid = #{sid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pcm_change_price_power_card
+    where sid = #{sid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangfj.product.price.domain.entity.PcmChangePricePowerCard" >
+    insert into pcm_change_price_power_card (sid, ka_num, ka_pwd, 
+      ka_state, ka_user, begin_time, 
+      end_time, change_price_unit, valence_type, 
+      priority, upperLimit, lowerLimit
+      )
+    values (#{sid,jdbcType=BIGINT}, #{kaNum,jdbcType=VARCHAR}, #{kaPwd,jdbcType=VARCHAR}, 
+      #{kaState,jdbcType=INTEGER}, #{kaUser,jdbcType=VARCHAR}, #{beginTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{changePriceUnit,jdbcType=VARCHAR}, #{valenceType,jdbcType=INTEGER}, 
+      #{priority,jdbcType=INTEGER}, #{upperlimit,jdbcType=DOUBLE}, #{lowerlimit,jdbcType=DOUBLE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangfj.product.price.domain.entity.PcmChangePricePowerCard" >
+    insert into pcm_change_price_power_card
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="kaNum != null" >
+        ka_num,
+      </if>
+      <if test="kaPwd != null" >
+        ka_pwd,
+      </if>
+      <if test="kaState != null" >
+        ka_state,
+      </if>
+      <if test="kaUser != null" >
+        ka_user,
+      </if>
+      <if test="beginTime != null" >
+        begin_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="changePriceUnit != null" >
+        change_price_unit,
+      </if>
+      <if test="valenceType != null" >
+        valence_type,
+      </if>
+      <if test="priority != null" >
+        priority,
+      </if>
+      <if test="upperlimit != null" >
+        upperLimit,
+      </if>
+      <if test="lowerlimit != null" >
+        lowerLimit,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        #{sid,jdbcType=BIGINT},
+      </if>
+      <if test="kaNum != null" >
+        #{kaNum,jdbcType=VARCHAR},
+      </if>
+      <if test="kaPwd != null" >
+        #{kaPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="kaState != null" >
+        #{kaState,jdbcType=INTEGER},
+      </if>
+      <if test="kaUser != null" >
+        #{kaUser,jdbcType=VARCHAR},
+      </if>
+      <if test="beginTime != null" >
+        #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="changePriceUnit != null" >
+        #{changePriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="valenceType != null" >
+        #{valenceType,jdbcType=INTEGER},
+      </if>
+      <if test="priority != null" >
+        #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="upperlimit != null" >
+        #{upperlimit,jdbcType=DOUBLE},
+      </if>
+      <if test="lowerlimit != null" >
+        #{lowerlimit,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.price.domain.entity.PcmChangePricePowerCard" >
+    update pcm_change_price_power_card
+    <set >
+      <if test="kaNum != null" >
+        ka_num = #{kaNum,jdbcType=VARCHAR},
+      </if>
+      <if test="kaPwd != null" >
+        ka_pwd = #{kaPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="kaState != null" >
+        ka_state = #{kaState,jdbcType=INTEGER},
+      </if>
+      <if test="kaUser != null" >
+        ka_user = #{kaUser,jdbcType=VARCHAR},
+      </if>
+      <if test="beginTime != null" >
+        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="changePriceUnit != null" >
+        change_price_unit = #{changePriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="valenceType != null" >
+        valence_type = #{valenceType,jdbcType=INTEGER},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="upperlimit != null" >
+        upperLimit = #{upperlimit,jdbcType=DOUBLE},
+      </if>
+      <if test="lowerlimit != null" >
+        lowerLimit = #{lowerlimit,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangfj.product.price.domain.entity.PcmChangePricePowerCard" >
+    update pcm_change_price_power_card
+    set ka_num = #{kaNum,jdbcType=VARCHAR},
+      ka_pwd = #{kaPwd,jdbcType=VARCHAR},
+      ka_state = #{kaState,jdbcType=INTEGER},
+      ka_user = #{kaUser,jdbcType=VARCHAR},
+      begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      change_price_unit = #{changePriceUnit,jdbcType=VARCHAR},
+      valence_type = #{valenceType,jdbcType=INTEGER},
+      priority = #{priority,jdbcType=INTEGER},
+      upperLimit = #{upperlimit,jdbcType=DOUBLE},
+      lowerLimit = #{lowerlimit,jdbcType=DOUBLE}
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectListByParam" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    	<include refid="Base_Column_List" />
+    from pcm_change_price_power_card
+    <where>
+     <if test="kaNum != null" >
+        ka_num = #{kaNum,jdbcType=VARCHAR},
+      </if>
+      <if test="kaPwd != null" >
+        ka_pwd = #{kaPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="kaState != null" >
+        ka_state = #{kaState,jdbcType=INTEGER},
+      </if>
+      <if test="kaUser != null" >
+        ka_user = #{kaUser,jdbcType=VARCHAR},
+      </if>
+      <if test="beginTime != null" >
+        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="changePriceUnit != null" >
+        change_price_unit = #{changePriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="valenceType != null" >
+        valence_type = #{valenceType,jdbcType=INTEGER},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="upperlimit != null" >
+        upperLimit = #{upperlimit,jdbcType=DOUBLE},
+      </if>
+      <if test="lowerlimit != null" >
+        lowerLimit = #{lowerlimit,jdbcType=DOUBLE},
+      </if>
+    </where>
+  </select>
+  
+  <select id="selectPageListByParam" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    	<include refid="Base_Column_List" />
+    from pcm_change_price_power_card
+    <where>
+    	<if test="kaNum != null" >
+        ka_num = #{kaNum,jdbcType=VARCHAR},
+      </if>
+      <if test="kaPwd != null" >
+        ka_pwd = #{kaPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="kaState != null" >
+        ka_state = #{kaState,jdbcType=INTEGER},
+      </if>
+      <if test="kaUser != null" >
+        ka_user = #{kaUser,jdbcType=VARCHAR},
+      </if>
+      <if test="beginTime != null" >
+        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="changePriceUnit != null" >
+        change_price_unit = #{changePriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="valenceType != null" >
+        valence_type = #{valenceType,jdbcType=INTEGER},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="upperlimit != null" >
+        upperLimit = #{upperlimit,jdbcType=DOUBLE},
+      </if>
+      <if test="lowerlimit != null" >
+        lowerLimit = #{lowerlimit,jdbcType=DOUBLE},
+      </if>
+    </where>
+    order by
+			sid asc
+		limit
+			#{start}, #{limit}
+  </select>
+  <select id="getCountByParam" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select 
+    	count(*)
+    from pcm_change_price_power_card
+    <where>
+       <if test="kaNum != null" >
+        ka_num = #{kaNum,jdbcType=VARCHAR},
+      </if>
+      <if test="kaPwd != null" >
+        ka_pwd = #{kaPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="kaState != null" >
+        ka_state = #{kaState,jdbcType=INTEGER},
+      </if>
+      <if test="kaUser != null" >
+        ka_user = #{kaUser,jdbcType=VARCHAR},
+      </if>
+      <if test="beginTime != null" >
+        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="changePriceUnit != null" >
+        change_price_unit = #{changePriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="valenceType != null" >
+        valence_type = #{valenceType,jdbcType=INTEGER},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="upperlimit != null" >
+        upperLimit = #{upperlimit,jdbcType=DOUBLE},
+      </if>
+      <if test="lowerlimit != null" >
+        lowerLimit = #{lowerlimit,jdbcType=DOUBLE},
+      </if>
+    </where>
+  </select>
+  
+</mapper>

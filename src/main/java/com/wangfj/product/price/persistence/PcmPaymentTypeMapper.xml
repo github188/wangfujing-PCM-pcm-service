@@ -1,0 +1,715 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.price.persistence.PcmPaymentTypeMapper">
+	<resultMap type="com.wangfj.product.price.domain.vo.PcmPaymentOrganDto"
+		id="PaymentTypeListResultMap">
+		<id column="shop_sid" property="storeCode"></id>
+		<result column="storeName" property="storeName" />
+		<collection property="payTypeList" column="shop_sid"
+			ofType="com.wangfj.product.price.domain.vo.PcmPaymentTypeDto">
+			<id column="code" property="payCode" />
+			<result column="name" property="name" />
+			<result column="parent_code" property="parentCode" />
+			<result column="parentName" property="parentName" />
+			<result column="bank_bin" property="bankBIN" />
+		</collection>
+	</resultMap>
+	<resultMap type="com.wangfj.product.price.domain.vo.PcmPaymentInfoDto"
+		id="PaymentTypeInfoListResultMap">
+		<id column="sid" property="sid" />
+		<result column="CODE" property="payCode" />
+		<result column="NAME" property="name" />
+		<result column="parent_code" property="parentCode" />
+		<result column="parentName" property="parentName" />
+		<result column="bank_bin" property="bankBIN" />
+		<result column="deal_time" property="dealTime" />
+		<result column="remark" property="remark" />
+		<result column="isallowinvoice" property="isAllowInvoice" />
+	</resultMap>
+	<resultMap type="com.wangfj.product.price.domain.vo.PcmShopPaymentInfoDto"
+		id="ShopPaymentTypeInfoListResultMap">
+		<id column="sid" property="storeSid" />
+		<result column="shop_sid" property="storeCode" />
+		<result column="storeName" property="storeName" />
+		<result column="CODE" property="payCode" />
+		<result column="NAME" property="name" />
+		<result column="parent_code" property="parentCode" />
+		<result column="parentName" property="parentName" />
+		<result column="bank_bin" property="bankBIN" />
+	</resultMap>
+
+	<resultMap type="com.wangfj.product.price.domain.entity.PcmPaymentType"
+		id="BaseResultMap">
+		<id column="sid" property="sid" />
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="parent_code" property="parentCode" />
+		<result column="bank_bin" property="bankBin" />
+		<result column="deal_time" property="dealTime" />
+		<result column="remark" property="remark" />
+		<result column="isallowinvoice" property="isAllowInvoice" />
+		<result column="ifdel" property="ifdel" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		sid,code,name,parent_code,bank_bin,deal_time,remark,isallowinvoice,ifdel
+	</sql>
+
+	<select id="selectListByParam" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM pcm_payment_type
+		<where>
+			<if test="sid != null">
+				and sid = #{sid}
+			</if>
+			<if test="code != null">
+				and code = #{code}
+			</if>
+			<if test="name != null">
+				and name = #{name}
+			</if>
+			<if test="parentCode != null">
+				and parent_code = #{parentCode}
+			</if>
+			<if test="bankBin != null">
+				and bank_bin = #{bankBin}
+			</if>
+			<if test="dealTime != null">
+				and deal_time = #{dealTime}
+			</if>
+			<if test="isAllowInvoice != null">
+				and isallowinvoice = #{isAllowInvoice}
+			</if>
+			<if test="ifdel != null">
+				and ifdel = #{ifdel}
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据门店信息查询门店与支付方式的关系表 -->
+	<select id="selectShopPaymentTypeListByParam" resultMap="PaymentTypeListResultMap"
+		parameterType="com.wangfj.product.price.domain.vo.SelectPaymentDto">
+		SELECT
+		ppo.shop_sid,
+		pcmo.organization_name AS storeName,
+		ppt.CODE,
+		ppt.NAME,
+		ppt.parent_code,
+		ppt1.NAME AS parentName,
+		ppo.bank_bin
+		FROM
+		(
+		SELECT
+		shop_sid,
+		COUNT(1) AS rowNum
+		FROM
+		pcm_payment_organ ppo
+		<where>
+			<if test="storeCode != null">
+				and ppo.shop_sid = #{storeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and ppo.status = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="status == null">
+				and ppo.status = 0
+			</if>
+		</where>
+		GROUP BY
+		shop_sid
+		<if test="limit != null">
+			limit #{start}, #{limit}
+		</if>
+		) ppo1
+		INNER JOIN pcm_payment_organ ppo ON ppo.shop_sid
+		= ppo1.shop_sid
+		INNER JOIN pcm_payment_type ppt ON ppo.CODE = ppt.CODE
+		LEFT JOIN
+		pcm_payment_type ppt1 ON ppt.parent_code = ppt1. CODE
+		LEFT
+		JOIN
+		pcm_organization pcmo ON ppo.shop_sid = pcmo.organization_code
+		<where>
+			ppt.ifdel = 0
+			<if test="status != null">
+				and ppo.status = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="status == null">
+				and ppo.status = 0
+			</if>
+			<if test="code != null">
+				and ppo.code = #{code,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectShopPaymentTypeListCount" resultType="java.lang.Integer"
+		parameterType="com.wangfj.product.price.domain.vo.SelectPaymentDto">
+		SELECT COUNT(1) from(
+		SELECT shop_sid,COUNT(1) from pcm_payment_organ
+		ppo
+		INNER JOIN
+		pcm_payment_type ppt ON ppo.CODE
+		=
+		ppt.CODE
+		<where>
+			<if test="storeCode != null">
+				and ppo.shop_sid = #{storeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="code != null">
+				and ppo.code = #{code,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and ppo.status = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="status == null">
+				and ppo.status = 0
+			</if>
+			and ppt.ifdel=0
+		</where>
+		GROUP BY shop_sid
+		) ppt1
+	</select>
+
+	<!-- 根据门店信息查询门店所关联的支付方式列表（分页） -->
+	<select id="selectPaymentTypeListByShopSid" resultMap="ShopPaymentTypeInfoListResultMap"
+		parameterType="com.wangfj.product.price.domain.vo.SelectPaymentTypeDto">
+		SELECT
+		ppo.sid,
+		ppo.shop_sid,
+		pcmo.organization_name AS storeName,
+		ppt.CODE,
+		ppt.NAME,
+		ppt.parent_code,
+		ppt1.NAME as parentName,
+		ppo.bank_bin
+		FROM
+		pcm_payment_organ ppo
+		INNER JOIN
+		pcm_payment_type ppt
+		ON
+		ppo.CODE = ppt.CODE
+		LEFT JOIN pcm_payment_type ppt1
+		on
+		ppt.parent_code=ppt1.code
+		LEFT JOIN pcm_organization pcmo
+		on
+		pcmo.organization_type=3 and
+		pcmo.organization_code=ppo.shop_sid
+		<where>
+			<if test="storeCode != null">
+				and ppo.shop_sid = #{storeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="payCode != null">
+				and ppt.CODE = #{payCode,jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				and ppt.NAME = #{name,jdbcType=VARCHAR}
+			</if>
+			<if test="parentCode != null">
+				and ppt.parent_code = #{parentCode,jdbcType=VARCHAR}
+			</if>
+			<if test="bankBIN != null">
+				and ppo.bank_bin = #{bankBIN,jdbcType=VARCHAR}
+			</if>
+			and ppt.ifdel=0
+			and ppo.status=0
+		</where>
+		<if test="limit != null">
+			limit #{start}, #{limit}
+		</if>
+	</select>
+
+	<!-- 查询支付方式 （分页） -->
+	<select id="selectPaymentTypeListByParam" resultMap="PaymentTypeInfoListResultMap"
+		parameterType="com.wangfj.product.price.domain.vo.SelectPaymentTypeDto">
+		SELECT ppt1.sid,ppt1.CODE,ppt1.NAME,ppt1.parent_code,ppt2.Name as
+		parentName, ppt1.bank_bin,ppt1.isallowinvoice, ppt1.deal_time,
+		ppt1.remark from pcm_payment_type ppt1
+		left JOIN
+		(
+		SELECT
+		ppt.*
+		FROM
+		pcm_payment_type ppt
+		WHERE
+		ppt.ifdel = 0
+		) ppt2 on
+		ppt1.parent_code=ppt2.code
+		<where>
+			ppt1.ifdel=0
+			<if test="payCode != null">
+				and ppt1.CODE = #{payCode,jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				and ppt1.NAME like "%"#{name,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="parentCode != null">
+				and ppt1.parent_code = #{parentCode,jdbcType=VARCHAR}
+			</if>
+			<if test="parentCode == null">
+				and ppt1.parent_code =0
+			</if>
+			<if test="bankBIN != null">
+				and ppt1.bank_bin = #{bankBIN,jdbcType=VARCHAR}
+			</if>
+		</where>
+		ORDER BY
+		ppt1.sid DESC
+		<if test="limit != null">
+			limit #{start}, #{limit}
+		</if>
+	</select>
+	<!-- 查询支付方式 总数 -->
+	<select id="selectPaymentTypeListCount" resultType="java.lang.Integer"
+		parameterType="com.wangfj.product.price.domain.vo.SelectPaymentTypeDto">
+		SELECT count(1) from pcm_payment_type ppt1
+		left JOIN
+		(
+		SELECT
+		ppt.*
+		FROM
+		pcm_payment_type ppt
+		WHERE
+		ppt.ifdel = 0
+		)
+		ppt2 on
+		ppt1.parent_code=ppt2.code
+		<where>
+			ppt1.ifdel=0
+			<if test="payCode != null">
+				and ppt1.CODE = #{payCode,jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				and ppt1.NAME like "%"#{name,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="parentCode != null">
+				and ppt1.parent_code = #{parentCode,jdbcType=VARCHAR}
+			</if>
+			<if test="parentCode == null">
+				and ppt1.parent_code =0
+			</if>
+			<if test="bankBIN != null">
+				and ppt1.bank_bin = #{bankBIN,jdbcType=VARCHAR}
+			</if>
+		</where>
+		ORDER BY
+		ppt1.sid DESC
+	</select>
+	<!-- 根据查询条件查询总行数 -->
+	<select id="selectPaymentTypeCount" resultType="java.lang.Integer"
+		parameterType="com.wangfj.product.price.domain.vo.SelectPaymentTypeDto">
+		SELECT
+		count(1)
+		FROM pcm_payment_type
+		<where>
+			<if test="payCode != null">
+				and CODE = #{payCode,jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				and NAME = #{name,jdbcType=VARCHAR}
+			</if>
+			<if test="bankBIN != null">
+				and bank_bin = #{bankBIN,jdbcType=VARCHAR}
+			</if>
+			and ifdel=0
+		</where>
+	</select>
+
+	<!-- 根据门店信息查询门店所关联的支付方式列表（分页） -->
+	<select id="selectPaymentTypeByShopSidCount" resultType="java.lang.Integer"
+		parameterType="com.wangfj.product.price.domain.vo.SelectPaymentTypeDto">
+		SELECT
+		count(1)
+		FROM
+		pcm_payment_organ ppo
+		INNER JOIN pcm_payment_type ppt
+		ON ppo.CODE
+		=
+		ppt.CODE
+		<where>
+			<if test="storeCode != null">
+				and ppo.shop_sid = #{storeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="payCode != null">
+				and ppt.CODE = #{payCode,jdbcType=VARCHAR}
+			</if>
+			<if test="name != null">
+				and ppt.NAME = #{name,jdbcType=VARCHAR}
+			</if>
+			<if test="parentCode != null">
+				and ppt.parent_code = #{parentCode,jdbcType=VARCHAR}
+			</if>
+			<if test="bankBIN != null">
+				and ppo.bank_bin = #{bankBIN,jdbcType=VARCHAR}
+			</if>
+			and ppt.ifdel=0
+			and ppo.status=0
+		</where>
+	</select>
+
+	<!-- 新增支付方式 -->
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.price.domain.entity.PcmPaymentType">
+		insert into pcm_payment_type
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="code != null">
+				code,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="parentCode != null">
+				parent_code,
+			</if>
+			<if test="bankBin != null">
+				bank_bin,
+			</if>
+			<if test="dealTime != null">
+				deal_time,
+			</if>
+			<if test="lastUpdBy != null">
+				last_upd_by,
+			</if>
+			<if test="createDate != null">
+				create_date,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="isAllowInvoice != null">
+				isallowinvoice,
+			</if>
+			<if test="ifdel != null">
+				ifdel,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="code != null">
+				#{code,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="parentCode != null">
+				#{parentCode,jdbcType=VARCHAR},
+			</if>
+			<if test="bankBin != null">
+				#{bankBin,jdbcType=VARCHAR},
+			</if>
+			<if test="dealTime != null">
+				#{dealTime,jdbcType=VARCHAR},
+			</if>
+			<if test="lastUpdBy != null">
+				#{lastUpdBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createDate != null">
+				#{createDate,jdbcType=DATE},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="isAllowInvoice != null">
+				#{isAllowInvoice,jdbcType=VARCHAR},
+			</if>
+			<if test="ifdel != null">
+				#{ifdel,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.price.domain.entity.PcmPaymentType">
+		update pcm_payment_type
+		<set>
+			<if test="code != null">
+				code = #{code,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="parentCode != null">
+				parent_code = #{parentCode,jdbcType=VARCHAR},
+			</if>
+			<if test="bankBin != null">
+				bank_bin = #{bankBin,jdbcType=VARCHAR},
+			</if>
+			<if test="dealTime != null">
+				deal_time = #{dealTime,jdbcType=VARCHAR},
+			</if>
+			<if test="lastUpdBy != null">
+				last_upd_by = #{lastUpdBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createDate != null">
+				create_date = #{createDate,jdbcType=DATE},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="isAllowInvoice != null">
+				isallowinvoice = #{isAllowInvoice,jdbcType=VARCHAR},
+			</if>
+			<if test="ifdel != null">
+				ifdel = #{ifdel,jdbcType=INTEGER},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+
+	<!--修改支付方式名称 -->
+	<update id="updatePayNameBySid"
+		parameterType="com.wangfj.product.price.domain.entity.PcmPaymentType">
+		update pcm_payment_type
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT} and ifdel=0
+	</update>
+	<select id="selecNotPaymentTypeListByShopSid" resultMap="PaymentTypeInfoListResultMap"
+		parameterType="com.wangfj.product.price.domain.vo.SelectPaymentTypeDto">
+		SELECT ppt1.sid,ppt1.CODE,ppt1.NAME,ppt1.parent_code,ppt2.Name as
+		parentName, ppt1.bank_bin from pcm_payment_type ppt1
+		left JOIN
+		pcm_payment_type ppt2 on ppt1.parent_code=ppt2.code
+		where ppt1.ifdel =
+		0 and ppt1.parent_code!=0
+		and ppt1.code not in(SELECT code from
+		pcm_payment_organ ppo
+		<where>
+			<if test="storeCode != null">
+				and ppo.shop_sid = #{storeCode,jdbcType=VARCHAR}
+			</if>
+			AND ppo.status=0
+		</where>
+		)
+		<if test="limit != null">
+			limit #{start}, #{limit}
+		</if>
+	</select>
+	<select id="selecNotPaymentTypeListByShopSidCount" resultType="java.lang.Integer"
+		parameterType="com.wangfj.product.price.domain.vo.SelectPaymentTypeDto">
+		SELECT count(1) from pcm_payment_type ppt1
+		left JOIN
+		pcm_payment_type
+		ppt2 on ppt1.parent_code=ppt2.code
+		where ppt1.ifdel =
+		0 and
+		ppt1.parent_code!=0
+		and ppt1.code not in(SELECT code from
+		pcm_payment_organ ppo
+		<where>
+			<if test="storeCode != null">
+				and ppo.shop_sid = #{storeCode,jdbcType=VARCHAR}
+			</if>
+			AND ppo.status=0
+		</where>
+		)
+	</select>
+
+	<!--根据门店查询一级支付方式 -->
+	<select id="selec1PaymentTypeListByShopSid" resultMap="PaymentTypeInfoListResultMap"
+		parameterType="com.wangfj.product.price.domain.vo.SelectPaymentTypeDto">
+		SELECT ppt3.* from (
+		SELECT distinct
+		ppt1.code,ppt1.name,ppt1.parent_code from
+		pcm_payment_organ ppo
+		INNER
+		JOIN pcm_payment_type ppt ON ppo.CODE =
+		ppt.CODE
+		INNER JOIN
+		pcm_payment_type ppt1 ON ppt.parent_code = ppt1.
+		CODE
+		<where>
+			<if test="storeCode != null">
+				and ppo.shop_sid = #{storeCode,jdbcType=VARCHAR}
+			</if>
+			AND ppo.status=0
+			AND ppt.ifdel = 0
+			AND ppt1.ifdel=0
+		</where>
+		<if test="limit != null">
+			limit #{start}, #{limit}
+		</if>
+		) ppt2 INNER JOIN pcm_payment_type ppt3
+		ON ppt2.code=ppt3.code
+		WHERE
+		ppt3.ifdel = 0
+		ORDER BY
+		ppt3.sid DESC
+	</select>
+	<select id="selec1PaymentTypeCountByShopSid" resultType="java.lang.Integer"
+		parameterType="com.wangfj.product.price.domain.vo.SelectPaymentTypeDto">
+		SELECT count(1) from (SELECT distinct
+		ppt1.code,ppt1.name,ppt1.parent_code from
+		pcm_payment_organ ppo
+		INNER
+		JOIN pcm_payment_type ppt ON ppo.CODE =
+		ppt.CODE
+		INNER JOIN
+		pcm_payment_type ppt1 ON ppt.parent_code = ppt1.
+		CODE
+		<where>
+			<if test="storeCode != null">
+				and ppo.shop_sid = #{storeCode,jdbcType=VARCHAR}
+			</if>
+			AND ppo.status=0
+			AND ppt.ifdel = 0
+			AND ppt1.ifdel=0
+		</where>
+		) ppt2 INNER JOIN pcm_payment_type ppt3
+		ON ppt2.code=ppt3.code
+		WHERE
+		ppt3.ifdel = 0
+	</select>
+	<!--根据门店查询二级支付方式 -->
+	<select id="selec2PaymentTypeListByShopSid" resultMap="PaymentTypeInfoListResultMap"
+		parameterType="com.wangfj.product.price.domain.vo.SelectPaymentTypeDto">
+		SELECT ppt3.* from (
+		SELECT distinct
+		ppt.code,ppt.name,ppt.parent_code
+		from
+		pcm_payment_organ ppo
+		INNER
+		JOIN pcm_payment_type ppt ON ppo.CODE =
+		ppt.CODE
+		INNER JOIN
+		pcm_payment_type ppt1 ON ppt.parent_code = ppt1.
+		CODE
+		<where>
+			<if test="storeCode != null">
+				and ppo.shop_sid = #{storeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="parentCode != null">
+				and ppt.parent_code= #{parentCode,jdbcType=VARCHAR}
+			</if>
+			AND ppo.status=0
+			AND ppt1.ifdel=0
+		</where>
+		<if test="limit != null">
+			limit #{start}, #{limit}
+		</if>
+		) ppt2 INNER JOIN pcm_payment_type ppt3
+		ON ppt2.code=ppt3.code
+		ORDER BY
+		ppt3.sid DESC
+	</select>
+	<select id="selec2PaymentTypeCountByShopSid" resultType="java.lang.Integer"
+		parameterType="com.wangfj.product.price.domain.vo.SelectPaymentTypeDto">
+		SELECT count(1) from (SELECT distinct
+		ppt.code,ppt.name,ppt.parent_code
+		from
+		pcm_payment_organ ppo
+		INNER
+		JOIN
+		pcm_payment_type ppt ON ppo.CODE =
+		ppt.CODE
+		INNER JOIN
+		pcm_payment_type
+		ppt1 ON ppt.parent_code = ppt1.
+		CODE
+		<where>
+			<if test="storeCode != null">
+				and ppo.shop_sid = #{storeCode,jdbcType=VARCHAR}
+			</if>
+			AND ppo.status=0
+			AND ppt1.ifdel=0
+		</where>
+		) ppt2 INNER JOIN pcm_payment_type ppt3
+		ON ppt2.code=ppt3.code
+	</select>
+
+	<!-- selectPushPaymentByPaycode 查询需要下发门店与支付方式的数据（修改支付方式）（增量）wanxguan -->
+	<select id="selectPushPaymentByPaycode" parameterType="java.util.Map"
+		resultType="com.wangfj.product.price.domain.vo.PcmPushPaymentToERPDto">
+		SELECT ppo.shop_sid AS storeCode, ppt.code AS payCode,
+		ppt.name AS
+		name,
+		ppt.parent_code AS parentCode, ppt.bank_bin AS
+		bankBIN
+		FROM
+		pcm_payment_organ ppo INNER JOIN pcm_payment_type ppt
+		ON
+		ppt.code =
+		ppo.code
+		WHERE ppt.ifdel = 0 AND ppo.status = 0
+		<if test="code != null">
+			AND ppt.code = #{code,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+	<!-- pushPaymentTypeData 查询需要下发支付方式的数据 wanxguan -->
+	<select id="pushPaymentTypeData" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT
+		ppt.code AS code,
+		ppt.name AS name,
+		ppt.deal_time AS
+		paymentType,
+		ppt.parent_code AS parentCode,
+		ppt.bank_bin AS bankBIN,
+		ppt.isallowinvoice AS isAllowInvoice,
+		ppt.create_by AS actionPerson
+		FROM
+		(
+		SELECT
+		*
+		FROM
+		pcm_payment_type
+		<where>
+			<if test="sid != null">
+				and sid = #{sid}
+			</if>
+			<if test="code != null">
+				and code = #{code}
+			</if>
+			<if test="ifdel != null">
+				and ifdel = #{ifdel}
+			</if>
+			<if test="ifdel == null">
+				and ifdel = 0
+			</if>
+		</where>
+		)
+		ppt
+		LEFT JOIN (
+		SELECT
+		*
+		FROM
+		pcm_payment_type
+		<where>
+			<if test="ifdel != null">
+				and ifdel = #{ifdel}
+			</if>
+			<if test="ifdel == null">
+				and ifdel = 0
+			</if>
+		</where>
+		) ppt1 ON ppt.parent_code =
+		ppt1.code
+		<if test="start != null and limit != null">
+			LIMIT #{start},#{limit}
+		</if>
+	</select>
+
+
+
+
+</mapper>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmProInputMapper" >
+  <resultMap id="BaseResultMap" type="com.wangfj.product.maindata.domain.entity.PcmProInput" >
+    <id column="sid" property="sid" jdbcType="BIGINT" />
+    <result column="contract_sid" property="contractSid" jdbcType="BIGINT" />
+    <result column="contract_code" property="contractCode" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="shoppe_pro_sid" property="shoppeProSid" jdbcType="BIGINT" />
+    <result column="procurement_user_code" property="procurementUserCode" jdbcType="VARCHAR" />
+    <result column="input_user_code" property="inputUserCode" jdbcType="VARCHAR" />
+    <result column="col1" property="col1" jdbcType="VARCHAR" />
+    <result column="col2" property="col2" jdbcType="VARCHAR" />
+    <result column="col3" property="col3" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sid, contract_sid, contract_code, shoppe_pro_sid, procurement_user_code, input_user_code, orderNo,
+    col1, col2, col3
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from pcm_pro_input
+    where sid = #{sid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pcm_pro_input
+    where sid = #{sid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangfj.product.maindata.domain.entity.PcmProInput" >
+    insert into pcm_pro_input (sid, contract_sid, contract_code, 
+      shoppe_pro_sid, procurement_user_code, input_user_code, 
+      col1, col2, col3,orderNo)
+    values (#{sid,jdbcType=BIGINT}, #{contractSid,jdbcType=BIGINT}, #{contractCode,jdbcType=VARCHAR}, 
+      #{shoppeProSid,jdbcType=BIGINT}, #{procurementUserCode,jdbcType=VARCHAR}, #{inputUserCode,jdbcType=VARCHAR}, 
+      #{col1,jdbcType=VARCHAR}, #{col2,jdbcType=VARCHAR}, #{col3,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmProInput" 
+ 		 useGeneratedKeys="true" keyProperty="sid">
+    insert into pcm_pro_input
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="contractSid != null" >
+        contract_sid,
+      </if>
+      <if test="contractCode != null" >
+        contract_code,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="shoppeProSid != null" >
+        shoppe_pro_sid,
+      </if>
+      <if test="procurementUserCode != null" >
+        procurement_user_code,
+      </if>
+      <if test="inputUserCode != null" >
+        input_user_code,
+      </if>
+      <if test="col1 != null" >
+        col1,
+      </if>
+      <if test="col2 != null" >
+        col2,
+      </if>
+      <if test="col3 != null" >
+        col3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        #{sid,jdbcType=BIGINT},
+      </if>
+      <if test="contractSid != null" >
+        #{contractSid,jdbcType=BIGINT},
+      </if>
+      <if test="contractCode != null" >
+        #{contractCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+         #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="shoppeProSid != null" >
+        #{shoppeProSid,jdbcType=BIGINT},
+      </if>
+      <if test="procurementUserCode != null" >
+        #{procurementUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="inputUserCode != null" >
+        #{inputUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="col1 != null" >
+        #{col1,jdbcType=VARCHAR},
+      </if>
+      <if test="col2 != null" >
+        #{col2,jdbcType=VARCHAR},
+      </if>
+      <if test="col3 != null" >
+        #{col3,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmProInput" >
+    update pcm_pro_input
+    <set >
+      <if test="contractSid != null" >
+        contract_sid = #{contractSid,jdbcType=BIGINT},
+      </if>
+      <if test="contractCode != null" >
+        contract_code = #{contractCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shoppeProSid != null" >
+        shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT},
+      </if>
+      <if test="procurementUserCode != null" >
+        procurement_user_code = #{procurementUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="inputUserCode != null" >
+        input_user_code = #{inputUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="col1 != null" >
+        col1 = #{col1,jdbcType=VARCHAR},
+      </if>
+      <if test="col2 != null" >
+        col2 = #{col2,jdbcType=VARCHAR},
+      </if>
+      <if test="col3 != null" >
+        col3 = #{col3,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        order_no=#{orderNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByProSidSelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmProInput" >
+    update pcm_pro_input
+    <set >
+      <if test="contractSid != null" >
+        contract_sid = #{contractSid,jdbcType=BIGINT},
+      </if>
+      <if test="contractCode != null" >
+        contract_code = #{contractCode,jdbcType=VARCHAR},
+      </if>
+      <if test="procurementUserCode != null" >
+        procurement_user_code = #{procurementUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="inputUserCode != null" >
+        input_user_code = #{inputUserCode,jdbcType=VARCHAR},
+      </if>
+      <if test="col1 != null" >
+        col1 = #{col1,jdbcType=VARCHAR},
+      </if>
+      <if test="col2 != null" >
+        col2 = #{col2,jdbcType=VARCHAR},
+      </if>
+      <if test="col3 != null" >
+        col3 = #{col3,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        order_no=#{orderNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangfj.product.maindata.domain.entity.PcmProInput" >
+    update pcm_pro_input
+    set contract_sid = #{contractSid,jdbcType=BIGINT},
+      contract_code = #{contractCode,jdbcType=VARCHAR},
+      order_no=#{orderNo,jdbcType=VARCHAR},
+      shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT},
+      procurement_user_code = #{procurementUserCode,jdbcType=VARCHAR},
+      input_user_code = #{inputUserCode,jdbcType=VARCHAR},
+      col1 = #{col1,jdbcType=VARCHAR},
+      col2 = #{col2,jdbcType=VARCHAR},
+      col3 = #{col3,jdbcType=VARCHAR}
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+</mapper>

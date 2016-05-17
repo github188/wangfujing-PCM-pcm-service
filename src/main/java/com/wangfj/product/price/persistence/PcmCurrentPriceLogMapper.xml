@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.price.persistence.PcmCurrentPriceLogMapper" >
+  <resultMap id="BaseResultMap" type="com.wangfj.product.price.domain.entity.PcmCurrentPriceLog" >
+    <id column="sid" property="sid" jdbcType="BIGINT" />
+    <result column="shoppe_pro_sid" property="shoppeProSid" jdbcType="BIGINT" />
+    <result column="old_current_price" property="oldCurrentPrice" jdbcType="DECIMAL" />
+    <result column="new_current_price" property="newCurrentPrice" jdbcType="DECIMAL" />
+    <result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="opt_user" property="optUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sid, shoppe_pro_sid, old_current_price, new_current_price, begin_time, end_time, 
+    create_time, opt_user
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from pcm_current_price_log
+    where sid = #{sid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pcm_current_price_log
+    where sid = #{sid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangfj.product.price.domain.entity.PcmCurrentPriceLog" >
+    insert into pcm_current_price_log (sid, shoppe_pro_sid, old_current_price, 
+      new_current_price, begin_time, end_time, 
+      create_time, opt_user)
+    values (#{sid,jdbcType=BIGINT}, #{shoppeProSid,jdbcType=BIGINT}, #{oldCurrentPrice,jdbcType=DECIMAL}, 
+      #{newCurrentPrice,jdbcType=DECIMAL}, #{beginTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{optUser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangfj.product.price.domain.entity.PcmCurrentPriceLog" >
+    insert into pcm_current_price_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="shoppeProSid != null" >
+        shoppe_pro_sid,
+      </if>
+      <if test="oldCurrentPrice != null" >
+        old_current_price,
+      </if>
+      <if test="newCurrentPrice != null" >
+        new_current_price,
+      </if>
+      <if test="beginTime != null" >
+        begin_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="optUser != null" >
+        opt_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        #{sid,jdbcType=BIGINT},
+      </if>
+      <if test="shoppeProSid != null" >
+        #{shoppeProSid,jdbcType=BIGINT},
+      </if>
+      <if test="oldCurrentPrice != null" >
+        #{oldCurrentPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="newCurrentPrice != null" >
+        #{newCurrentPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="beginTime != null" >
+        #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="optUser != null" >
+        #{optUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.price.domain.entity.PcmCurrentPriceLog" >
+    update pcm_current_price_log
+    <set >
+      <if test="shoppeProSid != null" >
+        shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT},
+      </if>
+      <if test="oldCurrentPrice != null" >
+        old_current_price = #{oldCurrentPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="newCurrentPrice != null" >
+        new_current_price = #{newCurrentPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="beginTime != null" >
+        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="optUser != null" >
+        opt_user = #{optUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangfj.product.price.domain.entity.PcmCurrentPriceLog" >
+    update pcm_current_price_log
+    set shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT},
+      old_current_price = #{oldCurrentPrice,jdbcType=DECIMAL},
+      new_current_price = #{newCurrentPrice,jdbcType=DECIMAL},
+      begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      opt_user = #{optUser,jdbcType=VARCHAR}
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  
+  
+  <select id="selectListByParam" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    	<include refid="Base_Column_List" />
+    from pcm_current_price_log
+    <where>
+      <if test="shoppeProSid != null" >
+        shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT},
+      </if>
+      <if test="oldCurrentPrice != null" >
+        old_current_price = #{oldCurrentPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="newCurrentPrice != null" >
+        new_current_price = #{newCurrentPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="beginTime != null" >
+        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="optUser != null" >
+        opt_user = #{optUser,jdbcType=VARCHAR},
+      </if>
+    </where>
+  </select>
+  
+  <select id="selectPageListByParam" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    	<include refid="Base_Column_List" />
+    from pcm_current_price_log
+    <where>
+     <if test="shoppeProSid != null" >
+        shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT},
+      </if>
+      <if test="oldCurrentPrice != null" >
+        old_current_price = #{oldCurrentPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="newCurrentPrice != null" >
+        new_current_price = #{newCurrentPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="beginTime != null" >
+        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="optUser != null" >
+        opt_user = #{optUser,jdbcType=VARCHAR},
+      </if>
+    </where>
+    order by
+			sid asc
+		limit
+			#{start}, #{limit}
+  </select>
+  <select id="getCountByParam" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select 
+    	count(*)
+    from pcm_current_price_log
+    <where>
+      <if test="shoppeProSid != null" >
+        shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT},
+      </if>
+      <if test="oldCurrentPrice != null" >
+        old_current_price = #{oldCurrentPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="newCurrentPrice != null" >
+        new_current_price = #{newCurrentPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="beginTime != null" >
+        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="optUser != null" >
+        opt_user = #{optUser,jdbcType=VARCHAR},
+      </if>
+    </where>
+  </select>
+  
+</mapper>

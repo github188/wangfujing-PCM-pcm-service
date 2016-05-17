@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.wangfj.product.category.persistence.PcmCategoryValuesDictMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.category.domain.entity.PcmCategoryValuesDict">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="values_sid" property="valuesSid" jdbcType="BIGINT" />
+		<result column="values_name" property="valuesName" jdbcType="VARCHAR" />
+		<result column="is_key_value" property="isKeyValue" jdbcType="BIGINT" />
+		<result column="values_desc" property="valuesDesc" jdbcType="VARCHAR" />
+		<result column="values_code" property="valuesCode" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="BIGINT" />
+		<result column="props_sid" property="propsSid" jdbcType="BIGINT" />
+		<result column="sort_order" property="sortOrder" jdbcType="BIGINT" />
+		<result column="channel_sid" property="channelSid" jdbcType="BIGINT" />
+		<result column="is_erp_value" property="isErpValue" jdbcType="BIGINT" />
+	</resultMap>
+
+	<resultMap id="valuesVO"
+		type="com.wangfj.product.category.domain.vo.PcmCategoryValuesDictDto">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="values_sid" property="valuesSid" jdbcType="BIGINT" />
+		<result column="values_name" property="valuesName" jdbcType="VARCHAR" />
+		<result column="channel_name" property="channelName" jdbcType="VARCHAR" />
+		<result column="values_desc" property="valuesDesc" jdbcType="VARCHAR" />
+		<result column="values_code" property="valuesCode" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="BIGINT" />
+		<result column="is_key_value" property="isKeyValue" jdbcType="BIGINT" />
+		<result column="is_erp_value" property="isErpValue" jdbcType="BIGINT" />
+		<result column="sort_order" property="sortOrder" jdbcType="BIGINT" />
+		<result column="channel_sid" property="channelSid" jdbcType="BIGINT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		sid, values_sid, values_name, is_key_value, values_desc,
+		values_code,
+		status, props_sid,
+		sort_order, channel_sid, is_erp_value
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_values_dict
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_category_values_dict
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryValuesDict">
+		insert into pcm_category_values_dict (sid, values_sid,
+		values_name,
+		is_key_value, values_desc, values_code,
+		status, props_sid,
+		sort_order,
+		channel_sid, is_erp_value)
+		values (#{sid,jdbcType=BIGINT},
+		#{valuesSid,jdbcType=BIGINT},
+		#{valuesName,jdbcType=VARCHAR},
+		#{isKeyValue,jdbcType=BIGINT}, #{valuesDesc,jdbcType=VARCHAR},
+		#{valuesCode,jdbcType=VARCHAR},
+		#{status,jdbcType=BIGINT},
+		#{propsSid,jdbcType=BIGINT},
+		#{sortOrder,jdbcType=BIGINT},
+		#{channelSid,jdbcType=BIGINT}, #{isErpValue,jdbcType=BIGINT})
+	</insert>
+	<!-- 批量添加 -->
+	<insert id="insertBatch" parameterType="java.util.List">
+		insert into pcm_category_values_dict ( values_sid, values_name,
+		is_key_value,
+		is_erp_value, status, sort_order, props_sid, channel_sid
+		) values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.valuesSid,jdbcType=BIGINT},#{item.valuesName,jdbcType=VARCHAR},
+			#{item.isKeyValue,jdbcType=BIGINT},
+			#{item.isErpValue,jdbcType=BIGINT},
+			#{item.status,jdbcType=BIGINT},
+			#{item.sortOrder,jdbcType=BIGINT},
+			#{item.propsSid,jdbcType=BIGINT},
+			#{item.channelSid,jdbcType=BIGINT} )
+		</foreach>
+	</insert>
+
+
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryValuesDict"
+		useGeneratedKeys="true" keyProperty="sid">
+		insert into pcm_category_values_dict
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="valuesSid != null">
+				values_sid,
+			</if>
+			<if test="valuesName != null">
+				values_name,
+			</if>
+			<if test="isKeyValue != null">
+				is_key_value,
+			</if>
+			<if test="valuesDesc != null">
+				values_desc,
+			</if>
+			<if test="valuesCode != null">
+				values_code,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="propsSid != null">
+				props_sid,
+			</if>
+			<if test="sortOrder != null">
+				sort_order,
+			</if>
+			<if test="channelSid != null">
+				channel_sid,
+			</if>
+			<if test="isErpValue != null">
+				is_erp_value,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="valuesSid != null">
+				#{valuesSid,jdbcType=BIGINT},
+			</if>
+			<if test="valuesName != null">
+				#{valuesName,jdbcType=VARCHAR},
+			</if>
+			<if test="isKeyValue != null">
+				#{isKeyValue,jdbcType=BIGINT},
+			</if>
+			<if test="valuesDesc != null">
+				#{valuesDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="valuesCode != null">
+				#{valuesCode,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=BIGINT},
+			</if>
+			<if test="propsSid != null">
+				#{propsSid,jdbcType=BIGINT},
+			</if>
+			<if test="sortOrder != null">
+				#{sortOrder,jdbcType=BIGINT},
+			</if>
+			<if test="channelSid != null">
+				#{channelSid,jdbcType=BIGINT},
+			</if>
+			<if test="isErpValue != null">
+				#{isErpValue,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryValuesDict">
+		update pcm_category_values_dict
+		<set>
+			<if test="valuesSid != null">
+				values_sid = #{valuesSid,jdbcType=BIGINT},
+			</if>
+			<if test="valuesName != null">
+				values_name = #{valuesName,jdbcType=VARCHAR},
+			</if>
+			<if test="isKeyValue != null">
+				is_key_value = #{isKeyValue,jdbcType=BIGINT},
+			</if>
+			<if test="valuesDesc != null">
+				values_desc = #{valuesDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="valuesCode != null">
+				values_code = #{valuesCode,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=BIGINT},
+			</if>
+			<if test="propsSid != null">
+				props_sid = #{propsSid,jdbcType=BIGINT},
+			</if>
+			<if test="sortOrder != null">
+				sort_order = #{sortOrder,jdbcType=BIGINT},
+			</if>
+			<if test="channelSid != null">
+				channel_sid = #{channelSid,jdbcType=BIGINT},
+			</if>
+			<if test="isErpValue != null">
+				is_erp_value = #{isErpValue,jdbcType=BIGINT},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryValuesDict">
+		update pcm_category_values_dict
+		set values_sid =
+		#{valuesSid,jdbcType=BIGINT},
+		values_name =
+		#{valuesName,jdbcType=VARCHAR},
+		is_key_value =
+		#{isKeyValue,jdbcType=BIGINT},
+		values_desc =
+		#{valuesDesc,jdbcType=VARCHAR},
+		values_code =
+		#{valuesCode,jdbcType=VARCHAR},
+		status = #{status,jdbcType=BIGINT},
+		props_sid = #{propsSid,jdbcType=BIGINT},
+		sort_order =
+		#{sortOrder,jdbcType=BIGINT},
+		channel_sid =
+		#{channelSid,jdbcType=BIGINT},
+		is_erp_value =
+		#{isErpValue,jdbcType=BIGINT}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<!-- 批量修改 -->
+	<update id="updateBatch">
+		replace into pcm_category_values_dict (sid, values_sid, values_name,
+		is_key_value,
+		is_erp_value, status, sort_order, props_sid, channel_sid
+		) values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			( #{item.sid,jdbcType=BIGINT},
+			#{item.valuesSid,jdbcType=BIGINT},
+			#{item.valuesName,jdbcType=VARCHAR},
+			#{item.isKeyValue,jdbcType=BIGINT},
+			#{item.isErpValue,jdbcType=BIGINT},
+			#{item.status,jdbcType=BIGINT},
+			#{item.sortOrder,jdbcType=BIGINT},
+			#{item.propsSid,jdbcType=BIGINT},
+			#{item.channelSid,jdbcType=BIGINT} )
+		</foreach>
+	</update>
+
+	<update id="updateStatus"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryValuesDict">
+		update pcm_category_values_dict set status = 0
+		where
+		props_sid = #{propsSid,jdbcType=BIGINT} and
+		channel_sid =
+		#{channelSid,jdbcType=BIGINT}
+	</update>
+
+	<select id="selectList" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryValuesDict">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_values_dict
+		<where>
+		status=1 
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="valuesSid != null">
+				and values_sid = #{valuesSid,jdbcType=BIGINT}
+			</if>
+			<if test="valuesName != null">
+				and values_name = #{valuesName,jdbcType=VARCHAR}
+			</if>
+			<if test="valuesDesc != null">
+				and values_desc = #{valuesDesc,jdbcType=VARCHAR}
+			</if>
+			<if test="valuesCode != null">
+				and values_code = #{valuesCode,jdbcType=VARCHAR}
+			</if>
+			<if test="isKeyValue != null">
+				and is_key_value = #{isKeyValue,jdbcType=BIGINT}
+			</if>
+			<if test="isErpValue != null">
+				and is_erp_value = #{isErpValue,jdbcType=BIGINT}
+			</if>
+			<if test="sortOrder != null">
+				and sort_order = #{sortOrder,jdbcType=BIGINT}
+			</if>
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectListByCategorySid" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.category.domain.vo.PcmCategoryValuesDictDto">
+		select pcpd.*,pcpv.category_sid
+		from pcm_category_props_dict as pcpd
+		inner join pcm_category_prop_values
+		as pcpv on
+		pcpd.props_sid=pcpv.props_sid
+		<where>
+			1=1
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name LIKE '%${propsName}%'
+			</if>
+			<if test="isKeyProp != null">
+				and is_key_prop = #{isKeyProp,jdbcType=INTEGER}
+			</if>
+			<if test="isEnumProp != null">
+				and is_enum_prop = #{isEnumProp,jdbcType=INTEGER}
+			</if>
+			<if test="propsDesc != null">
+				and props_desc = #{propsDesc,jdbcType=VARCHAR}
+			</if>
+			<if test="propsCode != null">
+				and props_code = #{propsCode,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=BIGINT}
+			</if>
+			<if test="sortOrder != null">
+				and sort_order = #{sortOrder,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="isErpProp != null">
+				and is_erp_prop = #{isErpProp,jdbcType=INTEGER}
+			</if>
+			<if test="erpType != null">
+				and erp_type = #{erpType,jdbcType=INTEGER}
+			</if>
+			<if test="erpPropCode != null">
+				and erp_prop_code = #{erpPropCode,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and pcpv.category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+	<select id="selectPage" resultMap="valuesVO"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryValuesDict">
+		select
+		<include refid="Base_Column_List" />
+		,
+		(select channel_name from pcm_channel where sid=channel_sid)
+		channel_name
+		from pcm_category_values_dict
+		<where>
+			1=1
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="valuesSid != null">
+				and values_sid = #{valuesSid,jdbcType=BIGINT}
+			</if>
+			<if test="valuesName != null">
+				and values_name = #{valuesName,jdbcType=VARCHAR}
+			</if>
+			<if test="valuesDesc != null">
+				and values_desc = #{valuesDesc,jdbcType=VARCHAR}
+			</if>
+			<if test="valuesCode != null">
+				and values_code = #{valuesCode,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=BIGINT}
+			</if>
+			<if test="isKeyValue != null">
+				and is_key_value = #{isKeyValue,jdbcType=BIGINT}
+			</if>
+			<if test="isErpValue != null">
+				and is_erp_value = #{isErpValue,jdbcType=BIGINT}
+			</if>
+			<if test="sortOrder != null">
+				and sort_order = #{sortOrder,jdbcType=BIGINT}
+			</if>
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+		</where>
+		limit #{start},#{pageSize}
+	</select>
+
+	<select id="selectPageTotal" resultType="int"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryValuesDict">
+		select count(1)
+		from pcm_category_values_dict
+		<where>
+			1=1
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="valuesSid != null">
+				and values_sid = #{valuesSid,jdbcType=BIGINT}
+			</if>
+			<if test="valuesName != null">
+				and values_name = #{valuesName,jdbcType=VARCHAR}
+			</if>
+			<if test="valuesDesc != null">
+				and values_desc = #{valuesDesc,jdbcType=VARCHAR}
+			</if>
+			<if test="valuesCode != null">
+				and values_code = #{valuesCode,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=BIGINT}
+			</if>
+			<if test="isKeyValue != null">
+				and is_key_value = #{isKeyValue,jdbcType=BIGINT}
+			</if>
+			<if test="isErpValue != null">
+				and is_erp_value = #{isErpValue,jdbcType=BIGINT}
+			</if>
+			<if test="sortOrder != null">
+				and sort_order = #{sortOrder,jdbcType=BIGINT}
+			</if>
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_values_dict
+		<where>
+			1=1
+			<if test="valuesSid != null">
+				and values_sid = #{valuesSid,jdbcType=BIGINT}
+			</if>
+			<if test="valuesName != null">
+				and values_name = #{valuesName,jdbcType=VARCHAR}
+			</if>
+			<if test="isKeyValue != null">
+				and is_key_value = #{isKeyValue,jdbcType=BIGINT}
+			</if>
+			<if test="valuesDesc != null">
+				and values_desc = #{valuesDesc,jdbcType=VARCHAR}
+			</if>
+			<if test="valuesCode != null">
+				and values_code = #{valuesCode,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=BIGINT}
+			</if>
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="sortOrder != null">
+				and sort_order = #{sortOrder,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="isErpValue != null">
+				and is_erp_value = #{isErpValue,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_values_dict
+		<where>
+			1=1
+			<if test="valuesSid != null">
+				and values_sid = #{valuesSid,jdbcType=BIGINT},
+			</if>
+			<if test="valuesName != null">
+				and values_name = #{valuesName,jdbcType=VARCHAR},
+			</if>
+			<if test="isKeyValue != null">
+				and is_key_value = #{isKeyValue,jdbcType=BIGINT},
+			</if>
+			<if test="valuesDesc != null">
+				and values_desc = #{valuesDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="valuesCode != null">
+				and values_code = #{valuesCode,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=BIGINT},
+			</if>
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT},
+			</if>
+			<if test="sortOrder != null">
+				and sort_order = #{sortOrder,jdbcType=BIGINT},
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT},
+			</if>
+			<if test="isErpValue != null">
+				and is_erp_value = #{isErpValue,jdbcType=BIGINT},
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_category_values_dict
+		<where>
+			1=1
+			<if test="valuesSid != null">
+				and values_sid = #{valuesSid,jdbcType=BIGINT},
+			</if>
+			<if test="valuesName != null">
+				and values_name = #{valuesName,jdbcType=VARCHAR},
+			</if>
+			<if test="isKeyValue != null">
+				and is_key_value = #{isKeyValue,jdbcType=BIGINT},
+			</if>
+			<if test="valuesDesc != null">
+				and values_desc = #{valuesDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="valuesCode != null">
+				and values_code = #{valuesCode,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=BIGINT},
+			</if>
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT},
+			</if>
+			<if test="sortOrder != null">
+				and sort_order = #{sortOrder,jdbcType=BIGINT},
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT},
+			</if>
+			<if test="isErpValue != null">
+				and is_erp_value = #{isErpValue,jdbcType=BIGINT},
+			</if>
+		</where>
+	</select>
+
+</mapper>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmColorDictMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.maindata.domain.entity.PcmColorDict">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="color_alias" property="colorAlias" jdbcType="VARCHAR" />
+		<result column="color_name" property="colorName" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, color_alias, color_name,status
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_color_dict
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from pcm_color_dict
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmColorDict">
+		insert into pcm_color_dict (sid, color_alias, color_name,status
+		)
+		values (#{sid,jdbcType=BIGINT}, #{colorAlias,jdbcType=VARCHAR},
+		#{colorName,jdbcType=VARCHAR},#{status,jdbcType=INTEGER}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmColorDict">
+		insert into pcm_color_dict
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="colorAlias != null">
+				color_alias,
+			</if>
+			<if test="colorName != null">
+				color_name,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="colorAlias != null">
+				#{colorAlias,jdbcType=VARCHAR},
+			</if>
+			<if test="colorName != null">
+				#{colorName,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmColorDict">
+		update pcm_color_dict
+		<set>
+			<if test="colorAlias != null">
+				color_alias = #{colorAlias,jdbcType=VARCHAR},
+			</if>
+			<if test="colorName != null">
+				color_name = #{colorName,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmColorDict">
+		update pcm_color_dict
+		set color_alias = #{colorAlias,jdbcType=VARCHAR},
+		color_name = #{colorName,jdbcType=VARCHAR},
+		status = #{status,jdbcType=INTEGER},
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_color_dict
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="colorAlias != null">
+				and color_alias = #{colorAlias,jdbcType=VARCHAR}
+			</if>
+			<if test="colorName != null">
+				and color_name = #{colorName,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_color_dict
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="colorAlias != null">
+				and color_alias = #{colorAlias,jdbcType=VARCHAR}
+			</if>
+			<if test="colorName != null">
+				and color_name = #{colorName,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+		</where>
+		order by
+		sid asc
+		<if test="limit != null">
+			limit
+			#{start}, #{limit}
+		</if>
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_color_dict
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="colorAlias != null">
+				and color_alias = #{colorAlias,jdbcType=VARCHAR}
+			</if>
+			<if test="colorName != null">
+				and color_name = #{colorName,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+</mapper>

@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.wangfj.product.category.persistence.PcmProductCategoryMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.category.domain.entity.PcmProductCategory">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="product_sid" property="productSid" jdbcType="VARCHAR" />
+		<result column="channel_sid" property="channelSid" jdbcType="BIGINT" />
+		<result column="category_sid" property="categorySid" jdbcType="BIGINT" />
+		<result column="opt_user" property="optUser" jdbcType="VARCHAR" />
+		<result column="opt_date" property="optDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="SPUResultMap"
+		type="com.wangfj.product.category.domain.vo.PcmProductDto">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="product_sid" property="productSid" jdbcType="VARCHAR" />
+		<result column="product_name" property="productName" jdbcType="VARCHAR" />
+		<result column="product_sku" property="productSku" jdbcType="VARCHAR" />
+		<result column="brand_sid" property="brandSid" jdbcType="VARCHAR" />
+		<result column="brand_root_sid" property="brandRootSid"
+			jdbcType="VARCHAR" />
+		<result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+		<result column="pro_active_bit" property="proActiveBit"
+			jdbcType="INTEGER" />
+		<result column="pro_selling" property="proSelling" jdbcType="INTEGER" />
+		<result column="activity_flg" property="activityFlg" jdbcType="INTEGER" />
+		<result column="pro_picture" property="proPicture" jdbcType="VARCHAR" />
+		<result column="category_sid" property="categorySid" jdbcType="BIGINT" />
+		<result column="sex_sid" property="sexSid" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="awesome" property="awesome" jdbcType="BIGINT" />
+		<result column="pro_desc_sid" property="proDescSid" jdbcType="BIGINT" />
+		<result column="product_name_alias" property="productNameAlias"
+			jdbcType="VARCHAR" />
+		<result column="pro_selling_time" property="proSellingTime"
+			jdbcType="TIMESTAMP" />
+		<result column="article_num" property="articleNum" jdbcType="VARCHAR" />
+		<result column="year_to_market" property="yearToMarket"
+			jdbcType="VARCHAR" />
+		<result column="short_des" property="shortDes" jdbcType="VARCHAR" />
+		<result column="edit_flag" property="editFlag" jdbcType="INTEGER" />
+		<result column="special_des" property="specialDes" jdbcType="VARCHAR" />
+		<result column="season_code" property="seasonCode" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="SKUResultMap"
+		type="com.wangfj.product.category.domain.vo.PcmProDetailDto">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="product_detail_sid" property="productDetailSid"
+			jdbcType="VARCHAR" />
+		<result column="product_sid" property="productSid" jdbcType="VARCHAR" />
+		<result column="pro_stan_sid" property="proStanSid" jdbcType="BIGINT" />
+		<result column="pro_color_sid" property="proColorSid" jdbcType="BIGINT" />
+		<result column="pro_color_name" property="proColorName"
+			jdbcType="VARCHAR" />
+		<result column="pro_color_alias" property="proColorAlias"
+			jdbcType="VARCHAR" />
+		<result column="pro_stan_name" property="proStanName" jdbcType="VARCHAR" />
+		<result column="memo" property="memo" jdbcType="VARCHAR" />
+		<result column="barcode" property="barcode" jdbcType="VARCHAR" />
+		<result column="pro_wri_time" property="proWriTime" jdbcType="TIMESTAMP" />
+		<result column="photo_sale_code_sid" property="photoSaleCodeSid"
+			jdbcType="VARCHAR" />
+		<result column="photo_status" property="photoStatus" jdbcType="INTEGER" />
+		<result column="opt_user_sid" property="optUserSid" jdbcType="BIGINT" />
+		<result column="opt_real_name" property="optRealName" jdbcType="VARCHAR" />
+		<result column="opt_update_time" property="optUpdateTime"
+			jdbcType="TIMESTAMP" />
+		<result column="plan_maker" property="planMaker" jdbcType="VARCHAR" />
+		<result column="plan_time" property="planTime" jdbcType="TIMESTAMP" />
+		<result column="photo_plan_sid" property="photoPlanSid"
+			jdbcType="VARCHAR" />
+		<result column="pro_active_bit" property="proActiveBit"
+			jdbcType="INTEGER" />
+		<result column="pro_type" property="proType" jdbcType="INTEGER" />
+		<result column="selling_status" property="sellingStatus"
+			jdbcType="INTEGER" />
+		<result column="search_key" property="searchKey" jdbcType="VARCHAR" />
+		<result column="key_word" property="keyWord" jdbcType="VARCHAR" />
+		<result column="size_picture_url" property="sizePictureUrl"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+
+
+	<sql id="Base_Column_List">
+		sid, product_sid, channel_sid, category_sid, opt_user,
+		opt_date
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_product_category
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByProductSid" parameterType="java.lang.Long">
+		delete from
+		pcm_product_category
+		where product_sid = #{productSid,jdbcType=VARCHAR}
+	</delete>
+
+	<delete id="deleteByRecord"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductCategory">
+		delete from pcm_product_category
+		<where>
+			<if test="productSid != null">
+				product_sid = #{productSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</delete>
+	<delete id="deleteGYCateByRecord"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductCategory">
+		delete ppc from pcm_product_category ppc
+		join pcm_category cate on cate.sid=ppc.category_sid
+		and cate.category_type=0
+		<where>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</delete>
+	<delete id="deleteZSCateByRecord"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductCategory">
+		delete ppc from pcm_product_category ppc
+		join pcm_category cate on cate.sid=ppc.category_sid
+		and cate.category_type=3
+		<where>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductCategory">
+		insert into pcm_product_category (sid, product_sid,
+		channel_sid,
+		category_sid, opt_user, opt_date
+		)
+		values
+		(#{sid,jdbcType=BIGINT}, #{productSid,jdbcType=VARCHAR},
+		#{channelSid,jdbcType=BIGINT},
+		#{categorySid,jdbcType=BIGINT},
+		#{optUser,jdbcType=VARCHAR}, #{optDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductCategory">
+		insert into pcm_product_category
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="productSid != null">
+				product_sid,
+			</if>
+			<if test="channelSid != null">
+				channel_sid,
+			</if>
+			<if test="categorySid != null">
+				category_sid,
+			</if>
+			<if test="optUser != null">
+				opt_user,
+			</if>
+			<if test="optDate != null">
+				opt_date,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="productSid != null">
+				#{productSid,jdbcType=VARCHAR},
+			</if>
+			<if test="channelSid != null">
+				#{channelSid,jdbcType=BIGINT},
+			</if>
+			<if test="categorySid != null">
+				#{categorySid,jdbcType=BIGINT},
+			</if>
+			<if test="optUser != null">
+				#{optUser,jdbcType=VARCHAR},
+			</if>
+			<if test="optDate != null">
+				#{optDate,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductCategory">
+		update pcm_product_category
+		set product_sid =
+		#{productSid,jdbcType=VARCHAR},
+		channel_sid =
+		#{channelSid,jdbcType=BIGINT},
+		category_sid =
+		#{categorySid,jdbcType=BIGINT},
+		opt_user =
+		#{optUser,jdbcType=VARCHAR},
+		opt_date = #{optDate,jdbcType=TIMESTAMP}
+		where sid =
+		#{sid,jdbcType=BIGINT}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_product_category
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+
+
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductCategory">
+		update pcm_product_category
+		<set>
+			<if test="productSid != null">
+				product_sid = #{productSid,jdbcType=VARCHAR},
+			</if>
+			<if test="channelSid != null">
+				channel_sid = #{channelSid,jdbcType=BIGINT},
+			</if>
+			<if test="categorySid != null">
+				category_sid = #{categorySid,jdbcType=BIGINT},
+			</if>
+			<if test="optUser != null">
+				opt_user = #{optUser,jdbcType=VARCHAR},
+			</if>
+			<if test="optDate != null">
+				opt_date = #{optDate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateCateByProSid"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductCategory">
+		update pcm_product_category
+		<set>
+			<if test="channelSid != null">
+				channel_sid = #{channelSid,jdbcType=BIGINT},
+			</if>
+			<if test="categorySid != null">
+				category_sid = #{categorySid,jdbcType=BIGINT},
+			</if>
+			<if test="optUser != null">
+				opt_user = #{optUser,jdbcType=VARCHAR},
+			</if>
+			<if test="optDate != null">
+				opt_date = #{optDate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where
+		sid = #{sid,jdbcType=BIGINT}
+		and channel_sid = 0
+	</update>
+	<select id="selectList" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductCategory">
+		select
+		ppc.*
+		from pcm_product_category as ppc INNER JOIN
+		pcm_category AS pc
+		ON
+		ppc.category_sid=pc.category_sid
+		<where>
+			pc.category_type=3 and
+			<if test="productSid != null">
+				product_sid = #{productSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_product_category
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_product_category
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_product_category
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+	<!-- 根据工业分类sid 查询产品信息 -->
+	<select id="selectSPUByCateSid" resultMap="SPUResultMap"
+		parameterType="java.lang.Long">
+		SELECT pp.* from pcm_product as pp INNER JOIN
+		pcm_product_category as
+		ppc ON pp.product_sid=ppc.product_sid
+		INNER JOIN
+		pcm_category as pc ON ppc.category_sid=pc.sid
+		where pc.category_type=0
+		and pc.sid = #{sid,jdbcType=BIGINT}
+	</select>
+
+	<!-- 根据工业分类sid 查询产品信息count -->
+	<select id="getCountSPUByCateSid" resultType="java.lang.Long"
+		parameterType="java.lang.Long">
+		SELECT count(1) from pcm_product as pp INNER JOIN
+		pcm_product_category as
+		ppc ON pp.product_sid=ppc.product_sid
+		INNER JOIN
+		pcm_category as pc ON ppc.category_sid=pc.sid
+		where pc.category_type=0
+		and pc.sid = #{sid,jdbcType=BIGINT}
+	</select>
+
+	<!-- 根据工业分类sid 查询商品信息 -->
+	<select id="selectSKUByCateSid" resultMap="SKUResultMap"
+		parameterType="java.lang.Long">
+		SELECT
+		ppd.*
+		FROM
+		pcm_product AS pp
+		INNER JOIN
+		pcm_product_category AS ppc ON pp.product_sid = ppc.product_sid
+		INNER
+		JOIN pcm_category AS pc ON ppc.category_sid = pc.sid INNER JOIN
+		pcm_pro_detail AS ppd ON
+		pp.product_sid=ppd.product_sid
+		WHERE
+		pc.category_type = 0
+		and pc.sid = #{sid,jdbcType=BIGINT}
+	</select>
+
+	<!-- 根据工业分类sid 查询商品信息 count -->
+	<select id="getCountSKUByCateSid" resultType="java.lang.Long"
+		parameterType="java.lang.Long">
+		SELECT
+		count(1)
+		FROM
+		pcm_product AS pp
+		INNER JOIN
+		pcm_product_category AS ppc ON pp.product_sid = ppc.product_sid
+		INNER
+		JOIN pcm_category AS pc ON ppc.category_sid = pc.sid INNER JOIN
+		pcm_pro_detail AS ppd ON
+		pp.product_sid=ppd.product_sid
+		WHERE
+		pc.category_type = 0
+		and pc.sid = #{sid,jdbcType=BIGINT}
+	</select>
+
+	<select id="getProCategoryByProSid"
+		resultType="com.wangfj.product.category.domain.vo.PcmProductCategoryDto"
+		parameterType="java.lang.Long">
+		SELECT
+		a.sid as sid,
+		a.category_sid as categorySid,
+		a.product_sid as productSid,
+		a.channel_sid as channelSid,
+		b.category_type categoryType
+		FROM
+		pcm_product_category a
+		LEFT JOIN pcm_category b ON
+		a.category_sid = b.sid
+		WHERE
+		product_sid = #{productSid,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectUpdateCate" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		ppc.*
+		from pcm_product_category as ppc
+		join
+		pcm_category as pc on ppc.category_sid = pc.sid
+		where
+		pc.category_type =
+		#{categoryType,jdbcType=BIGINT}
+		and ppc.product_sid =
+		#{productSid,jdbcType=VARCHAR}
+	</select>
+
+</mapper>

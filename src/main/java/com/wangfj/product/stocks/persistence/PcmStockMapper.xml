@@ -1,0 +1,1591 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.stocks.persistence.PcmStockMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.stocks.domain.entity.PcmStock">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="shoppe_pro_sid" property="shoppeProSid"
+			jdbcType="VARCHAR" />
+		<result column="stock_type_sid" property="stockTypeSid"
+			jdbcType="INTEGER" />
+		<result column="pro_sum" property="proSum" jdbcType="BIGINT" />
+		<result column="channel_sid" property="channelSid" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, shoppe_pro_sid, stock_type_sid,
+		pro_sum,channel_sid
+	</sql>
+
+	<!-- saveOrUpdate -->
+	<insert id="saveOrUpdate" useGeneratedKeys="true" keyProperty="sid">
+		<selectKey resultType="int" keyProperty="count" order="BEFORE">
+			select
+			count(*) as count
+			from
+			pcm_stock
+			<where>
+				1 = 1
+				<if test="shoppeProSid != null">
+					and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+				</if>
+				<if test="stockTypeSid != null">
+					and stock_type_sid = #{stockTypeSid,jdbcType=INTEGER}
+				</if>
+				<if test="channelSid != null">
+					and channel_sid = #{channelSid,jdbcType=VARCHAR}
+				</if>
+				<if test="channelSid == null">
+					and channel_sid = '0'
+				</if>
+			</where>
+		</selectKey>
+		<if test="count > 0">
+			update pcm_stock set pro_sum = #{proSum,jdbcType=BIGINT}
+			<where>
+				<if test="shoppeProSid != null">
+					and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+				</if>
+				<if test="stockTypeSid != null">
+					and stock_type_sid = #{stockTypeSid,jdbcType=INTEGER}
+				</if>
+				<if test="channelSid != null">
+					and channel_sid = #{channelSid,jdbcType=VARCHAR}
+				</if>
+				<if test="channelSid == null">
+					and channel_sid = '0'
+				</if>
+			</where>
+		</if>
+		<if test="count == 0">
+			insert into pcm_stock
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test="shoppeProSid != null">
+					shoppe_pro_sid,
+				</if>
+				<if test="stockTypeSid != null">
+					stock_type_sid,
+				</if>
+				<if test="proSum != null">
+					pro_sum,
+				</if>
+				channel_sid,
+			</trim>
+			<trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test="shoppeProSid != null">
+					#{shoppeProSid,jdbcType=VARCHAR},
+				</if>
+				<if test="stockTypeSid != null">
+					#{stockTypeSid,jdbcType=INTEGER},
+				</if>
+				<if test="proSum != null">
+					#{proSum,jdbcType=BIGINT},
+				</if>
+				<if test="channelSid != null">
+					#{channelSid,jdbcType=VARCHAR},
+				</if>
+				<if test="channelSid == null">
+					'0',
+				</if>
+			</trim>
+		</if>
+	</insert>
+
+	<!--导入库存变更 -->
+	<insert id="stockImport" useGeneratedKeys="true" keyProperty="sid">
+		<selectKey resultType="int" keyProperty="count" order="BEFORE">
+			select
+			count(*) as count
+			from
+			pcm_stock
+			<where>
+				1 = 1
+				<if test="shoppeProSid != null">
+					and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+				</if>
+				<if test="stockTypeSid != null">
+					and stock_type_sid = #{stockTypeSid,jdbcType=INTEGER}
+				</if>
+				<if test="channelSid != null">
+					and channel_sid = #{channelSid,jdbcType=VARCHAR}
+				</if>
+				<if test="channelSid == null">
+					and channel_sid = '0'
+				</if>
+			</where>
+		</selectKey>
+		<if test="count > 0">
+			update pcm_stock set pro_sum = pro_sum +
+			#{proSum,jdbcType=BIGINT}
+			<where>
+				<if test="shoppeProSid != null">
+					and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+				</if>
+				<if test="stockTypeSid != null">
+					and stock_type_sid = #{stockTypeSid,jdbcType=INTEGER}
+				</if>
+				<if test="channelSid != null">
+					and channel_sid = #{channelSid,jdbcType=VARCHAR}
+				</if>
+				<if test="channelSid == null">
+					and channel_sid = '0'
+				</if>
+			</where>
+		</if>
+	</insert>
+	<!-- 加减库存 -->
+	<insert id="addOrReduce" useGeneratedKeys="true" keyProperty="sid">
+		<selectKey resultType="int" keyProperty="count" order="BEFORE">
+			select
+			count(*) as count
+			from
+			pcm_stock
+			<where>
+				1 = 1
+				<if test="shoppeProSid != null">
+					and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+				</if>
+				<if test="stockTypeSid != null">
+					and stock_type_sid = #{stockTypeSid,jdbcType=INTEGER}
+				</if>
+				<if test="channelSid != null">
+					and channel_sid = #{channelSid,jdbcType=VARCHAR}
+				</if>
+				<if test="channelSid == null">
+					and channel_sid = '0'
+				</if>
+			</where>
+		</selectKey>
+		<if test="count == 0">
+			insert into pcm_stock
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test="shoppeProSid != null">
+					shoppe_pro_sid,
+				</if>
+				<if test="stockTypeSid != null">
+					stock_type_sid,
+				</if>
+				<if test="proSum != null">
+					pro_sum,
+				</if>
+				channel_sid,
+			</trim>
+			<trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test="shoppeProSid != null">
+					#{shoppeProSid,jdbcType=VARCHAR},
+				</if>
+				<if test="stockTypeSid != null">
+					#{stockTypeSid,jdbcType=INTEGER},
+				</if>
+				<if test="proSum != null">
+					#{proSum,jdbcType=BIGINT},
+				</if>
+				<if test="channelSid != null">
+					#{channelSid,jdbcType=INTEGER},
+				</if>
+
+				<if test="channelSid == null">
+					0,
+				</if>
+			</trim>
+		</if>
+		<if test="count > 0">
+			update pcm_stock set pro_sum = pro_sum +
+			#{proSum,jdbcType=BIGINT}
+			<where>
+				<if test="shoppeProSid != null">
+					and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+				</if>
+				<if test="stockTypeSid != null">
+					and stock_type_sid = #{stockTypeSid,jdbcType=INTEGER}
+				</if>
+				<if test="channelSid != null">
+					and channel_sid = #{channelSid,jdbcType=VARCHAR}
+				</if>
+				<if test="channelSid == null">
+					and channel_sid = '0'
+				</if>
+			</where>
+		</if>
+	</insert>
+
+	<!-- 根据SID查询库存表 -->
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_stock
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+
+	<!-- 查询可售库 -->
+	<select id="selectSaleCount" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.stocks.domain.vo.PcmStockDto">
+		select
+		pro_sum as proSum,sid
+		from
+		pcm_stock
+		<where>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+				and
+				EXISTS(SELECT psp.shoppe_pro_sid from pcm_shoppe_product psp where
+				psp.shoppe_pro_sid= #{shoppeProSid,jdbcType=VARCHAR} AND
+				psp.sale_status=0)
+			</if>
+			<if test="stockTypeSid != null">
+				and stock_type_sid = #{stockTypeSid,jdbcType=INTEGER}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid == null">
+				and channel_sid = '0'
+			</if>
+		</where>
+	</select>
+	<!-- 查询all总库存 -->
+	<select id="selectStockCountAll" resultType="java.util.Map"
+		parameterType="com.wangfj.product.stocks.domain.vo.PcmStockDto">
+		select
+		(sum(pro_sum) +
+		(select
+		ifnull(SUM(pro_sum),0)
+		from
+		pcm_stock where shoppe_pro_sid =
+		#{shoppeProSid,jdbcType=VARCHAR} and
+		channel_sid != '0'
+		and stock_type_sid =
+		#{stockTypeSid,jdbcType=INTEGER})
+		) as proSum
+		from
+		pcm_stock where
+		shoppe_pro_sid =
+		#{shoppeProSid,jdbcType=VARCHAR} and
+		channel_sid = '0'
+	</select>
+
+	<!-- 查询总库存 -->
+	<select id="selectStockCount" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.stocks.domain.vo.PcmStockDto">
+		select
+		sum(pro_sum) as proSum
+		from
+		pcm_stock
+		<where>
+			shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+			and
+			EXISTS(SELECT
+			psp.shoppe_pro_sid from pcm_shoppe_product psp where
+			psp.shoppe_pro_sid= #{shoppeProSid,jdbcType=VARCHAR} AND
+			psp.sale_status=0)
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<!-- 条件查询 -->
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_stock
+		<where>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+			</if>
+			<if test="stockTypeSid != null">
+				and stock_type_sid = #{stockTypeSid,jdbcType=INTEGER}
+			</if>
+			<if test="proSum != null">
+				and pro_sum = #{proSum,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid == null">
+				and channel_sid = '0'
+			</if>
+		</where>
+	</select>
+
+
+	<!-- 分页显示 -->
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_stock
+		<where>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+			</if>
+			<if test="stockTypeSid != null">
+				and stock_type_sid = #{stockTypeSid,jdbcType=INTEGER}
+			</if>
+			<if test="proSum != null">
+				and pro_sum = #{proSum,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid == null">
+				and channel_sid = '0'
+			</if>
+		</where>
+		order by
+		sid asc
+		<if test="start != null">
+			<if test="limit != null">
+				limit
+				#{start}, #{limit}
+			</if>
+		</if>
+	</select>
+
+
+	<!-- 条件查询总数 -->
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_stock
+		<where>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+			</if>
+			<if test="stockTypeSid != null">
+				and stock_type_sid = #{stockTypeSid,jdbcType=INTEGER}
+			</if>
+			<if test="proSum != null">
+				and pro_sum = #{proSum,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid == null">
+				and channel_sid = '0'
+			</if>
+		</where>
+	</select>
+	<!-- 根据专柜商品+库存类型查SID -->
+	<select id="selectSidByShoppeProSid" resultType="java.lang.Integer"
+		parameterType="com.wangfj.product.stocks.domain.vo.PcmStockDto">
+		select
+		sid
+		from pcm_stock
+		<where>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+			</if>
+			<if test="stockTypeSid != null">
+				and stock_type_sid = #{stockTypeSid,jdbcType=INTEGER}
+			</if>
+			<if test="proSum != null">
+				and pro_sum = #{proSum,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid == null">
+				and channel_sid = '0'
+			</if>
+		</where>
+
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_stock
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+
+	<!-- 修改锁定数量 -->
+	<update id="updateLockCount" parameterType="com.wangfj.product.stocks.domain.entity.PcmStock">
+		update pcm_stock set
+		pro_sum = pro_sum +
+		#{proSum,jdbcType=BIGINT}, lock_count +
+		#{lockCount,jdbcType=BIGINT}
+	</update>
+	<!-- 添加 -->
+	<insert id="insertSelective" parameterType="com.wangfj.product.stocks.domain.entity.PcmStock"
+		useGeneratedKeys="true" keyProperty="sid">
+		insert into pcm_stock
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid,
+			</if>
+			<if test="stockTypeSid != null">
+				stock_type_sid,
+			</if>
+			<if test="proSum != null">
+				pro_sum,
+			</if>
+			channel_sid,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="shoppeProSid != null">
+				#{shoppeProSid,jdbcType=VARCHAR},
+			</if>
+			<if test="stockTypeSid != null">
+				#{stockTypeSid,jdbcType=INTEGER},
+			</if>
+			<if test="proSum != null">
+				#{proSum,jdbcType=BIGINT},
+			</if>
+			<if test="channelSid != null">
+				#{channelSid,jdbcType=INTEGER},
+			</if>
+			<if test="channelSid == null">
+				0,
+			</if>
+		</trim>
+	</insert>
+
+
+	<!-- 根据专柜商品编码和库存类型修改库存数或渠道 -->
+	<update id="updateByParamSelective" parameterType="com.wangfj.product.stocks.domain.entity.PcmStock">
+		update pcm_stock
+		<set>
+			<if test="proSum != null">
+				pro_sum = #{proSum,jdbcType=BIGINT},
+			</if>
+			<if test="channelSid != null">
+				channel_sid = #{channelSid,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<where>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+			</if>
+			<if test="stockTypeSid != null">
+				and stock_type_sid = #{stockTypeSid,jdbcType=INTEGER}
+			</if>
+		</where>
+	</update>
+	<!-- 修改数量 -->
+	<update id="proSumUpdateSelective" parameterType="com.wangfj.product.stocks.domain.vo.PcmStockDto">
+		update pcm_stock
+		<set>
+			<if test="proSum != null">
+				pro_sum = pro_sum + #{proSum,jdbcType=BIGINT},
+			</if>
+		</set>
+		<where>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+			</if>
+			<if test="stockTypeSid != null">
+				and stock_type_sid = #{stockTypeSid,jdbcType=INTEGER}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid == null">
+				and channel_sid = '0'
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据专柜商品编码和渠道查询库位信息 -->
+	<select id="selectShoppeProStockInfo" resultType="com.wangfj.product.stocks.domain.vo.PcmStockInfoDto"
+		parameterType="com.wangfj.product.stocks.domain.vo.PcmStockDto">
+		SELECT ps.sid,
+		shoppe_pro_sid as shoppeProSid,
+		stock_type_sid as
+		stockTypeSid,
+		stock_name as stockName,
+		pro_sum AS proSum,channel_sid
+		as
+		channelSid
+		FROM
+		pcm_stock ps
+		INNER JOIN pcm_stock_type_dict pstd
+		on
+		ps.stock_type_sid=pstd.sid
+		<where>
+			and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+			and
+			EXISTS(SELECT psp.shoppe_pro_sid from pcm_shoppe_product psp where
+			psp.shoppe_pro_sid= #{shoppeProSid,jdbcType=VARCHAR} AND
+			psp.sale_status=0)
+			<if test="stockTypeSid != null">
+				and stock_type_sid = #{stockTypeSid,jdbcType=INTEGER}
+			</if>
+			<if test="proSum != null">
+				and pro_sum = #{proSum,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid == null">
+				and channel_sid = '0'
+			</if>
+			AND pro_sum>0
+		</where>
+	</select>
+	<!-- 商品库存信息查询 -->
+	<select id="SelecProductStockInfoByPara"
+		parameterType="com.wangfj.product.stocks.domain.vo.QueryProductStockInfoDto"
+		resultType="com.wangfj.product.stocks.domain.vo.SelectProductStockInfoDto">
+		SELECT
+		sps2.*, pr.current_price AS salesPrice,
+		ch.channel_code AS
+		channelSid,
+		ifnull(sto.sale_stock, 0) AS saleStock,
+		ifnull(sto.edefective_stock, 0) AS edefectiveStock,
+		ifnull(sto.return_stock, 0) AS returnStock,
+		ifnull(sto.locked_stock, 0)
+		AS lockedStock,
+		edi.is_pay_reducestock AS isPayReduce,
+		pspe.is_card AS
+		isCard,
+		pspe.base_unit_code AS baseUnitCode,
+		pspe.origin_country AS
+		originCountry,
+		pspe.is_origin_package AS isOriginPackage,
+		pspe.xxhc_flag AS xxhcFlag,
+		pspe.field1 productCategory,
+		pspe.field2
+		originPrice,
+		pr.price_type AS priceType,
+		pr.promotion_price AS
+		promotionPrice,
+		ch.channel_name AS channelName,
+		psd.season AS season,
+		ic.industry_name AS industryName,
+		erp.pro_status AS productStatus,
+		erp.commission_rate AS commissionRate,
+		erp.sales_unit AS
+		originSalesUnit,
+		erp.code_type AS erpSkuType
+		FROM
+		(
+		SELECT DISTINCT
+		pc2.category_code AS statCategoryCode,
+		v.sid AS sid,
+		v.spu_sid AS
+		spuSid,
+		v.sku_sid AS skuSid,
+		v.shoppe_pro_sid AS productCode,
+		v.product_detail_sid AS skuCode,
+		v.product_sid AS spuCode,
+		v.rate_code
+		AS discountCode,
+		v.erpProductCode AS erpProductCode,
+		v.product_sku AS
+		modelCode,
+		v.supply_product_code AS supplyProCode,
+		v.product_name AS
+		productName,
+		v.product_abbr AS productAbbr,
+		v.spu_name AS spuName,
+		v.sku_name AS skuName,
+		v.supply_code AS supplierCode,
+		v.supply_name AS
+		supplierName,
+		br.sid AS brandSid,
+		br.brand_sid AS brandCode,
+		br.brand_name AS brandName,
+		v.brand_group_code AS brandGroupCode,
+		v.brand_group_name AS brandGroupName,
+		v.shoppe_code AS counterCode,
+		v.shoppe_name AS counterName,
+		org.organization_code AS storeCode,
+		org.organization_name AS storeName,
+		v.manage_category_sid AS
+		manageCategory,
+		v.pro_color_sid AS colorSid,
+		v.pro_color AS proColor,
+		v.pro_color_code AS colorCode,
+		v.pro_color_name AS colorName,
+		v.pro_stan_name AS stanCode,
+		v.pro_stan_name AS stanName,
+		v.pro_sale_status AS isSale,
+		v.sku_sale_status AS skuSale,
+		v.spu_sale_status AS spuSale,
+		v.shoppe_pro_type AS manageType,
+		v.is_stock AS stockType,
+		v.article_num AS articleNum,
+		v.is_discountable
+		AS isDiscountable,
+		v.is_cod AS isCOD,
+		v.sale_unit_code AS unitCode,
+		v.sale_unit_name AS unitName,
+		v.original_price AS marketPrice,
+		v.discountLimit AS maxDiscountRate,
+		v.operate_mode AS operateMode,
+		v.pro_type AS productType,
+		v.tms_param AS tmsParam,
+		v.year_to_market AS
+		onMarketDate,
+		cate.category_code AS category,
+		cate.NAME AS categoryName,
+		pc2.category_sid AS statCategory,
+		pc2. NAME AS statCategoryName,
+		cate2.
+		NAME AS glCategoryName,
+		v.season_code,
+		v.industry_condition_sid AS
+		industrySid,
+		v.negative_stock AS negativeStock,
+		v.stock_mode AS
+		stockMode,
+		v.input_tax AS inputTax,
+		v.output_tax AS outputTax,
+		v.sales_tax AS salesTax,
+		v.purchase_price AS purchasePrice,
+		v.buying_price AS buyingPrice,
+		v.process_type AS processType,
+		v.origin_land AS originLand,
+		v.origin_land2 AS originLand2,
+		v.order_type AS orderType,
+		v.is_promotion AS isPromotion,
+		v.is_adjust_price AS isAdjustPrice,
+		v.primary_attr AS primaryAttr,
+		v.sex_sid AS sexSid,
+		v.awesome AS awesome,
+		v.features AS features,
+		v.offer_num AS contractCode,
+		v.procurement_user_code AS
+		procurementUserCode,
+		v.input_user_code AS inputUserCode,
+		v.bills_no AS
+		billsNo,
+		v.field2 AS field2,
+		v.notes AS notes,
+		org.sid AS storeSid,
+		v.field4 AS field4,
+		v.isGift AS isGift,
+		v.isPacking AS isPacking,
+		v.counterSid AS counterSid
+		FROM
+		(
+		SELECT
+		*
+		FROM
+		v_pcm_product_stock_price
+		<where>
+			<if test="productCode != null">
+				and shoppe_pro_sid = #{productCode,jdbcType=VARCHAR}
+			</if>
+			<if test="skuCode != null">
+				and product_detail_sid = #{skuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="counterCode != null">
+				and shoppe_code = #{counterCode,jdbcType=VARCHAR}
+			</if>
+		</where>
+		)
+		v
+		<if test="supplierCode != null">
+			INNER JOIN pcm_shoppe_product_supply psps ON v.sid =
+			psps.shoppe_product_sid
+			AND psps.supply_sid
+			=#{supplierCode,jdbcType=VARCHAR}
+		</if>
+		INNER JOIN pcm_brand br
+		ON br.sid = v.brand_code
+		INNER JOIN
+		pcm_organization org ON v.shop_sid
+		= org.sid
+		AND
+		org.organization_type =
+		3
+		<if test="storeCode != null">
+			and org.organization_code = #{storeCode,jdbcType=VARCHAR}
+		</if>
+		INNER JOIN
+		pcm_product_category ppc
+		ON ppc.product_sid =
+		v.spu_sid
+		INNER
+		JOIN
+		pcm_category cate ON cate.sid =
+		ppc.category_sid
+		AND
+		cate.category_type
+		= 0
+		AND cate.is_leaf = 'Y'
+		AND
+		cate. STATUS = 'Y'
+		AND
+		cate.is_display = 1
+		LEFT JOIN (
+		SELECT
+		cate1.category_sid,
+		cate1.`name`,
+		cate1.category_code,
+		ppc1.product_sid
+		FROM
+		pcm_category
+		cate1
+		JOIN
+		pcm_product_category ppc1 ON cate1.sid =
+		ppc1.category_sid
+		AND
+		cate1.category_type = 2
+		AND cate1.is_leaf = 'Y'
+		AND cate1. STATUS =
+		'Y'
+		AND cate1.is_display = 1
+		) pc2 ON pc2.product_sid
+		= v.shoppe_pro_sid
+		LEFT
+		JOIN pcm_category cate2 ON cate2.category_code =
+		v.manage_category_sid
+		LEFT JOIN (
+		SELECT
+		cate3.category_sid,
+		cate3.`name`,
+		cate3.category_code,
+		ppp.product_sid
+		FROM
+		pcm_category cate3
+		JOIN pcm_product_parameters ppp ON ppp.category_sid = cate3.sid
+		AND
+		cate3.category_type = 3
+		AND cate3.is_display = 1
+		AND cate3.is_leaf = 'Y'
+		AND cate3. STATUS = 'Y'
+		) ppp2 ON ppp2.product_sid = v.spu_sid
+		ORDER BY
+		v.sid DESC
+		<if test="limit != null">
+			limit #{start}, #{limit}
+		</if>
+		) sps2
+		LEFT JOIN pcm_shoppe_product_extend AS pspe
+		ON sps2.sid =
+		pspe.shoppe_pro_sid
+		LEFT JOIN
+		pcm_shoppe_product_edi_relation AS edi ON
+		sps2.productCode =
+		edi.field1
+		AND edi.channel_code = '0'
+		LEFT JOIN
+		(
+		SELECT
+		shoppe_pro_sid,
+		SUM(
+
+		IF (
+		stock_type_sid = 1001,
+		pro_sum,
+		0
+		)
+		) AS
+		sale_stock,
+		SUM(
+
+		IF (
+		stock_type_sid = 1002,
+		pro_sum,
+		0
+		)
+		) AS
+		edefective_stock,
+		SUM(
+
+		IF (
+		stock_type_sid = 1003,
+		pro_sum,
+		0
+		)
+		) AS
+		return_stock,
+		SUM(
+
+		IF (
+		stock_type_sid = 1004,
+		pro_sum,
+		0
+		)
+		) AS
+		locked_stock,
+		channel_sid
+		FROM
+		pcm_stock st
+		WHERE
+		st.channel_sid =
+		<if test="channelSid != null">
+			#{channelSid,jdbcType=VARCHAR}
+		</if>
+		<if test="channelSid == null">
+			'0'
+		</if>
+		GROUP
+		BY
+		st.shoppe_pro_sid
+		) sto ON sto.shoppe_pro_sid = sps2.productCode
+		LEFT
+		JOIN pcm_price pr ON pr.shoppe_pro_sid = sps2.productCode
+		AND
+		pr.channel_sid =
+		<if test="channelSid != null">
+			#{channelSid,jdbcType=VARCHAR}
+		</if>
+		<if test="channelSid == null">
+			'0'
+		</if>
+		AND NOW() BETWEEN pr.promotion_begin_time
+		AND
+		pr.promotion_end_time
+		AND
+		pr.ifdel = 0
+		LEFT JOIN pcm_channel ch ON
+		ch.channel_code =
+		<if test="channelSid != null">
+			#{channelSid,jdbcType=VARCHAR}
+		</if>
+		<if test="channelSid == null">
+			'0'
+		</if>
+		AND ch. STATUS = 0
+		LEFT JOIN pcm_season_dict psd ON psd.sid =
+		sps2.season_code
+		LEFT JOIN pcm_industry_condition_dict ic ON
+		sps2.industrySid + 1 = ic.sid
+		LEFT JOIN pcm_erp_product erp ON
+		erp.product_code =
+		sps2.erpProductCode
+	</select>
+
+	<!-- 查询商品库存信息数量 优化 -->
+	<select id="findProductStockInfoCountByPara"
+		parameterType="com.wangfj.product.stocks.domain.vo.QueryProductStockInfoDto"
+		resultType="java.lang.Integer">
+		SELECT
+		COUNT(psp.sid)
+		FROM
+		pcm_shoppe_product psp
+		<if test="skuCode != null">
+			LEFT JOIN pcm_pro_detail ppd ON psp.product_detail_sid =
+			ppd.sid
+		</if>
+		<if test="supplierCode != null">
+			INNER JOIN pcm_supply_info psi ON psi.sid = psp.supply_sid
+		</if>
+		<if test="storeCode == null and counterCode != null">
+			INNER JOIN pcm_shoppe ps ON ps.sid = psp.shoppe_sid
+		</if>
+		<if test="storeCode != null">
+			INNER JOIN pcm_shoppe ps ON ps.sid = psp.shoppe_sid
+			INNER
+			JOIN pcm_organization org ON ps.shop_sid = org.sid
+		</if>
+		LEFT JOIN pcm_channel ch ON ch.channel_code =
+		<if test="channelSid != null">
+			#{channelSid,jdbcType=VARCHAR}
+		</if>
+		<if test="channelSid == null">
+			'0'
+		</if>
+		WHERE
+		psp.sale_status = 0
+		<if test="storeCode != null">
+			AND org.organization_type = 3
+		</if>
+		<if test="productCode != null">
+			and psp.shoppe_pro_sid = #{productCode,jdbcType=VARCHAR}
+		</if>
+		<if test="skuCode != null">
+			and ppd.product_detail_sid = #{skuCode,jdbcType=VARCHAR}
+		</if>
+		<if test="counterCode != null">
+			and ps.shoppe_code = #{counterCode,jdbcType=VARCHAR}
+		</if>
+		<if test="storeCode != null">
+			and org.organization_code = #{storeCode,jdbcType=VARCHAR}
+		</if>
+		<if test="supplierCode != null">
+			AND ( psi.supply_code = #{supplierCode} OR psi.sid =
+			#{supplierCode} )
+		</if>
+	</select>
+
+	<!-- 商品信息查询 拆分优化 -->
+	<select id="findProductInfoByPara"
+			parameterType="com.wangfj.product.stocks.domain.vo.QueryProductStockInfoDto"
+			resultType="com.wangfj.product.stocks.domain.vo.SelectProductStockInfoDto">
+		SELECT
+			psp.sid AS sid,
+			ppd.product_detail_sid AS skuCode,
+			psp.shoppe_pro_sid AS productCode,
+			psp.shoppe_pro_name AS productName,
+			org.organization_name AS storeName,
+			ps.shoppe_name AS counterName,
+			psp.sale_unit_code AS unitCode,
+			psp.sale_unit_code AS unitName,
+			psi.supply_name AS supplierName,
+			br.brand_name AS brandName,
+			ch.channel_code AS channelSid,
+			ch.channel_name AS channelName,
+			psp.sale_status AS isSale
+		FROM
+			pcm_shoppe_product psp
+		LEFT JOIN pcm_pro_detail ppd ON psp.product_detail_sid = ppd.sid
+		INNER JOIN pcm_supply_info psi ON psi.sid = psp.supply_sid
+		INNER JOIN pcm_shoppe ps ON ps.sid = psp.shoppe_sid
+		INNER JOIN pcm_organization org ON ps.shop_sid = org.sid
+		INNER JOIN pcm_brand br ON br.sid = psp.brand_sid
+		LEFT JOIN pcm_channel ch ON ch.channel_code =
+		<if test="channelSid != null">
+			#{channelSid,jdbcType=VARCHAR}
+		</if>
+		<if test="channelSid == null">
+			'0'
+		</if>
+		WHERE
+			psp.sale_status = 0
+			AND org.organization_type = 3
+			<if test="productCode != null">
+				and psp.shoppe_pro_sid = #{productCode,jdbcType=VARCHAR}
+			</if>
+			<if test="skuCode != null">
+				and ppd.product_detail_sid = #{skuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="counterCode != null">
+				and ps.shoppe_code = #{counterCode,jdbcType=VARCHAR}
+			</if>
+			<if test="storeCode != null">
+				and org.organization_code = #{storeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="supplierCode != null">
+				AND ( psi.supply_code = #{supplierCode} OR psi.sid = #{supplierCode} )
+			</if>
+			ORDER BY
+			psp.sid DESC
+			<if test="limit != null">
+				LIMIT #{start}, #{limit}
+			</if>
+	</select>
+
+	<!-- 商品库存信息查询 拆分优化 -->
+	<select id="findStockInfoByProductPara"
+			parameterType="com.wangfj.product.stocks.domain.vo.QueryProductStockInfoDto"
+			resultType="com.wangfj.product.stocks.domain.vo.SelectProductStockInfoDto">
+		SELECT
+			st.shoppe_pro_sid AS productCode,
+			SUM(IF(stock_type_sid = 1001, pro_sum, 0)) AS saleStock,
+			SUM(IF(stock_type_sid = 1002, pro_sum, 0)) AS edefectiveStock,
+			SUM(IF(stock_type_sid = 1003, pro_sum, 0)) AS returnStock,
+			SUM(IF(stock_type_sid = 1004, pro_sum, 0)) AS lockedStock
+		FROM
+			pcm_stock st
+		WHERE
+		st.channel_sid =
+		<if test="channelSid != null">
+			#{channelSid,jdbcType=VARCHAR}
+		</if>
+		<if test="channelSid == null">
+			'0'
+		</if>
+		<if test="productCodeList != null">
+			AND st.shoppe_pro_sid IN
+			<foreach collection="productCodeList" open="(" item="item" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		GROUP BY
+		st.shoppe_pro_sid
+	</select>
+
+	<!-- 商品库存信息查询 优化 -->
+	<select id="findProductStockInfoByPara"
+		parameterType="com.wangfj.product.stocks.domain.vo.QueryProductStockInfoDto"
+		resultType="com.wangfj.product.stocks.domain.vo.SelectProductStockInfoDto">
+		SELECT
+		IFNULL(st1.saleStock, 0) AS saleStock,
+		IFNULL(st1.edefectiveStock, 0) AS edefectiveStock,
+		IFNULL(st1.returnStock, 0) AS returnStock,
+		IFNULL(st1.lockedStock, 0)
+		AS lockedStock,
+		sps2.*
+		FROM
+		(
+		SELECT
+		psp.sid AS sid,
+		ppd.product_detail_sid
+		AS skuCode,
+		psp.shoppe_pro_sid AS productCode,
+		psp.shoppe_pro_name AS
+		productName,
+		org.organization_name AS storeName,
+		ps.shoppe_name AS
+		counterName,
+		psp.sale_unit_code AS unitCode,
+		psp.sale_unit_code AS
+		unitName,
+		psi.supply_name AS supplierName,
+		br.brand_name AS brandName,
+		ch.channel_code AS channelSid,
+		ch.channel_name AS channelName,
+		psp.sale_status AS isSale
+		FROM
+		pcm_shoppe_product psp
+		LEFT JOIN
+		pcm_pro_detail ppd ON psp.product_detail_sid = ppd.sid
+		INNER JOIN
+		pcm_supply_info psi ON psi.sid = psp.supply_sid
+		INNER JOIN pcm_shoppe
+		ps ON ps.sid = psp.shoppe_sid
+		INNER JOIN pcm_organization org ON
+		ps.shop_sid = org.sid
+		INNER JOIN pcm_brand br ON br.sid = psp.brand_sid
+		LEFT JOIN pcm_channel ch ON ch.channel_code =
+		<if test="channelSid != null">
+			#{channelSid,jdbcType=VARCHAR}
+		</if>
+		<if test="channelSid == null">
+			'0'
+		</if>
+		WHERE
+		psp.sale_status = 0
+		AND org.organization_type = 3
+		<if test="productCode != null">
+			and psp.shoppe_pro_sid = #{productCode,jdbcType=VARCHAR}
+		</if>
+		<if test="skuCode != null">
+			and ppd.product_detail_sid = #{skuCode,jdbcType=VARCHAR}
+		</if>
+		<if test="counterCode != null">
+			and ps.shoppe_code = #{counterCode,jdbcType=VARCHAR}
+		</if>
+		<if test="storeCode != null">
+			and org.organization_code = #{storeCode,jdbcType=VARCHAR}
+		</if>
+		<if test="supplierCode != null">
+			AND ( psi.supply_code = #{supplierCode} OR psi.sid =
+			#{supplierCode} )
+		</if>
+		ORDER BY
+		psp.sid DESC
+		<if test="limit != null">
+			LIMIT #{start}, #{limit}
+		</if>
+		) sps2
+		LEFT JOIN (
+		SELECT
+		st.shoppe_pro_sid,
+		SUM(
+		IF (
+		stock_type_sid =
+		1001,
+		pro_sum,
+		0
+		)
+		) AS saleStock,
+		SUM(
+		IF (
+		stock_type_sid = 1002,
+		pro_sum,
+		0
+		)
+		) AS edefectiveStock,
+		SUM(
+		IF (
+		stock_type_sid = 1003,
+		pro_sum,
+		0
+		)
+		) AS
+		returnStock,
+		SUM(
+		IF (
+		stock_type_sid = 1004,
+		pro_sum,
+		0
+		)
+		) AS lockedStock
+		FROM
+		pcm_stock st
+		WHERE
+		st.channel_sid =
+		<if test="channelSid != null">
+			#{channelSid,jdbcType=VARCHAR}
+		</if>
+		<if test="channelSid == null">
+			'0'
+		</if>
+		GROUP BY
+		st.shoppe_pro_sid
+		) st1 ON st1.shoppe_pro_sid =
+		sps2.productCode
+	</select>
+
+	<!-- 商品库存信息导出Excel查询 -->
+	<select id="SelecProductStockInfoExcelByPara"
+		parameterType="com.wangfj.product.stocks.domain.vo.QueryProductStockInfoDto"
+		resultType="com.wangfj.product.stocks.domain.vo.SelectProductStockInfoDto">
+		SELECT
+		sps2.*, pr.current_price AS salesPrice,
+		ch.channel_code AS
+		channelSid,
+		ifnull(sto.sale_stock, 0) AS saleStock,
+		ifnull(sto.edefective_stock, 0) AS edefectiveStock,
+		ifnull(sto.return_stock, 0) AS returnStock,
+		ifnull(sto.locked_stock, 0)
+		AS lockedStock,
+		edi.is_pay_reducestock AS isPayReduce,
+		pspe.is_card AS
+		isCard,
+		pspe.base_unit_code AS baseUnitCode,
+		pspe.origin_country AS
+		originCountry,
+		pspe.is_origin_package AS isOriginPackage,
+		pspe.xxhc_flag AS xxhcFlag,
+		pspe.field1 productCategory,
+		pspe.field2
+		originPrice,
+		pr.price_type AS priceType,
+		pr.promotion_price AS
+		promotionPrice,
+		ch.channel_name AS channelName,
+		psd.season AS season,
+		ic.industry_name AS industryName,
+		erp.pro_status AS productStatus,
+		erp.commission_rate AS commissionRate,
+		erp.sales_unit AS
+		originSalesUnit,
+		erp.code_type AS erpSkuType
+		FROM
+		(
+		SELECT DISTINCT
+		pc2.category_code AS statCategoryCode,
+		v.sid AS sid,
+		v.spu_sid AS
+		spuSid,
+		v.sku_sid AS skuSid,
+		v.shoppe_pro_sid AS productCode,
+		v.product_detail_sid AS skuCode,
+		v.product_sid AS spuCode,
+		v.rate_code
+		AS discountCode,
+		v.erpProductCode AS erpProductCode,
+		v.product_sku AS
+		modelCode,
+		v.supply_product_code AS supplyProCode,
+		v.product_name AS
+		productName,
+		v.product_abbr AS productAbbr,
+		v.spu_name AS spuName,
+		v.sku_name AS skuName,
+		v.supply_code AS supplierCode,
+		v.supply_name AS
+		supplierName,
+		br.sid AS brandSid,
+		br.brand_sid AS brandCode,
+		br.brand_name AS brandName,
+		v.brand_group_code AS brandGroupCode,
+		v.brand_group_name AS brandGroupName,
+		v.shoppe_code AS counterCode,
+		v.shoppe_name AS counterName,
+		org.organization_code AS storeCode,
+		org.organization_name AS storeName,
+		v.manage_category_sid AS
+		manageCategory,
+		v.pro_color_sid AS colorSid,
+		v.pro_color AS proColor,
+		v.pro_color_code AS colorCode,
+		v.pro_color_name AS colorName,
+		v.pro_stan_name AS stanCode,
+		v.pro_stan_name AS stanName,
+		v.pro_sale_status AS isSale,
+		v.sku_sale_status AS skuSale,
+		v.spu_sale_status AS spuSale,
+		v.shoppe_pro_type AS manageType,
+		v.is_stock AS stockType,
+		v.article_num AS articleNum,
+		v.is_discountable
+		AS isDiscountable,
+		v.is_cod AS isCOD,
+		v.sale_unit_code AS unitCode,
+		v.sale_unit_name AS unitName,
+		v.original_price AS marketPrice,
+		v.discountLimit AS maxDiscountRate,
+		v.operate_mode AS operateMode,
+		v.pro_type AS productType,
+		v.tms_param AS tmsParam,
+		v.year_to_market AS
+		onMarketDate,
+		cate.category_code AS category,
+		cate.NAME AS categoryName,
+		pc2.category_sid AS statCategory,
+		pc2. NAME AS statCategoryName,
+		cate2.
+		NAME AS glCategoryName,
+		v.season_code,
+		v.industry_condition_sid AS
+		industrySid,
+		v.negative_stock AS negativeStock,
+		v.stock_mode AS
+		stockMode,
+		v.input_tax AS inputTax,
+		v.output_tax AS outputTax,
+		v.sales_tax AS salesTax,
+		v.purchase_price AS purchasePrice,
+		v.buying_price AS buyingPrice,
+		v.process_type AS processType,
+		v.origin_land AS originLand,
+		v.origin_land2 AS originLand2,
+		v.order_type AS orderType,
+		v.is_promotion AS isPromotion,
+		v.is_adjust_price AS isAdjustPrice,
+		v.primary_attr AS primaryAttr,
+		v.sex_sid AS sexSid,
+		v.awesome AS awesome,
+		v.features AS features,
+		v.offer_num AS contractCode,
+		v.procurement_user_code AS
+		procurementUserCode,
+		v.input_user_code AS inputUserCode,
+		v.bills_no AS
+		billsNo,
+		v.field2 AS field2,
+		v.notes AS notes,
+		org.sid AS storeSid,
+		v.field4 AS field4,
+		v.isGift AS isGift,
+		v.isPacking AS isPacking,
+		v.counterSid AS counterSid
+		FROM
+		(
+		SELECT
+		*
+		FROM
+		v_pcm_product_stock_price
+		<where>
+			<if test="productCode != null">
+				and shoppe_pro_sid = #{productCode,jdbcType=VARCHAR}
+			</if>
+			<if test="skuCode != null">
+				and product_detail_sid = #{skuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="counterCode != null">
+				and shoppe_code = #{counterCode,jdbcType=VARCHAR}
+			</if>
+		</where>
+		)
+		v
+		<if test="supplierCode != null">
+			INNER JOIN pcm_shoppe_product_supply psps ON v.sid =
+			psps.shoppe_product_sid
+			AND psps.supply_sid
+			=#{supplierCode,jdbcType=VARCHAR}
+		</if>
+		INNER JOIN pcm_brand br
+		ON br.sid = v.brand_code
+		INNER JOIN
+		pcm_organization org ON v.shop_sid
+		= org.sid
+		AND
+		org.organization_type =
+		3
+		<if test="storeCode != null">
+			and org.organization_code = #{storeCode,jdbcType=VARCHAR}
+		</if>
+		INNER JOIN
+		pcm_product_category ppc
+		ON ppc.product_sid =
+		v.spu_sid
+		INNER
+		JOIN
+		pcm_category cate ON cate.sid =
+		ppc.category_sid
+		AND
+		cate.category_type
+		= 0
+		AND cate.is_leaf = 'Y'
+		AND
+		cate. STATUS = 'Y'
+		AND
+		cate.is_display = 1
+		LEFT JOIN (
+		SELECT
+		cate1.category_sid,
+		cate1.`name`,
+		cate1.category_code,
+		ppc1.product_sid
+		FROM
+		pcm_category
+		cate1
+		JOIN
+		pcm_product_category ppc1 ON cate1.sid =
+		ppc1.category_sid
+		AND
+		cate1.category_type = 2
+		AND cate1.is_leaf = 'Y'
+		AND cate1. STATUS =
+		'Y'
+		AND cate1.is_display = 1
+		) pc2 ON pc2.product_sid
+		= v.shoppe_pro_sid
+		LEFT
+		JOIN pcm_category cate2 ON cate2.category_code =
+		v.manage_category_sid
+		LEFT JOIN (
+		SELECT
+		cate3.category_sid,
+		cate3.`name`,
+		cate3.category_code,
+		ppp.product_sid
+		FROM
+		pcm_category cate3
+		JOIN pcm_product_parameters ppp ON ppp.category_sid = cate3.sid
+		AND
+		cate3.category_type = 3
+		AND cate3.is_display = 1
+		AND cate3.is_leaf = 'Y'
+		AND cate3. STATUS = 'Y'
+		) ppp2 ON ppp2.product_sid = v.spu_sid
+		ORDER BY
+		v.sid DESC
+		) sps2
+		LEFT JOIN pcm_shoppe_product_extend AS pspe
+		ON sps2.sid
+		=
+		pspe.shoppe_pro_sid
+		LEFT JOIN
+		pcm_shoppe_product_edi_relation AS edi ON
+		sps2.productCode =
+		edi.field1
+		AND edi.channel_code = '0'
+		LEFT JOIN
+		(
+		SELECT
+		shoppe_pro_sid,
+		SUM(
+
+		IF (
+		stock_type_sid = 1001,
+		pro_sum,
+		0
+		)
+		) AS
+		sale_stock,
+		SUM(
+
+		IF (
+		stock_type_sid = 1002,
+		pro_sum,
+		0
+		)
+		) AS
+		edefective_stock,
+		SUM(
+
+		IF (
+		stock_type_sid = 1003,
+		pro_sum,
+		0
+		)
+		) AS
+		return_stock,
+		SUM(
+
+		IF (
+		stock_type_sid = 1004,
+		pro_sum,
+		0
+		)
+		) AS
+		locked_stock,
+		channel_sid
+		FROM
+		pcm_stock st
+		WHERE
+		st.channel_sid =
+		<if test="channelSid != null">
+			#{channelSid,jdbcType=VARCHAR}
+		</if>
+		<if test="channelSid == null">
+			'0'
+		</if>
+		GROUP
+		BY
+		st.shoppe_pro_sid
+		) sto ON sto.shoppe_pro_sid = sps2.productCode
+		LEFT
+		JOIN pcm_price pr ON pr.shoppe_pro_sid = sps2.productCode
+		AND
+		pr.channel_sid =
+		<if test="channelSid != null">
+			#{channelSid,jdbcType=VARCHAR}
+		</if>
+		<if test="channelSid == null">
+			'0'
+		</if>
+		AND NOW() BETWEEN pr.promotion_begin_time
+		AND
+		pr.promotion_end_time
+		AND
+		pr.ifdel = 0
+		LEFT JOIN pcm_channel ch ON
+		ch.channel_code =
+		<if test="channelSid != null">
+			#{channelSid,jdbcType=VARCHAR}
+		</if>
+		<if test="channelSid == null">
+			'0'
+		</if>
+		AND ch. STATUS = 0
+		LEFT JOIN pcm_season_dict psd ON psd.sid =
+		sps2.season_code
+		LEFT JOIN pcm_industry_condition_dict ic ON
+		sps2.industrySid + 1 = ic.sid
+		LEFT JOIN pcm_erp_product erp ON
+		erp.product_code =
+		sps2.erpProductCode
+	</select>
+
+	<select id="SelecProductStockInfoCountByPara"
+		parameterType="com.wangfj.product.stocks.domain.vo.QueryProductStockInfoDto"
+		resultType="java.lang.Integer">
+		SELECT count(*) from (
+		SELECT DISTINCT v.sid
+		FROM
+		(
+		SELECT
+		*
+		FROM
+		v_pcm_product_stock_price
+		<where>
+			<if test="productCode != null">
+				and shoppe_pro_sid = #{productCode,jdbcType=VARCHAR}
+			</if>
+			<if test="skuCode != null">
+				and product_detail_sid = #{skuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="counterCode != null">
+				and shoppe_code = #{counterCode,jdbcType=VARCHAR}
+			</if>
+		</where>
+		)
+		v
+		<if test="supplierCode != null">
+			INNER JOIN pcm_shoppe_product_supply psps ON v.sid =
+			psps.shoppe_product_sid
+			AND psps.supply_sid
+			=#{supplierCode,jdbcType=VARCHAR}
+		</if>
+		INNER JOIN pcm_brand br
+		ON br.sid = v.brand_code
+		INNER JOIN
+		pcm_organization org ON v.shop_sid
+		= org.sid
+		AND
+		org.organization_type =
+		3
+		<if test="storeCode != null">
+			and org.organization_code = #{storeCode,jdbcType=VARCHAR}
+		</if>
+		INNER JOIN
+		pcm_product_category ppc
+		ON ppc.product_sid =
+		v.spu_sid
+		INNER
+		JOIN
+		pcm_category cate ON cate.sid =
+		ppc.category_sid
+		AND
+		cate.category_type
+		= 0
+		AND cate.is_leaf = 'Y'
+		AND
+		cate. STATUS = 'Y'
+		AND
+		cate.is_display = 1
+		LEFT JOIN (
+		SELECT
+		cate1.category_sid,
+		cate1.`name`,
+		cate1.category_code,
+		ppc1.product_sid
+		FROM
+		pcm_category
+		cate1
+		JOIN
+		pcm_product_category ppc1 ON cate1.sid =
+		ppc1.category_sid
+		AND
+		cate1.category_type = 2
+		AND cate1.is_leaf = 'Y'
+		AND cate1. STATUS =
+		'Y'
+		AND cate1.is_display = 1
+		) pc2 ON pc2.product_sid
+		= v.shoppe_pro_sid
+		LEFT
+		JOIN pcm_category cate2 ON cate2.category_code =
+		v.manage_category_sid
+		LEFT JOIN (
+		SELECT
+		cate3.category_sid,
+		cate3.`name`,
+		cate3.category_code,
+		ppp.product_sid
+		FROM
+		pcm_category cate3
+		JOIN pcm_product_parameters ppp ON ppp.category_sid = cate3.sid
+		AND
+		cate3.category_type = 3
+		AND cate3.is_display = 1
+		AND cate3.is_leaf = 'Y'
+		AND cate3. STATUS = 'Y'
+		) ppp2 ON ppp2.product_sid = v.spu_sid
+		)PPP3
+	</select>
+
+	<!--根据sku查询库存数 -->
+	<select id="SelectSkuStockSumBySku"
+		parameterType="com.wangfj.product.stocks.domain.vo.PcmProductStockInfoDto"
+		resultType="com.wangfj.product.stocks.domain.vo.PcmProductStockInfoDto">
+		SELECT ps3.*,ppd.size_picture_url as stockStatus from (
+		SELECT
+		ps2.product_detail_sid as
+		skuSid,IFNULL(SUM(ps2.pro_sum),0) as
+		saleSum
+		from (
+		select psp.product_detail_sid, ps.pro_sum from
+		pcm_shoppe_product
+		psp
+		LEFT JOIN pcm_stock ps
+		on
+		psp.shoppe_pro_sid=ps.shoppe_pro_sid
+		<if test="channelSid != null">
+			AND ps.channel_sid=#{channelSid,jdbcType=VARCHAR}
+		</if>
+		<if test="stockTypeSid != null">
+			AND
+			ps.stock_type_sid=#{stockTypeSid,jdbcType=VARCHAR}
+		</if>
+		<if test="stockTypeSid == null">
+			AND ps.stock_type_sid=1001
+		</if>
+		<where>
+			<if test="skuSid !=null">
+				product_detail_sid=#{skuSid,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeProSid !=null">
+				product_detail_sid=(select product_detail_sid from
+				pcm_shoppe_product where
+				shoppe_pro_sid=#{shoppeProSid,jdbcType=VARCHAR} LIMIT
+				1)
+			</if>
+			AND
+			psp.sale_status=0
+		</where>
+		)as ps2
+		GROUP BY
+		product_detail_sid
+		)ps3 INNER JOIN pcm_pro_detail ppd on
+		ps3.skuSid =ppd.sid
+	</select>
+
+</mapper>

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmProductDescMapper">
+    <resultMap id="BaseResultMap"
+               type="com.wangfj.product.maindata.domain.entity.PcmProductDesc">
+        <id column="sid" property="sid" jdbcType="BIGINT"/>
+        <result column="content" property="content" jdbcType="BLOB"/>
+        <result column="color" property="color" jdbcType="VARCHAR"/>
+        <result column="product_sid" property="productSid" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+		sid,content,color,product_sid
+	</sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_product_desc
+        where sid = #{sid,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_product_desc
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+    <insert id="insert"
+            parameterType="com.wangfj.product.maindata.domain.entity.PcmProductDesc">
+		insert into pcm_product_desc (sid,
+		content,color,product_sid)
+		values (#{sid,jdbcType=BIGINT},
+		#{content,jdbcType=BLOB},
+		#{color,jdbcType=VARCHAR},#{productSid,jdbcType=VARCHAR})
+	</insert>
+    <insert id="insertSelective" useGeneratedKeys="true"
+            keyProperty="sid" parameterType="com.wangfj.product.maindata.domain.entity.PcmProductDesc">
+        insert into pcm_product_desc
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                sid,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="color != null">
+                color,
+            </if>
+            <if test="productSid != null">
+                product_sid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                #{sid,jdbcType=BIGINT},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=BLOB},
+            </if>
+            <if test="color != null">
+                #{color,jdbcType=VARCHAR},
+            </if>
+            <if test="productSid != null">
+                #{productSid,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.wangfj.product.maindata.domain.entity.PcmProductDesc">
+        update pcm_product_desc
+        <set>
+            <if test="content != null">
+                content = #{content,jdbcType=BLOB},
+            </if>
+            <if test="color != null">
+                color = #{color,jdbcType=VARCHAR},
+            </if>
+            <if test="productSid != null">
+                product_sid = #{productSid,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs"
+            parameterType="com.wangfj.product.maindata.domain.entity.PcmProductDesc">
+		update pcm_product_desc
+		set content =
+		#{content,jdbcType=BLOB},
+		color = #{color,jdbcType=VARCHAR},
+		product_sid = #{productSid,jdbcType=VARCHAR}
+		where sid =
+		#{sid,jdbcType=BIGINT}
+	</update>
+    <select id="selectListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        <!-- ,<include refid="Blob_Column_List" /> -->
+        from pcm_product_desc
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="content != null">
+                and content = #{content,jdbcType=BLOB}
+            </if>
+            <if test="color != null">
+                and color = #{color,jdbcType=VARCHAR}
+            </if>
+            <if test="productSid != null">
+                and product_sid = #{productSid,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <select id="selectPageListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        <!-- ,<include refid="Blob_Column_List" /> -->
+        from pcm_product_desc
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="content != null">
+                and content = #{content,jdbcType=BLOB}
+            </if>
+            <if test="color != null">
+                and color = #{color,jdbcType=VARCHAR}
+            </if>
+            <if test="productSid != null">
+                and product_sid = #{productSid,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by
+        sid asc
+        limit
+        #{start}, #{limit}
+    </select>
+    <select id="getCountByParam" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        select
+        count(*)
+        from pcm_product_desc
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="content != null">
+                and content = #{content,jdbcType=BLOB}
+            </if>
+            <if test="color != null">
+                and color = #{color,jdbcType=VARCHAR}
+            </if>
+            <if test="productSid != null">
+                and product_sid = #{productSid,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="findListByParam" resultType="com.wangfj.product.maindata.domain.vo.PcmProductDescDto"
+            parameterType="com.wangfj.product.maindata.domain.vo.PcmProductDescQueryDto">
+        select
+        sid AS sid,
+        product_sid AS productSid,
+        color AS color,
+        content AS content
+        from pcm_product_desc
+        <where>
+            <if test="sid != null">
+                and sid = #{sid}
+            </if>
+            <if test="color != null">
+                and color = #{color}
+            </if>
+            <if test="productSid != null">
+                and product_sid = #{productSid}
+            </if>
+        </where>
+    </select>
+
+    <select id="findPageByParam" resultType="com.wangfj.product.maindata.domain.vo.PcmProductDescDto"
+            parameterType="com.wangfj.product.maindata.domain.vo.PcmProductDescQueryDto">
+        select
+        sid AS sid,
+        product_sid AS productSid,
+        color AS color,
+        content AS content
+        from pcm_product_desc
+        <where>
+            <if test="sid != null">
+                and sid = #{sid}
+            </if>
+            <if test="color != null">
+                and color = #{color}
+            </if>
+            <if test="productSid != null">
+                and product_sid = #{productSid}
+            </if>
+        </where>
+        order by
+        sid desc
+        <if test="start != null and limit != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+    <select id="findCountByParam" resultType="java.lang.Integer"
+            parameterType="com.wangfj.product.maindata.domain.vo.PcmProductDescQueryDto">
+        select
+        count(*)
+        from pcm_product_desc
+        <where>
+            <if test="sid != null">
+                and sid = #{sid}
+            </if>
+            <if test="color != null">
+                and color = #{color}
+            </if>
+            <if test="productSid != null">
+                and product_sid = #{productSid}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateContentByPrimaryKey"
+            parameterType="com.wangfj.product.maindata.domain.entity.PcmProductDesc">
+        update pcm_product_desc
+        SET content = #{content}
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+
+
+</mapper>

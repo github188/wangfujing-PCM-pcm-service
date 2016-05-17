@@ -1,0 +1,944 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.wangfj.product.category.persistence.PcmCategoryPropValuesMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.category.domain.entity.PcmCategoryPropValues">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="category_sid" property="categorySid" jdbcType="VARCHAR" />
+		<result column="category_name" property="categoryName"
+			jdbcType="VARCHAR" />
+		<result column="props_sid" property="propsSid" jdbcType="BIGINT" />
+		<result column="props_name" property="propsName" jdbcType="VARCHAR" />
+		<result column="values_sid" property="valuesSid" jdbcType="BIGINT" />
+		<result column="values_name" property="valuesName" jdbcType="VARCHAR" />
+		<result column="channel_sid" property="channelSid" jdbcType="BIGINT" />
+		<result column="opt_user" property="optUser" jdbcType="VARCHAR" />
+		<result column="opt_date" property="optDate" jdbcType="TIMESTAMP" />
+		<result column="not_null" property="notNull" jdbcType="INTEGER" />
+		<result column="is_erp_syn" property="isErpSyn" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<resultMap id="propsVO"
+		type="com.wangfj.product.category.domain.entity.PcmCategoryPropValues">
+		<result column="category_sid" property="categorySid" jdbcType="VARCHAR" />
+		<result column="category_name" property="categoryName"
+			jdbcType="VARCHAR" />
+		<result column="props_sid" property="propsSid" jdbcType="BIGINT" />
+		<result column="props_name" property="propsName" jdbcType="VARCHAR" />
+		<result column="is_enum_prop" property="isEnumProp" jdbcType="VARCHAR" />
+		<result column="channel_sid" property="channelSid" jdbcType="BIGINT" />
+		<result column="not_null" property="notNull" jdbcType="INTEGER" />
+	</resultMap>
+
+	<resultMap id="categoryPropsVO" type="com.wangfj.product.category.domain.vo.PropsVO">
+		<result column="props_sid" property="propsSid" jdbcType="BIGINT" />
+		<result column="props_name" property="propsName" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="categoryValuesVO"
+		type="com.wangfj.product.category.domain.vo.ValuesVO">
+		<result column="values_sid" property="valuesSid" jdbcType="BIGINT" />
+		<result column="values_name" property="valuesName" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, category_sid, category_name, props_sid, props_name,
+		values_sid,
+		values_name,
+		channel_sid, opt_user, opt_date, not_null,
+		is_erp_syn, create_time
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_prop_values
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectByPropSid" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_prop_values
+		where props_sid =
+		#{propsSid,jdbcType=BIGINT}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_category_prop_values
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+
+	<delete id="deleteList"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropValues">
+		delete from pcm_category_prop_values
+		<where>
+			<if test="sid != null">
+				sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name = #{propsName,jdbcType=VARCHAR}
+			</if>
+			<if test="valuesSid != null">
+				and values_sid = #{valuesSid,jdbcType=BIGINT}
+			</if>
+			<if test="valuesName != null">
+				and values_name = #{valuesName,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="notNull != null">
+				and not_null = #{notNull,jdbcType=INTEGER},
+			</if>
+			<if test="isErpSyn != null">
+				and is_erp_syn = #{isErpSyn,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</where>
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropValues">
+		insert into pcm_category_prop_values (sid, category_sid,
+		category_name,
+		props_sid, props_name, values_sid,
+		values_name,
+		channel_sid, opt_user,
+		opt_date, not_null, is_erp_syn,
+		create_time)
+		values (#{sid,jdbcType=BIGINT}, #{categorySid,jdbcType=VARCHAR},
+		#{categoryName,jdbcType=VARCHAR},
+		#{propsSid,jdbcType=BIGINT},
+		#{propsName,jdbcType=VARCHAR}, #{valuesSid,jdbcType=BIGINT},
+		#{valuesName,jdbcType=VARCHAR}, #{channelSid,jdbcType=BIGINT},
+		#{optUser,jdbcType=VARCHAR},
+		#{optDate,jdbcType=TIMESTAMP},
+		#{notNull,jdbcType=INTEGER}, #{isErpSyn,jdbcType=INTEGER},
+		#{createTime,jdbcType=TIMESTAMP})
+	</insert>
+
+	<insert id="insertBatch" parameterType="java.util.List">
+		insert into pcm_category_prop_values (category_sid, category_name,
+		props_sid, props_name, values_sid, values_name, channel_sid,not_null,
+		is_erp_syn, create_time)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.categorySid,jdbcType=VARCHAR},#{item.categoryName,jdbcType=VARCHAR},
+			#{item.propsSid,jdbcType=BIGINT}, #{item.propsName,jdbcType=VARCHAR},
+			#{item.valuesSid,jdbcType=BIGINT},
+			#{item.valuesName,jdbcType=VARCHAR},
+			#{item.channelSid,jdbcType=BIGINT},#{notNull,jdbcType=INTEGER},
+			#{isErpSyn,jdbcType=INTEGER},
+			#{createTime,jdbcType=TIMESTAMP})
+		</foreach>
+	</insert>
+
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropValues">
+		insert into pcm_category_prop_values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="categorySid != null">
+				category_sid,
+			</if>
+			<if test="categoryName != null">
+				category_name,
+			</if>
+			<if test="propsSid != null">
+				props_sid,
+			</if>
+			<if test="propsName != null">
+				props_name,
+			</if>
+			<if test="valuesSid != null">
+				values_sid,
+			</if>
+			<if test="valuesName != null">
+				values_name,
+			</if>
+			<if test="channelSid != null">
+				channel_sid,
+			</if>
+			<if test="optUser != null">
+				opt_user,
+			</if>
+			<if test="optDate != null">
+				opt_date,
+			</if>
+			<if test="notNull != null">
+				not_null,
+			</if>
+			<if test="isErpSyn != null">
+				is_erp_syn,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="categorySid != null">
+				#{categorySid,jdbcType=VARCHAR},
+			</if>
+			<if test="categoryName != null">
+				#{categoryName,jdbcType=VARCHAR},
+			</if>
+			<if test="propsSid != null">
+				#{propsSid,jdbcType=BIGINT},
+			</if>
+			<if test="propsName != null">
+				#{propsName,jdbcType=VARCHAR},
+			</if>
+			<if test="valuesSid != null">
+				#{valuesSid,jdbcType=BIGINT},
+			</if>
+			<if test="valuesName != null">
+				#{valuesName,jdbcType=VARCHAR},
+			</if>
+			<if test="channelSid != null">
+				#{channelSid,jdbcType=BIGINT},
+			</if>
+			<if test="optUser != null">
+				#{optUser,jdbcType=VARCHAR},
+			</if>
+			<if test="optDate != null">
+				#{optDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="notNull != null">
+				#{notNull,jdbcType=INTEGER},
+			</if>
+			<if test="isErpSyn != null">
+				#{isErpSyn,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropValues">
+		update pcm_category_prop_values
+		<set>
+			<if test="categorySid != null">
+				category_sid = #{categorySid,jdbcType=VARCHAR},
+			</if>
+			<if test="categoryName != null">
+				category_name = #{categoryName,jdbcType=VARCHAR},
+			</if>
+			<if test="propsSid != null">
+				props_sid = #{propsSid,jdbcType=BIGINT},
+			</if>
+			<if test="propsName != null">
+				props_name = #{propsName,jdbcType=VARCHAR},
+			</if>
+			<if test="valuesSid != null">
+				values_sid = #{valuesSid,jdbcType=BIGINT},
+			</if>
+			<if test="valuesName != null">
+				values_name = #{valuesName,jdbcType=VARCHAR},
+			</if>
+			<if test="channelSid != null">
+				channel_sid = #{channelSid,jdbcType=BIGINT},
+			</if>
+			<if test="optUser != null">
+				opt_user = #{optUser,jdbcType=VARCHAR},
+			</if>
+			<if test="optDate != null">
+				opt_date = #{optDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="notNull != null">
+				not_null = #{notNull,jdbcType=INTEGER},
+			</if>
+			<if test="isErpSyn != null">
+				is_erp_syn = #{isErpSyn,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<!-- 根据品类编码修改品类名称 -->
+	<update id="updateByCategorySid" parameterType="java.util.Map">
+		update pcm_category_prop_values
+		<set>
+			<if test="categorySid != null">
+				category_sid = #{categorySid,jdbcType=VARCHAR},
+			</if>
+			<if test="categoryName != null">
+				category_name = #{categoryName,jdbcType=VARCHAR},
+			</if>
+			<if test="propsSid != null">
+				props_sid = #{propsSid,jdbcType=BIGINT},
+			</if>
+			<if test="propsName != null">
+				props_name = #{propsName,jdbcType=VARCHAR},
+			</if>
+			<if test="valuesSid != null">
+				values_sid = #{valuesSid,jdbcType=BIGINT},
+			</if>
+			<if test="valuesName != null">
+				values_name = #{valuesName,jdbcType=VARCHAR},
+			</if>
+			<if test="channelSid != null">
+				channel_sid = #{channelSid,jdbcType=BIGINT},
+			</if>
+			<if test="optUser != null">
+				opt_user = #{optUser,jdbcType=VARCHAR},
+			</if>
+			<if test="optDate != null">
+				opt_date = #{optDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="notNull != null">
+				not_null = #{notNull,jdbcType=INTEGER},
+			</if>
+			<if test="isErpSyn != null">
+				is_erp_syn = #{isErpSyn,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where category_sid = #{categorySid,jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropValues">
+		update pcm_category_prop_values
+		set category_sid =
+		#{categorySid,jdbcType=VARCHAR},
+		category_name =
+		#{categoryName,jdbcType=VARCHAR},
+		props_sid =
+		#{propsSid,jdbcType=BIGINT},
+		props_name =
+		#{propsName,jdbcType=VARCHAR},
+		values_sid =
+		#{valuesSid,jdbcType=BIGINT},
+		values_name =
+		#{valuesName,jdbcType=VARCHAR},
+		channel_sid =
+		#{channelSid,jdbcType=BIGINT},
+		opt_user = #{optUser,jdbcType=VARCHAR},
+		opt_date = #{optDate,jdbcType=TIMESTAMP},
+		not_null =
+		#{notNull,jdbcType=INTEGER},
+		is_erp_syn = #{isErpSyn,jdbcType=INTEGER},
+		create_time = #{createTime,jdbcType=TIMESTAMP}
+		where sid =
+		#{sid,jdbcType=BIGINT}
+	</update>
+
+	<insert id="updateBatch" parameterType="java.util.List">
+		replace into pcm_category_prop_values (sid, category_sid,
+		category_name,
+		props_sid, props_name, values_sid, values_name,
+		channel_sid,not_null,is_erp_syn, create_time)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.sid,jdbcType=BIGINT},
+			#{item.categorySid,jdbcType=VARCHAR},
+			#{item.categoryName,jdbcType=VARCHAR},
+			#{item.propsSid,jdbcType=BIGINT},
+			#{item.propsName,jdbcType=VARCHAR},
+			#{item.valuesSid,jdbcType=BIGINT},
+			#{item.valuesName,jdbcType=VARCHAR},
+			#{item.channelSid,jdbcType=BIGINT},
+			#{item.notNull,jdbcType=INTEGER},
+			#{item.isErpSyn,jdbcType=INTEGER},
+			#{item.createTime,jdbcType=TIMESTAMP})
+		</foreach>
+	</insert>
+
+	<select id="selectList" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropValues">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_prop_values
+		<where>
+			1=1
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name = #{propsName,jdbcType=VARCHAR}
+			</if>
+			<if test="valuesSid != null">
+				and values_sid = #{valuesSid,jdbcType=BIGINT}
+			</if>
+			<if test="valuesName != null">
+				and values_name = #{valuesName,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="notNull != null">
+				and not_null = #{notNull,jdbcType=INTEGER}
+			</if>
+			<if test="isErpSyn != null">
+				and is_erp_syn = #{isErpSyn,jdbcType=INTEGER}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+	<select id="selectPage" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropValues">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_prop_values
+		<where>
+			1=1
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name = #{propsName,jdbcType=VARCHAR}
+			</if>
+			<if test="valuesSid != null">
+				and values_sid = #{valuesSid,jdbcType=BIGINT}
+			</if>
+			<if test="valuesName != null">
+				and values_name = #{valuesName,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="notNull != null">
+				and not_null = #{notNull,jdbcType=INTEGER}
+			</if>
+			<if test="isErpSyn != null">
+				and is_erp_syn = #{isErpSyn,jdbcType=INTEGER}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+		limit #{start},#{pageSize}
+	</select>
+
+	<select id="selectPageTotal" resultType="int"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropValues">
+		select count(1)
+		from pcm_category_prop_values
+		<where>
+			1=1
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name = #{propsName,jdbcType=VARCHAR}
+			</if>
+			<if test="valuesSid != null">
+				and values_sid = #{valuesSid,jdbcType=BIGINT}
+			</if>
+			<if test="valuesName != null">
+				and values_name = #{valuesName,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="notNull != null">
+				and not_null = #{notNull,jdbcType=INTEGER}
+			</if>
+			<if test="isErpSyn != null">
+				and is_erp_syn = #{isErpSyn,jdbcType=INTEGER}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+	<!-- 网站对应的属性管理 -->
+	<select id="selectPropsVOList" resultMap="propsVO"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropValues">
+		select
+		props_sid,props_name,category_name,category_sid,channel_sid,not_null
+		from pcm_category_prop_values
+		<where>
+			1=1
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name = #{propsName,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+		</where>
+		group by props_sid
+	</select>
+
+	<!-- 商品——>品类 属性管理 -->
+	<select id="selectPropsVOLists" resultMap="propsVO"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropValues">
+		SELECT pcpd.* from pcm_category_props_dict AS
+		pcpd INNER JOIN
+		pcm_category_prop_values AS pcpv
+		ON pcpd.props_sid=pcpv.props_sid
+		INNER
+		JOIN pcm_category as pc ON pcpv.category_sid=pc.category_sid
+		where
+		pc.category_sid in (categorySids)
+		<where>
+			1=1
+			<if test="categorySid != null">
+				and pc.category_sid in (categorySids)
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name = #{propsName,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+		</where>
+		group by props_sid
+	</select>
+
+	<select id="selectPropsVO" resultMap="propsVO"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropValues">
+		select
+		b.props_sid,
+		b.props_name,
+		b.category_name,
+		b.category_sid,
+		b.channel_sid,
+		a.is_enum_prop
+		from
+		pcm_category_props_dict a,
+		pcm_category_prop_values b
+		<where>
+			1=1
+			AND
+			a.sid = b.props_sid
+			<if test="categorySid != null">
+				and b.category_sid = #{categorySid,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryName != null">
+				and b.category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="propsSid != null">
+				and b.props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and b.props_name like "%"#{propsName,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="channelSid != null">
+				and b.channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+		</where>
+		group by props_sid
+		limit #{start},#{pageSize}
+	</select>
+
+	<select id="selectPropsVOTotal" resultType="int"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropValues">
+		select count(distinct props_sid)
+		from pcm_category_prop_values
+		<where>
+			1=1
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name = #{propsName,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectCateVO" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropValues">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_prop_values
+		<where>
+			1=1
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+		</where>
+		group by props_sid,category_sid
+	</select>
+
+	<select id="getAllCategoryValuesVOs" resultMap="categoryValuesVO"
+		parameterType="java.util.Map">
+		select values_sid,values_name from pcm_category_prop_values
+		<where>
+			1=1
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name = #{propsName,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+		</where>
+
+	</select>
+
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_prop_values
+		<where>
+			1=1
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name = #{propsName,jdbcType=VARCHAR}
+			</if>
+			<if test="valuesSid != null">
+				and values_sid = #{valuesSid,jdbcType=BIGINT}
+			</if>
+			<if test="valuesName != null">
+				and values_name = #{valuesName,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="notNull != null">
+				and not_null = #{notNull,jdbcType=INTEGER}
+			</if>
+			<if test="isErpSyn != null">
+				and is_erp_syn = #{isErpSyn,jdbcType=INTEGER}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_category_prop_values
+		<where>
+			1=1
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name = #{propsName,jdbcType=VARCHAR}
+			</if>
+			<if test="valuesSid != null">
+				and values_sid = #{valuesSid,jdbcType=BIGINT}
+			</if>
+			<if test="valuesName != null">
+				and values_name = #{valuesName,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="notNull != null">
+				and not_null = #{notNull,jdbcType=INTEGER}
+			</if>
+			<if test="isErpSyn != null">
+				and is_erp_syn = #{isErpSyn,jdbcType=INTEGER}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_category_prop_values
+		<where>
+			1=1
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name = #{propsName,jdbcType=VARCHAR}
+			</if>
+			<if test="valuesSid != null">
+				and values_sid = #{valuesSid,jdbcType=BIGINT}
+			</if>
+			<if test="valuesName != null">
+				and values_name = #{valuesName,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="notNull != null">
+				and not_null = #{notNull,jdbcType=INTEGER}
+			</if>
+			<if test="isErpSyn != null">
+				and is_erp_syn = #{isErpSyn,jdbcType=INTEGER}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectListInnerByParam" resultType="java.util.HashMap"
+		parameterType="java.util.Map">
+		SELECT pcpv.props_name,pc.`name`,pch.channel_name,pcd.values_name
+		from
+		pcm_category_prop_values as pd INNER JOIN
+		pcm_category_values_dict AS
+		pcd ON pd.values_sid=pcd.values_sid
+		INNER JOIN pcm_category_props_dict
+		as pcpv ON pd.props_sid=pcpv.props_sid
+		INNER JOIN pcm_category as pc ON
+		pd.category_sid=pc.category_sid
+		INNER JOIN pcm_channel as pch ON
+		pd.channel_sid=pch.sid
+		<where>
+			1=1
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="propsSid != null">
+				and props_sid = #{propsSid,jdbcType=BIGINT}
+			</if>
+			<if test="propsName != null">
+				and props_name = #{propsName,jdbcType=VARCHAR}
+			</if>
+			<if test="valuesSid != null">
+				and values_sid = #{valuesSid,jdbcType=BIGINT}
+			</if>
+			<if test="valuesName != null">
+				and values_name = #{valuesName,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="notNull != null">
+				and not_null = #{notNull,jdbcType=INTEGER}
+			</if>
+			<if test="isErpSyn != null">
+				and is_erp_syn = #{isErpSyn,jdbcType=INTEGER}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+
+	<select id="getSidListParams" resultType="String">
+		select *
+		from pcm_category_prop_values
+		where category_sid in
+		<foreach collection="cateList" item="cateSid" index="index"
+			open="(" close=")" separator=",">
+			#{cateSid}
+		</foreach>
+		and props_sid in
+		<foreach collection="propsList" item="propsSid" index="index"
+			open="(" close=")" separator=",">
+			#{propsSid}
+		</foreach>
+	</select>
+
+	<delete id="deleteSidListParams">
+		delete from
+		pcm_category_prop_values
+		where sid in
+		<foreach collection="subNodeList" item="subNodeSid" index="index"
+			open="(" close=")" separator=",">
+			#{subNodeSid}
+		</foreach>
+	</delete>
+
+	<delete id="deleteDragInheritance">
+		delete from pcm_category_prop_values
+		where
+		category_sid IN
+		<foreach collection="cateSidList" item="cateSid" index="index"
+			open="(" close=")" separator=",">
+			#{cateSid}
+		</foreach>
+		AND props_sid IN
+		<foreach collection="propSidList" item="propSid" index="index"
+			open="(" close=")" separator=",">
+			#{propSid}
+		</foreach>
+	</delete>
+
+	<insert id="insertCategoryPropValBatch">
+		insert into pcm_category_prop_values (category_sid,
+		category_name,
+		props_sid, props_name, values_sid,
+		values_name,
+		channel_sid, opt_user,
+		opt_date, not_null, is_erp_syn,
+		create_time)
+		values
+		<foreach collection="batchList" item="item" index="index"
+			separator=",">
+			(#{item.categorySid},
+			#{item.categoryName},
+			#{item.propsSid},
+			#{item.propsName},
+			#{item.valuesSid},
+			#{item.valuesName}, #{item.channelSid},
+			#{item.optUser},
+			#{item.optDate},
+			#{item.notNull}, #{item.isErpSyn},
+			#{item.createTime})
+		</foreach>
+	</insert>
+
+</mapper>

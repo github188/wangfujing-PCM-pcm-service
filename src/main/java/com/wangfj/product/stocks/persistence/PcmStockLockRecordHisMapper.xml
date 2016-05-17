@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.wangfj.product.stocks.persistence.PcmStockLockRecordHisMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.stocks.domain.entity.PcmStockLockRecordHis">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="sale_no" property="saleNo" jdbcType="VARCHAR" />
+		<result column="bills_no" property="billsNo" jdbcType="VARCHAR" />
+		<result column="shoppe_pro_sid" property="shoppeProSid"
+			jdbcType="VARCHAR" />
+		<result column="lock_sum" property="lockSum" jdbcType="BIGINT" />
+		<result column="lock_type_sid" property="lockTypeSid" jdbcType="INTEGER" />
+		<result column="lock_time" property="lockTime" jdbcType="TIMESTAMP" />
+		<result column="note" property="note" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, sale_no, bills_no, shoppe_pro_sid, lock_sum,
+		lock_type_sid,
+		lock_time, note
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_stock_lock_record_his
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_stock_lock_record_his
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.stocks.domain.entity.PcmStockLockRecordHis">
+		insert into pcm_stock_lock_record_his (sid, sale_no,
+		bills_no,
+		shoppe_pro_sid, lock_sum, lock_type_sid,
+		lock_time, note)
+		values (#{sid,jdbcType=BIGINT}, #{saleNo,jdbcType=VARCHAR},
+		#{billsNo,jdbcType=VARCHAR},
+		#{shoppeProSid,jdbcType=VARCHAR},
+		#{lockSum,jdbcType=BIGINT}, #{lockTypeSid,jdbcType=INTEGER},
+		#{lockTime,jdbcType=TIMESTAMP}, #{note,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertBybillsNo"
+		parameterType="com.wangfj.product.stocks.domain.entity.PcmStockLockRecord">
+		insert into pcm_stock_lock_record_his (sid, sale_no,
+		bills_no,
+		shoppe_pro_sid, lock_sum, lock_type_sid,
+		lock_time, note)
+		select
+		sid, sale_no,
+		bills_no,
+		shoppe_pro_sid, lock_sum, lock_type_sid,
+		lock_time,
+		note
+		from pcm_stock_lock_record where
+		bills_no =
+		#{billsNo,jdbcType=VARCHAR}
+		and sale_no =
+		#{saleNo,jdbcType=VARCHAR}
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.stocks.domain.entity.PcmStockLockRecordHis">
+		insert into pcm_stock_lock_record_his
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="saleNo != null">
+				sale_no,
+			</if>
+			<if test="billsNo != null">
+				bills_no,
+			</if>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid,
+			</if>
+			<if test="lockSum != null">
+				lock_sum,
+			</if>
+			<if test="lockTypeSid != null">
+				lock_type_sid,
+			</if>
+			<if test="lockTime != null">
+				lock_time,
+			</if>
+			<if test="note != null">
+				note,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="saleNo != null">
+				#{saleNo,jdbcType=VARCHAR},
+			</if>
+			<if test="billsNo != null">
+				#{billsNo,jdbcType=VARCHAR},
+			</if>
+			<if test="shoppeProSid != null">
+				#{shoppeProSid,jdbcType=VARCHAR},
+			</if>
+			<if test="lockSum != null">
+				#{lockSum,jdbcType=BIGINT},
+			</if>
+			<if test="lockTypeSid != null">
+				#{lockTypeSid,jdbcType=INTEGER},
+			</if>
+			<if test="lockTime != null">
+				#{lockTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="note != null">
+				#{note,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.stocks.domain.entity.PcmStockLockRecordHis">
+		update pcm_stock_lock_record_his
+		<set>
+			<if test="saleNo != null">
+				sale_no = #{saleNo,jdbcType=VARCHAR},
+			</if>
+			<if test="billsNo != null">
+				bills_no = #{billsNo,jdbcType=VARCHAR},
+			</if>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR},
+			</if>
+			<if test="lockSum != null">
+				lock_sum = #{lockSum,jdbcType=BIGINT},
+			</if>
+			<if test="lockTypeSid != null">
+				lock_type_sid = #{lockTypeSid,jdbcType=INTEGER},
+			</if>
+			<if test="lockTime != null">
+				lock_time = #{lockTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="note != null">
+				note = #{note,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.stocks.domain.entity.PcmStockLockRecordHis">
+		update pcm_stock_lock_record_his
+		set sale_no =
+		#{saleNo,jdbcType=VARCHAR},
+		bills_no = #{billsNo,jdbcType=VARCHAR},
+		shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR},
+		lock_sum =
+		#{lockSum,jdbcType=BIGINT},
+		lock_type_sid =
+		#{lockTypeSid,jdbcType=INTEGER},
+		lock_time =
+		#{lockTime,jdbcType=TIMESTAMP},
+		note = #{note,jdbcType=VARCHAR}
+		where
+		sid = #{sid,jdbcType=BIGINT}
+	</update>
+</mapper>

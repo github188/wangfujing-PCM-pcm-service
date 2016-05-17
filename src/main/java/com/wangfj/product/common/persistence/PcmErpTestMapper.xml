@@ -1,0 +1,804 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.common.persistence.PcmErpTestMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.common.domain.entity.PcmErpTest">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="storeCode" property="storecode" jdbcType="CHAR" />
+		<result column="productCode" property="productcode" jdbcType="CHAR" />
+		<result column="productName" property="productname" jdbcType="CHAR" />
+		<result column="productType" property="producttype" jdbcType="CHAR" />
+		<result column="productCategory" property="productcategory"
+			jdbcType="CHAR" />
+		<result column="supplierCode" property="suppliercode" jdbcType="CHAR" />
+		<result column="brandCode" property="brandcode" jdbcType="CHAR" />
+		<result column="specName" property="specname" jdbcType="CHAR" />
+		<result column="articleNum" property="articlenum" jdbcType="CHAR" />
+		<result column="salesUnit" property="salesunit" jdbcType="CHAR" />
+		<result column="supplierBarcode" property="supplierbarcode"
+			jdbcType="CHAR" />
+		<result column="counterCode" property="countercode" jdbcType="CHAR" />
+		<result column="salesPrice" property="salesprice" jdbcType="DECIMAL" />
+		<result column="inputTax" property="inputtax" jdbcType="CHAR" />
+		<result column="outputTax" property="outputtax" jdbcType="CHAR" />
+		<result column="salesTax" property="salestax" jdbcType="CHAR" />
+		<result column="status" property="status" jdbcType="CHAR" />
+		<result column="isPromotion" property="ispromotion" jdbcType="CHAR" />
+		<result column="isAdjustPrice" property="isadjustprice"
+			jdbcType="CHAR" />
+		<result column="manageCategory" property="managecategory"
+			jdbcType="CHAR" />
+		<result column="skuType" property="skutype" jdbcType="CHAR" />
+		<result column="discountLimit" property="discountlimit"
+			jdbcType="DECIMAL" />
+		<result column="comboItems" property="comboitems" jdbcType="REAL" />
+		<result column="originLand" property="originland" jdbcType="CHAR" />
+		<result column="serviceFeeType" property="servicefeetype"
+			jdbcType="CHAR" />
+		<result column="formatType" property="formattype" jdbcType="CHAR" />
+		<result column="statCategory" property="statcategory" jdbcType="CHAR" />
+		<result column="commissionRate" property="commissionrate"
+			jdbcType="DECIMAL" />
+		<result column="ACT_CODE" property="actCode" jdbcType="CHAR" />
+		<result column="ACTION_DATE" property="actionDate" jdbcType="CHAR" />
+		<result column="ACT_PERSON" property="actPerson" jdbcType="CHAR" />
+		<result column="STATUS2" property="status2" jdbcType="CHAR" />
+		<result column="contractCode" property="contractcode" jdbcType="VARCHAR" />
+		<result column="DID" property="did" jdbcType="DECIMAL" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, storeCode, productCode, productName, productType, productCategory,
+		supplierCode,
+		brandCode, specName, articleNum, salesUnit, supplierBarcode, counterCode,
+		salesPrice,
+		inputTax, outputTax, salesTax, status, isPromotion, isAdjustPrice,
+		manageCategory,
+		skuType, discountLimit, comboItems, originLand, serviceFeeType, formatType,
+		statCategory,
+		commissionRate, ACT_CODE, ACTION_DATE, ACT_PERSON, STATUS2, DID, contractCode
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from test
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from test
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.wangfj.product.common.domain.entity.PcmErpTest">
+		insert into test (sid, storeCode, productCode,
+		productName, productType, productCategory,
+		supplierCode, brandCode, specName,
+		articleNum, salesUnit, supplierBarcode,
+		counterCode, salesPrice, inputTax,
+		outputTax, salesTax, status,
+		isPromotion, isAdjustPrice, manageCategory,
+		skuType, discountLimit, comboItems,
+		originLand, serviceFeeType, formatType,
+		statCategory, commissionRate, ACT_CODE,
+		ACTION_DATE, ACT_PERSON, STATUS2,contractCode,
+		DID)
+		values (#{sid,jdbcType=BIGINT}, #{storecode,jdbcType=CHAR},
+		#{productcode,jdbcType=CHAR},
+		#{productname,jdbcType=CHAR}, #{producttype,jdbcType=CHAR}, #{productcategory,jdbcType=CHAR},
+		#{suppliercode,jdbcType=CHAR}, #{brandcode,jdbcType=CHAR},
+		#{specname,jdbcType=CHAR},
+		#{articlenum,jdbcType=CHAR}, #{salesunit,jdbcType=CHAR}, #{supplierbarcode,jdbcType=CHAR},
+		#{countercode,jdbcType=CHAR}, #{salesprice,jdbcType=DECIMAL},
+		#{inputtax,jdbcType=CHAR},
+		#{outputtax,jdbcType=CHAR}, #{salestax,jdbcType=CHAR}, #{status,jdbcType=CHAR},
+		#{ispromotion,jdbcType=CHAR}, #{isadjustprice,jdbcType=CHAR},
+		#{managecategory,jdbcType=CHAR},
+		#{skutype,jdbcType=CHAR}, #{discountlimit,jdbcType=DECIMAL}, #{comboitems,jdbcType=REAL},
+		#{originland,jdbcType=CHAR}, #{servicefeetype,jdbcType=CHAR},
+		#{formattype,jdbcType=CHAR},
+		#{statcategory,jdbcType=CHAR}, #{commissionrate,jdbcType=DECIMAL}, #{actCode,jdbcType=CHAR},
+		#{actionDate,jdbcType=CHAR}, #{actPerson,jdbcType=CHAR},
+		#{status2,jdbcType=CHAR},#{contractCode,jdbcType=VARCHAR},
+		#{did,jdbcType=DECIMAL})
+	</insert>
+	<insert id="insertSelective" parameterType="com.wangfj.product.common.domain.entity.PcmErpTest">
+		insert into test
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="storecode != null">
+				storeCode,
+			</if>
+			<if test="productcode != null">
+				productCode,
+			</if>
+			<if test="productname != null">
+				productName,
+			</if>
+			<if test="producttype != null">
+				productType,
+			</if>
+			<if test="productcategory != null">
+				productCategory,
+			</if>
+			<if test="suppliercode != null">
+				supplierCode,
+			</if>
+			<if test="brandcode != null">
+				brandCode,
+			</if>
+			<if test="specname != null">
+				specName,
+			</if>
+			<if test="articlenum != null">
+				articleNum,
+			</if>
+			<if test="salesunit != null">
+				salesUnit,
+			</if>
+			<if test="supplierbarcode != null">
+				supplierBarcode,
+			</if>
+			<if test="countercode != null">
+				counterCode,
+			</if>
+			<if test="salesprice != null">
+				salesPrice,
+			</if>
+			<if test="inputtax != null">
+				inputTax,
+			</if>
+			<if test="outputtax != null">
+				outputTax,
+			</if>
+			<if test="salestax != null">
+				salesTax,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="ispromotion != null">
+				isPromotion,
+			</if>
+			<if test="isadjustprice != null">
+				isAdjustPrice,
+			</if>
+			<if test="managecategory != null">
+				manageCategory,
+			</if>
+			<if test="skutype != null">
+				skuType,
+			</if>
+			<if test="discountlimit != null">
+				discountLimit,
+			</if>
+			<if test="comboitems != null">
+				comboItems,
+			</if>
+			<if test="originland != null">
+				originLand,
+			</if>
+			<if test="servicefeetype != null">
+				serviceFeeType,
+			</if>
+			<if test="formattype != null">
+				formatType,
+			</if>
+			<if test="statcategory != null">
+				statCategory,
+			</if>
+			<if test="commissionrate != null">
+				commissionRate,
+			</if>
+			<if test="actCode != null">
+				ACT_CODE,
+			</if>
+			<if test="actionDate != null">
+				ACTION_DATE,
+			</if>
+			<if test="actPerson != null">
+				ACT_PERSON,
+			</if>
+			<if test="status2 != null">
+				STATUS2,
+			</if>
+			<if test="contractCode!=null">
+				contractCode,
+			</if>
+			<if test="did != null">
+				DID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="storecode != null">
+				#{storecode,jdbcType=CHAR},
+			</if>
+			<if test="productcode != null">
+				#{productcode,jdbcType=CHAR},
+			</if>
+			<if test="productname != null">
+				#{productname,jdbcType=CHAR},
+			</if>
+			<if test="producttype != null">
+				#{producttype,jdbcType=CHAR},
+			</if>
+			<if test="productcategory != null">
+				#{productcategory,jdbcType=CHAR},
+			</if>
+			<if test="suppliercode != null">
+				#{suppliercode,jdbcType=CHAR},
+			</if>
+			<if test="brandcode != null">
+				#{brandcode,jdbcType=CHAR},
+			</if>
+			<if test="specname != null">
+				#{specname,jdbcType=CHAR},
+			</if>
+			<if test="articlenum != null">
+				#{articlenum,jdbcType=CHAR},
+			</if>
+			<if test="salesunit != null">
+				#{salesunit,jdbcType=CHAR},
+			</if>
+			<if test="supplierbarcode != null">
+				#{supplierbarcode,jdbcType=CHAR},
+			</if>
+			<if test="countercode != null">
+				#{countercode,jdbcType=CHAR},
+			</if>
+			<if test="salesprice != null">
+				#{salesprice,jdbcType=DECIMAL},
+			</if>
+			<if test="inputtax != null">
+				#{inputtax,jdbcType=CHAR},
+			</if>
+			<if test="outputtax != null">
+				#{outputtax,jdbcType=CHAR},
+			</if>
+			<if test="salestax != null">
+				#{salestax,jdbcType=CHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=CHAR},
+			</if>
+			<if test="ispromotion != null">
+				#{ispromotion,jdbcType=CHAR},
+			</if>
+			<if test="isadjustprice != null">
+				#{isadjustprice,jdbcType=CHAR},
+			</if>
+			<if test="managecategory != null">
+				#{managecategory,jdbcType=CHAR},
+			</if>
+			<if test="skutype != null">
+				#{skutype,jdbcType=CHAR},
+			</if>
+			<if test="discountlimit != null">
+				#{discountlimit,jdbcType=DECIMAL},
+			</if>
+			<if test="comboitems != null">
+				#{comboitems,jdbcType=REAL},
+			</if>
+			<if test="originland != null">
+				#{originland,jdbcType=CHAR},
+			</if>
+			<if test="servicefeetype != null">
+				#{servicefeetype,jdbcType=CHAR},
+			</if>
+			<if test="formattype != null">
+				#{formattype,jdbcType=CHAR},
+			</if>
+			<if test="statcategory != null">
+				#{statcategory,jdbcType=CHAR},
+			</if>
+			<if test="commissionrate != null">
+				#{commissionrate,jdbcType=DECIMAL},
+			</if>
+			<if test="actCode != null">
+				#{actCode,jdbcType=CHAR},
+			</if>
+			<if test="actionDate != null">
+				#{actionDate,jdbcType=CHAR},
+			</if>
+			<if test="actPerson != null">
+				#{actPerson,jdbcType=CHAR},
+			</if>
+			<if test="status2 != null">
+				#{status2,jdbcType=CHAR},
+			</if>
+			<if test="contractCode != null">
+				#{contractCode,jdbcType=VARCHAR}
+			</if>
+			<if test="did != null">
+				#{did,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.common.domain.entity.PcmErpTest">
+		update test
+		<set>
+			<if test="storecode != null">
+				storeCode = #{storecode,jdbcType=CHAR},
+			</if>
+			<if test="productcode != null">
+				productCode = #{productcode,jdbcType=CHAR},
+			</if>
+			<if test="productname != null">
+				productName = #{productname,jdbcType=CHAR},
+			</if>
+			<if test="producttype != null">
+				productType = #{producttype,jdbcType=CHAR},
+			</if>
+			<if test="productcategory != null">
+				productCategory = #{productcategory,jdbcType=CHAR},
+			</if>
+			<if test="suppliercode != null">
+				supplierCode = #{suppliercode,jdbcType=CHAR},
+			</if>
+			<if test="brandcode != null">
+				brandCode = #{brandcode,jdbcType=CHAR},
+			</if>
+			<if test="specname != null">
+				specName = #{specname,jdbcType=CHAR},
+			</if>
+			<if test="articlenum != null">
+				articleNum = #{articlenum,jdbcType=CHAR},
+			</if>
+			<if test="salesunit != null">
+				salesUnit = #{salesunit,jdbcType=CHAR},
+			</if>
+			<if test="supplierbarcode != null">
+				supplierBarcode = #{supplierbarcode,jdbcType=CHAR},
+			</if>
+			<if test="countercode != null">
+				counterCode = #{countercode,jdbcType=CHAR},
+			</if>
+			<if test="salesprice != null">
+				salesPrice = #{salesprice,jdbcType=DECIMAL},
+			</if>
+			<if test="inputtax != null">
+				inputTax = #{inputtax,jdbcType=CHAR},
+			</if>
+			<if test="outputtax != null">
+				outputTax = #{outputtax,jdbcType=CHAR},
+			</if>
+			<if test="salestax != null">
+				salesTax = #{salestax,jdbcType=CHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=CHAR},
+			</if>
+			<if test="ispromotion != null">
+				isPromotion = #{ispromotion,jdbcType=CHAR},
+			</if>
+			<if test="isadjustprice != null">
+				isAdjustPrice = #{isadjustprice,jdbcType=CHAR},
+			</if>
+			<if test="managecategory != null">
+				manageCategory = #{managecategory,jdbcType=CHAR},
+			</if>
+			<if test="skutype != null">
+				skuType = #{skutype,jdbcType=CHAR},
+			</if>
+			<if test="discountlimit != null">
+				discountLimit = #{discountlimit,jdbcType=DECIMAL},
+			</if>
+			<if test="comboitems != null">
+				comboItems = #{comboitems,jdbcType=REAL},
+			</if>
+			<if test="originland != null">
+				originLand = #{originland,jdbcType=CHAR},
+			</if>
+			<if test="servicefeetype != null">
+				serviceFeeType = #{servicefeetype,jdbcType=CHAR},
+			</if>
+			<if test="formattype != null">
+				formatType = #{formattype,jdbcType=CHAR},
+			</if>
+			<if test="statcategory != null">
+				statCategory = #{statcategory,jdbcType=CHAR},
+			</if>
+			<if test="commissionrate != null">
+				commissionRate = #{commissionrate,jdbcType=DECIMAL},
+			</if>
+			<if test="actCode != null">
+				ACT_CODE = #{actCode,jdbcType=CHAR},
+			</if>
+			<if test="actionDate != null">
+				ACTION_DATE = #{actionDate,jdbcType=CHAR},
+			</if>
+			<if test="actPerson != null">
+				ACT_PERSON = #{actPerson,jdbcType=CHAR},
+			</if>
+			<if test="status2 != null">
+				STATUS2 = #{status2,jdbcType=CHAR},
+			</if>
+			<if test="contractCode != null">
+				#{contractCode,jdbcType=VARCHAR},
+			</if>
+			<if test="did != null">
+				DID = #{did,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.wangfj.product.common.domain.entity.PcmErpTest">
+		update test
+		set storeCode = #{storecode,jdbcType=CHAR},
+		productCode = #{productcode,jdbcType=CHAR},
+		productName = #{productname,jdbcType=CHAR},
+		productType = #{producttype,jdbcType=CHAR},
+		productCategory = #{productcategory,jdbcType=CHAR},
+		supplierCode = #{suppliercode,jdbcType=CHAR},
+		brandCode = #{brandcode,jdbcType=CHAR},
+		specName = #{specname,jdbcType=CHAR},
+		articleNum = #{articlenum,jdbcType=CHAR},
+		salesUnit = #{salesunit,jdbcType=CHAR},
+		supplierBarcode = #{supplierbarcode,jdbcType=CHAR},
+		counterCode = #{countercode,jdbcType=CHAR},
+		salesPrice = #{salesprice,jdbcType=DECIMAL},
+		inputTax = #{inputtax,jdbcType=CHAR},
+		outputTax = #{outputtax,jdbcType=CHAR},
+		salesTax = #{salestax,jdbcType=CHAR},
+		status = #{status,jdbcType=CHAR},
+		isPromotion = #{ispromotion,jdbcType=CHAR},
+		isAdjustPrice = #{isadjustprice,jdbcType=CHAR},
+		manageCategory = #{managecategory,jdbcType=CHAR},
+		skuType = #{skutype,jdbcType=CHAR},
+		discountLimit = #{discountlimit,jdbcType=DECIMAL},
+		comboItems = #{comboitems,jdbcType=REAL},
+		originLand = #{originland,jdbcType=CHAR},
+		serviceFeeType = #{servicefeetype,jdbcType=CHAR},
+		formatType = #{formattype,jdbcType=CHAR},
+		statCategory = #{statcategory,jdbcType=CHAR},
+		commissionRate = #{commissionrate,jdbcType=DECIMAL},
+		ACT_CODE = #{actCode,jdbcType=CHAR},
+		ACTION_DATE = #{actionDate,jdbcType=CHAR},
+		ACT_PERSON = #{actPerson,jdbcType=CHAR},
+		STATUS2 = #{status2,jdbcType=CHAR},
+		DID = #{did,jdbcType=DECIMAL}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+		<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from test
+		<where>
+			<if test="contractCode != null">
+				and contractCode = #{contractCode,jdbcType=VARCHAR}
+			</if>
+			<if test="storecode != null">
+				and storeCode = #{storecode,jdbcType=CHAR}
+			</if>
+			<if test="productcode != null">
+				and productCode = #{productcode,jdbcType=CHAR}
+			</if>
+			<if test="productname != null">
+				and productName = #{productname,jdbcType=CHAR}
+			</if>
+			<if test="producttype != null">
+				and productType = #{producttype,jdbcType=CHAR}
+			</if>
+			<if test="productcategory != null">
+				and productCategory = #{productcategory,jdbcType=CHAR}
+			</if>
+			<if test="suppliercode != null">
+				and supplierCode = #{suppliercode,jdbcType=CHAR}
+			</if>
+			<if test="brandcode != null">
+				and brandCode = #{brandcode,jdbcType=CHAR}
+			</if>
+			<if test="specname != null">
+				and specName = #{specname,jdbcType=CHAR}
+			</if>
+			<if test="articlenum != null">
+				and articleNum = #{articlenum,jdbcType=CHAR}
+			</if>
+			<if test="salesunit != null">
+				and salesUnit = #{salesunit,jdbcType=CHAR}
+			</if>
+			<if test="supplierbarcode != null">
+				and supplierBarcode = #{supplierbarcode,jdbcType=CHAR}
+			</if>
+			<if test="countercode != null">
+				and counterCode = #{countercode,jdbcType=CHAR}
+			</if>
+			<if test="salesprice != null">
+				and salesPrice = #{salesprice,jdbcType=DECIMAL}
+			</if>
+			<if test="inputtax != null">
+				and inputTax = #{inputtax,jdbcType=CHAR}
+			</if>
+			<if test="outputtax != null">
+				and outputTax = #{outputtax,jdbcType=CHAR}
+			</if>
+			<if test="salestax != null">
+				and salesTax = #{salestax,jdbcType=CHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=CHAR}
+			</if>
+			<if test="ispromotion != null">
+				and isPromotion = #{ispromotion,jdbcType=CHAR}
+			</if>
+			<if test="isadjustprice != null">
+				and isAdjustPrice = #{isadjustprice,jdbcType=CHAR}
+			</if>
+			<if test="managecategory != null">
+				and manageCategory = #{managecategory,jdbcType=CHAR}
+			</if>
+			<if test="skutype != null">
+				and skuType = #{skutype,jdbcType=CHAR}
+			</if>
+			<if test="discountlimit != null">
+				and discountLimit = #{discountlimit,jdbcType=DECIMAL}
+			</if>
+			<if test="comboitems != null">
+				and comboItems = #{comboitems,jdbcType=REAL}
+			</if>
+			<if test="originland != null">
+				and originLand = #{originland,jdbcType=CHAR}
+			</if>
+			<if test="servicefeetype != null">
+				and serviceFeeType = #{servicefeetype,jdbcType=CHAR}
+			</if>
+			<if test="formattype != null">
+				and formatType = #{formattype,jdbcType=CHAR}
+			</if>
+			<if test="statcategory != null">
+				and statCategory = #{statcategory,jdbcType=CHAR}
+			</if>
+			<if test="commissionrate != null">
+				and commissionRate = #{commissionrate,jdbcType=DECIMAL}
+			</if>
+			<if test="actCode != null">
+				and ACT_CODE = #{actCode,jdbcType=CHAR}
+			</if>
+			<if test="actionDate != null">
+				and ACTION_DATE = #{actionDate,jdbcType=CHAR}
+			</if>
+			<if test="actPerson != null">
+				and ACT_PERSON = #{actPerson,jdbcType=CHAR}
+			</if>
+			<if test="status2 != null">
+				and STATUS2 = #{status2,jdbcType=CHAR}
+			</if>
+			<if test="did != null">
+				and DID = #{did,jdbcType=DECIMAL}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from test
+		<where>
+			<if test="contractCode != null">
+				and contractCode = #{contractCode,jdbcType=VARCHAR}
+			</if>
+			<if test="storecode != null">
+				and storeCode = #{storecode,jdbcType=CHAR}
+			</if>
+			<if test="productcode != null">
+				and productCode = #{productcode,jdbcType=CHAR}
+			</if>
+			<if test="productname != null">
+				and productName = #{productname,jdbcType=CHAR}
+			</if>
+			<if test="producttype != null">
+				and productType = #{producttype,jdbcType=CHAR}
+			</if>
+			<if test="productcategory != null">
+				and productCategory = #{productcategory,jdbcType=CHAR}
+			</if>
+			<if test="suppliercode != null">
+				and supplierCode = #{suppliercode,jdbcType=CHAR}
+			</if>
+			<if test="brandcode != null">
+				and brandCode = #{brandcode,jdbcType=CHAR}
+			</if>
+			<if test="specname != null">
+				and specName = #{specname,jdbcType=CHAR}
+			</if>
+			<if test="articlenum != null">
+				and articleNum = #{articlenum,jdbcType=CHAR}
+			</if>
+			<if test="salesunit != null">
+				and salesUnit = #{salesunit,jdbcType=CHAR}
+			</if>
+			<if test="supplierbarcode != null">
+				and supplierBarcode = #{supplierbarcode,jdbcType=CHAR}
+			</if>
+			<if test="countercode != null">
+				and counterCode = #{countercode,jdbcType=CHAR}
+			</if>
+			<if test="salesprice != null">
+				and salesPrice = #{salesprice,jdbcType=DECIMAL}
+			</if>
+			<if test="inputtax != null">
+				and inputTax = #{inputtax,jdbcType=CHAR}
+			</if>
+			<if test="outputtax != null">
+				and outputTax = #{outputtax,jdbcType=CHAR}
+			</if>
+			<if test="salestax != null">
+				and salesTax = #{salestax,jdbcType=CHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=CHAR}
+			</if>
+			<if test="ispromotion != null">
+				and isPromotion = #{ispromotion,jdbcType=CHAR}
+			</if>
+			<if test="isadjustprice != null">
+				and isAdjustPrice = #{isadjustprice,jdbcType=CHAR}
+			</if>
+			<if test="managecategory != null">
+				and manageCategory = #{managecategory,jdbcType=CHAR}
+			</if>
+			<if test="skutype != null">
+				and skuType = #{skutype,jdbcType=CHAR}
+			</if>
+			<if test="discountlimit != null">
+				and discountLimit = #{discountlimit,jdbcType=DECIMAL}
+			</if>
+			<if test="comboitems != null">
+				and comboItems = #{comboitems,jdbcType=REAL}
+			</if>
+			<if test="originland != null">
+				and originLand = #{originland,jdbcType=CHAR}
+			</if>
+			<if test="servicefeetype != null">
+				and serviceFeeType = #{servicefeetype,jdbcType=CHAR}
+			</if>
+			<if test="formattype != null">
+				and formatType = #{formattype,jdbcType=CHAR}
+			</if>
+			<if test="statcategory != null">
+				and statCategory = #{statcategory,jdbcType=CHAR}
+			</if>
+			<if test="commissionrate != null">
+				and commissionRate = #{commissionrate,jdbcType=DECIMAL}
+			</if>
+			<if test="actCode != null">
+				and ACT_CODE = #{actCode,jdbcType=CHAR}
+			</if>
+			<if test="actionDate != null">
+				and ACTION_DATE = #{actionDate,jdbcType=CHAR}
+			</if>
+			<if test="actPerson != null">
+				and ACT_PERSON = #{actPerson,jdbcType=CHAR}
+			</if>
+			<if test="status2 != null">
+				and STATUS2 = #{status2,jdbcType=CHAR}
+			</if>
+			<if test="did != null">
+				and DID = #{did,jdbcType=DECIMAL}
+			</if>
+		</where>
+		order by
+		sid desc
+		<if test="limit != null">
+			<if test="start != null">
+				limit
+				#{start}, #{limit}
+			</if>
+		</if>
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from test
+		<where>
+			<if test="contractCode != null">
+				and contractCode = #{contractCode,jdbcType=VARCHAR}
+			</if>
+			<if test="storecode != null">
+				and storeCode = #{storecode,jdbcType=CHAR}
+			</if>
+			<if test="productcode != null">
+				and productCode = #{productcode,jdbcType=CHAR}
+			</if>
+			<if test="productname != null">
+				and productName = #{productname,jdbcType=CHAR}
+			</if>
+			<if test="producttype != null">
+				and productType = #{producttype,jdbcType=CHAR}
+			</if>
+			<if test="productcategory != null">
+				and productCategory = #{productcategory,jdbcType=CHAR}
+			</if>
+			<if test="suppliercode != null">
+				and supplierCode = #{suppliercode,jdbcType=CHAR}
+			</if>
+			<if test="brandcode != null">
+				and brandCode = #{brandcode,jdbcType=CHAR}
+			</if>
+			<if test="specname != null">
+				and specName = #{specname,jdbcType=CHAR}
+			</if>
+			<if test="articlenum != null">
+				and articleNum = #{articlenum,jdbcType=CHAR}
+			</if>
+			<if test="salesunit != null">
+				and salesUnit = #{salesunit,jdbcType=CHAR}
+			</if>
+			<if test="supplierbarcode != null">
+				and supplierBarcode = #{supplierbarcode,jdbcType=CHAR}
+			</if>
+			<if test="countercode != null">
+				and counterCode = #{countercode,jdbcType=CHAR}
+			</if>
+			<if test="salesprice != null">
+				and salesPrice = #{salesprice,jdbcType=DECIMAL}
+			</if>
+			<if test="inputtax != null">
+				and inputTax = #{inputtax,jdbcType=CHAR}
+			</if>
+			<if test="outputtax != null">
+				and outputTax = #{outputtax,jdbcType=CHAR}
+			</if>
+			<if test="salestax != null">
+				and salesTax = #{salestax,jdbcType=CHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=CHAR}
+			</if>
+			<if test="ispromotion != null">
+				and isPromotion = #{ispromotion,jdbcType=CHAR}
+			</if>
+			<if test="isadjustprice != null">
+				and isAdjustPrice = #{isadjustprice,jdbcType=CHAR}
+			</if>
+			<if test="managecategory != null">
+				and manageCategory = #{managecategory,jdbcType=CHAR}
+			</if>
+			<if test="skutype != null">
+				and skuType = #{skutype,jdbcType=CHAR}
+			</if>
+			<if test="discountlimit != null">
+				and discountLimit = #{discountlimit,jdbcType=DECIMAL}
+			</if>
+			<if test="comboitems != null">
+				and comboItems = #{comboitems,jdbcType=REAL}
+			</if>
+			<if test="originland != null">
+				and originLand = #{originland,jdbcType=CHAR}
+			</if>
+			<if test="servicefeetype != null">
+				and serviceFeeType = #{servicefeetype,jdbcType=CHAR}
+			</if>
+			<if test="formattype != null">
+				and formatType = #{formattype,jdbcType=CHAR}
+			</if>
+			<if test="statcategory != null">
+				and statCategory = #{statcategory,jdbcType=CHAR}
+			</if>
+			<if test="commissionrate != null">
+				and commissionRate = #{commissionrate,jdbcType=DECIMAL}
+			</if>
+			<if test="actCode != null">
+				and ACT_CODE = #{actCode,jdbcType=CHAR}
+			</if>
+			<if test="actionDate != null">
+				and ACTION_DATE = #{actionDate,jdbcType=CHAR}
+			</if>
+			<if test="actPerson != null">
+				and ACT_PERSON = #{actPerson,jdbcType=CHAR}
+			</if>
+			<if test="status2 != null">
+				and STATUS2 = #{status2,jdbcType=CHAR}
+			</if>
+			<if test="did != null">
+				and DID = #{did,jdbcType=DECIMAL}
+			</if>
+		</where>
+	</select>
+</mapper>

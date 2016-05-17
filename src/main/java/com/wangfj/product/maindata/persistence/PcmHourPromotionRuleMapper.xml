@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.wangfj.product.maindata.persistence.PcmHourPromotionRuleMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.maindata.domain.entity.PcmHourPromotionRule">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="promotion_title" property="promotionTitle"
+			jdbcType="VARCHAR" />
+		<result column="brand_sid" property="brandSid" jdbcType="BIGINT" />
+		<result column="category_sid" property="categorySid" jdbcType="BIGINT" />
+		<result column="shoppe_pro_sid" property="shoppeProSid"
+			jdbcType="BIGINT" />
+		<result column="mode" property="mode" jdbcType="VARCHAR" />
+		<result column="refer_price" property="referPrice" jdbcType="VARCHAR" />
+		<result column="opt" property="opt" jdbcType="VARCHAR" />
+		<result column="off_value" property="offValue" jdbcType="BIGINT" />
+		<result column="money" property="money" jdbcType="BIGINT" />
+		<result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
+		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="opt_user" property="optUser" jdbcType="VARCHAR" />
+		<result column="opt_time" property="optTime" jdbcType="TIMESTAMP" />
+		<result column="restore_sql" property="restoreSql" jdbcType="VARCHAR" />
+		<result column="change_sql" property="changeSql" jdbcType="VARCHAR" />
+		<result column="promotion_number" property="promotionNumber"
+			jdbcType="BIGINT" />
+		<result column="priority" property="priority" jdbcType="BIGINT" />
+		<result column="flag" property="flag" jdbcType="BIGINT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, promotion_title, brand_sid, category_sid, shoppe_pro_sid, mode,
+		refer_price,
+		opt, off_value, money, begin_time, end_time, create_user, create_time,
+		opt_user,
+		opt_time, restore_sql, change_sql, promotion_number, priority, flag
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_hour_promotion_rule
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from pcm_hour_promotion_rule
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmHourPromotionRule">
+		insert into pcm_hour_promotion_rule (sid, promotion_title, brand_sid,
+		category_sid, shoppe_pro_sid, mode,
+		refer_price, opt, off_value,
+		money, begin_time, end_time,
+		create_user, create_time, opt_user,
+		opt_time, restore_sql, change_sql,
+		promotion_number, priority, flag
+		)
+		values (#{sid,jdbcType=BIGINT}, #{promotionTitle,jdbcType=VARCHAR},
+		#{brandSid,jdbcType=BIGINT},
+		#{categorySid,jdbcType=BIGINT}, #{shoppeProSid,jdbcType=BIGINT}, #{mode,jdbcType=VARCHAR},
+		#{referPrice,jdbcType=VARCHAR}, #{opt,jdbcType=VARCHAR},
+		#{offValue,jdbcType=BIGINT},
+		#{money,jdbcType=BIGINT}, #{beginTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
+		#{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+		#{optUser,jdbcType=VARCHAR},
+		#{optTime,jdbcType=TIMESTAMP}, #{restoreSql,jdbcType=VARCHAR}, #{changeSql,jdbcType=VARCHAR},
+		#{promotionNumber,jdbcType=BIGINT}, #{priority,jdbcType=BIGINT},
+		#{flag,jdbcType=BIGINT}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmHourPromotionRule">
+		insert into pcm_hour_promotion_rule
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="promotionTitle != null">
+				promotion_title,
+			</if>
+			<if test="brandSid != null">
+				brand_sid,
+			</if>
+			<if test="categorySid != null">
+				category_sid,
+			</if>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid,
+			</if>
+			<if test="mode != null">
+				mode,
+			</if>
+			<if test="referPrice != null">
+				refer_price,
+			</if>
+			<if test="opt != null">
+				opt,
+			</if>
+			<if test="offValue != null">
+				off_value,
+			</if>
+			<if test="money != null">
+				money,
+			</if>
+			<if test="beginTime != null">
+				begin_time,
+			</if>
+			<if test="endTime != null">
+				end_time,
+			</if>
+			<if test="createUser != null">
+				create_user,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="optUser != null">
+				opt_user,
+			</if>
+			<if test="optTime != null">
+				opt_time,
+			</if>
+			<if test="restoreSql != null">
+				restore_sql,
+			</if>
+			<if test="changeSql != null">
+				change_sql,
+			</if>
+			<if test="promotionNumber != null">
+				promotion_number,
+			</if>
+			<if test="priority != null">
+				priority,
+			</if>
+			<if test="flag != null">
+				flag,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="promotionTitle != null">
+				#{promotionTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="brandSid != null">
+				#{brandSid,jdbcType=BIGINT},
+			</if>
+			<if test="categorySid != null">
+				#{categorySid,jdbcType=BIGINT},
+			</if>
+			<if test="shoppeProSid != null">
+				#{shoppeProSid,jdbcType=BIGINT},
+			</if>
+			<if test="mode != null">
+				#{mode,jdbcType=VARCHAR},
+			</if>
+			<if test="referPrice != null">
+				#{referPrice,jdbcType=VARCHAR},
+			</if>
+			<if test="opt != null">
+				#{opt,jdbcType=VARCHAR},
+			</if>
+			<if test="offValue != null">
+				#{offValue,jdbcType=BIGINT},
+			</if>
+			<if test="money != null">
+				#{money,jdbcType=BIGINT},
+			</if>
+			<if test="beginTime != null">
+				#{beginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				#{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createUser != null">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optUser != null">
+				#{optUser,jdbcType=VARCHAR},
+			</if>
+			<if test="optTime != null">
+				#{optTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="restoreSql != null">
+				#{restoreSql,jdbcType=VARCHAR},
+			</if>
+			<if test="changeSql != null">
+				#{changeSql,jdbcType=VARCHAR},
+			</if>
+			<if test="promotionNumber != null">
+				#{promotionNumber,jdbcType=BIGINT},
+			</if>
+			<if test="priority != null">
+				#{priority,jdbcType=BIGINT},
+			</if>
+			<if test="flag != null">
+				#{flag,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmHourPromotionRule">
+		update pcm_hour_promotion_rule
+		<set>
+			<if test="promotionTitle != null">
+				promotion_title = #{promotionTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="brandSid != null">
+				brand_sid = #{brandSid,jdbcType=BIGINT},
+			</if>
+			<if test="categorySid != null">
+				category_sid = #{categorySid,jdbcType=BIGINT},
+			</if>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT},
+			</if>
+			<if test="mode != null">
+				mode = #{mode,jdbcType=VARCHAR},
+			</if>
+			<if test="referPrice != null">
+				refer_price = #{referPrice,jdbcType=VARCHAR},
+			</if>
+			<if test="opt != null">
+				opt = #{opt,jdbcType=VARCHAR},
+			</if>
+			<if test="offValue != null">
+				off_value = #{offValue,jdbcType=BIGINT},
+			</if>
+			<if test="money != null">
+				money = #{money,jdbcType=BIGINT},
+			</if>
+			<if test="beginTime != null">
+				begin_time = #{beginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createUser != null">
+				create_user = #{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optUser != null">
+				opt_user = #{optUser,jdbcType=VARCHAR},
+			</if>
+			<if test="optTime != null">
+				opt_time = #{optTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="restoreSql != null">
+				restore_sql = #{restoreSql,jdbcType=VARCHAR},
+			</if>
+			<if test="changeSql != null">
+				change_sql = #{changeSql,jdbcType=VARCHAR},
+			</if>
+			<if test="promotionNumber != null">
+				promotion_number = #{promotionNumber,jdbcType=BIGINT},
+			</if>
+			<if test="priority != null">
+				priority = #{priority,jdbcType=BIGINT},
+			</if>
+			<if test="flag != null">
+				flag = #{flag,jdbcType=BIGINT},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmHourPromotionRule">
+		update pcm_hour_promotion_rule
+		set promotion_title = #{promotionTitle,jdbcType=VARCHAR},
+		brand_sid = #{brandSid,jdbcType=BIGINT},
+		category_sid = #{categorySid,jdbcType=BIGINT},
+		shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT},
+		mode = #{mode,jdbcType=VARCHAR},
+		refer_price = #{referPrice,jdbcType=VARCHAR},
+		opt = #{opt,jdbcType=VARCHAR},
+		off_value = #{offValue,jdbcType=BIGINT},
+		money = #{money,jdbcType=BIGINT},
+		begin_time = #{beginTime,jdbcType=TIMESTAMP},
+		end_time = #{endTime,jdbcType=TIMESTAMP},
+		create_user = #{createUser,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		opt_user = #{optUser,jdbcType=VARCHAR},
+		opt_time = #{optTime,jdbcType=TIMESTAMP},
+		restore_sql = #{restoreSql,jdbcType=VARCHAR},
+		change_sql = #{changeSql,jdbcType=VARCHAR},
+		promotion_number = #{promotionNumber,jdbcType=BIGINT},
+		priority = #{priority,jdbcType=BIGINT},
+		flag = #{flag,jdbcType=BIGINT}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_hour_promotion_rule
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="promotionTitle != null">
+				and promotion_title = #{promotionTitle,jdbcType=VARCHAR}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT}
+			</if>
+			<if test="mode != null">
+				and mode = #{mode,jdbcType=VARCHAR}
+			</if>
+			<if test="referPrice != null">
+				and refer_price = #{referPrice,jdbcType=VARCHAR}
+			</if>
+			<if test="opt != null">
+				and opt = #{opt,jdbcType=VARCHAR}
+			</if>
+			<if test="offValue != null">
+				and off_value = #{offValue,jdbcType=BIGINT}
+			</if>
+			<if test="money != null">
+				and money = #{money,jdbcType=BIGINT}
+			</if>
+			<if test="beginTime != null">
+				and begin_time = #{beginTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endTime != null">
+				and end_time = #{endTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null">
+				and create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optTime != null">
+				and opt_time = #{optTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="restoreSql != null">
+				and restore_sql = #{restoreSql,jdbcType=VARCHAR}
+			</if>
+			<if test="changeSql != null">
+				and change_sql = #{changeSql,jdbcType=VARCHAR}
+			</if>
+			<if test="promotionNumber != null">
+				and promotion_number = #{promotionNumber,jdbcType=BIGINT}
+			</if>
+			<if test="priority != null">
+				and priority = #{priority,jdbcType=BIGINT}
+			</if>
+			<if test="flag != null">
+				and flag = #{flag,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_hour_promotion_rule
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="promotionTitle != null">
+				and promotion_title = #{promotionTitle,jdbcType=VARCHAR}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT}
+			</if>
+			<if test="mode != null">
+				and mode = #{mode,jdbcType=VARCHAR}
+			</if>
+			<if test="referPrice != null">
+				and refer_price = #{referPrice,jdbcType=VARCHAR}
+			</if>
+			<if test="opt != null">
+				and opt = #{opt,jdbcType=VARCHAR}
+			</if>
+			<if test="offValue != null">
+				and off_value = #{offValue,jdbcType=BIGINT}
+			</if>
+			<if test="money != null">
+				and money = #{money,jdbcType=BIGINT}
+			</if>
+			<if test="beginTime != null">
+				and begin_time = #{beginTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endTime != null">
+				and end_time = #{endTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null">
+				and create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optTime != null">
+				and opt_time = #{optTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="restoreSql != null">
+				and restore_sql = #{restoreSql,jdbcType=VARCHAR}
+			</if>
+			<if test="changeSql != null">
+				and change_sql = #{changeSql,jdbcType=VARCHAR}
+			</if>
+			<if test="promotionNumber != null">
+				and promotion_number = #{promotionNumber,jdbcType=BIGINT}
+			</if>
+			<if test="priority != null">
+				and priority = #{priority,jdbcType=BIGINT}
+			</if>
+			<if test="flag != null">
+				and flag = #{flag,jdbcType=BIGINT}
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_hour_promotion_rule
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="promotionTitle != null">
+				and promotion_title = #{promotionTitle,jdbcType=VARCHAR}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT}
+			</if>
+			<if test="mode != null">
+				and mode = #{mode,jdbcType=VARCHAR}
+			</if>
+			<if test="referPrice != null">
+				and refer_price = #{referPrice,jdbcType=VARCHAR}
+			</if>
+			<if test="opt != null">
+				and opt = #{opt,jdbcType=VARCHAR}
+			</if>
+			<if test="offValue != null">
+				and off_value = #{offValue,jdbcType=BIGINT}
+			</if>
+			<if test="money != null">
+				and money = #{money,jdbcType=BIGINT}
+			</if>
+			<if test="beginTime != null">
+				and begin_time = #{beginTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endTime != null">
+				and end_time = #{endTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null">
+				and create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optTime != null">
+				and opt_time = #{optTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="restoreSql != null">
+				and restore_sql = #{restoreSql,jdbcType=VARCHAR}
+			</if>
+			<if test="changeSql != null">
+				and change_sql = #{changeSql,jdbcType=VARCHAR}
+			</if>
+			<if test="promotionNumber != null">
+				and promotion_number = #{promotionNumber,jdbcType=BIGINT}
+			</if>
+			<if test="priority != null">
+				and priority = #{priority,jdbcType=BIGINT}
+			</if>
+			<if test="flag != null">
+				and flag = #{flag,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+</mapper>

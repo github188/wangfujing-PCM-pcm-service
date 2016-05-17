@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.organization.persistence.PcmFloorMapper">
+    <resultMap id="BaseResultMap"
+               type="com.wangfj.product.organization.domain.entity.PcmFloor">
+        <id column="sid" property="sid" jdbcType="BIGINT"/>
+        <result column="shop_sid" property="shopSid" jdbcType="BIGINT"/>
+        <result column="floor_name" property="floorName" jdbcType="VARCHAR"/>
+        <result column="floor_code" property="floorCode" jdbcType="VARCHAR"/>
+        <result column="opt_user_sid" property="optUserSid" jdbcType="BIGINT"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="create_name" property="createName" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="floor_status" property="floorStatus" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+		sid,
+		shop_sid,
+		floor_name,
+		floor_code,
+		opt_user_sid,
+		update_time,
+		create_name,
+		create_time,
+		floor_status
+	</sql>
+    <select id="get" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_floor
+        where sid = #{sid,jdbcType=BIGINT}
+    </select>
+    <select id="findFloorBySid"
+            resultType="com.wangfj.product.organization.domain.vo.PcmFloorDto"
+            parameterType="java.lang.Long">
+        <!--SELECT po"src/main/java/com/wangfj/product/organization/service/impl/PcmFloorServiceImpl.java".organization_code
+            as storeCode, pf.floor_code as code, pf.floor_name as name pf.* FROM pcm_floor
+            pf JOIN pcm_organization po ON po.sid = pf.shop_sid AND po.organization_type
+            = 3 -->
+        select
+        pf.create_name as createName,pf.create_time as
+        createTime,pf.floor_code as code,pf.floor_name as name,
+        pf.floor_status as floorStatus,pf.opt_user_sid as optUserSid,pf.sid as
+        sid,pf.update_time as updateTime
+        from pcm_floor pf join
+        pcm_organization po
+        on pf.shop_sid=po.sid
+        and po.organization_type=3
+        where pf.sid=
+        #{sid,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_floor
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+
+    <insert id="insertSelective"
+            parameterType="com.wangfj.product.organization.domain.entity.PcmFloor"
+            useGeneratedKeys="true" keyProperty="sid">
+        insert into pcm_floor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                sid,
+            </if>
+            <if test="shopSid != null">
+                shop_sid,
+            </if>
+            <if test="floorName != null">
+                floor_name,
+            </if>
+            <if test="floorCode != null">
+                floor_code,
+            </if>
+            <if test="optUserSid != null">
+                opt_user_sid,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="createName != null">
+                create_name,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                #{sid,jdbcType=BIGINT},
+            </if>
+            <if test="shopSid != null">
+                #{shopSid,jdbcType=VARCHAR},
+            </if>
+            <if test="floorName != null">
+                #{floorName,jdbcType=VARCHAR},
+            </if>
+            <if test="floorCode != null">
+                #{floorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="optUserSid != null">
+                #{optUserSid,jdbcType=BIGINT},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createName != null">
+                #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.wangfj.product.organization.domain.entity.PcmFloor">
+        update pcm_floor
+        <set>
+            <if test="shopSid != null">
+                shop_sid = #{shopSid,jdbcType=VARCHAR},
+            </if>
+            <if test="floorName != null">
+                floor_name = #{floorName,jdbcType=VARCHAR},
+            </if>
+            <if test="floorCode != null">
+                floor_code = #{floorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="optUserSid != null">
+                opt_user_sid = #{optUserSid,jdbcType=BIGINT},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createName != null">
+                create_name = #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="floorStatus !=null">
+                floor_status= #{floorStatus,jdbcType=BIGINT}
+            </if>
+        </set>
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+    <select id="selectListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_floor
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="shopSid != null">
+                and shop_sid = #{shopSid,jdbcType=BIGINT}
+            </if>
+            <if test="floorName != null">
+                and floor_name = #{floorName,jdbcType=VARCHAR}
+            </if>
+            <if test="floorCode != null">
+                and floor_code = #{floorCode,jdbcType=VARCHAR}
+            </if>
+            <if test="optUserSid != null">
+                and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createName != null">
+                and create_name = #{createName,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="floorStatus !=null">
+                and floor_status= #{floorStatus,jdbcType=BIGINT}
+            </if>
+        </where>
+    </select>
+    <!-- 判重 -->
+    <select id="selectCountByFloor" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        SELECT
+        COUNT(*)
+        FROM
+        pcm_floor
+        <where>
+            1=1
+            <if test="shopSid != null">
+                and shop_sid = #{shopSid,jdbcType=BIGINT}
+            </if>
+            <if test="name != null">
+                and floor_name = #{name,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <select id="selectFloorByParam" resultType="java.lang.Integer"
+            parameterType="com.wangfj.product.organization.domain.vo.PcmFloorDto">
+        SELECT
+        COUNT(*)
+        FROM
+        pcm_floor
+        <where>
+            1=1
+            <if test="storeCode != null">
+                and shop_sid = #{storeCode,jdbcType=BIGINT}
+            </if>
+            <if test="name != null">
+                and floor_name = #{name,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <select id="selectCountByFloors" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        SELECT
+        COUNT(*)
+        FROM
+        pcm_floor
+        <where>
+            <if test="code != null">
+                floor_code = #{code,jdbcType=VARCHAR}
+            </if>
+            <if test="name != null">
+                and floor_name = #{name,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <!-- 分页查询楼层信息 -->
+    <select id="findFloorByParam" resultType="java.util.HashMap"
+            parameterType="java.util.Map">
+        SELECT
+        pf.sid ,pf.shop_sid,pf.floor_code,pf.floor_name,pf.floor_status
+        FROM
+        pcm_floor pf
+        JOIN pcm_organization po ON pf.shop_sid = po.sid
+        AND
+        po.organization_type = 3
+        <where>
+            <if test="storeName != null">
+                and organization_name = #{storeName,jdbcType=VARCHAR}
+            </if>
+            <if test="name != null">
+                and floor_name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="code != null">
+                and floor_code = #{code,jdbcType=VARCHAR}
+            </if>
+            <if test="storeCode != null">
+                and organization_code = #{storeCode,jdbcType=VARCHAR}
+            </if>
+        </where>
+        <if test="start != null">
+            <if test="limit != null">
+                limit
+                #{start}, #{limit}
+            </if>
+        </if>
+    </select>
+
+    <select id="getFloorCount" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        SELECT
+        count(*)
+        FROM
+        pcm_floor pf
+        JOIN pcm_organization po ON pf.shop_sid
+        =
+        po.sid
+        AND po.organization_type = 3
+        <where>
+            <if test="storeName != null">
+                and organization_name = #{storeName,jdbcType=VARCHAR}
+            </if>
+            <if test="name != null">
+                and floor_name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="code != null">
+                and floor_code = #{code,jdbcType=VARCHAR}
+            </if>
+            <if test="storeCode != null">
+                and organization_code = #{storeCode,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="findFloorByParamFromPcm" resultType="java.util.Map"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_floor
+        <where>
+            <if test="storeCode != null">
+                and shop_sid = #{storeCode,jdbcType=BIGINT}
+            </if>
+            <if test="name != null">
+                and floor_name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="code != null">
+                and floor_code = #{code,jdbcType=VARCHAR}
+            </if>
+            <if test="optUserSid != null">
+                and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createName != null">
+                and create_name = #{createName,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+        <if test="start != null">
+            <if test="limit != null">
+                limit
+                #{start}, #{limit}
+
+            </if>
+        </if>
+    </select>
+
+    <select id="getCountByParam" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        select
+        count(*)
+        from pcm_floor
+        <where>
+            <if test="storeCode != null">
+                and shop_sid = #{storeCode,jdbcType=BIGINT}
+            </if>
+            <if test="name != null">
+                and floor_name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="code != null">
+                and floor_code = #{code,jdbcType=VARCHAR}
+            </if>
+            <if test="optUserSid != null">
+                and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createName != null">
+                and create_name = #{createName,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
+
+    <select id="getFloorsByShopSid" resultType="java.util.HashMap"
+            parameterType="java.lang.Long">
+		SELECT
+		pf.sid,
+		pf.floor_code,
+		pf.floor_name
+		FROM
+		pcm_floor pf
+		LEFT JOIN pcm_organization po ON pf.shop_sid = po.sid
+		WHERE
+		po.organization_type = 3
+		AND pf.floor_status = 0
+		AND pf.shop_sid =
+		#{shopSid,jdbcType=BIGINT}
+		ORDER BY pf.sid ASC
+	</select>
+
+    <!-- 根据sid查询 wangxuan -->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_floor
+        where sid = #{sid,jdbcType=BIGINT}
+    </select>
+
+    <!--查询楼层List selectFloorListByParam -->
+    <select id="selectFloorListByParam"
+            resultType="com.wangfj.product.organization.domain.vo.PcmFloorResultDto"
+            parameterType="com.wangfj.product.organization.domain.vo.SelectPcmFloorDto">
+        SELECT
+        pf.sid AS sid,
+        pf.shop_sid AS shopSid,
+        pf.floor_name AS floorName,
+        pf.floor_code AS floorCode,
+        pf.floor_status AS floorStatus,
+        pf.opt_user_sid AS optUserSid,
+        pf.update_time AS updateTimes,
+        pf.create_name AS createName,
+        pf.create_time AS createTimes,
+        po.organization_name AS shopName,
+        po.organization_code AS shopCode
+        FROM
+        pcm_floor pf
+        INNER JOIN pcm_organization po ON pf.shop_sid = po.sid
+        WHERE
+        po.organization_type = 3
+        AND po.organization_status = 0
+        AND pf.floor_status = 0
+        <if test="sid != null">
+            and pf.sid = #{sid,jdbcType=BIGINT}
+        </if>
+        <if test="shopSid != null">
+            and pf.shop_sid = #{shopSid,jdbcType=BIGINT}
+        </if>
+        <if test="floorName != null">
+            and pf.floor_name like "%"#{floorName,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="floorCode != null">
+            and pf.floor_code = #{floorCode,jdbcType=VARCHAR}
+        </if>
+        ORDER BY
+        CONVERT(pf.floor_name USING gbk) ASC
+    </select>
+
+    <!--分页查询selectPageByPara niuzhifan -->
+    <select id="selectPageByPara"
+            resultType="com.wangfj.product.organization.domain.vo.PcmFloorResultDto"
+            parameterType="com.wangfj.product.organization.domain.vo.SelectPcmFloorDto">
+        SELECT
+        pf.sid AS sid,
+        pf.shop_sid AS shopSid,
+        pf.floor_name AS floorName,
+        pf.floor_code AS floorCode,
+        pf.floor_status AS floorStatus,
+        pf.opt_user_sid AS optUserSid,
+        pf.update_time AS updateTimes,
+        pf.create_name AS createName,
+        pf.create_time AS createTimes,
+        po.organization_name AS shopName,
+        po.organization_code AS shopCode
+        FROM
+        pcm_floor pf
+        INNER JOIN pcm_organization po ON pf.shop_sid = po.sid
+        WHERE
+        po.organization_type = 3
+        AND po.organization_status = 0
+        AND pf.floor_status = 0
+        <if test="sid != null">
+            and pf.sid = #{sid,jdbcType=BIGINT}
+        </if>
+        <if test="shopSid != null">
+            and pf.shop_sid = #{shopSid,jdbcType=BIGINT}
+        </if>
+        <if test="floorName != null">
+            and pf.floor_name like "%"#{floorName,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="floorCode != null">
+            and pf.floor_code = #{floorCode,jdbcType=VARCHAR}
+        </if>
+        ORDER BY
+        pf.sid DESC
+        <if test="start != null and limit != null">
+            LIMIT #{start}, #{limit}
+        </if>
+    </select>
+
+    <!-- 查询总数量getPageCountByPara niuzhifan -->
+    <select id="getPageCountByPara" resultType="java.lang.Integer"
+            parameterType="com.wangfj.product.organization.domain.vo.SelectPcmFloorDto">
+        SELECT
+        COUNT(pf.sid)
+        FROM
+        pcm_floor pf
+        INNER JOIN pcm_organization po ON pf.shop_sid = po.sid
+        WHERE
+        po.organization_type = 3
+        AND po.organization_status = 0
+        AND pf.floor_status = 0
+        <if test="sid != null">
+            and pf.sid = #{sid,jdbcType=BIGINT}
+        </if>
+        <if test="shopSid != null">
+            and pf.shop_sid = #{shopSid,jdbcType=BIGINT}
+        </if>
+        <if test="floorName != null">
+            and pf.floor_name like "%"#{floorName,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="floorCode != null">
+            and pf.floor_code = #{floorCode,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <!-- 移动工作台调用主数据获取楼层信息列表 -->
+    <select id="getFloorsByShopCode" resultType="java.util.Map"
+            parameterType="java.util.Map">
+        SELECT
+        po.organization_code as storeCode ,
+        pf.floor_code AS code,
+        pf.floor_name as name
+        FROM
+        pcm_floor pf
+        LEFT JOIN pcm_organization po ON
+        pf.shop_sid = po.sid
+        WHERE
+        po.organization_type = 3
+        AND pf.floor_status =
+        0
+        AND
+        <if test="storeCode!=null">
+            po.organization_code =
+            #{storeCode,jdbcType=VARCHAR}
+        </if>
+        ORDER BY pf.sid ASC
+    </select>
+    <!-- 移动工作台调用主数据获取门店对应楼层下所有专柜信 -->
+    <select id="getFloorsByShopAndFloorCode" resultType="java.util.Map"
+            parameterType="java.util.Map">
+        select ps.shoppe_code as code ,
+        ps.shoppe_name as name
+        from pcm_shoppe
+        ps join pcm_organization
+        po on ps.shop_sid =po.sid and
+        po.organization_type=3
+        <where>
+            <if test="storeCode!=null">
+                po.organization_code = #{storeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="fool!=null">
+                and ps.floor_sid=#{fool,jdbcType=BIGINT}
+            </if>
+        </where>
+    </select>
+
+    <select id="pushFloorData" resultType="java.util.Map"
+            parameterType="java.util.Map">
+        SELECT
+        po.organization_code AS storeCode,
+        pf.floor_code AS
+        code,
+        pf.floor_name AS name,
+        pf.create_name AS actionPerson
+        FROM
+        (SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        pcm_floor
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="floorStatus !=null">
+                and floor_status= #{floorStatus,jdbcType=BIGINT}
+            </if>
+        </where>
+        ) pf
+        INNER JOIN (
+        SELECT
+        *
+        FROM
+        pcm_organization
+        WHERE
+        organization_type = 3
+        AND organization_status = 0
+        ) po ON pf.shop_sid =
+        po.sid
+    </select>
+
+    <!-- 主数据ERP发送楼层字典到其他系统 -->
+    <select id="getFloorsAndOrg" resultType="java.util.Map"
+            parameterType="java.util.Map">
+        SELECT
+        pf.sid as sid,
+        po.organization_code as storeCode ,
+        pf.floor_code
+        AS code,
+        pf.floor_name as name,
+        pf.floor_status as status,
+        pf.shop_sid as
+        shopSid,
+        po.organization_name ogrName,
+        po.organization_status as
+        orgStatus,
+        po.organization_type as orgType,
+        po.sid as orgSid
+        FROM
+        pcm_floor pf
+        LEFT JOIN pcm_organization po ON pf.shop_sid = po.sid
+        WHERE
+        po.organization_type = 3
+        <if test="floorSid!=null">
+            and pf.sid=#{floorSid,jdbcType=BIGINT}
+        </if>
+        <if test="orgSid!=null">
+            and po.sid=#{orgSid,jdbcType=BIGINT}
+        </if>
+        <if test="storeCode!=null">
+            and po.organization_code=#{storeCode,jdbcType=VARCHAR}
+        </if>
+        <if test="floorCode!=null">
+            and pf.floor_code=#{floorCode,jdbcType=VARCHAR}
+        </if>
+        <if test="floorName!=null">
+            and pf.floor_name=#{floorName,jdbcType=VARCHAR}
+        </if>
+        <if test="floorStatus!=null">
+            and pf.floor_status=#{floorStatus,jdbcType=VARCHAR}
+        </if>
+        <if test="shopSid!=null">
+            and pf.shop_sid=#{shopSid,jdbcType=BIGINT}
+        </if>
+        <if test="orgName!=null">
+            and po.organization_name=#{orgName,jdbcType=VARCHAR}
+        </if>
+        <if test="orgStatus!=null">
+            and po.organization_status=#{orgStatus,jdbcType=VARCHAR}
+        </if>
+        <if test="orgType!=null">
+            and po.organization_type=#{orgType,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+</mapper>

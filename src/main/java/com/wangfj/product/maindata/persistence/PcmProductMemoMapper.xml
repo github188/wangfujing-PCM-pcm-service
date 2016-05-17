@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmProductMemoMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.maindata.domain.entity.PcmProductMemo">
+		<id column="sid" property="sid" jdbcType="INTEGER" />
+		<result column="sku_sid" property="skuSid" jdbcType="VARCHAR" />
+		<result column="sku_info" property="skuInfo" jdbcType="VARCHAR" />
+		<result column="if_delete" property="ifDelete" jdbcType="INTEGER" />
+		<result column="c1" property="c1" jdbcType="VARCHAR" />
+		<result column="c2" property="c2" jdbcType="VARCHAR" />
+		<result column="c3" property="c3" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, sku_sid, sku_info, if_delete, c1, c2, c3
+	</sql>
+	<!-- 根据sku编码查询文描信息 -->
+	<select id="selectBySKUCode" resultType="com.wangfj.product.maindata.domain.entity.PcmProDesc"
+		parameterType="java.lang.String">
+		SELECT
+		pd.sid AS sid,
+		sku.product_detail_sid AS skuCode,
+		pd.content AS content
+		FROM
+		pcm_pro_detail AS sku
+		JOIN pcm_product AS spu ON sku.product_sid = spu.sid
+		LEFT JOIN pcm_product_desc AS pd ON spu.product_sid = pd.product_sid
+		AND pd.color = sku.pro_color_sid 
+		WHERE
+		sku.product_detail_sid = #{skuCode,jdbcType=VARCHAR}
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_product_memo
+		where sku_sid = #{skuSid,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		pcm_product_memo
+		where sid = #{sid,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmProductMemo">
+		insert into pcm_product_memo (sid, sku_sid, sku_info,
+		if_delete, c1, c2, c3
+		)
+		values (#{sid,jdbcType=INTEGER},
+		#{skuSid,jdbcType=VARCHAR},
+		#{skuInfo,jdbcType=VARCHAR},
+		#{ifDelete,jdbcType=INTEGER}, #{c1,jdbcType=VARCHAR},
+		#{c2,jdbcType=VARCHAR},
+		#{c3,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmProductMemo">
+		insert into pcm_product_memo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="skuSid != null">
+				sku_sid,
+			</if>
+			<if test="skuInfo != null">
+				sku_info,
+			</if>
+			<if test="ifDelete != null">
+				if_delete,
+			</if>
+			<if test="c1 != null">
+				c1,
+			</if>
+			<if test="c2 != null">
+				c2,
+			</if>
+			<if test="c3 != null">
+				c3,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=INTEGER},
+			</if>
+			<if test="skuSid != null">
+				#{skuSid,jdbcType=VARCHAR},
+			</if>
+			<if test="skuInfo != null">
+				#{skuInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="ifDelete != null">
+				#{ifDelete,jdbcType=INTEGER},
+			</if>
+			<if test="c1 != null">
+				#{c1,jdbcType=VARCHAR},
+			</if>
+			<if test="c2 != null">
+				#{c2,jdbcType=VARCHAR},
+			</if>
+			<if test="c3 != null">
+				#{c3,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmProductMemo">
+		update pcm_product_memo
+		<set>
+			<if test="skuSid != null">
+				sku_sid = #{skuSid,jdbcType=VARCHAR},
+			</if>
+			<if test="skuInfo != null">
+				sku_info = #{skuInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="ifDelete != null">
+				if_delete = #{ifDelete,jdbcType=INTEGER},
+			</if>
+			<if test="c1 != null">
+				c1 = #{c1,jdbcType=VARCHAR},
+			</if>
+			<if test="c2 != null">
+				c2 = #{c2,jdbcType=VARCHAR},
+			</if>
+			<if test="c3 != null">
+				c3 = #{c3,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sku_sid = #{skuSid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmProductMemo">
+		update pcm_product_memo
+		set sku_sid =
+		#{skuSid,jdbcType=VARCHAR},
+		sku_info = #{skuInfo,jdbcType=VARCHAR},
+		if_delete = #{ifDelete,jdbcType=INTEGER},
+		c1 = #{c1,jdbcType=VARCHAR},
+		c2 = #{c2,jdbcType=VARCHAR},
+		c3 = #{c3,jdbcType=VARCHAR}
+		where sid =
+		#{sid,jdbcType=INTEGER}
+	</update>
+</mapper>

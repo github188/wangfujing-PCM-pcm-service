@@ -1,0 +1,883 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.brand.persistence.PcmBrandGroupMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.brand.domain.entity.PcmBrandGroup">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="brand_sid" property="brandSid" jdbcType="VARCHAR" />
+		<result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+		<result column="brand_name_spell" property="brandNameSpell"
+			jdbcType="VARCHAR" />
+		<result column="brand_name_alias" property="brandNameAlias"
+			jdbcType="VARCHAR" />
+		<result column="brand_name_en" property="brandNameEn" jdbcType="VARCHAR" />
+		<result column="brand_desc" property="brandDesc" jdbcType="VARCHAR" />
+		<result column="brand_pict" property="brandPict" jdbcType="VARCHAR" />
+		<result column="brand_create_time" property="brandCreateTime"
+			jdbcType="DATE" />
+		<result column="brand_create_country" property="brandCreateCountry"
+			jdbcType="VARCHAR" />
+		<result column="brand_specialty" property="brandSpecialty"
+			jdbcType="VARCHAR" />
+		<result column="brand_suitability" property="brandSuitability"
+			jdbcType="VARCHAR" />
+		<result column="is_factory_store" property="isFactoryStore"
+			jdbcType="BIGINT" />
+		<result column="factory_big_pic" property="factoryBigPic"
+			jdbcType="VARCHAR" />
+		<result column="factory_small_pic" property="factorySmallPic"
+			jdbcType="VARCHAR" />
+		<result column="activity_big_pic" property="activityBigPic"
+			jdbcType="VARCHAR" />
+		<result column="activity_small_pic" property="activitySmallPic"
+			jdbcType="VARCHAR" />
+		<result column="factory_store_order" property="factoryStoreOrder"
+			jdbcType="BIGINT" />
+		<result column="parent_factory_store_id" property="parentFactoryStoreId"
+			jdbcType="BIGINT" />
+		<result column="logo_pic" property="logoPic" jdbcType="VARCHAR" />
+		<result column="awesome" property="awesome" jdbcType="BIGINT" />
+		<result column="is_display" property="isDisplay" jdbcType="BIGINT" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="opt_real_name" property="optRealName" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		sid, brand_sid, brand_name, brand_name_spell,
+		brand_name_alias,
+		brand_name_en, brand_desc,
+		brand_pict,
+		brand_create_time, brand_create_country, brand_specialty,
+		brand_suitability,
+		is_factory_store, factory_big_pic,
+		factory_small_pic, activity_big_pic,
+		activity_small_pic,
+		factory_store_order, parent_factory_store_id, logo_pic, awesome,
+		is_display,status,opt_real_name
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_brand_group
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+
+	<!-- 查询所有 selectListByParam -->
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_brand_group
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandName != null">
+				and brand_name like "%"#{brandName,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandNameSpell != null">
+				and brand_name_spell like
+				"%"#{brandNameSpell,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandNameAlias != null">
+				and brand_name_alias like
+				"%"#{brandNameAlias,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandNameEn != null">
+				and brand_name_en like
+				"%"#{brandNameEn,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandDesc != null">
+				and brand_desc like "%"#{brandDesc,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandPict != null">
+				and brand_pict = #{brandPict,jdbcType=VARCHAR}
+			</if>
+			<if test="brandCreateTime != null">
+				and brand_create_time = #{brandCreateTime,jdbcType=DATE}
+			</if>
+			<if test="brandCreateCountry != null">
+				and brand_create_country =
+				#{brandCreateCountry,jdbcType=VARCHAR}
+			</if>
+			<if test="brandSpecialty != null">
+				and brand_specialty = #{brandSpecialty,jdbcType=VARCHAR}
+			</if>
+			<if test="brand_suitability != null">
+				and brand_suitability =
+				#{brand_suitability,jdbcType=VARCHAR}
+			</if>
+			<if test="isFactoryStore != null">
+				and is_factory_store = #{isFactoryStore,jdbcType=BIGINT}
+			</if>
+			<if test="factoryBigPic != null">
+				and factory_big_pic = #{factoryBigPic,jdbcType=VARCHAR}
+			</if>
+			<if test="factorySmallPic != null">
+				and factory_small_pic =
+				#{factorySmallPic,jdbcType=VARCHAR}
+			</if>
+			<if test="activityBigPic != null">
+				and activity_big_pic = #{activityBigPic,jdbcType=VARCHAR}
+			</if>
+			<if test="activitySmallPic != null">
+				and activity_small_pic =
+				#{activitySmallPic,jdbcType=VARCHAR}
+			</if>
+			<if test="factoryStoreOrder != null">
+				and factory_store_order =
+				#{factoryStoreOrder,jdbcType=BIGINT}
+			</if>
+			<if test="parentFactoryStoreId != null">
+				and parent_factory_store_id =
+				#{parentFactoryStoreId,jdbcType=BIGINT}
+			</if>
+			<if test="logoPic != null">
+				and logo_pic = #{logoPic,jdbcType=VARCHAR}
+			</if>
+			<if test="awesome != null">
+				and awesome = #{awesome,jdbcType=BIGINT}
+			</if>
+			<if test="isDisplay != null">
+				and is_display = #{isDisplay,jdbcType=BIGINT}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+			<if test="optRealName != null">
+				and opt_real_name = #{optRealName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<!-- 分页查询 -->
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_brand_group
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandName != null">
+				and brand_name like "%"#{brandName,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandNameSpell != null">
+				and brand_name_spell like
+				"%"#{brandNameSpell,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandNameAlias != null">
+				and brand_name_alias like
+				"%"#{brandNameAlias,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandNameEn != null">
+				and brand_name_en like
+				"%"#{brandNameEn,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandDesc != null">
+				and brand_desc like "%"#{brandDesc,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandPict != null">
+				and brand_pict = #{brandPict,jdbcType=VARCHAR}
+			</if>
+			<if test="brandCreateTime != null">
+				and brand_create_time = #{brandCreateTime,jdbcType=DATE}
+			</if>
+			<if test="brandCreateCountry != null">
+				and brand_create_country =
+				#{brandCreateCountry,jdbcType=VARCHAR}
+			</if>
+			<if test="brandSpecialty != null">
+				and brand_specialty = #{brandSpecialty,jdbcType=VARCHAR}
+			</if>
+			<if test="brand_suitability != null">
+				and brand_suitability =
+				#{brand_suitability,jdbcType=VARCHAR}
+			</if>
+			<if test="isFactoryStore != null">
+				and is_factory_store = #{isFactoryStore,jdbcType=BIGINT}
+			</if>
+			<if test="factoryBigPic != null">
+				and factory_big_pic = #{factoryBigPic,jdbcType=VARCHAR}
+			</if>
+			<if test="factorySmallPic != null">
+				and factory_small_pic =
+				#{factorySmallPic,jdbcType=VARCHAR}
+			</if>
+			<if test="activityBigPic != null">
+				and activity_big_pic = #{activityBigPic,jdbcType=VARCHAR}
+			</if>
+			<if test="activitySmallPic != null">
+				and activity_small_pic =
+				#{activitySmallPic,jdbcType=VARCHAR}
+			</if>
+			<if test="factoryStoreOrder != null">
+				and factory_store_order =
+				#{factoryStoreOrder,jdbcType=BIGINT}
+			</if>
+			<if test="parentFactoryStoreId != null">
+				and parent_factory_store_id =
+				#{parentFactoryStoreId,jdbcType=BIGINT}
+			</if>
+			<if test="logoPic != null">
+				and logo_pic = #{logoPic,jdbcType=VARCHAR}
+			</if>
+			<if test="awesome != null">
+				and awesome = #{awesome,jdbcType=BIGINT}
+			</if>
+			<if test="isDisplay != null">
+				and is_display = #{isDisplay,jdbcType=BIGINT}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+			<if test="optRealName != null">
+				and opt_real_name = #{optRealName,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by
+		sid asc
+		<if test="start != null and limit != null">
+			limit #{start}, #{limit}
+		</if>
+	</select>
+
+	<!-- 查询数量 -->
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_brand_group
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandName != null">
+				and brand_name like "%"#{brandName,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandNameSpell != null">
+				and brand_name_spell like
+				"%"#{brandNameSpell,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandNameAlias != null">
+				and brand_name_alias like
+				"%"#{brandNameAlias,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandNameEn != null">
+				and brand_name_en like
+				"%"#{brandNameEn,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandDesc != null">
+				and brand_desc like "%"#{brandDesc,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandPict != null">
+				and brand_pict = #{brandPict,jdbcType=VARCHAR}
+			</if>
+			<if test="brandCreateTime != null">
+				and brand_create_time = #{brandCreateTime,jdbcType=DATE}
+			</if>
+			<if test="brandCreateCountry != null">
+				and brand_create_country =
+				#{brandCreateCountry,jdbcType=VARCHAR}
+			</if>
+			<if test="brandSpecialty != null">
+				and brand_specialty = #{brandSpecialty,jdbcType=VARCHAR}
+			</if>
+			<if test="brand_suitability != null">
+				and brand_suitability =
+				#{brand_suitability,jdbcType=VARCHAR}
+			</if>
+			<if test="isFactoryStore != null">
+				and is_factory_store = #{isFactoryStore,jdbcType=BIGINT}
+			</if>
+			<if test="factoryBigPic != null">
+				and factory_big_pic = #{factoryBigPic,jdbcType=VARCHAR}
+			</if>
+			<if test="factorySmallPic != null">
+				and factory_small_pic =
+				#{factorySmallPic,jdbcType=VARCHAR}
+			</if>
+			<if test="activityBigPic != null">
+				and activity_big_pic = #{activityBigPic,jdbcType=VARCHAR}
+			</if>
+			<if test="activitySmallPic != null">
+				and activity_small_pic =
+				#{activitySmallPic,jdbcType=VARCHAR}
+			</if>
+			<if test="factoryStoreOrder != null">
+				and factory_store_order =
+				#{factoryStoreOrder,jdbcType=BIGINT}
+			</if>
+			<if test="parentFactoryStoreId != null">
+				and parent_factory_store_id =
+				#{parentFactoryStoreId,jdbcType=BIGINT}
+			</if>
+			<if test="logoPic != null">
+				and logo_pic = #{logoPic,jdbcType=VARCHAR}
+			</if>
+			<if test="awesome != null">
+				and awesome = #{awesome,jdbcType=BIGINT}
+			</if>
+			<if test="isDisplay != null">
+				and is_display = #{isDisplay,jdbcType=BIGINT}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+			<if test="optRealName != null">
+				and opt_real_name = #{optRealName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_brand_group
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmBrandGroup">
+		insert into pcm_brand_group (sid, brand_sid, brand_name,
+		brand_name_spell, brand_name_alias, brand_name_en,
+		brand_desc,
+		brand_pict, brand_create_time,
+		brand_create_country, brand_specialty,
+		brand_suitability,
+		is_factory_store, factory_big_pic,
+		factory_small_pic,
+		activity_big_pic, activity_small_pic,
+		factory_store_order,
+		parent_factory_store_id, logo_pic, awesome,
+		is_display)
+		values (#{sid,jdbcType=BIGINT},
+		#{brandSid,jdbcType=VARCHAR},
+		#{brandName,jdbcType=VARCHAR},
+		#{brandNameSpell,jdbcType=VARCHAR},
+		#{brandNameAlias,jdbcType=VARCHAR}, #{brandNameEn,jdbcType=VARCHAR},
+		#{brandDesc,jdbcType=VARCHAR}, #{brandPict,jdbcType=VARCHAR},
+		#{brandCreateTime,jdbcType=DATE},
+		#{brandCreateCountry,jdbcType=VARCHAR},
+		#{brandSpecialty,jdbcType=VARCHAR},
+		#{brandSuitability,jdbcType=VARCHAR},
+		#{isFactoryStore,jdbcType=BIGINT}, #{factoryBigPic,jdbcType=VARCHAR},
+		#{factorySmallPic,jdbcType=VARCHAR},
+		#{activityBigPic,jdbcType=VARCHAR},
+		#{activitySmallPic,jdbcType=VARCHAR},
+		#{factoryStoreOrder,jdbcType=BIGINT},
+		#{parentFactoryStoreId,jdbcType=BIGINT}, #{logoPic,jdbcType=VARCHAR},
+		#{awesome,jdbcType=BIGINT},
+		#{isDisplay,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmBrandGroup">
+		insert into pcm_brand_group
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="brandSid != null">
+				brand_sid,
+			</if>
+			<if test="brandName != null">
+				brand_name,
+			</if>
+			<if test="brandNameSpell != null">
+				brand_name_spell,
+			</if>
+			<if test="brandNameAlias != null">
+				brand_name_alias,
+			</if>
+			<if test="brandNameEn != null">
+				brand_name_en,
+			</if>
+			<if test="brandDesc != null">
+				brand_desc,
+			</if>
+			<if test="brandPict != null">
+				brand_pict,
+			</if>
+			<if test="brandCreateTime != null">
+				brand_create_time,
+			</if>
+			<if test="brandCreateCountry != null">
+				brand_create_country,
+			</if>
+			<if test="brandSpecialty != null">
+				brand_specialty,
+			</if>
+			<if test="brandSuitability != null">
+				brand_suitability,
+			</if>
+			<if test="isFactoryStore != null">
+				is_factory_store,
+			</if>
+			<if test="factoryBigPic != null">
+				factory_big_pic,
+			</if>
+			<if test="factorySmallPic != null">
+				factory_small_pic,
+			</if>
+			<if test="activityBigPic != null">
+				activity_big_pic,
+			</if>
+			<if test="activitySmallPic != null">
+				activity_small_pic,
+			</if>
+			<if test="factoryStoreOrder != null">
+				factory_store_order,
+			</if>
+			<if test="parentFactoryStoreId != null">
+				parent_factory_store_id,
+			</if>
+			<if test="logoPic != null">
+				logo_pic,
+			</if>
+			<if test="awesome != null">
+				awesome,
+			</if>
+			<if test="isDisplay != null">
+				is_display,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="optRealName != null">
+				opt_real_name,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="brandSid != null">
+				#{brandSid,jdbcType=VARCHAR},
+			</if>
+			<if test="brandName != null">
+				#{brandName,jdbcType=VARCHAR},
+			</if>
+			<if test="brandNameSpell != null">
+				#{brandNameSpell,jdbcType=VARCHAR},
+			</if>
+			<if test="brandNameAlias != null">
+				#{brandNameAlias,jdbcType=VARCHAR},
+			</if>
+			<if test="brandNameEn != null">
+				#{brandNameEn,jdbcType=VARCHAR},
+			</if>
+			<if test="brandDesc != null">
+				#{brandDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="brandPict != null">
+				#{brandPict,jdbcType=VARCHAR},
+			</if>
+			<if test="brandCreateTime != null">
+				#{brandCreateTime,jdbcType=DATE},
+			</if>
+			<if test="brandCreateCountry != null">
+				#{brandCreateCountry,jdbcType=VARCHAR},
+			</if>
+			<if test="brandSpecialty != null">
+				#{brandSpecialty,jdbcType=VARCHAR},
+			</if>
+			<if test="brandSuitability != null">
+				#{brandSuitability,jdbcType=VARCHAR},
+			</if>
+			<if test="isFactoryStore != null">
+				#{isFactoryStore,jdbcType=BIGINT},
+			</if>
+			<if test="factoryBigPic != null">
+				#{factoryBigPic,jdbcType=VARCHAR},
+			</if>
+			<if test="factorySmallPic != null">
+				#{factorySmallPic,jdbcType=VARCHAR},
+			</if>
+			<if test="activityBigPic != null">
+				#{activityBigPic,jdbcType=VARCHAR},
+			</if>
+			<if test="activitySmallPic != null">
+				#{activitySmallPic,jdbcType=VARCHAR},
+			</if>
+			<if test="factoryStoreOrder != null">
+				#{factoryStoreOrder,jdbcType=BIGINT},
+			</if>
+			<if test="parentFactoryStoreId != null">
+				#{parentFactoryStoreId,jdbcType=BIGINT},
+			</if>
+			<if test="logoPic != null">
+				#{logoPic,jdbcType=VARCHAR},
+			</if>
+			<if test="awesome != null">
+				#{awesome,jdbcType=BIGINT},
+			</if>
+			<if test="isDisplay != null">
+				#{isDisplay,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="optRealName != null">
+				#{optRealName,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmBrandGroup">
+		update pcm_brand_group
+		<set>
+			<if test="brandSid != null">
+				brand_sid = #{brandSid,jdbcType=VARCHAR},
+			</if>
+			<if test="brandName != null">
+				brand_name = #{brandName,jdbcType=VARCHAR},
+			</if>
+			<if test="brandNameSpell != null">
+				brand_name_spell = #{brandNameSpell,jdbcType=VARCHAR},
+			</if>
+			<if test="brandNameAlias != null">
+				brand_name_alias = #{brandNameAlias,jdbcType=VARCHAR},
+			</if>
+			<if test="brandNameEn != null">
+				brand_name_en = #{brandNameEn,jdbcType=VARCHAR},
+			</if>
+			<if test="brandDesc != null">
+				brand_desc = #{brandDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="brandPict != null">
+				brand_pict = #{brandPict,jdbcType=VARCHAR},
+			</if>
+			<if test="brandCreateTime != null">
+				brand_create_time = #{brandCreateTime,jdbcType=DATE},
+			</if>
+			<if test="brandCreateCountry != null">
+				brand_create_country =
+				#{brandCreateCountry,jdbcType=VARCHAR},
+			</if>
+			<if test="brandSpecialty != null">
+				brand_specialty = #{brandSpecialty,jdbcType=VARCHAR},
+			</if>
+			<if test="brandSuitability != null">
+				brand_suitability = #{brandSuitability,jdbcType=VARCHAR},
+			</if>
+			<if test="isFactoryStore != null">
+				is_factory_store = #{isFactoryStore,jdbcType=BIGINT},
+			</if>
+			<if test="factoryBigPic != null">
+				factory_big_pic = #{factoryBigPic,jdbcType=VARCHAR},
+			</if>
+			<if test="factorySmallPic != null">
+				factory_small_pic = #{factorySmallPic,jdbcType=VARCHAR},
+			</if>
+			<if test="activityBigPic != null">
+				activity_big_pic = #{activityBigPic,jdbcType=VARCHAR},
+			</if>
+			<if test="activitySmallPic != null">
+				activity_small_pic =
+				#{activitySmallPic,jdbcType=VARCHAR},
+			</if>
+			<if test="factoryStoreOrder != null">
+				factory_store_order =
+				#{factoryStoreOrder,jdbcType=BIGINT},
+			</if>
+			<if test="parentFactoryStoreId != null">
+				parent_factory_store_id =
+				#{parentFactoryStoreId,jdbcType=BIGINT},
+			</if>
+			<if test="logoPic != null">
+				logo_pic = #{logoPic,jdbcType=VARCHAR},
+			</if>
+			<if test="awesome != null">
+				awesome = #{awesome,jdbcType=BIGINT},
+			</if>
+			<if test="isDisplay != null">
+				is_display = #{isDisplay,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="optRealName != null">
+				opt_real_name = #{optRealName,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmBrandGroup">
+		update pcm_brand_group
+		set brand_sid =
+		#{brandSid,jdbcType=VARCHAR},
+		brand_name =
+		#{brandName,jdbcType=VARCHAR},
+		brand_name_spell =
+		#{brandNameSpell,jdbcType=VARCHAR},
+		brand_name_alias =
+		#{brandNameAlias,jdbcType=VARCHAR},
+		brand_name_en =
+		#{brandNameEn,jdbcType=VARCHAR},
+		brand_desc =
+		#{brandDesc,jdbcType=VARCHAR},
+		brand_pict =
+		#{brandPict,jdbcType=VARCHAR},
+		brand_create_time =
+		#{brandCreateTime,jdbcType=DATE},
+		brand_create_country =
+		#{brandCreateCountry,jdbcType=VARCHAR},
+		brand_specialty =
+		#{brandSpecialty,jdbcType=VARCHAR},
+		brand_suitability =
+		#{brandSuitability,jdbcType=VARCHAR},
+		is_factory_store =
+		#{isFactoryStore,jdbcType=BIGINT},
+		factory_big_pic =
+		#{factoryBigPic,jdbcType=VARCHAR},
+		factory_small_pic =
+		#{factorySmallPic,jdbcType=VARCHAR},
+		activity_big_pic =
+		#{activityBigPic,jdbcType=VARCHAR},
+		activity_small_pic =
+		#{activitySmallPic,jdbcType=VARCHAR},
+		factory_store_order =
+		#{factoryStoreOrder,jdbcType=BIGINT},
+		parent_factory_store_id =
+		#{parentFactoryStoreId,jdbcType=BIGINT},
+		logo_pic =
+		#{logoPic,jdbcType=VARCHAR},
+		awesome = #{awesome,jdbcType=BIGINT},
+		is_display = #{isDisplay,jdbcType=BIGINT}
+		where sid =
+		#{sid,jdbcType=BIGINT}
+	</update>
+
+	<!-- 根据集团品牌Sid查询集团品牌 wangx -->
+	<select id="selectByBrandSid" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_brand_group
+		where brand_sid = #{brandSid,jdbcType=VARCHAR}
+	</select>
+
+	<!-- 根据集团品牌Sid或者集团名称查询集团品牌 wangx -->
+	<select id="selectListByBrandSidOrBrandName" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_brand_group
+		<where>
+			<if test="brandSid != null">
+				or brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandName != null">
+				or brand_name = #{brandName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据集团名称和是否有效查询集团品牌 wangx -->
+	<select id="selectListByBrandNameAndStatus" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_brand_group
+		<where>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+			<if test="brandName != null">
+				and brand_name = #{brandName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据集团编码和是否有效查询集团品牌 wangx -->
+	<select id="selectListByBrandSidAndStatus" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_brand_group
+		<where>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+
+	<!-- 查询集团品牌 wangx -->
+	<select id="selectListByParaSelective" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.brand.domain.vo.PcmBrandGroupDto">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_brand_group
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandName != null">
+				and brand_name like "%"#{brandName,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandNameSpell != null">
+				and brand_name_spell like
+				"%"#{brandNameSpell,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandNameAlias != null">
+				and brand_name_alias like
+				"%"#{brandNameAlias,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandNameEn != null">
+				and brand_name_en like
+				"%"#{brandNameEn,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandDesc != null">
+				and brand_desc like "%"#{brandDesc,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandPict != null">
+				and brand_pict = #{brandPict,jdbcType=VARCHAR}
+			</if>
+			<if test="brandCreateTimes != null">
+				and brand_create_time = #{brandCreateTimes,jdbcType=DATE}
+			</if>
+			<if test="brandCreateCountry != null">
+				and brand_create_country =
+				#{brandCreateCountry,jdbcType=VARCHAR}
+			</if>
+			<if test="brandSpecialty != null">
+				and brand_specialty = #{brandSpecialty,jdbcType=VARCHAR}
+			</if>
+			<if test="brandSuitability != null">
+				and brand_suitability =
+				#{brandSuitability,jdbcType=VARCHAR}
+			</if>
+			<if test="isFactoryStore != null">
+				and is_factory_store = #{isFactoryStore,jdbcType=BIGINT}
+			</if>
+			<if test="factoryBigPic != null">
+				and factory_big_pic = #{factoryBigPic,jdbcType=VARCHAR}
+			</if>
+			<if test="factorySmallPic != null">
+				and factory_small_pic =
+				#{factorySmallPic,jdbcType=VARCHAR}
+			</if>
+			<if test="activityBigPic != null">
+				and activity_big_pic = #{activityBigPic,jdbcType=VARCHAR}
+			</if>
+			<if test="activitySmallPic != null">
+				and activity_small_pic =
+				#{activitySmallPic,jdbcType=VARCHAR}
+			</if>
+			<if test="factoryStoreOrder != null">
+				and factory_store_order =
+				#{factoryStoreOrder,jdbcType=BIGINT}
+			</if>
+			<if test="parentFactoryStoreId != null">
+				and parent_factory_store_id =
+				#{parentFactoryStoreId,jdbcType=BIGINT}
+			</if>
+			<if test="logoPic != null">
+				and logo_pic = #{logoPic,jdbcType=VARCHAR}
+			</if>
+			<if test="awesome != null">
+				and awesome = #{awesome,jdbcType=BIGINT}
+			</if>
+			<if test="isDisplay != null">
+				and is_display = #{isDisplay,jdbcType=BIGINT}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+			<if test="optRealName != null">
+				and opt_real_name = #{optRealName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<!-- 分页记录总数查询 -->
+	<select id="getCountByParaForPage" resultType="java.lang.Long"
+		parameterType="com.wangfj.product.brand.domain.vo.SelectPcmBrandGroupPageDto">
+		select
+		count(*)
+		from pcm_brand_group
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandName != null">
+				and brand_name like "%"#{brandName,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandNameSpell != null">
+				and brand_name_spell like
+				"%"#{brandNameSpell,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandNameAlias != null">
+				and brand_name_alias like
+				"%"#{brandNameAlias,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandNameEn != null">
+				and brand_name_en like
+				"%"#{brandNameEn,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+
+	<!-- 分页查询 -->
+	<select id="selectListByParaForPage" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.brand.domain.vo.SelectPcmBrandGroupPageDto">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_brand_group
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandName != null">
+				and brand_name like "%"#{brandName,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandNameSpell != null">
+				and brand_name_spell like
+				"%"#{brandNameSpell,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandNameAlias != null">
+				and brand_name_alias like
+				"%"#{brandNameAlias,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="brandNameEn != null">
+				and brand_name_en like
+				"%"#{brandNameEn,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+		</where>
+		order by
+		sid asc
+		<if test="start != null and limit != null">
+			limit #{start}, #{limit}
+		</if>
+	</select>
+
+
+</mapper>

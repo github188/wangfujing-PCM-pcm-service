@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.supplier.persistence.PcmSupShoProductMapper">
+	<resultMap
+		type="com.wangfj.product.supplier.domain.vo.PcmShoppeProductForSupDto"
+		id="ShoppeProductForSupDtoMap">
+		<id column="sid" property="sid" />
+		<result column="shortDec" property="shortDesc" />
+		<result column="prodCategoryCode" property="prodCategoryCode" />
+		<result column="prodCategoryName" property="prodCategoryName" />
+		<result column="storeName" property="storeName" />
+		<result column="storeCode" property="storeCode" />
+		<result column="counterName" property="counterName" />
+		<result column="counterCode" property="counterCode" />
+		<result column="articleNum" property="articleNum" />
+		<result column="marketPrice" property="marketPrice" />
+		<result column="salesPrice" property="salePrice" />
+		<result column="purchasePrice" property="purchasePrice" /><!-- 进价待定 -->
+		<result column="finalClassiFicationCode" property="finalClassiFicationCode" />
+		<result column="finalClassiFicationName" property="finalClassiFicationName" />
+		<result column="inputTax" property="inputTax" />
+		<result column="outputTax" property="ouputTax" />
+		<result column="salesTax" property="salesTax" />
+		<result column="supplierCode" property="supplierCode" />
+		<result column="originCountry" property="originCountry" />
+		<result column="originLand" property="originLand" />
+		<result column="colorCode" property="colorCode" />
+		<result column="colorName" property="colorName" />
+		<result column="stanCode" property="stanCode" />
+		<result column="stanName" property="stanName" />
+		<result column="baseUnitCode" property="baseUnitCode" />
+		<result column="isCod" property="isCod" />
+		<result column="tmsType" property="tmsType" />
+		<result column="tmsTypeName" property="TmsTypeName" /><!-- -->
+		<result column="isOriginPackage" property="isOriginPackage" />
+		<result column="yearToMarket" property="yearToMarket" />
+		<result column="crowdUser" property="crowdUser" />
+		<result column="crowdUserName" property="crowdUserName" /><!-- -->
+		<result column="procurementPersonnelNumber" property="procurementPersonnelNumber" /><!-- -->
+		<result column="supProCode" property="supProCode" />
+		<result column="seasonCode" property="seasonCode" />
+		<result column="seasonName" property="seasonName" /><!-- -->
+		<result column="proColor" property="proColor" />
+		<result column="proColorName" property="proColorName" /><!-- -->
+		<result column="offerNumber" property="offerNumber" />
+		<result column="productName" property="productName" />
+		<result column="productCode" property="productCode" />
+		<result column="productNameAlias" property="productNameAlias" />
+		<result column="operateMode" property="operateMode" />
+		<result column="operateModeName" property="operateModeName" /><!-- -->
+		<result column="discount" property="discount" />
+		<result column="businessType" property="businessType" />
+		<result column="businessTypeName" property="businessTypeName" />
+		<result column="manageCateGory" property="manageCateGory" />
+		<result column="manageCateGoryName" property="manageCateGoryName" /><!-- -->
+		<result column="discountCode" property="discountCode" />
+		<result column="productType" property="productType" />
+		<result column="productTypeName" property="ProductTypeName" /><!-- -->
+		<collection property="standardBarCodes" javaType="java.util.List"
+			ofType="java.util.HashMap">
+			<id column="barcode" property="barcode" />
+			<result column="codeType" property="codeType" />
+		</collection>
+	</resultMap>
+	<!-- 获取商品信息数量 -->
+	<select id="getShoProductCount"
+		parameterType="com.wangfj.product.supplier.domain.entity.GetShoProductSup"
+		resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM
+		(
+		SELECT
+		psp1.*,
+		sup.business_pattern
+		FROM
+		pcm_shoppe_product psp1
+		INNER JOIN pcm_supply_info sup ON
+		psp1.supply_sid = sup.sid
+		<where>
+			<if test="supplierCode != null"><!-- 供应商编码 -->
+				sup.supply_code = #{supplierCode,jdbcType=VARCHAR}
+			</if>
+			<if test="counterProCode != null"><!-- 专柜商品编码 -->
+				AND psp1.shoppe_pro_sid = #{counterProCode,jdbcType=VARCHAR}
+			</if>
+			<if test="countProName != null"><!-- 专柜商品名称 -->
+				AND psp1.shoppe_pro_name LIKE '%${countProName}%'
+			</if>
+			<if test="operaterMode != null"><!-- 经营方式 -->
+				AND sup.business_pattern = #{operaterMode,jdbcType=VARCHAR}
+			</if>
+		</where>
+		) psp
+		INNER JOIN pcm_pro_detail sku ON psp.product_detail_sid = sku.sid
+		<if test="isSell != null">
+		  AND sku.selling_status = #{isSell,jdbcType=INTEGER}<!-- 上下架状态 -->
+		</if>
+		INNER JOIN pcm_shoppe ps ON psp.shoppe_sid = ps.sid
+		<if test="counterName != null">
+			AND ps.shoppe_name like '%${counterName}%'<!-- 专柜名称 -->
+		</if>
+		INNER JOIN
+		pcm_organization po ON ps.shop_sid = po.sid
+		<if test="storeName != null">
+		   AND po.organization_name like '%${storeName}%'<!-- 门店名称 -->
+		</if>
+		INNER JOIN
+		pcm_brand pb ON
+		psp.brand_sid = pb.sid
+		<where>
+			<if test="productType != null"> <!-- 商品类型 -->
+				AND sku.pro_type = #{productType,jdbcType=VARCHAR}
+			</if>
+			<if test="colorCode != null"><!-- 色系 -->
+				AND sku.pro_color_sid = #{colorCode,jdbcType=VARCHAR}
+			</if>
+			<if test="busniessType !=null"><!-- 业态 -->
+				AND ps.industry_condition_sid = #{busniessType,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<!-- 供应商获取商品信息 -->
+	<select id="getShoProductByParams"
+		parameterType="com.wangfj.product.supplier.domain.entity.GetShoProductSup"
+		resultType="com.wangfj.product.supplier.domain.vo.PcmShoProductSupDataDto">
+		SELECT
+		sup.supply_code AS supplyCode,<!-- 供应商编码 -->
+		psp.shoppe_pro_sid AS productCode,<!-- 专柜商品编码 -->
+		psp.category_sid AS manageCategroyCode,<!-- 管理分类 -->
+		cate.name AS manageCategoryName,<!-- 管理分类名称 -->
+		psp.shoppe_pro_name AS productName,<!-- 商品名称 -->
+		po.organization_name AS storeName,<!-- 门店名称 -->
+		ps.shoppe_name AS counterName,<!-- 专柜名称 -->
+		ps.industry_condition_sid AS businessType,<!-- 业态 -->
+		sup.business_pattern AS operateMode,<!-- 经营方式 -->
+		pb.brand_name AS storeBrandName,<!-- 门店品牌 -->
+		sku.pro_type AS productType,<!-- 商品类型 -->
+		sku.pro_color_sid AS colorSid,<!-- 色系 -->
+		sku.selling_status AS isSell<!-- 上下架状态 -->
+		FROM
+		(
+		SELECT
+		business_pattern,
+		supply_code,
+		sid
+		FROM
+		pcm_supply_info
+		<where>
+			<if test="supplierCode != null"><!-- 供应商编码 -->
+				AND supply_code = #{supplierCode,jdbcType=VARCHAR}
+			</if>
+			<if test="operaterMode != null"><!-- 经营方式 -->
+				AND business_pattern = #{operaterMode,jdbcType=VARCHAR}
+			</if>
+		</where>
+		) sup
+		INNER JOIN pcm_shoppe_product psp ON sup.sid = psp.supply_sid
+		<if test="counterProCode != null"><!-- 专柜商品编码 -->
+			AND psp.shoppe_pro_sid = #{counterProCode,jdbcType=VARCHAR}
+		</if>
+		<if test="countProName != null"><!-- 专柜商品名称 -->
+			AND psp.shoppe_pro_name LIKE '%${countProName}%'
+		</if>
+		LEFT JOIN pcm_category cate ON cate.category_sid = psp.category_sid
+		INNER JOIN pcm_pro_detail sku ON psp.product_detail_sid = sku.sid
+		<if test="isSell != null">
+			AND sku.selling_status = #{isSell,jdbcType=INTEGER}<!-- 上下架状态 -->
+		</if>
+		INNER JOIN pcm_shoppe ps ON psp.shoppe_sid = ps.sid
+		<if test="counterName != null">
+			AND ps.shoppe_name like '%${counterName}%'<!-- 专柜名称 -->
+		</if>
+		INNER JOIN
+		pcm_organization po ON ps.shop_sid = po.sid
+		<if test="storeName != null">
+		   AND po.organization_name like '%${storeName}%'<!-- 门店名称 -->
+		</if>
+		INNER JOIN
+		pcm_brand pb ON
+		psp.brand_sid = pb.sid
+		<where>
+			<if test="productType != null"> <!-- 商品类型 -->
+				AND sku.pro_type = #{productType,jdbcType=VARCHAR}
+			</if>
+			<if test="colorCode != null"><!-- 色系 -->
+				AND sku.pro_color_sid = #{colorCode,jdbcType=VARCHAR}
+			</if>
+			<if test="busniessType !=null"><!-- 业态 -->
+				AND ps.industry_condition_sid = #{busniessType,jdbcType=VARCHAR}
+			</if>
+		</where>
+		<if test="limit != null">
+			limit
+			#{start}, #{limit}
+		</if>
+	
+	
+		<!-- SELECT psp.supply_code AS supplyCode,供应商编码 psp.shoppe_pro_sid AS productCode,专柜商品编码 
+			psp.category_sid AS manageCategroyCode,管理分类 cate.name AS manageCategoryName,管理分类名称 
+			psp.shoppe_pro_name AS productName,商品名称 po.organization_name AS storeName,门店名称 
+			ps.shoppe_name AS counterName,专柜名称 ps.industry_condition_sid AS businessType,业态 
+			psp.business_pattern AS operateMode,经营方式 pb.brand_name AS storeBrandName,门店品牌 
+			sku.pro_type AS productType,商品类型 sku.pro_color_sid AS colorSid,色系 sku.selling_status 
+			AS isSell上下架状态 FROM ( SELECT psp1.*, sup.business_pattern, sup.supply_code 
+			FROM pcm_shoppe_product psp1 INNER JOIN pcm_supply_info sup ON psp1.supply_sid 
+			= sup.sid <where> <if test="supplierCode != null">供应商编码 sup.supply_code = 
+			#{supplierCode,jdbcType=VARCHAR} </if> <if test="counterProCode != null">专柜商品编码 
+			AND psp1.shoppe_pro_sid = #{counterProCode,jdbcType=VARCHAR} </if> <if test="countProName 
+			!= null">专柜商品名称 AND psp1.shoppe_pro_name LIKE '%${countProName}%' </if> <if 
+			test="operaterMode != null">经营方式 AND sup.business_pattern = #{operaterMode,jdbcType=VARCHAR} 
+			</if> </where> ) psp LEFT JOIN pcm_category cate on cate.category_sid = psp.category_sid 
+			INNER JOIN pcm_pro_detail sku ON psp.product_detail_sid = sku.sid <if test="isSell 
+			!= null"> AND sku.selling_status = #{isSell,jdbcType=INTEGER}上下架状态 </if> 
+			INNER JOIN pcm_shoppe ps ON psp.shoppe_sid = ps.sid <if test="counterName 
+			!= null"> AND ps.shoppe_name like '%${counterName}%'专柜名称 </if> INNER JOIN 
+			pcm_organization po ON ps.shop_sid = po.sid <if test="storeName != null"> 
+			AND po.organization_name like '%${storeName}%'门店名称 </if> INNER JOIN pcm_brand 
+			pb ON psp.brand_sid = pb.sid <where> <if test="productType != null"> 商品类型 
+			AND sku.pro_type = #{productType,jdbcType=VARCHAR} </if> <if test="colorCode 
+			!= null">色系 AND sku.pro_color_sid = #{colorCode,jdbcType=VARCHAR} </if> <if 
+			test="busniessType !=null">业态 AND ps.industry_condition_sid = #{busniessType,jdbcType=VARCHAR} 
+			</if> </where> <if test="limit != null"> limit #{start}, #{limit} </if> -->
+	
+	</select>
+
+	<!-- 供应商查询商品详情 -->
+	<select id="getShoppeProductForSupDto" resultMap="ShoppeProductForSupDtoMap"
+		parameterType="com.wangfj.product.supplier.domain.entity.GetShoProductSup">
+		SELECT
+		pcmv.sid AS sid,
+		pcmv.short_des AS shortDec,
+		pcmv.shoppe_code AS counterCode,
+		pcmv.shoppe_name AS counterName,
+		pcmv.input_tax AS inputTax,
+		pcmv.output_tax AS outputTax,
+		pcmv.sales_tax AS salesTax,
+		pcmv.supply_code AS supplierCode,
+		pcmv.pro_color_code AS colorCode,
+		pcmv.pro_color_name AS colorName,
+		pcmv.pro_stan_name AS stanName,
+		pcmv.sale_unit_code AS baseUnitCode,
+		pcmv.is_cod AS isCod,
+		pcmv.year_to_market AS yearToMarket,
+		pcmv.supply_product_code AS supProCode,
+		pcmv.pro_color_sid AS proColor,
+		pcmv.offer_num AS offerNumber,
+		pcmv.product_name AS productName,
+		pcmv.shoppe_pro_sid AS productCode,
+		pcmv.industry_condition_sid AS
+		businessType,
+		pcmv.manage_category_sid AS manageCateGory,
+		glcate.`name` AS manageCateGoryName,
+		pcmv.pro_type
+		AS productType,
+		pcmv.tms_param AS tmsType,
+		pcmv.season_code AS
+		seasonCode,
+		pspsi.field3 AS articleNum,
+		pspsi.origin_land AS originLand,
+		pspsi.shoppe_pro_alias AS productNameAlias,
+		sku.pro_stan_sid AS
+		stanCode,
+		sku.pro_type AS productType,
+		spu.sex_sid AS crowdUser,
+		ps.industry_condition_sid AS businessTypeName,
+		pspsi.business_pattern
+		AS operateMode,
+		pspe.origin_country AS originCountry,
+		pspe.is_origin_package AS isOriginPackage,
+		pspe.field3 AS discount,
+		pr.original_price AS marketPrice,
+		pr.promotion_price AS salesPrice,
+		po.organization_code AS storeCode,
+		po.organization_name AS storeName,
+		perp.product_code AS discountCode,
+		tjcate.category_code AS
+		finalClassiFicationCode,
+		tjcate.`name` AS finalClassiFicationName,
+		gycate.category_code AS prodCategoryCode,
+		gycate.`name` AS
+		prodCategoryName,
+		barcode.barcode AS barcode,
+		barcode.code_type AS
+		codeType
+		FROM
+		v_pcm_product_stock_price pcmv
+		INNER JOIN (
+		SELECT
+		psp.*,business_pattern FROM
+		pcm_shoppe_product psp
+		INNER JOIN
+		pcm_supply_info psi ON psp.supply_sid = psi.sid
+		AND psp.shoppe_pro_sid
+		= #{counterProCode,jdbcType=VARCHAR}
+		AND psi.supply_code =
+		#{supplierCode,jdbcType=VARCHAR}
+		) pspsi ON pspsi.sid = pcmv.sid
+		INNER
+		JOIN pcm_pro_detail sku ON sku.sid = pspsi.product_detail_sid
+		INNER
+		JOIN pcm_product spu ON spu.sid = sku.product_sid
+		INNER JOIN pcm_shoppe
+		ps ON pspsi.shoppe_sid = ps.sid
+		INNER JOIN pcm_shoppe_product_extend
+		pspe ON pspsi.sid =
+		pspe.shoppe_pro_sid
+		INNER JOIN pcm_price pr ON
+		pspsi.shoppe_pro_sid = pr.shoppe_pro_sid
+		AND NOW() BETWEEN
+		pr.promotion_begin_time
+		AND pr.promotion_end_time
+		INNER JOIN
+		pcm_organization po ON po.sid = ps.shop_sid
+		LEFT JOIN pcm_erp_product
+		perp ON pspsi.erpProductCode = perp.product_code
+		LEFT JOIN (
+		SELECT
+		product_sid,
+		`name`,
+		category_code
+		FROM
+		pcm_product_category tjcate
+		INNER
+		JOIN pcm_category cate1 ON tjcate.category_sid = cate1.sid
+		AND
+		cate1.category_type = 2
+		) tjcate ON tjcate.product_sid =
+		pspsi.shoppe_pro_sid
+		LEFT JOIN (
+		SELECT
+		product_sid,
+		`name`,
+		category_code
+		FROM
+		pcm_product_category gycate
+		INNER JOIN pcm_category cate2 ON
+		gycate.category_sid = cate2.sid
+		AND cate2.category_type = 0
+		) gycate ON
+		gycate.product_sid = spu.sid
+		LEFT JOIN (SELECT
+		shoppe_pro_sid,barcode,code_type FROM pcm_barcode pb
+		WHERE
+		pb.supply_code = #{supplierCode,jdbcType=VARCHAR}) barcode ON
+		barcode.shoppe_pro_sid =
+		pcmv.shoppe_pro_sid
+		LEFT JOIN (SELECT * FROM pcm_category glcate WHERE category_type = 1) glcate ON glcate.category_code = pcmv.manage_category_sid
+	</select>
+</mapper>

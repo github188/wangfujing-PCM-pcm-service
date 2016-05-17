@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmPictureUrlMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.maindata.domain.entity.PcmPictureUrl">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="sku_sid" property="skuSid" jdbcType="VARCHAR" />
+		<result column="picture_sid" property="pictureSid" jdbcType="VARCHAR" />
+		<result column="picture_name" property="pictureName" jdbcType="VARCHAR" />
+		<result column="stan_sid" property="stanSid" jdbcType="VARCHAR" />
+		<result column="picture_url" property="pictureUrl" jdbcType="VARCHAR" />
+		<result column="is_primary" property="isPrimary" jdbcType="INTEGER" />
+		<result column="is_model" property="isModel" jdbcType="INTEGER" />
+		<result column="is_thumbnail" property="isThumbnail" jdbcType="INTEGER" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+		<result column="if_delete" property="ifDelete" jdbcType="INTEGER" />
+		<result column="opt_name" property="optName" jdbcType="VARCHAR" />
+		<result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+		<result column="c1" property="c1" jdbcType="VARCHAR" />
+		<result column="c2" property="c2" jdbcType="VARCHAR" />
+		<result column="color_code" property="colorCode" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, sku_sid, picture_sid, picture_name, stan_sid,
+		picture_url,
+		is_primary, is_model,
+		is_thumbnail, sort, create_date,
+		if_delete, opt_name, update_date, c1, c2, color_code
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_picture_url
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+
+	<!-- 根据条件查询商品图片信息 -->
+	<select id="queryProductPictureInfoByPara" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmPictureUrl">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_picture_url
+		<where>
+			<if test="skuSid != null">
+				and sku_sid = #{skuSid,jdbcType=VARCHAR}
+			</if>
+			<if test="pictureSid != null">
+				and picture_sid = #{pictureSid,jdbcType=VARCHAR}
+			</if>
+			<if test="pictureUrl != null">
+				and picture_url = #{pictureUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="isPrimary != null">
+				and is_primary = #{isPrimary,jdbcType=VARCHAR}
+			</if>
+			<if test="isModel != null">
+				and is_model = #{isModel,jdbcType=VARCHAR}
+			</if>
+			<if test="isThumbnail != null">
+				and is_thumbnail = #{isThumbnail,jdbcType=VARCHAR}
+			</if>
+			<if test="sort != null">
+				and sort = #{sort,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_picture_url
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmPictureUrl">
+		insert into pcm_picture_url (sid, sku_sid, picture_sid,
+		picture_name, stan_sid, picture_url,
+		is_primary, is_model,
+		is_thumbnail,
+		sort, create_date, if_delete,
+		opt_name, update_date, c1,
+		c2, color_code)
+		values (#{sid,jdbcType=BIGINT},
+		#{skuSid,jdbcType=VARCHAR},
+		#{pictureSid,jdbcType=VARCHAR},
+		#{pictureName,jdbcType=VARCHAR},
+		#{stanSid,jdbcType=VARCHAR},
+		#{pictureUrl,jdbcType=VARCHAR},
+		#{isPrimary,jdbcType=INTEGER},
+		#{isModel,jdbcType=INTEGER},
+		#{isThumbnail,jdbcType=INTEGER},
+		#{sort,jdbcType=INTEGER},
+		#{createDate,jdbcType=TIMESTAMP},
+		#{ifDelete,jdbcType=INTEGER},
+		#{optName,jdbcType=VARCHAR},
+		#{updateDate,jdbcType=TIMESTAMP},
+		#{c1,jdbcType=VARCHAR},
+		#{c2,jdbcType=VARCHAR}, #{colorCode,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" useGeneratedKeys="true"
+		keyProperty="sid" parameterType="com.wangfj.product.maindata.domain.entity.PcmPictureUrl">
+		insert into pcm_picture_url
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="skuSid != null">
+				sku_sid,
+			</if>
+			<if test="pictureSid != null">
+				picture_sid,
+			</if>
+			<if test="pictureName != null">
+				picture_name,
+			</if>
+			<if test="stanSid != null">
+				stan_sid,
+			</if>
+			<if test="pictureUrl != null">
+				picture_url,
+			</if>
+			<if test="isPrimary != null">
+				is_primary,
+			</if>
+			<if test="isModel != null">
+				is_model,
+			</if>
+			<if test="isThumbnail != null">
+				is_thumbnail,
+			</if>
+			<if test="sort != null">
+				sort,
+			</if>
+			<if test="ifDelete != null">
+				if_delete,
+			</if>
+			<if test="optName != null">
+				opt_name,
+			</if>
+			<if test="c1 != null">
+				c1,
+			</if>
+			<if test="c2 != null">
+				c2,
+			</if>
+			<if test="colorCode != null">
+				color_code,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="skuSid != null">
+				#{skuSid,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureSid != null">
+				#{pictureSid,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureName != null">
+				#{pictureName,jdbcType=VARCHAR},
+			</if>
+			<if test="stanSid != null">
+				#{stanSid,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureUrl != null">
+				#{pictureUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="isPrimary != null">
+				#{isPrimary,jdbcType=INTEGER},
+			</if>
+			<if test="isModel != null">
+				#{isModel,jdbcType=INTEGER},
+			</if>
+			<if test="isThumbnail != null">
+				#{isThumbnail,jdbcType=INTEGER},
+			</if>
+			<if test="sort != null">
+				#{sort,jdbcType=INTEGER},
+			</if>
+			<if test="ifDelete != null">
+				#{ifDelete,jdbcType=INTEGER},
+			</if>
+			<if test="optName != null">
+				#{optName,jdbcType=VARCHAR},
+			</if>
+			<if test="c1 != null">
+				#{c1,jdbcType=VARCHAR},
+			</if>
+			<if test="c2 != null">
+				#{c2,jdbcType=VARCHAR},
+			</if>
+			<if test="colorCode != null">
+				#{colorCode,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateMainBySpuColor"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmPictureUrl">
+		update pcm_picture_url
+		SET
+		is_primary = #{isPrimary,jdbcType=INTEGER}
+		<where>
+			<if test="skuSid != null">
+				and sku_sid = #{skuSid,jdbcType=VARCHAR}
+			</if>
+			<if test="colorCode != null">
+				and color_code = #{colorCode,jdbcType=VARCHAR}
+			</if>
+			<if test="stanSid != null">
+				and stan_sid = #{stanSid,jdbcType=VARCHAR}
+			</if>
+			<if test="isModel != null">
+				and is_model = #{isModel,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</update>
+
+	<update id="updateDeleteBySpuColor"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmPictureUrl">
+		update pcm_picture_url
+		SET
+		if_delete = 1
+		where
+		sku_sid = #{skuSid,jdbcType=VARCHAR}
+		and color_code = #{colorCode,jdbcType=VARCHAR}
+		and is_thumbnail = 0;
+	</update>
+
+
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmPictureUrl">
+		update pcm_picture_url
+		<set>
+			<if test="skuSid != null">
+				sku_sid = #{skuSid,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureSid != null">
+				picture_sid = #{pictureSid,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureName != null">
+				picture_name = #{pictureName,jdbcType=VARCHAR},
+			</if>
+			<if test="stanSid != null">
+				stan_sid = #{stanSid,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureUrl != null">
+				picture_url = #{pictureUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="isPrimary != null">
+				is_primary = #{isPrimary,jdbcType=INTEGER},
+			</if>
+			<if test="isModel != null">
+				is_model = #{isModel,jdbcType=INTEGER},
+			</if>
+			<if test="isThumbnail != null">
+				is_thumbnail = #{isThumbnail,jdbcType=INTEGER},
+			</if>
+			<if test="sort != null">
+				sort = #{sort,jdbcType=INTEGER},
+			</if>
+			<if test="createDate != null">
+				create_date = #{createDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="ifDelete != null">
+				if_delete = #{ifDelete,jdbcType=INTEGER},
+			</if>
+			<if test="optName != null">
+				opt_name = #{optName,jdbcType=VARCHAR},
+			</if>
+			<if test="updateDate != null">
+				update_date = #{updateDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="c1 != null">
+				c1 = #{c1,jdbcType=VARCHAR},
+			</if>
+			<if test="c2 != null">
+				c2 = #{c2,jdbcType=VARCHAR},
+			</if>
+			<if test="colorCode != null">
+				color_code = #{colorCode,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmPictureUrl">
+		update pcm_picture_url
+		set sku_sid =
+		#{skuSid,jdbcType=VARCHAR},
+		picture_sid =
+		#{pictureSid,jdbcType=VARCHAR},
+		picture_name =
+		#{pictureName,jdbcType=VARCHAR},
+		stan_sid =
+		#{stanSid,jdbcType=VARCHAR},
+		picture_url =
+		#{pictureUrl,jdbcType=VARCHAR},
+		is_primary =
+		#{isPrimary,jdbcType=INTEGER},
+		is_model = #{isModel,jdbcType=INTEGER},
+		is_thumbnail = #{isThumbnail,jdbcType=INTEGER},
+		sort =
+		#{sort,jdbcType=INTEGER},
+		create_date =
+		#{createDate,jdbcType=TIMESTAMP},
+		if_delete =
+		#{ifDelete,jdbcType=INTEGER},
+		opt_name = #{optName,jdbcType=VARCHAR},
+		update_date = #{updateDate,jdbcType=TIMESTAMP},
+		c1 =
+		#{c1,jdbcType=VARCHAR},
+		c2 = #{c2,jdbcType=VARCHAR},
+		color_code =
+		#{colorCode,jdbcType=VARCHAR}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmPictureUrl">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_picture_url
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="skuSid != null">
+				and sku_sid = #{skuSid,jdbcType=VARCHAR}
+			</if>
+			<if test="pictureSid != null">
+				and picture_sid = #{pictureSid,jdbcType=VARCHAR}
+			</if>
+			<if test="pictureName != null">
+				and picture_name = #{pictureName,jdbcType=VARCHAR}
+			</if>
+			<if test="stanSid != null">
+				and stan_sid = #{stanSid,jdbcType=VARCHAR}
+			</if>
+			<if test="pictureUrl != null">
+				and picture_url = #{pictureUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="isPrimary != null">
+				and is_primary = #{isPrimary,jdbcType=INTEGER}
+			</if>
+			<if test="isModel != null">
+				and is_model = #{isModel,jdbcType=INTEGER}
+			</if>
+			<if test="isThumbnail != null">
+				and is_thumbnail = #{isThumbnail,jdbcType=INTEGER}
+			</if>
+			<if test="sort != null">
+				and sort = #{sort,jdbcType=INTEGER}
+			</if>
+			<if test="createDate != null">
+				and create_date = #{createDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="ifDelete != null">
+				and if_delete = #{ifDelete,jdbcType=INTEGER}
+			</if>
+			<if test="optName != null">
+				and opt_name = #{optName,jdbcType=VARCHAR}
+			</if>
+			<if test="updateDate != null">
+				and update_date = #{updateDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="c1 != null">
+				and c1 = #{c1,jdbcType=VARCHAR}
+			</if>
+			<if test="c2 != null">
+				and c2 = #{c2,jdbcType=VARCHAR}
+			</if>
+			<if test="colorCode != null">
+				and color_code = #{colorCode,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by sort asc
+	</select>
+	<select id="getSortByOara" resultType="java.lang.Integer"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmPictureUrl">
+		select
+		max(sort)
+		from pcm_picture_url
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="skuSid != null">
+				and sku_sid = #{skuSid,jdbcType=VARCHAR}
+			</if>
+			<if test="pictureSid != null">
+				and picture_sid = #{pictureSid,jdbcType=VARCHAR}
+			</if>
+			<if test="pictureName != null">
+				and picture_name = #{pictureName,jdbcType=VARCHAR}
+			</if>
+			<if test="stanSid != null">
+				and stan_sid = #{stanSid,jdbcType=VARCHAR}
+			</if>
+			<if test="pictureUrl != null">
+				and picture_url = #{pictureUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="isPrimary != null">
+				and is_primary = #{isPrimary,jdbcType=INTEGER}
+			</if>
+			<if test="isModel != null">
+				and is_model = #{isModel,jdbcType=INTEGER}
+			</if>
+			<if test="isThumbnail != null">
+				and is_thumbnail = #{isThumbnail,jdbcType=INTEGER}
+			</if>
+			<if test="sort != null">
+				and sort = #{sort,jdbcType=INTEGER}
+			</if>
+			<if test="createDate != null">
+				and create_date = #{createDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="ifDelete != null">
+				and if_delete = #{ifDelete,jdbcType=INTEGER}
+			</if>
+			<if test="optName != null">
+				and opt_name = #{optName,jdbcType=VARCHAR}
+			</if>
+			<if test="updateDate != null">
+				and update_date = #{updateDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="c1 != null">
+				and c1 = #{c1,jdbcType=VARCHAR}
+			</if>
+			<if test="c2 != null">
+				and c2 = #{c2,jdbcType=VARCHAR}
+			</if>
+			<if test="colorCode != null">
+				and color_code = #{colorCode,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="selectColorBySpu" resultType="hashMap"
+		parameterType="java.lang.String">
+		select distinct
+		color.sid,
+		color.color_name,
+		color.rgb
+		from
+		pcm_pro_detail
+		as sku
+		join pcm_product as spu on sku.product_sid = spu.sid
+		join
+		pcm_color_dict as
+		color on sku.pro_color_sid = color.sid
+		where
+		spu.product_sid = #{spuCode,jdbcType=VARCHAR}
+		<where>
+		</where>
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmPictureUrl">
+		select
+		count(*)
+		from pcm_picture_url
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="skuSid != null">
+				and sku_sid = #{skuSid,jdbcType=VARCHAR}
+			</if>
+			<if test="pictureSid != null">
+				and picture_sid = #{pictureSid,jdbcType=VARCHAR}
+			</if>
+			<if test="pictureName != null">
+				and picture_name = #{pictureName,jdbcType=VARCHAR}
+			</if>
+			<if test="stanSid != null">
+				and stan_sid = #{stanSid,jdbcType=VARCHAR}
+			</if>
+			<if test="pictureUrl != null">
+				and picture_url = #{pictureUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="isPrimary != null">
+				and is_primary = #{isPrimary,jdbcType=INTEGER}
+			</if>
+			<if test="isModel != null">
+				and is_model = #{isModel,jdbcType=INTEGER}
+			</if>
+			<if test="isThumbnail != null">
+				and is_thumbnail = #{isThumbnail,jdbcType=INTEGER}
+			</if>
+			<if test="sort != null">
+				and sort = #{sort,jdbcType=INTEGER}
+			</if>
+			<if test="createDate != null">
+				and create_date = #{createDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="ifDelete != null">
+				and if_delete = #{ifDelete,jdbcType=INTEGER}
+			</if>
+			<if test="optName != null">
+				and opt_name = #{optName,jdbcType=VARCHAR}
+			</if>
+			<if test="updateDate != null">
+				and update_date = #{updateDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="c1 != null">
+				and c1 = #{c1,jdbcType=VARCHAR}
+			</if>
+			<if test="c2 != null">
+				and c2 = #{c2,jdbcType=VARCHAR}
+			</if>
+			<if test="colorCode != null">
+				and color_code = #{colorCode,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	
+	<select id="getSidAndPhoneSid" resultMap="BaseResultMap"
+		parameterType="Map">
+		select 
+			<include refid="Base_Column_List" /> 
+		from 
+			pcm_picture_url 
+		limit #{start},#{limit}
+	</select>
+</mapper>

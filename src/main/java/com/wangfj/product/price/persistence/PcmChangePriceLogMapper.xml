@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.price.persistence.PcmChangePriceLogMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.price.domain.entity.PcmChangePriceLog">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="shoppe_pro_sid" property="shoppeProSid"
+			jdbcType="BIGINT" />
+		<result column="change_before_price" property="changeBeforePrice"
+			jdbcType="DECIMAL" />
+		<result column="change_after_price" property="changeAfterPrice"
+			jdbcType="DECIMAL" />
+		<result column="valence_type" property="valenceType" jdbcType="INTEGER" />
+		<result column="change_time" property="changeTime" jdbcType="TIMESTAMP" />
+		<result column="opt_user_sid" property="optUserSid" jdbcType="BIGINT" />
+		<result column="device_no" property="deviceNo" jdbcType="VARCHAR" />
+		<result column="ip" property="ip" jdbcType="VARCHAR" />
+		<result column="order_no" property="order_no" jdbcType="VARCHAR" />
+		<result column="price_channel" property="priceChannel"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, shoppe_pro_sid, change_before_price,
+		change_after_price,
+		valence_type, change_time,
+		opt_user_sid, device_no,
+		ip,order_no,price_channel
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_change_price_log
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_change_price_log
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.price.domain.entity.PcmChangePriceLog">
+		insert into pcm_change_price_log (sid, shoppe_pro_sid,
+		change_before_price,
+		change_after_price, valence_type, change_time,
+		opt_user_sid, device_no, ip,order_no,price_channel
+		)
+		values
+		(#{sid,jdbcType=BIGINT}, #{shoppeProSid,jdbcType=BIGINT},
+		#{changeBeforePrice,jdbcType=DECIMAL},
+		#{changeAfterPrice,jdbcType=DECIMAL}, #{valenceType,jdbcType=INTEGER},
+		#{changeTime,jdbcType=TIMESTAMP},
+		#{optUserSid,jdbcType=BIGINT},
+		#{deviceNo,jdbcType=VARCHAR},
+		#{ip,jdbcType=VARCHAR},
+		#{order_no,jdbcType=VARCHAR},
+		#{priceChannel,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.price.domain.entity.PcmChangePriceLog">
+		insert into pcm_change_price_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid,
+			</if>
+			<if test="changeBeforePrice != null">
+				change_before_price,
+			</if>
+			<if test="changeAfterPrice != null">
+				change_after_price,
+			</if>
+			<if test="valenceType != null">
+				valence_type,
+			</if>
+			<if test="changeTime != null">
+				change_time,
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid,
+			</if>
+			<if test="deviceNo != null">
+				device_no,
+			</if>
+			<if test="ip != null">
+				ip,
+			</if>
+			<if test="order_no != null">
+				order_no,
+			</if>
+			<if test="priceChannel != null">
+				price_channel,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="shoppeProSid != null">
+				#{shoppeProSid,jdbcType=BIGINT},
+			</if>
+			<if test="changeBeforePrice != null">
+				#{changeBeforePrice,jdbcType=DECIMAL},
+			</if>
+			<if test="changeAfterPrice != null">
+				#{changeAfterPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="valenceType != null">
+				#{valenceType,jdbcType=INTEGER},
+			</if>
+			<if test="changeTime != null">
+				#{changeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optUserSid != null">
+				#{optUserSid,jdbcType=BIGINT},
+			</if>
+			<if test="deviceNo != null">
+				#{deviceNo,jdbcType=VARCHAR},
+			</if>
+			<if test="ip != null">
+				#{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="order_no != null">
+				#{order_no,jdbcType=VARCHAR},
+			</if>
+			<if test="priceChannel != null">
+				#{priceChannel,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.price.domain.entity.PcmChangePriceLog">
+		update pcm_change_price_log
+		<set>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT},
+			</if>
+			<if test="changeBeforePrice != null">
+				change_before_price =
+				#{changeBeforePrice,jdbcType=DECIMAL},
+			</if>
+			<if test="changeAfterPrice != null">
+				change_after_price =
+				#{changeAfterPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="valenceType != null">
+				valence_type = #{valenceType,jdbcType=INTEGER},
+			</if>
+			<if test="changeTime != null">
+				change_time = #{changeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid = #{optUserSid,jdbcType=BIGINT},
+			</if>
+			<if test="deviceNo != null">
+				device_no = #{deviceNo,jdbcType=VARCHAR},
+			</if>
+			<if test="ip != null">
+				ip = #{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="order_no != null">
+				#{order_no,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.price.domain.entity.PcmChangePriceLog">
+		update pcm_change_price_log
+		set shoppe_pro_sid =
+		#{shoppeProSid,jdbcType=BIGINT},
+		change_before_price =
+		#{changeBeforePrice,jdbcType=DECIMAL},
+		change_after_price =
+		#{changeAfterPrice,jdbcType=DECIMAL},
+		valence_type =
+		#{valenceType,jdbcType=INTEGER},
+		change_time =
+		#{changeTime,jdbcType=TIMESTAMP},
+		opt_user_sid =
+		#{optUserSid,jdbcType=BIGINT},
+		device_no =
+		#{deviceNo,jdbcType=VARCHAR},
+		ip = #{ip,jdbcType=VARCHAR}, order_no =
+		#{order_no,jdbcType=VARCHAR}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+
+
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_change_price_log
+		<where>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT},
+			</if>
+			<if test="changeBeforePrice != null">
+				change_before_price =
+				#{changeBeforePrice,jdbcType=DECIMAL},
+			</if>
+			<if test="changeAfterPrice != null">
+				change_after_price =
+				#{changeAfterPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="valenceType != null">
+				valence_type = #{valenceType,jdbcType=INTEGER},
+			</if>
+			<if test="changeTime != null">
+				change_time = #{changeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid = #{optUserSid,jdbcType=BIGINT},
+			</if>
+			<if test="deviceNo != null">
+				device_no = #{deviceNo,jdbcType=VARCHAR},
+			</if>
+			<if test="ip != null">
+				ip = #{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="order_no != null">
+				order_no = #{order_no,jdbcType=VARCHAR},
+			</if>
+		</where>
+	</select>
+
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_change_price_log
+		<where>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT},
+			</if>
+			<if test="changeBeforePrice != null">
+				change_before_price =
+				#{changeBeforePrice,jdbcType=DECIMAL},
+			</if>
+			<if test="changeAfterPrice != null">
+				change_after_price =
+				#{changeAfterPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="valenceType != null">
+				valence_type = #{valenceType,jdbcType=INTEGER},
+			</if>
+			<if test="changeTime != null">
+				change_time = #{changeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid = #{optUserSid,jdbcType=BIGINT},
+			</if>
+			<if test="deviceNo != null">
+				device_no = #{deviceNo,jdbcType=VARCHAR},
+			</if>
+			<if test="ip != null">
+				ip = #{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="order_no != null">
+				order_no = #{order_no,jdbcType=VARCHAR},
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_change_price_log
+		<where>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT},
+			</if>
+			<if test="changeBeforePrice != null">
+				change_before_price =
+				#{changeBeforePrice,jdbcType=DECIMAL},
+			</if>
+			<if test="changeAfterPrice != null">
+				change_after_price =
+				#{changeAfterPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="valenceType != null">
+				valence_type = #{valenceType,jdbcType=INTEGER},
+			</if>
+			<if test="changeTime != null">
+				change_time = #{changeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid = #{optUserSid,jdbcType=BIGINT},
+			</if>
+			<if test="deviceNo != null">
+				device_no = #{deviceNo,jdbcType=VARCHAR},
+			</if>
+			<if test="ip != null">
+				ip = #{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="order_no != null">
+				order_no = #{order_no,jdbcType=VARCHAR},
+			</if>
+		</where>
+	</select>
+
+</mapper>

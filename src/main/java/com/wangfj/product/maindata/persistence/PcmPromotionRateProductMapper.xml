@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.wangfj.product.maindata.persistence.PcmPromotionRateProductMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.maindata.domain.entity.PcmPromotionRateProduct">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="shoppe_pro_sid" property="shoppeProSid"
+			jdbcType="BIGINT" />
+		<result column="promotion_rate_code_sid_sid" property="promotionRateCodeSid"
+			jdbcType="BIGINT" />
+		<result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
+		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="opt_user_sid" property="optUserSid" jdbcType="BIGINT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, shoppe_pro_sid, promotion_rate_code_sid, begin_time, end_time,
+		create_time, opt_user_sid
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_promotion_rate_product
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from pcm_promotion_rate_product
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmPromotionRateProduct">
+		insert into pcm_promotion_rate_product (sid, shoppe_pro_sid,
+		promotion_rate_code_sid,
+		begin_time, end_time, create_time,
+		opt_user_sid)
+		values (#{sid,jdbcType=BIGINT}, #{shoppeProSid,jdbcType=BIGINT},
+		#{promotionRateCodeSid,jdbcType=BIGINT},
+		#{beginTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{optUserSid,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmPromotionRateProduct">
+		insert into pcm_promotion_rate_product
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid,
+			</if>
+			<if test="promotionRateCodeSid != null">
+				promotion_rate_code_sid,
+			</if>
+			<if test="beginTime != null">
+				begin_time,
+			</if>
+			<if test="endTime != null">
+				end_time,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="shoppeProSid != null">
+				#{shoppeProSid,jdbcType=BIGINT},
+			</if>
+			<if test="promotionRateCodeSid != null">
+				#{promotionRateCodeSid,jdbcType=BIGINT},
+			</if>
+			<if test="beginTime != null">
+				#{beginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				#{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optUserSid != null">
+				#{optUserSid,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmPromotionRateProduct">
+		update pcm_promotion_rate_product
+		<set>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT},
+			</if>
+			<if test="promotionRateCodeSid != null">
+				promotion_rate_code_sid = #{promotionRateCodeSid,jdbcType=BIGINT},
+			</if>
+			<if test="beginTime != null">
+				begin_time = #{beginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid = #{optUserSid,jdbcType=BIGINT},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmPromotionRateProduct">
+		update pcm_promotion_rate_product
+		set shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT},
+		promotion_rate_code_sid = #{promotionRateCodeSid,jdbcType=BIGINT},
+		begin_time = #{beginTime,jdbcType=TIMESTAMP},
+		end_time = #{endTime,jdbcType=TIMESTAMP},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_promotion_rate_product
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT}
+			</if>
+			<if test="promotionRateCodeSid != null">
+				and promotion_rate_code_sid = #{promotionRateCodeSid,jdbcType=BIGINT}
+			</if>
+			<if test="beginTime != null">
+				and begin_time = #{beginTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endTime != null">
+				and end_time = #{endTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+	<select id="selectPromoSaleCode" resultType="java.lang.String"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmPromotionRateProduct">
+		select
+			ssc.promo_sale_code
+		from 
+			pcm_promotion_rate_product prp
+		join 
+			pcm_supply_shop_code ssc on prp.promotion_rate_code_sid=ssc.sid
+		where
+			shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT}
+			and now() between prp.begin_time and prp.end_time
+	</select>
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />	
+		from pcm_promotion_rate_product
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT}
+			</if>
+			<if test="promotionRateCodeSid != null">
+				and promotion_rate_code_sid = #{promotionRateCodeSid,jdbcType=BIGINT}
+			</if>
+			<if test="beginTime != null">
+				and begin_time = #{beginTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endTime != null">
+				and end_time = #{endTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_promotion_rate_product
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT}
+			</if>
+			<if test="promotionRateCodeSid != null">
+				and promotion_rate_code_sid = #{promotionRateCodeSid,jdbcType=BIGINT}
+			</if>
+			<if test="beginTime != null">
+				and begin_time = #{beginTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endTime != null">
+				and end_time = #{endTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+</mapper>

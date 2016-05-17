@@ -1,0 +1,1554 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.brand.persistence.PcmBrandMapper">
+    <resultMap id="BaseResultMap"
+               type="com.wangfj.product.brand.domain.entity.PcmBrand">
+        <id column="sid" property="sid" jdbcType="BIGINT"/>
+        <result column="brand_sid" property="brandSid" jdbcType="VARCHAR"/>
+        <result column="brand_name" property="brandName" jdbcType="VARCHAR"/>
+        <result column="picture_url" property="pictureUrl" jdbcType="VARCHAR"/>
+        <result column="brand_name_second" property="brandNameSecond"
+                jdbcType="VARCHAR"/>
+        <result column="brand_active_bit" property="brandActiveBit"
+                jdbcType="BIGINT"/>
+        <result column="brandno" property="brandno" jdbcType="VARCHAR"/>
+        <result column="brandcorp" property="brandcorp" jdbcType="VARCHAR"/>
+        <result column="brandpic1" property="brandpic1" jdbcType="VARCHAR"/>
+        <result column="brandpic2" property="brandpic2" jdbcType="VARCHAR"/>
+        <result column="photo_blacklist_bit" property="photoBlacklistBit"
+                jdbcType="BIGINT"/>
+        <result column="parent_sid" property="parentSid" jdbcType="BIGINT"/>
+        <result column="end_bit" property="endBit" jdbcType="BIGINT"/>
+        <result column="spell" property="spell" jdbcType="VARCHAR"/>
+        <result column="opt_user_sid" property="optUserSid" jdbcType="BIGINT"/>
+        <result column="opt_real_name" property="optRealName" jdbcType="VARCHAR"/>
+        <result column="opt_update_time" property="optUpdateTime"
+                jdbcType="TIMESTAMP"/>
+        <result column="shop_type" property="shopType" jdbcType="INTEGER"/>
+        <result column="brand_type" property="brandType" jdbcType="INTEGER"/>
+        <result column="brand_desc" property="brandDesc" jdbcType="VARCHAR"/>
+        <result column="shop_sid" property="shopSid" jdbcType="BIGINT"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="brand_name_en" property="brandNameEn" jdbcType="VARCHAR"/>
+        <result column="brand_specialty" property="brandSpecialty"
+                jdbcType="VARCHAR"/>
+        <result column="brand_suitability" property="brandSuitability"
+                jdbcType="VARCHAR"/>
+        <result column="is_display" property="isDisplay" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        sid, brand_sid, brand_name, picture_url, brand_name_second,
+        brand_active_bit, brandno,brandcorp, brandpic1, brandpic2,
+        photo_blacklist_bit, parent_sid, end_bit,spell,opt_user_sid,
+        opt_real_name, opt_update_time, shop_type,brand_type,brand_desc,
+        shop_sid,status,brand_name_en,brand_specialty,brand_suitability,
+        is_display
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_brand
+        where sid = #{sid,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_brand
+        <where>
+            <if test="sid != null">
+                and sid=#{sid,jdbcType=BIGINT}
+            </if>
+            <if test="brandSid != null">
+                and brand_sid = #{brandSid,jdbcType=VARCHAR}
+            </if>
+            <if test="pictureUrl != null">
+                and picture_url = #{pictureUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="brandNameSecond != null">
+                and brand_name_second =
+                #{brandNameSecond,jdbcType=VARCHAR}
+            </if>
+            <if test="brandActiveBit != null">
+                and brand_active_bit = #{brandActiveBit,jdbcType=BIGINT}
+            </if>
+            <if test="brandno != null">
+                and brandno = #{brandno,jdbcType=VARCHAR}
+            </if>
+            <if test="brandcorp != null">
+                and brandcorp = #{brandcorp,jdbcType=VARCHAR}
+            </if>
+            <if test="brandpic1 != null">
+                and brandpic1 = #{brandpic1,jdbcType=VARCHAR}
+            </if>
+            <if test="brandpic2 != null">
+                and brandpic2 = #{brandpic2,jdbcType=VARCHAR}
+            </if>
+            <if test="photoBlacklistBit != null">
+                and photo_blacklist_bit =
+                #{photoBlacklistBit,jdbcType=BIGINT}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="endBit != null">
+                and end_bit = #{endBit,jdbcType=VARCHAR}
+            </if>
+            <if test="spell != null">
+                and spell = #{spell,jdbcType=VARCHAR}
+            </if>
+            <if test="optUserSid != null">
+                and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+            </if>
+            <if test="optRealName != null">
+                and opt_real_name = #{optRealName,jdbcType=VARCHAR}
+            </if>
+            <if test="optUpdateTime != null">
+                and opt_update_time = #{optUpdateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="brandName != null">
+                and brand_name = #{brandName,jdbcType=VARCHAR}
+            </if>
+            <if test="shopType != null">
+                and shop_type = #{shopType,jdbcType=INTEGER}
+            </if>
+            <if test="brandDesc != null">
+                and brand_desc = #{brandDesc,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="brandNameEn != null">
+                and brand_name_en = #{brandNameEn,jdbcType=VARCHAR}
+            </if>
+            <if test="brandSpecialty != null">
+                and brand_specialty = #{brandSpecialty,jdbcType=VARCHAR}
+            </if>
+            <if test="brandSuitability != null">
+                and brand_suitability =
+                #{brandSuitability,jdbcType=VARCHAR}
+            </if>
+            <if test="isDisplay != null">
+                and is_display = #{isDisplay,jdbcType=INTEGER}
+            </if>
+            <if test="brandType != null">
+                and brand_type = #{brandType,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+    <!--分页查询selectPageListByParam -->
+    <select id="selectPageListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_brand
+        <where>
+            <if test="sid != null">
+                and sid=#{sid,jdbcType=BIGINT}
+            </if>
+            <if test="brandSid != null">
+                and brand_sid = #{brandSid,jdbcType=VARCHAR}
+            </if>
+            <if test="pictureUrl != null">
+                and picture_url = #{pictureUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="brandNameSecond != null">
+                and brand_name_second =
+                #{brandNameSecond,jdbcType=VARCHAR}
+            </if>
+            <if test="brandActiveBit != null">
+                and brand_active_bit = #{brandActiveBit,jdbcType=BIGINT}
+            </if>
+            <if test="brandno != null">
+                and brandno = #{brandno,jdbcType=VARCHAR}
+            </if>
+            <if test="brandcorp != null">
+                and brandcorp = #{brandcorp,jdbcType=VARCHAR}
+            </if>
+            <if test="brandpic1 != null">
+                and brandpic1 = #{brandpic1,jdbcType=VARCHAR}
+            </if>
+            <if test="brandpic2 != null">
+                and brandpic2 = #{brandpic2,jdbcType=VARCHAR}
+            </if>
+            <if test="photoBlacklistBit != null">
+                and photo_blacklist_bit =
+                #{photoBlacklistBit,jdbcType=BIGINT}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="endBit != null">
+                and end_bit = #{endBit,jdbcType=VARCHAR}
+            </if>
+            <if test="spell != null">
+                and spell = #{spell,jdbcType=VARCHAR}
+            </if>
+            <if test="optUserSid != null">
+                and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+            </if>
+            <if test="optRealName != null">
+                and opt_real_name = #{optRealName,jdbcType=VARCHAR}
+            </if>
+            <if test="optUpdateTime != null">
+                and opt_update_time = #{optUpdateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="brandName != null">
+                and brand_name = #{brandName,jdbcType=VARCHAR}
+            </if>
+            <if test="shopType != null">
+                and shop_type = #{shopType,jdbcType=INTEGER}
+            </if>
+            <if test="brandDesc != null">
+                and brand_desc = #{brandDesc,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="brandNameEn != null">
+                and brand_name_en = #{brandNameEn,jdbcType=VARCHAR}
+            </if>
+            <if test="brandSpecialty != null">
+                and brand_specialty = #{brandSpecialty,jdbcType=VARCHAR}
+            </if>
+            <if test="brandSuitability != null">
+                and brand_suitability =
+                #{brandSuitability,jdbcType=VARCHAR}
+            </if>
+            <if test="isDisplay != null">
+                and is_display = #{isDisplay,jdbcType=INTEGER}
+            </if>
+            <if test="brandType != null">
+                and brand_type = #{brandType,jdbcType=INTEGER}
+            </if>
+        </where>
+        order by
+        sid asc
+        <if test="start != null and limit != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+    <!--查询数量 getCountByParam -->
+    <select id="getCountByParam" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        select
+        count(*)
+        from pcm_brand
+        <where>
+            <if test="sid != null">
+                and sid=#{sid,jdbcType=BIGINT}
+            </if>
+            <if test="brandSid != null">
+                and brand_sid = #{brandSid,jdbcType=VARCHAR}
+            </if>
+            <if test="pictureUrl != null">
+                and picture_url = #{pictureUrl,jdbcType=VARCHAR}
+            </if>
+            <if test="brandNameSecond != null">
+                and brand_name_second =
+                #{brandNameSecond,jdbcType=VARCHAR}
+            </if>
+            <if test="brandActiveBit != null">
+                and brand_active_bit = #{brandActiveBit,jdbcType=BIGINT}
+            </if>
+            <if test="brandno != null">
+                and brandno = #{brandno,jdbcType=VARCHAR}
+            </if>
+            <if test="brandcorp != null">
+                and brandcorp = #{brandcorp,jdbcType=VARCHAR}
+            </if>
+            <if test="brandpic1 != null">
+                and brandpic1 = #{brandpic1,jdbcType=VARCHAR}
+            </if>
+            <if test="brandpic2 != null">
+                and brandpic2 = #{brandpic2,jdbcType=VARCHAR}
+            </if>
+            <if test="photoBlacklistBit != null">
+                and photo_blacklist_bit =
+                #{photoBlacklistBit,jdbcType=BIGINT}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="endBit != null">
+                and end_bit = #{endBit,jdbcType=VARCHAR}
+            </if>
+            <if test="spell != null">
+                and spell = #{spell,jdbcType=VARCHAR}
+            </if>
+            <if test="optUserSid != null">
+                and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+            </if>
+            <if test="optRealName != null">
+                and opt_real_name = #{optRealName,jdbcType=VARCHAR}
+            </if>
+            <if test="optUpdateTime != null">
+                and opt_update_time = #{optUpdateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="brandName != null">
+                and brand_name = #{brandName,jdbcType=VARCHAR}
+            </if>
+            <if test="shopType != null">
+                and shop_type = #{shopType,jdbcType=INTEGER}
+            </if>
+            <if test="brandDesc != null">
+                and brand_desc = #{brandDesc,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="brandNameEn != null">
+                and brand_name_en = #{brandNameEn,jdbcType=VARCHAR}
+            </if>
+            <if test="brandSpecialty != null">
+                and brand_specialty = #{brandSpecialty,jdbcType=VARCHAR}
+            </if>
+            <if test="brandSuitability != null">
+                and brand_suitability =
+                #{brandSuitability,jdbcType=VARCHAR}
+            </if>
+            <if test="isDisplay != null">
+                and is_display = #{isDisplay,jdbcType=INTEGER}
+            </if>
+            <if test="brandType != null">
+                and brand_type = #{brandType,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from
+        pcm_brand
+        where sid = #{sid,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.wangfj.product.brand.domain.entity.PcmBrand">
+        insert into pcm_brand (sid,
+        brand_sid, brand_name,
+        picture_url, brand_name_second,
+        brand_active_bit,
+        brandno, brandcorp, brandpic1,
+        brandpic2,
+        photo_blacklist_bit, parent_sid,
+        end_bit, spell, opt_user_sid,
+        opt_real_name, opt_update_time, shop_type,
+        group_brand_sid, brand_type,
+        brand_desc,
+        shop_sid)
+        values (#{sid,jdbcType=BIGINT},
+        #{brandSid,jdbcType=VARCHAR},
+        #{brandName,jdbcType=VARCHAR},
+        #{pictureUrl,jdbcType=VARCHAR}, #{brandNameSecond,jdbcType=VARCHAR},
+        #{brandActiveBit,jdbcType=BIGINT},
+        #{brandno,jdbcType=VARCHAR},
+        #{brandcorp,jdbcType=VARCHAR}, #{brandpic1,jdbcType=VARCHAR},
+        #{brandpic2,jdbcType=VARCHAR}, #{photoBlacklistBit,jdbcType=BIGINT},
+        #{parentSid,jdbcType=BIGINT},
+        #{endBit,jdbcType=BIGINT},
+        #{spell,jdbcType=VARCHAR}, #{optUserSid,jdbcType=BIGINT},
+        #{optRealName,jdbcType=VARCHAR}, #{optUpdateTime,jdbcType=TIMESTAMP},
+        #{shopType,jdbcType=INTEGER},
+        #{groupBrandSid,jdbcType=BIGINT},
+        #{brandType,jdbcType=INTEGER}, #{brandDesc,jdbcType=VARCHAR},
+        #{shopSid,jdbcType=BIGINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.wangfj.product.brand.domain.entity.PcmBrand"
+            useGeneratedKeys="true" keyProperty="sid">
+        insert into pcm_brand
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                sid,
+            </if>
+            <if test="brandSid != null">
+                brand_sid,
+            </if>
+            <if test="brandName != null">
+                brand_name,
+            </if>
+            <if test="pictureUrl != null">
+                picture_url,
+            </if>
+            <if test="brandNameSecond != null">
+                brand_name_second,
+            </if>
+            <if test="brandActiveBit != null">
+                brand_active_bit,
+            </if>
+            <if test="brandno != null">
+                brandno,
+            </if>
+            <if test="brandcorp != null">
+                brandcorp,
+            </if>
+            <if test="brandpic1 != null">
+                brandpic1,
+            </if>
+            <if test="brandpic2 != null">
+                brandpic2,
+            </if>
+            <if test="photoBlacklistBit != null">
+                photo_blacklist_bit,
+            </if>
+            <if test="parentSid != null">
+                parent_sid,
+            </if>
+            <if test="endBit != null">
+                end_bit,
+            </if>
+            <if test="spell != null">
+                spell,
+            </if>
+            <if test="optUserSid != null">
+                opt_user_sid,
+            </if>
+            <if test="optRealName != null">
+                opt_real_name,
+            </if>
+            <if test="optUpdateTime != null">
+                opt_update_time,
+            </if>
+            <if test="shopType != null">
+                shop_type,
+            </if>
+            <if test="brandType != null">
+                brand_type,
+            </if>
+            <if test="brandDesc != null">
+                brand_desc,
+            </if>
+            <if test="shopSid != null">
+                shop_sid,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="brandNameEn != null">
+                brand_name_en,
+            </if>
+            <if test="brandSpecialty != null">
+                brand_specialty,
+            </if>
+            <if test="brandSuitability != null">
+                brand_suitability,
+            </if>
+            <if test="isDisplay != null">
+                is_display,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                #{sid,jdbcType=BIGINT},
+            </if>
+            <if test="brandSid != null">
+                #{brandSid,jdbcType=VARCHAR},
+            </if>
+            <if test="brandName != null">
+                #{brandName,jdbcType=VARCHAR},
+            </if>
+            <if test="pictureUrl != null">
+                #{pictureUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="brandNameSecond != null">
+                #{brandNameSecond,jdbcType=VARCHAR},
+            </if>
+            <if test="brandActiveBit != null">
+                #{brandActiveBit,jdbcType=BIGINT},
+            </if>
+            <if test="brandno != null">
+                #{brandno,jdbcType=VARCHAR},
+            </if>
+            <if test="brandcorp != null">
+                #{brandcorp,jdbcType=VARCHAR},
+            </if>
+            <if test="brandpic1 != null">
+                #{brandpic1,jdbcType=VARCHAR},
+            </if>
+            <if test="brandpic2 != null">
+                #{brandpic2,jdbcType=VARCHAR},
+            </if>
+            <if test="photoBlacklistBit != null">
+                #{photoBlacklistBit,jdbcType=BIGINT},
+            </if>
+            <if test="parentSid != null">
+                #{parentSid,jdbcType=BIGINT},
+            </if>
+            <if test="endBit != null">
+                #{endBit,jdbcType=BIGINT},
+            </if>
+            <if test="spell != null">
+                #{spell,jdbcType=VARCHAR},
+            </if>
+            <if test="optUserSid != null">
+                #{optUserSid,jdbcType=BIGINT},
+            </if>
+            <if test="optRealName != null">
+                #{optRealName,jdbcType=VARCHAR},
+            </if>
+            <if test="optUpdateTime != null">
+                #{optUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="shopType != null">
+                #{shopType,jdbcType=INTEGER},
+            </if>
+            <if test="brandType != null">
+                #{brandType,jdbcType=INTEGER},
+            </if>
+            <if test="brandDesc != null">
+                #{brandDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="shopSid != null">
+                #{shopSid,jdbcType=BIGINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="brandNameEn != null">
+                #{brandNameEn,jdbcType=VARCHAR},
+            </if>
+            <if test="brandSpecialty != null">
+                #{brandSpecialty,jdbcType=VARCHAR},
+            </if>
+            <if test="brandSuitability != null">
+                #{brandSuitability,jdbcType=VARCHAR},
+            </if>
+            <if test="isDisplay != null">
+                #{isDisplay,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.brand.domain.entity.PcmBrand">
+        update pcm_brand
+        <set>
+            <if test="brandSid != null">
+                brand_sid = #{brandSid,jdbcType=VARCHAR},
+            </if>
+            <if test="brandName != null">
+                brand_name = #{brandName,jdbcType=VARCHAR},
+            </if>
+            <if test="pictureUrl != null">
+                picture_url = #{pictureUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="brandNameSecond != null">
+                brand_name_second = #{brandNameSecond,jdbcType=VARCHAR},
+            </if>
+            <if test="brandActiveBit != null">
+                brand_active_bit = #{brandActiveBit,jdbcType=BIGINT},
+            </if>
+            <if test="brandno != null">
+                brandno = #{brandno,jdbcType=VARCHAR},
+            </if>
+            <if test="brandcorp != null">
+                brandcorp = #{brandcorp,jdbcType=VARCHAR},
+            </if>
+            <if test="brandpic1 != null">
+                brandpic1 = #{brandpic1,jdbcType=VARCHAR},
+            </if>
+            <if test="brandpic2 != null">
+                brandpic2 = #{brandpic2,jdbcType=VARCHAR},
+            </if>
+            <if test="photoBlacklistBit != null">
+                photo_blacklist_bit =
+                #{photoBlacklistBit,jdbcType=BIGINT},
+            </if>
+            <if test="parentSid != null">
+                parent_sid = #{parentSid,jdbcType=BIGINT},
+            </if>
+            <if test="endBit != null">
+                end_bit = #{endBit,jdbcType=BIGINT},
+            </if>
+            <if test="spell != null">
+                spell = #{spell,jdbcType=VARCHAR},
+            </if>
+            <if test="optUserSid != null">
+                opt_user_sid = #{optUserSid,jdbcType=BIGINT},
+            </if>
+            <if test="optRealName != null">
+                opt_real_name = #{optRealName,jdbcType=VARCHAR},
+            </if>
+            <if test="optUpdateTime != null">
+                opt_update_time = #{optUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="shopType != null">
+                shop_type = #{shopType,jdbcType=INTEGER},
+            </if>
+            <if test="brandType != null">
+                brand_type = #{brandType,jdbcType=INTEGER},
+            </if>
+            <if test="brandDesc != null">
+                brand_desc = #{brandDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="shopSid != null">
+                shop_sid = #{shopSid,jdbcType=BIGINT},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=BIGINT},
+            </if>
+            <if test="brandNameEn != null">
+                brand_name_en = #{brandNameEn,jdbcType=VARCHAR},
+            </if>
+            <if test="brandSpecialty != null">
+                brand_specialty = #{brandSpecialty,jdbcType=VARCHAR},
+            </if>
+            <if test="brandSuitability != null">
+                brand_suitability = #{brandSuitability,jdbcType=VARCHAR},
+            </if>
+            <if test="isDisplay != null">
+                is_display = #{isDisplay,jdbcType=INTEGER},
+            </if>
+        </set>
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.wangfj.product.brand.domain.entity.PcmBrand">
+        update pcm_brand
+        set brand_sid = #{brandSid,jdbcType=VARCHAR},
+        brand_name =
+        #{brandName,jdbcType=VARCHAR},
+        picture_url =
+        #{pictureUrl,jdbcType=VARCHAR},
+        brand_name_second =
+        #{brandNameSecond,jdbcType=VARCHAR},
+        brand_active_bit =
+        #{brandActiveBit,jdbcType=BIGINT},
+        brandno =
+        #{brandno,jdbcType=VARCHAR},
+        brandcorp = #{brandcorp,jdbcType=VARCHAR},
+        brandpic1 = #{brandpic1,jdbcType=VARCHAR},
+        brandpic2 =
+        #{brandpic2,jdbcType=VARCHAR},
+        photo_blacklist_bit =
+        #{photoBlacklistBit,jdbcType=BIGINT},
+        parent_sid =
+        #{parentSid,jdbcType=BIGINT},
+        end_bit = #{endBit,jdbcType=BIGINT},
+        spell = #{spell,jdbcType=VARCHAR},
+        opt_user_sid =
+        #{optUserSid,jdbcType=BIGINT},
+        opt_real_name =
+        #{optRealName,jdbcType=VARCHAR},
+        opt_update_time =
+        #{optUpdateTime,jdbcType=TIMESTAMP},
+        shop_type =
+        #{shopType,jdbcType=INTEGER},
+        brand_type =
+        #{brandType,jdbcType=INTEGER},
+        brand_desc =
+        #{brandDesc,jdbcType=VARCHAR},
+        shop_sid = #{shopSid,jdbcType=BIGINT}
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+
+    <!--分页查询selectPageByPara wangxuan -->
+    <select id="selectPageByPara" resultType="com.wangfj.product.brand.domain.vo.PcmBrandDto"
+            parameterType="com.wangfj.product.brand.domain.vo.SelectPcmBrandPageDto">
+        select pb.sid as sid,pb.parent_sid as parentSid,
+        pb.brand_sid as
+        brandSid,pb.brand_name as
+        brandName,pb.brandpic1,pb.brandpic2,pb.brand_name_second
+        as
+        brandNameSecond,pb.brandcorp as
+        brandcorp ,pb.spell as spell
+        ,pb.brand_type as
+        brandType,pb.shop_type
+        as
+        shopType,pb.opt_real_name as
+        optRealName,
+        pb.opt_update_time as
+        optUpdateTimes,pb.brand_desc as
+        brandDesc ,pb.status as
+        status
+        ,pb.brand_name_en as brandNameEn
+        ,pb.brand_specialty as
+        brandSpecialty
+        ,pb.brand_suitability as
+        brandSuitability ,pb.is_display
+        as isDisplay
+        ,pbg.brand_sid
+        as
+        superCode,
+        pbg.brand_name as
+        brandFatherName
+        from
+        pcm_brand pb left
+        join
+        pcm_brand
+        pbg
+        on
+        pb.parent_sid
+        =
+        pbg.sid
+        <where>
+            <if test="sid != null">
+                and pb.sid = #{sid}
+            </if>
+            <if test="status != null">
+                and pb.status = #{status}
+            </if>
+            <if test="brandType != null">
+                and pb.brand_type = #{brandType}
+            </if>
+            <if test="parentSid != null">
+                and pb.parent_sid = #{parentSid}
+            </if>
+            <if test="brandSid != null">
+                and pb.brand_sid = #{brandSid}
+            </if>
+            <if test="brandName != null">
+                and ( pb.brand_name like "%"#{brandName}"%"
+                or
+                pb.brand_name_second like "%"#{brandName}"%" )
+            </if>
+            <if test="spell != null">
+                and (pb.spell like "%"#{spell}"%"
+                or
+                pb.brand_name_en like
+                "%"#{spell}"%" )
+            </if>
+            <if test="shopType != null">
+                and pb.shop_type = #{shopType}
+            </if>
+        </where>
+        order by
+        sid desc
+        <if test="start != null and limit != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+    <!--查询数量 getPageCountByPara wangxuan -->
+    <select id="getPageCountByPara" resultType="java.lang.Long"
+            parameterType="com.wangfj.product.brand.domain.vo.SelectPcmBrandPageDto">
+        select
+        count(pb.sid)
+        from
+        pcm_brand pb left
+        join
+        pcm_brand
+        pbg on
+        pb.parent_sid
+        =
+        pbg.sid
+        <where>
+            <if test="sid != null">
+                and pb.sid = #{sid}
+            </if>
+            <if test="status != null">
+                and pb.status = #{status}
+            </if>
+            <if test="brandType != null">
+                and pb.brand_type = #{brandType}
+            </if>
+            <if test="parentSid != null">
+                and pb.parent_sid = #{parentSid}
+            </if>
+            <if test="brandSid != null">
+                and pb.brand_sid = #{brandSid}
+            </if>
+            <if test="brandName != null">
+                and ( pb.brand_name like "%"#{brandName}"%"
+                or
+                pb.brand_name_second like "%"#{brandName}"%" )
+            </if>
+            <if test="spell != null">
+                and (pb.spell like "%"#{spell}"%"
+                or
+                pb.brand_name_en like
+                "%"#{spell}"%" )
+            </if>
+            <if test="shopType != null">
+                and pb.shop_type = #{shopType}
+            </if>
+        </where>
+    </select>
+
+    <!--查询selectListByParaSelective wangxuan -->
+    <select id="selectListByParaSelective" resultMap="BaseResultMap"
+            parameterType="com.wangfj.product.brand.domain.vo.SelectPcmBrandPageDto">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_brand
+        <where>
+            <if test="sid != null">
+                and sid=#{sid,jdbcType=BIGINT}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="brandSid != null">
+                and brand_sid = #{brandSid,jdbcType=VARCHAR}
+            </if>
+            <if test="brandName != null">
+                and ( brand_name like "%"#{brandName,jdbcType=VARCHAR}"%"
+                or brand_name_second like "%"#{brandName,jdbcType=VARCHAR}"%" )
+            </if>
+            <if test="spell != null">
+                and (spell like "%"#{spell,jdbcType=VARCHAR}"%"
+                or
+                brand_name_en like "%"#{spell,jdbcType=VARCHAR}"%" )
+            </if>
+            <if test="shopType != null">
+                and shop_type = #{shopType,jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="brandType != null">
+                and brand_type = #{brandType,jdbcType=INTEGER}
+            </if>
+        </where>
+        ORDER BY
+        CONVERT(brand_name USING gbk) ASC
+    </select>
+
+    <!--查询 selectListPartInfoByParam wangxuan -->
+    <select id="selectListPartInfoByParam" resultType="com.wangfj.product.brand.domain.vo.PcmBrandPartDto"
+            parameterType="com.wangfj.product.brand.domain.vo.SelectPcmBrandPageDto">
+        select
+        sid AS sid,
+        brand_name AS brandName,
+        brand_sid AS brandSid
+        from pcm_brand
+        <where>
+            <if test="sid != null">
+                and sid=#{sid,jdbcType=BIGINT}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="brandSid != null">
+                and brand_sid = #{brandSid,jdbcType=VARCHAR}
+            </if>
+            <if test="brandName != null">
+                and ( brand_name like "%"#{brandName,jdbcType=VARCHAR}"%"
+                or brand_name_second like "%"#{brandName,jdbcType=VARCHAR}"%"
+                or spell like "%"#{brandName,jdbcType=VARCHAR}"%"
+                or brand_name_en like "%"#{brandName,jdbcType=VARCHAR}"%" )
+            </if>
+            <if test="spell != null">
+                and (spell like "%"#{spell,jdbcType=VARCHAR}"%"
+                or brand_name_en like "%"#{spell,jdbcType=VARCHAR}"%" )
+            </if>
+            <if test="shopType != null">
+                and shop_type = #{shopType,jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="brandType != null">
+                and brand_type = #{brandType,jdbcType=INTEGER}
+            </if>
+        </where>
+        ORDER BY
+        CONVERT(brand_name USING gbk) ASC
+        <if test="start != null and limit != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+    <!--查询 selectCountPartInfoByParam wangxuan -->
+    <select id="selectCountPartInfoByParam" resultType="java.lang.Integer"
+            parameterType="com.wangfj.product.brand.domain.vo.SelectPcmBrandPageDto">
+        select
+        COUNT(*)
+        from pcm_brand
+        <where>
+            <if test="sid != null">
+                and sid=#{sid,jdbcType=BIGINT}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="brandSid != null">
+                and brand_sid = #{brandSid,jdbcType=VARCHAR}
+            </if>
+            <if test="brandName != null">
+                and ( brand_name like "%"#{brandName,jdbcType=VARCHAR}"%"
+                or brand_name_second like "%"#{brandName,jdbcType=VARCHAR}"%"
+                or spell like "%"#{brandName,jdbcType=VARCHAR}"%"
+                or brand_name_en like "%"#{brandName,jdbcType=VARCHAR}"%" )
+            </if>
+            <if test="spell != null">
+                and (spell like "%"#{spell,jdbcType=VARCHAR}"%"
+                or brand_name_en like "%"#{spell,jdbcType=VARCHAR}"%" )
+            </if>
+            <if test="shopType != null">
+                and shop_type = #{shopType,jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="brandType != null">
+                and brand_type = #{brandType,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <!--selectPageBrandAndBrandGroup分页查询门店品牌及其集团品牌 -->
+    <select id="selectPageBrandAndBrandGroup" resultType="com.wangfj.product.brand.domain.vo.PcmBrandDto"
+            parameterType="java.util.Map">
+        select pb.sid as sid,
+        pb.brand_sid as brandSid,pb.brand_name as
+        brandName, pb.brand_name_second
+        as
+        brandNameSecond,pb.brandcorp as
+        brandcorp ,pb.spell as spell ,pb.brand_type as
+        brandType,pb.shop_type
+        as
+        shopType,pb.opt_real_name as optRealName,
+        pb.opt_update_time as
+        optUpdateTimes,pb.brand_desc as brandDesc ,pb.status as
+        status
+        ,pb.brand_name_en as brandNameEn ,pb.brand_specialty as
+        brandSpecialty
+        ,pb.brand_suitability as brandSuitability ,pb.is_display
+        as isDisplay
+        ,pbg.brand_sid
+        as
+        superCode,
+        pbg.brand_name as
+        brandFatherName
+        from
+        pcm_brand pb
+        join
+        pcm_brand
+        pbg on
+        pb.parent_sid
+        =
+        pbg.sid
+        <where>
+            <if test="sid != null">
+                and pb.sid = #{sid}
+            </if>
+            <if test="status != null">
+                and pb.status = #{status}
+            </if>
+            <if test="brandType != null">
+                and pb.brand_type = #{brandType}
+            </if>
+            <if test="parentSid != null">
+                and pb.parent_sid = #{parentSid}
+            </if>
+            <if test="brandSid != null">
+                and pb.brand_sid = #{brandSid}
+            </if>
+            <if test="brandName != null">
+                and ( pb.brand_name like "%"#{brandName}"%"
+                or
+                pb.brand_name_second like "%"#{brandName}"%" )
+            </if>
+            <if test="spell != null">
+                and (pb.spell like "%"#{spell}"%"
+                or
+                pb.brand_name_en like
+                "%"#{spell}"%" )
+            </if>
+            <if test="shopType != null">
+                and pb.shop_type = #{shopType}
+            </if>
+            <if test="brandGroupStatus != null">
+                and pbg.status = #{brandGroupStatus}
+            </if>
+        </where>
+        order by
+        pb.sid desc
+        <if test="start != null and limit != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+    <!--getPageCountBrandAndBrandGroup查询门店品牌及其集团品牌总数 -->
+    <select id="getPageCountBrandAndBrandGroup" resultType="java.lang.Long"
+            parameterType="java.util.Map">
+        select
+        count(pb.sid)
+        from
+        pcm_brand pb
+        join
+        pcm_brand
+        pbg on
+        pb.parent_sid
+        =
+        pbg.sid
+        <where>
+            <if test="sid != null">
+                and pb.sid = #{sid}
+            </if>
+            <if test="status != null">
+                and pb.status = #{status}
+            </if>
+            <if test="brandType != null">
+                and pb.brand_type = #{brandType}
+            </if>
+            <if test="parentSid != null">
+                and pb.parent_sid = #{parentSid}
+            </if>
+            <if test="brandSid != null">
+                and pb.brand_sid = #{brandSid}
+            </if>
+            <if test="brandName != null">
+                and ( pb.brand_name like "%"#{brandName}"%"
+                or
+                pb.brand_name_second like "%"#{brandName}"%" )
+            </if>
+            <if test="spell != null">
+                and (pb.spell like "%"#{spell}"%"
+                or
+                pb.brand_name_en like
+                "%"#{spell}"%" )
+            </if>
+            <if test="shopType != null">
+                and pb.shop_type = #{shopType}
+            </if>
+            <if test="brandGroupStatus != null">
+                and pbg.status = #{brandGroupStatus}
+            </if>
+        </where>
+    </select>
+
+
+    <!-- 删除门店品牌与集团品牌的关系 wangxuan -->
+    <update id="deleteRelation" parameterType="java.util.Map">
+        update pcm_brand
+        set
+        parent_sid =
+        #{parentSid,jdbcType=BIGINT}
+        where sid =
+        #{sid,jdbcType=BIGINT}
+    </update>
+
+    <!-- 商品导入终端 由主数据获取品牌信息 getBrandGroupData wangxuan -->
+    <select id="getBrandGroupData" resultType="com.wangfj.product.brand.domain.vo.BrandDataDto"
+            parameterType="java.util.Map">
+        SELECT
+        pb.brand_sid AS superCode,
+        pb.brand_sid AS code,
+        pb.brand_name AS name,
+        pb.brand_name_second AS Name2
+        FROM
+        pcm_brand pb
+        WHERE
+        pb.brand_type = 0
+        AND pb.status = 0
+        <if test="code != null">
+            AND pb.brand_sid = #{code}
+        </if>
+        <if test="name != null">
+            AND pb.brand_name like "%"#{name}"%"
+        </if>
+        ORDER BY
+        pb.sid DESC
+    </select>
+
+    <!-- 商品导入终端 由主数据获取品牌信息 getBrandData wangxuan -->
+    <select id="getBrandData" resultType="com.wangfj.product.brand.domain.vo.BrandDataDto"
+            parameterType="java.util.Map">
+        SELECT
+        pbg.brand_sid AS superCode,
+        pb.brand_sid AS code,
+        pb.brand_name AS name,
+        pb.brand_name_second AS Name2
+        FROM
+        pcm_brand pb
+        INNER JOIN pcm_brand pbg ON pb.parent_sid = pbg.sid
+        <if test="storeCode != null">
+            INNER JOIN pcm_shop_brand_relation psbr ON psbr.brand_sid = pb.sid
+            AND psbr.status = 0
+            INNER JOIN pcm_organization po ON psbr.shop_sid = po.sid
+            AND psbr.status = 0
+        </if>
+        WHERE
+        pb.status = 0
+        AND pb.brand_type = 1
+        AND pbg.status = 0
+        AND pbg.brand_type = 0
+        <if test="code != null">
+            AND pb.brand_sid = #{code}
+        </if>
+        <if test="name != null">
+            AND pb.brand_name like "%"#{name}"%"
+        </if>
+        <if test="shopType != null">
+            and pb.shop_type = #{shopType}
+        </if>
+        <if test="storeCode != null">
+            AND po.organization_type = 3
+            AND po.organization_code = #{storeCode}
+        </if>
+        ORDER BY
+        pb.sid DESC
+    </select>
+
+    <!-- 移动工作台调用主数据获取品牌信息 分页查询 getPageBrandForPad wangxuan -->
+    <select id="getPageBrandForPad"
+            resultType="com.wangfj.product.brand.domain.vo.PadBrandResultDto"
+            parameterType="java.util.Map">
+        select
+        pb.brand_sid as code,pb.brand_name as
+        name,pb.brand_name_second
+        as name2,pb.brand_type as
+        brandType,pb.shop_type as shopType,
+        pbg.brand_sid as superCode
+        from pcm_brand pb
+        left join pcm_brand
+        pbg on
+        pb.parent_sid = pbg.sid
+        <where>
+            <if test="status != null">
+                and pb.status = #{status}
+            </if>
+            <if test="brandSid != null">
+                and pb.brand_sid = #{brandSid}
+            </if>
+            <if test="shopType != null">
+                and pb.shop_type = #{shopType}
+            </if>
+            <if test="brandType != null">
+                and pb.brand_type = #{brandType}
+            </if>
+        </where>
+        order by
+        pb.sid desc
+        <if test="start != null and limit != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+    <!-- 门店品牌下发分页查询 pushPageBrandData wangxuan -->
+    <select id="pushPageBrandData" resultType="com.wangfj.product.brand.domain.vo.PushBrandDto"
+            parameterType="java.util.Map">
+        select
+        pb.brand_sid as code,pb.brand_name as
+        name,pb.brand_name_second
+        as name2,pb.brand_type as
+        brandType,pb.shop_type as
+        shopType,pb.opt_real_name as optRealName,
+        pb.opt_update_time as
+        optUpdateTime,
+        pbg.brand_sid as
+        superCode
+        from
+        (SELECT
+        <include refid="Base_Column_List"/>
+        FROM pcm_brand
+        <where>
+            <if test="sid != null">
+                and sid = #{sid}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="brandType != null">
+                and brand_type = #{brandType}
+            </if>
+        </where>
+        )
+        pb left join
+        (SELECT
+        <include refid="Base_Column_List"/>
+        FROM pcm_brand
+        WHERE
+        brand_type = 0
+        <if test="status != null">
+            and status = #{status}
+        </if>
+        ) pbg on
+        pb.parent_sid = pbg.sid
+        <if test="start != null and limit != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+    <!-- 搜索查询门店品牌信息 searchBrandByParam wangxuan -->
+    <select id="searchBrandByParam" resultType="java.util.Map"
+            parameterType="java.util.Map">
+        SELECT pb.brand_sid AS brandCode, pb.brand_name AS storeBrandName
+        FROM
+        pcm_brand pb LEFT JOIN pcm_shop_brand_relation psb
+        ON pb.sid =
+        psb.brand_sid
+        <where>
+            pb.status = 0
+            <if test="storeBrandCode != null">
+                AND pb.brand_sid = #{storeBrandCode}
+            </if>
+            <if test="storeCode != null">
+                AND psb.shop_sid =
+                (SELECT po.sid FROM pcm_organization po
+                WHERE
+                po.organization_type = 3 AND po.organization_status = 0 AND
+                po.organization_code = #{storeCode} )
+            </if>
+        </where>
+    </select>
+
+    <!-- updateRelationList批量修改门店品牌与集团品牌的关系 -->
+    <update id="updateRelationList" parameterType="java.util.Map">
+        update pcm_brand set
+        parent_sid = #{parentSid} where sid in
+        <foreach collection="sidList" item="item" open="(" separator=","
+                 close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!-- 根据门店与门店品牌查询门店品牌 getListBrandFromShopBrandRelation -->
+    <select id="getListBrandFromShopBrandRelation" parameterType="java.util.Map"
+            resultMap="BaseResultMap">
+        SELECT DISTINCT
+        pb.sid AS sid, pb.brand_sid AS brandSid, pb.brand_name
+        AS
+        brandName
+        FROM pcm_brand pb INNER JOIN pcm_shop_brand_relation psb
+        ON
+        pb.sid =
+        psb.brand_sid
+        INNER JOIN (
+        SELECT
+        sid
+        FROM
+        pcm_organization
+        WHERE
+        organization_type = 3
+        AND organization_status = 0
+        <if test="shopCode != null">
+            AND organization_code = #{shopCode}
+        </if>
+        ) po ON psb.shop_sid = po.sid
+        <where>
+            pb.status = 0 AND psb.status = 0 AND
+            pb.brand_type = 1
+            <if test="parentSid != null">
+                AND pb.parent_sid = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="brandSid != null">
+                AND pb.brand_sid = #{brandSid}
+            </if>
+            <if test="shopSid != null">
+                AND psb.shop_sid = #{shopSid,jdbcType=VARCHAR}
+            </if>
+        </where>
+        ORDER BY
+        pb.brand_name
+    </select>
+
+    <!-- 分页查询门店下的门店品牌 getPageBrandFromShopBrandRelation -->
+    <select id="getPageBrandFromShopBrandRelation" parameterType="com.wangfj.product.brand.domain.vo.PcmShopBrandDto"
+            resultType="com.wangfj.product.brand.domain.vo.PcmBrandDto">
+        SELECT
+        pb.sid as sid,
+        pb.brand_sid as brandSid,pb.brand_name as
+        brandName, pb.brand_name_second
+        as
+        brandNameSecond,pb.spell as spell
+        ,pb.brand_type as
+        brandType,pb.shop_type
+        as
+        shopType,pb.brand_desc as
+        brandDesc ,pb.status as
+        status
+        ,pb.brand_name_en as brandNameEn
+        ,pb.brand_specialty as
+        brandSpecialty
+        ,pb.brand_suitability as
+        brandSuitability ,pb.is_display
+        as isDisplay,
+        pb.brandpic1 AS brandpic1,
+        pb.brandpic2 AS brandpic2
+        FROM pcm_brand pb INNER
+        JOIN
+        pcm_shop_brand_relation psb
+        ON
+        pb.sid =
+        psb.brand_sid
+        INNER JOIN (
+        SELECT
+        *
+        FROM
+        pcm_organization
+        WHERE
+        organization_type = 3
+        AND
+        organization_status =
+        0
+        <if test="shopCode != null">
+            AND organization_code = #{shopCode}
+        </if>
+        ) po ON psb.shop_sid = po.sid
+        <where>
+            pb.status = 0 AND psb.status = 0 AND
+            pb.brand_type = 1
+            <if test="parentSid != null">
+                AND pb.parent_sid = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="shopSid != null">
+                AND psb.shop_sid = #{shopSid,jdbcType=VARCHAR}
+            </if>
+        </where>
+        ORDER BY
+        CONVERT(pb.brand_name USING gbk)
+        <if test="start != null and limit != null">
+            LIMIT #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="getPageBrandCountFromShopBrandRelation"
+            parameterType="com.wangfj.product.brand.domain.vo.PcmShopBrandDto"
+            resultType="java.lang.Long">
+        SELECT
+        count(pb.sid)
+        FROM pcm_brand pb INNER
+        JOIN pcm_shop_brand_relation
+        psb
+        ON
+        pb.sid =
+        psb.brand_sid
+        INNER JOIN (
+        SELECT
+        *
+        FROM
+        pcm_organization
+        WHERE
+        organization_type = 3
+        AND
+        organization_status = 0
+        <if test="shopCode != null">
+            AND organization_code = #{shopCode}
+        </if>
+        ) po ON psb.shop_sid = po.sid
+        <where>
+            pb.status = 0 AND psb.status = 0 AND
+            pb.brand_type = 1
+            <if test="parentSid != null">
+                AND pb.parent_sid = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="shopSid != null">
+                AND psb.shop_sid = #{shopSid,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <!-- pushSearchBrandBySid 根据sid查询下发给搜索的数据（修改品牌时） wangxuan -->
+    <select id="pushSearchBrandBySid" parameterType="java.util.Map"
+            resultType="com.wangfj.product.brand.domain.vo.PushSearchBrandDto">
+        SELECT
+        pb.brand_sid AS storeBrandCode,
+        pb.brand_name AS storeBrandName,
+        po.organization_code
+        AS storeCode
+        FROM
+        pcm_brand pb
+        INNER JOIN
+        pcm_shop_brand_relation psb ON
+        pb.sid =
+        psb.brand_sid
+        INNER JOIN
+        pcm_organization po ON psb.shop_sid =
+        po.sid
+        WHERE
+        pb.status = 0
+        AND
+        po.organization_status = 0
+        AND
+        po.organization_type = 3
+        <if test="sid != null">
+            AND pb.sid = #{sid}
+        </if>
+        <if test="brandType != null">
+            AND pb.brand_type = #{brandType}
+        </if>
+    </select>
+
+    <!-- 搜索线上下发品牌信息 -->
+    <select id="pushSearchOnlineBrandBySid" parameterType="java.util.Map"
+            resultType="java.util.Map">
+        SELECT
+        brand_sid AS brandId,
+        brand_name AS brandName,
+        brand_desc AS
+        brandDesc,
+        brandpic1 AS brandLogo,
+        brandpic2 AS
+        brandPicture,
+        brand_name_second AS brandNameSecond,
+        spell AS spell,
+        brand_name_en AS
+        brandNameEn
+        FROM
+        pcm_brand
+        WHERE
+        status = 0
+        <if test="sid != null">
+            AND sid = #{sid}
+        </if>
+        <if test="brandType != null">
+            AND brand_type = #{brandType}
+        </if>
+    </select>
+
+    <!-- 搜索线上根据编码查询品牌 -->
+    <select id="searchOnlineBrandByCode" parameterType="java.util.Map"
+            resultType="java.util.Map">
+        SELECT
+        brand_sid AS brandId,
+        brand_name AS brandName,
+        brand_desc AS
+        brandDesc,
+        brandpic1 AS brandLogo,
+        brandpic2 AS
+        brandPicture,
+        brand_name_second AS brandNameSecond,
+        spell AS spell,
+        brand_name_en AS
+        brandNameEn
+        FROM
+        pcm_brand
+        WHERE
+        status = 0
+        <if test="brandId != null and brandId != ''">
+            AND brand_sid = #{brandId}
+        </if>
+    </select>
+
+    <!-- 搜索线上列出所有网站品牌 -->
+    <select id="searchOnlineAllBrand" parameterType="java.util.Map"
+            resultType="java.util.Map">
+        SELECT
+        brand_sid AS brandId,
+        brand_name AS brandName
+        FROM
+        pcm_brand
+        WHERE
+        status = 0
+        <if test="brandType != null">
+            AND brand_type = #{brandType}
+        </if>
+    </select>
+
+    <!-- CMS -->
+    <select id="getBrandInfoByName" parameterType="java.util.Map"
+            resultType="java.util.Map">
+        SELECT
+        brand_name AS brandName,
+        brand_sid AS brandCode,
+        CONCAT(#{brandPicUrl}, brandpic1) AS logoPicUrl,
+        '' AS bannerPicUrl
+        FROM
+        pcm_brand
+        <where>
+            <if test="brandName != null">
+                and brand_name like "%"#{brandName,jdbcType=VARCHAR}"%"
+            </if>
+        </where>
+    </select>
+
+    <!-- CMS -->
+    <select id="getBrandListByIds" parameterType="java.util.List"
+            resultType="java.util.Map">
+        SELECT
+        brand_name AS brandName,
+        brand_sid AS brandCode
+        FROM
+        pcm_brand
+        WHERE
+        brand_sid IN
+        <foreach collection="list" open="(" item="item" separator=","
+                 close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="getBrandGroupByBrandParam" parameterType="java.util.Map"
+            resultType="java.util.Map">
+        SELECT
+        pbg.brand_sid AS superCode,
+        pb.brand_sid AS code
+        FROM
+        pcm_brand pb
+        INNER JOIN pcm_brand pbg ON pb.parent_sid = pbg.sid
+        AND
+        pb.status = 0
+        AND pbg.status = 0
+        <where>
+            <if test="code != null and code != ''">
+                and pb.brand_sid = #{code}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectMaxSidByParam"
+            parameterType="com.wangfj.product.brand.domain.vo.GenerateBrandCodeDto"
+            resultType="java.util.Map">
+        SELECT
+        MAX(
+        CAST(pb.brand_sid AS UNSIGNED)
+        ) AS maxSid
+        FROM
+        pcm_brand pb
+        <where>
+            <if test="brandType != null">
+                and pb.brand_type = #{brandType}
+            </if>
+            <if test="shopType != null">
+                and pb.shop_type = #{shopType}
+            </if>
+            <if test="codeStart != null">
+                and pb.brand_sid LIKE CONCAT(#{codeStart}, "______")
+            </if>
+        </where>
+    </select>
+
+    <!--根据门店SID skuSID查询门店品牌 -->
+    <select id="selectBrandByShopSku" parameterType="java.util.Map"
+            resultType="com.wangfj.product.brand.domain.entity.PcmBrand">
+        select
+        br.sid as sid,
+        br.brand_sid as brandSid,
+        br.brand_name
+        as brandName,
+        br.picture_url as pictureUrl,
+        br.brand_name_second as
+        brandNameSecond,
+        br.brand_active_bit as brandActiveBit,
+        br.brandno as
+        brandno,
+        br.brandcorp as brandcorp,
+        br.brandpic1 as brandpic1,
+        br.brandpic2 as brandpic2,
+        br.photo_blacklist_bit as photoBlacklistBit,
+        br.parent_sid as parenSid,
+        br.end_bit as endBit,
+        br.spell as spell,
+        br.opt_user_sid as optUserSid,
+        br.opt_real_name as optRealName,
+        br.opt_update_time as optUpdateTime,
+        br.shop_type as shopType,
+        br.brand_type as brandType,
+        br.brand_desc as brandDesc,
+        br.shop_sid as
+        shopSid,
+        br.status as status,
+        br.brand_name_en as
+        brandNameEn,
+        br.brand_specialty as brandSpecialty,
+        br.brand_suitability
+        as
+        brandSuitability,
+        br.is_display as isDisplay
+        FROM
+        pcm_brand br
+        JOIN
+        pcm_shop_brand_relation sbr ON sbr.shop_sid = #{shopSid}
+        AND br.sid =
+        sbr.brand_sid
+        WHERE
+        br.parent_sid = (
+        SELECT
+        p.brand_root_sid
+        FROM
+        pcm_pro_detail pd
+        JOIN pcm_product p ON pd.product_sid = p.sid
+        WHERE
+        pd.sid = #{skuSid}
+        )
+        ORDER BY
+        CONVERT(br.brand_name USING gbk)
+    </select>
+</mapper>

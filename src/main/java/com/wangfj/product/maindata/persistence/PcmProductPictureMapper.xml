@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.wangfj.product.maindata.persistence.PcmProductPictureMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.maindata.domain.entity.PcmProductPicture">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="product_sid" property="productSid" jdbcType="BIGINT" />
+		<result column="pro_pict_name" property="proPictName" jdbcType="VARCHAR" />
+		<result column="pro_pict_dir" property="proPictDir" jdbcType="VARCHAR" />
+		<result column="pro_pict_order" property="proPictOrder"
+			jdbcType="INTEGER" />
+		<result column="picture_model_bit" property="pictureModelBit"
+			jdbcType="INTEGER" />
+		<result column="picture_master_bit" property="pictureMasterBit"
+			jdbcType="INTEGER" />
+		<result column="pro_color_sid" property="proColorSid" jdbcType="BIGINT" />
+		<result column="pro_color_name" property="proColorName"
+			jdbcType="VARCHAR" />
+		<result column="pro_color_alias" property="proColorAlias"
+			jdbcType="VARCHAR" />
+		<result column="pro_picture_size_sid" property="proPictureSizeSid"
+			jdbcType="BIGINT" />
+		<result column="pro_picture_sid" property="proPictureSid"
+			jdbcType="BIGINT" />
+		<result column="color_master_pic_bit" property="colorMasterPicBit"
+			jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, product_sid, pro_pict_name, pro_pict_dir,
+		pro_pict_order,
+		picture_model_bit,
+		picture_master_bit, pro_color_sid,
+		pro_color_name, pro_color_alias, pro_picture_size_sid,
+		pro_picture_sid, color_master_pic_bit
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_product_picture
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+
+	<select id="getUrlBySpuCodeAndColor" resultType="com.wangfj.product.maindata.domain.vo.PcmSapResUrlDto"
+		parameterType="com.wangfj.product.stocks.domain.vo.PcmSpuSkuProInfoDto">
+		SELECT
+		url.picture_url as picUrl
+		FROM
+		pcm_picture_url AS url
+		JOIN pcm_picture_stan AS stan ON url.stan_sid = stan.sid AND url.if_delete = 0
+		<where>
+			<if test="spuCode != null">
+				AND url.sku_sid = #{spuCode}
+			</if>
+			<if test="height != null">
+				AND stan.picture_height = #{height}
+			</if>
+			<if test="width != null">
+				AND	stan.picture_width = #{width}
+			</if>
+			<if test="colorSid != null">
+				AND url.color_code = #{colorSid}
+			</if>
+			and is_primary=0
+		</where>
+		<if test="urlNum != null">
+			LIMIT 0, #{urlNum}
+		</if>
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_product_picture
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmProductPicture">
+		insert into pcm_product_picture (sid, product_sid,
+		pro_pict_name,
+		pro_pict_dir, pro_pict_order, picture_model_bit,
+		picture_master_bit, pro_color_sid, pro_color_name,
+		pro_color_alias,
+		pro_picture_size_sid, pro_picture_sid,
+		color_master_pic_bit)
+		values
+		(#{sid,jdbcType=BIGINT}, #{productSid,jdbcType=BIGINT},
+		#{proPictName,jdbcType=VARCHAR},
+		#{proPictDir,jdbcType=VARCHAR},
+		#{proPictOrder,jdbcType=INTEGER},
+		#{pictureModelBit,jdbcType=INTEGER},
+		#{pictureMasterBit,jdbcType=INTEGER}, #{proColorSid,jdbcType=BIGINT},
+		#{proColorName,jdbcType=VARCHAR},
+		#{proColorAlias,jdbcType=VARCHAR},
+		#{proPictureSizeSid,jdbcType=BIGINT},
+		#{proPictureSid,jdbcType=BIGINT},
+		#{colorMasterPicBit,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmProductPicture">
+		insert into pcm_product_picture
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="productSid != null">
+				product_sid,
+			</if>
+			<if test="proPictName != null">
+				pro_pict_name,
+			</if>
+			<if test="proPictDir != null">
+				pro_pict_dir,
+			</if>
+			<if test="proPictOrder != null">
+				pro_pict_order,
+			</if>
+			<if test="pictureModelBit != null">
+				picture_model_bit,
+			</if>
+			<if test="pictureMasterBit != null">
+				picture_master_bit,
+			</if>
+			<if test="proColorSid != null">
+				pro_color_sid,
+			</if>
+			<if test="proColorName != null">
+				pro_color_name,
+			</if>
+			<if test="proColorAlias != null">
+				pro_color_alias,
+			</if>
+			<if test="proPictureSizeSid != null">
+				pro_picture_size_sid,
+			</if>
+			<if test="proPictureSid != null">
+				pro_picture_sid,
+			</if>
+			<if test="colorMasterPicBit != null">
+				color_master_pic_bit,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="productSid != null">
+				#{productSid,jdbcType=BIGINT},
+			</if>
+			<if test="proPictName != null">
+				#{proPictName,jdbcType=VARCHAR},
+			</if>
+			<if test="proPictDir != null">
+				#{proPictDir,jdbcType=VARCHAR},
+			</if>
+			<if test="proPictOrder != null">
+				#{proPictOrder,jdbcType=INTEGER},
+			</if>
+			<if test="pictureModelBit != null">
+				#{pictureModelBit,jdbcType=INTEGER},
+			</if>
+			<if test="pictureMasterBit != null">
+				#{pictureMasterBit,jdbcType=INTEGER},
+			</if>
+			<if test="proColorSid != null">
+				#{proColorSid,jdbcType=BIGINT},
+			</if>
+			<if test="proColorName != null">
+				#{proColorName,jdbcType=VARCHAR},
+			</if>
+			<if test="proColorAlias != null">
+				#{proColorAlias,jdbcType=VARCHAR},
+			</if>
+			<if test="proPictureSizeSid != null">
+				#{proPictureSizeSid,jdbcType=BIGINT},
+			</if>
+			<if test="proPictureSid != null">
+				#{proPictureSid,jdbcType=BIGINT},
+			</if>
+			<if test="colorMasterPicBit != null">
+				#{colorMasterPicBit,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmProductPicture">
+		update pcm_product_picture
+		<set>
+			<if test="productSid != null">
+				product_sid = #{productSid,jdbcType=BIGINT},
+			</if>
+			<if test="proPictName != null">
+				pro_pict_name = #{proPictName,jdbcType=VARCHAR},
+			</if>
+			<if test="proPictDir != null">
+				pro_pict_dir = #{proPictDir,jdbcType=VARCHAR},
+			</if>
+			<if test="proPictOrder != null">
+				pro_pict_order = #{proPictOrder,jdbcType=INTEGER},
+			</if>
+			<if test="pictureModelBit != null">
+				picture_model_bit = #{pictureModelBit,jdbcType=INTEGER},
+			</if>
+			<if test="pictureMasterBit != null">
+				picture_master_bit =
+				#{pictureMasterBit,jdbcType=INTEGER},
+			</if>
+			<if test="proColorSid != null">
+				pro_color_sid = #{proColorSid,jdbcType=BIGINT},
+			</if>
+			<if test="proColorName != null">
+				pro_color_name = #{proColorName,jdbcType=VARCHAR},
+			</if>
+			<if test="proColorAlias != null">
+				pro_color_alias = #{proColorAlias,jdbcType=VARCHAR},
+			</if>
+			<if test="proPictureSizeSid != null">
+				pro_picture_size_sid =
+				#{proPictureSizeSid,jdbcType=BIGINT},
+			</if>
+			<if test="proPictureSid != null">
+				pro_picture_sid = #{proPictureSid,jdbcType=BIGINT},
+			</if>
+			<if test="colorMasterPicBit != null">
+				color_master_pic_bit =
+				#{colorMasterPicBit,jdbcType=INTEGER},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmProductPicture">
+		update pcm_product_picture
+		set product_sid =
+		#{productSid,jdbcType=BIGINT},
+		pro_pict_name =
+		#{proPictName,jdbcType=VARCHAR},
+		pro_pict_dir =
+		#{proPictDir,jdbcType=VARCHAR},
+		pro_pict_order =
+		#{proPictOrder,jdbcType=INTEGER},
+		picture_model_bit =
+		#{pictureModelBit,jdbcType=INTEGER},
+		picture_master_bit =
+		#{pictureMasterBit,jdbcType=INTEGER},
+		pro_color_sid =
+		#{proColorSid,jdbcType=BIGINT},
+		pro_color_name =
+		#{proColorName,jdbcType=VARCHAR},
+		pro_color_alias =
+		#{proColorAlias,jdbcType=VARCHAR},
+		pro_picture_size_sid =
+		#{proPictureSizeSid,jdbcType=BIGINT},
+		pro_picture_sid =
+		#{proPictureSid,jdbcType=BIGINT},
+		color_master_pic_bit =
+		#{colorMasterPicBit,jdbcType=INTEGER}
+		where sid =
+		#{sid,jdbcType=BIGINT}
+	</update>
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_product_picture
+		where sid = #{sid,jdbcType=INTEGER}
+	</select>
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_product_picture
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=BIGINT}
+			</if>
+			<if test="proPictName != null">
+				and pro_pict_name = #{proPictName,jdbcType=VARCHAR}
+			</if>
+			<if test="proPictDir != null">
+				and pro_pict_dir = #{proPictDir,jdbcType=VARCHAR}
+			</if>
+			<if test="proPictOrder != null">
+				and pro_pict_order = #{proPictOrder,jdbcType=INTEGER}
+			</if>
+			<if test="pictureModelBit != null">
+				and picture_model_bit =
+				#{pictureModelBit,jdbcType=INTEGER}
+			</if>
+			<if test="pictureMasterBit != null">
+				and picture_master_bit =
+				#{pictureMasterBit,jdbcType=INTEGER}
+			</if>
+			<if test="proColorSid != null">
+				and pro_color_sid = #{proColorSid,jdbcType=BIGINT}
+			</if>
+			<if test="proColorName != null">
+				and pro_color_name = #{proColorName,jdbcType=VARCHAR}
+			</if>
+			<if test="proColorAlias != null">
+				and pro_color_alias = #{proColorAlias,jdbcType=VARCHAR}
+			</if>
+			<if test="proPictureSizeSid != null">
+				and pro_picture_size_sid =
+				#{proPictureSizeSid,jdbcType=BIGINT}
+			</if>
+			<if test="proPictureSid != null">
+				and pro_picture_sid = #{proPictureSid,jdbcType=BIGINT}
+			</if>
+			<if test="colorMasterPicBit != null">
+				and color_master_pic_bit =
+				#{colorMasterPicBit,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_product_picture
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=BIGINT}
+			</if>
+			<if test="proPictName != null">
+				and pro_pict_name = #{proPictName,jdbcType=VARCHAR}
+			</if>
+			<if test="proPictDir != null">
+				and pro_pict_dir = #{proPictDir,jdbcType=VARCHAR}
+			</if>
+			<if test="proPictOrder != null">
+				and pro_pict_order = #{proPictOrder,jdbcType=INTEGER}
+			</if>
+			<if test="pictureModelBit != null">
+				and picture_model_bit =
+				#{pictureModelBit,jdbcType=INTEGER}
+			</if>
+			<if test="pictureMasterBit != null">
+				and picture_master_bit =
+				#{pictureMasterBit,jdbcType=INTEGER}
+			</if>
+			<if test="proColorSid != null">
+				and pro_color_sid = #{proColorSid,jdbcType=BIGINT}
+			</if>
+			<if test="proColorName != null">
+				and pro_color_name = #{proColorName,jdbcType=VARCHAR}
+			</if>
+			<if test="proColorAlias != null">
+				and pro_color_alias = #{proColorAlias,jdbcType=VARCHAR}
+			</if>
+			<if test="proPictureSizeSid != null">
+				and pro_picture_size_sid =
+				#{proPictureSizeSid,jdbcType=BIGINT}
+			</if>
+			<if test="proPictureSid != null">
+				and pro_picture_sid = #{proPictureSid,jdbcType=BIGINT}
+			</if>
+			<if test="colorMasterPicBit != null">
+				and color_master_pic_bit =
+				#{colorMasterPicBit,jdbcType=INTEGER}
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_product_picture
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=BIGINT}
+			</if>
+			<if test="proPictName != null">
+				and pro_pict_name = #{proPictName,jdbcType=VARCHAR}
+			</if>
+			<if test="proPictDir != null">
+				and pro_pict_dir = #{proPictDir,jdbcType=VARCHAR}
+			</if>
+			<if test="proPictOrder != null">
+				and pro_pict_order = #{proPictOrder,jdbcType=INTEGER}
+			</if>
+			<if test="pictureModelBit != null">
+				and picture_model_bit =
+				#{pictureModelBit,jdbcType=INTEGER}
+			</if>
+			<if test="pictureMasterBit != null">
+				and picture_master_bit =
+				#{pictureMasterBit,jdbcType=INTEGER}
+			</if>
+			<if test="proColorSid != null">
+				and pro_color_sid = #{proColorSid,jdbcType=BIGINT}
+			</if>
+			<if test="proColorName != null">
+				and pro_color_name = #{proColorName,jdbcType=VARCHAR}
+			</if>
+			<if test="proColorAlias != null">
+				and pro_color_alias = #{proColorAlias,jdbcType=VARCHAR}
+			</if>
+			<if test="proPictureSizeSid != null">
+				and pro_picture_size_sid =
+				#{proPictureSizeSid,jdbcType=BIGINT}
+			</if>
+			<if test="proPictureSid != null">
+				and pro_picture_sid = #{proPictureSid,jdbcType=BIGINT}
+			</if>
+			<if test="colorMasterPicBit != null">
+				and color_master_pic_bit =
+				#{colorMasterPicBit,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+</mapper>

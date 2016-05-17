@@ -1,0 +1,1636 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmErpProductMapper">
+    <!--查询供应商门店下扣率码要约-->
+    <resultMap type="com.wangfj.product.maindata.domain.vo.GetSupAndErpInfoDto" id="GetShopInfoResultMap">
+       <id column="supplierCode" property="supplierCode" jdbcType="VARCHAR"/>
+       <result column="supplierName" property="supplierName" jdbcType="VARCHAR"/>
+       <collection property="shoppeList" resultMap="shoppeList"></collection>
+    </resultMap>
+    <resultMap type="com.wangfj.product.maindata.domain.vo.ErpSupInfoListDto" id="shoppeList">
+      <id column="shoppeCode" property="shoppeCode" jdbcType="VARCHAR"/>
+      <collection property="erplist" resultMap="erplist"></collection>
+    </resultMap>
+    <resultMap id="erplist" type="com.wangfj.product.maindata.domain.vo.ErpSupInfoDto">
+           <id column="erpcode" property="erpcode" jdbcType="VARCHAR"/>
+           <result column="contractList" property="contractList" jdbcType="VARCHAR"/>
+           <result column="discountLimit" property="discountLimit" jdbcType="VARCHAR"/>
+           <result column="statCategory" property="statCategory" jdbcType="VARCHAR"/>
+           <result column="manageCategory" property="manageCategory" jdbcType="VARCHAR"/>
+    </resultMap>
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.maindata.domain.entity.PcmErpProduct">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="store_code" property="storeCode" jdbcType="VARCHAR" />
+		<result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+		<result column="shoppe_code" property="shoppeCode" jdbcType="VARCHAR" />
+		<result column="shoppe_name" property="shoppeName" jdbcType="VARCHAR" />
+		<result column="product_code" property="productCode" jdbcType="VARCHAR" />
+		<result column="code_type" property="codeType" jdbcType="INTEGER" />
+		<result column="big_code_price" property="bigCodePrice"
+			jdbcType="DECIMAL" />
+		<result column="supply_code" property="supplyCode" jdbcType="VARCHAR" />
+		<result column="offer_no" property="offerNo" jdbcType="VARCHAR" />
+		<result column="brand_code" property="brandCode" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="opt_user_sid" property="optUserSid" jdbcType="VARCHAR" />
+		<result column="notes" property="notes" jdbcType="VARCHAR" />
+		<result column="product_abbr" property="productAbbr" jdbcType="VARCHAR" />
+		<result column="product_name" property="productName" jdbcType="VARCHAR" />
+		<result column="product_type" property="productType" jdbcType="INTEGER" />
+		<result column="product_category" property="productCategory"
+			jdbcType="INTEGER" />
+		<result column="stan_name" property="stanName" jdbcType="VARCHAR" />
+		<result column="article_num" property="articleNum" jdbcType="VARCHAR" />
+		<result column="sales_unit" property="salesUnit" jdbcType="VARCHAR" />
+		<result column="supplier_barcode" property="supplierBarcode"
+			jdbcType="VARCHAR" />
+		<result column="sales_price" property="salesPrice" jdbcType="DECIMAL" />
+		<result column="input_tax" property="inputTax" jdbcType="DECIMAL" />
+		<result column="output_tax" property="outputTax" jdbcType="DECIMAL" />
+		<result column="sales_tax" property="salesTax" jdbcType="DECIMAL" />
+		<result column="pro_status" property="proStatus" jdbcType="INTEGER" />
+		<result column="is_promotion" property="isPromotion" jdbcType="INTEGER" />
+		<result column="is_adjust_price" property="isAdjustPrice"
+			jdbcType="INTEGER" />
+		<result column="manage_category" property="manageCategory"
+			jdbcType="VARCHAR" />
+		<result column="discount_limit" property="discountLimit"
+			jdbcType="DECIMAL" />
+		<result column="origin_land" property="originLand" jdbcType="VARCHAR" />
+		<result column="service_fee_type" property="serviceFeeType"
+			jdbcType="VARCHAR" />
+		<result column="format_type" property="formatType" jdbcType="INTEGER" />
+		<result column="stat_category" property="statCategory"
+			jdbcType="VARCHAR" />
+		<result column="commission_rate" property="commissionRate"
+			jdbcType="DECIMAL" />
+	</resultMap>
+	<resultMap id="resultMap2"
+		type="com.wangfj.product.maindata.domain.entity.PcmErpProduct">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="store_code" property="storeCode" jdbcType="VARCHAR" />
+		<result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+		<result column="shoppe_code" property="shoppeCode" jdbcType="VARCHAR" />
+		<result column="shoppe_name" property="shoppeName" jdbcType="VARCHAR" />
+		<result column="product_code" property="productCode" jdbcType="VARCHAR" />
+		<result column="code_type" property="codeType" jdbcType="INTEGER" />
+		<result column="big_code_price" property="bigCodePrice"
+			jdbcType="DECIMAL" />
+		<result column="supply_code" property="supplyCode" jdbcType="VARCHAR" />
+		<result column="offer_no" property="offerNo" jdbcType="VARCHAR" />
+		<result column="brand_code" property="brandCode" jdbcType="VARCHAR" />
+		<result column="brand_rood_sid" property="groupBrandCode"
+			jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="opt_user_sid" property="optUserSid" jdbcType="VARCHAR" />
+		<result column="product_name" property="productName" jdbcType="VARCHAR" />
+		<result column="product_type" property="productType" jdbcType="INTEGER" />
+		<result column="product_category" property="productCategory"
+			jdbcType="INTEGER" />
+		<result column="stan_name" property="stanName" jdbcType="VARCHAR" />
+		<result column="article_num" property="articleNum" jdbcType="VARCHAR" />
+		<result column="sales_unit" property="salesUnit" jdbcType="VARCHAR" />
+		<result column="supplier_barcode" property="supplierBarcode"
+			jdbcType="VARCHAR" />
+		<result column="sales_price" property="salesPrice" jdbcType="DECIMAL" />
+		<result column="input_tax" property="inputTax" jdbcType="DECIMAL" />
+		<result column="output_tax" property="outputTax" jdbcType="DECIMAL" />
+		<result column="sales_tax" property="salesTax" jdbcType="DECIMAL" />
+		<result column="pro_status" property="proStatus" jdbcType="INTEGER" />
+		<result column="is_promotion" property="isPromotion" jdbcType="INTEGER" />
+		<result column="is_adjust_price" property="isAdjustPrice"
+			jdbcType="INTEGER" />
+		<result column="manage_category" property="manageCategory"
+			jdbcType="VARCHAR" />
+		<result column="discount_limit" property="discountLimit"
+			jdbcType="DECIMAL" />
+		<result column="origin_land" property="originLand" jdbcType="VARCHAR" />
+		<result column="service_fee_type" property="serviceFeeType"
+			jdbcType="VARCHAR" />
+		<result column="format_type" property="formatType" jdbcType="INTEGER" />
+		<result column="stat_category" property="statCategory"
+			jdbcType="VARCHAR" />
+		<result column="commission_rate" property="commissionRate"
+			jdbcType="DECIMAL" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, store_code, shop_name, shoppe_code, shoppe_name,
+		product_code,
+		code_type, big_code_price,
+		supply_code, offer_no,
+		brand_code, update_time, opt_user_sid, product_name,
+		product_type,
+		product_category, stan_name, article_num, sales_unit,
+		supplier_barcode, sales_price,
+		input_tax, output_tax, sales_tax,
+		pro_status, is_promotion,
+		is_adjust_price, manage_category,
+		discount_limit, origin_land, service_fee_type, format_type,
+		stat_category,notes,product_abbr,
+		commission_rate
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_erp_product
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<select id="getBrandShopInfo" resultType="Map"
+		parameterType="Map">
+		SELECT
+			*
+		FROM
+			pcm_organization AS shop
+		JOIN pcm_shop_brand_relation AS psbr ON shop.sid = psbr.shop_sid
+		JOIN pcm_brand AS brand ON brand.sid = psbr.brand_sid
+		WHERE
+			shop.organization_code = #{shopCode}
+		AND brand.brand_sid = #{brandCode}
+	</select>
+	<select id="selectByProCode" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_erp_product
+		where product_code = #{productCode}
+		and
+		pro_status=0
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_erp_product
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProduct">
+		insert into pcm_erp_product (sid, store_code, shop_name,
+		shoppe_code, shoppe_name, product_code,
+		code_type, big_code_price,
+		supply_code,
+		offer_no, brand_code, update_time,
+		opt_user_sid,
+		product_name, product_type,
+		product_category, stan_name, article_num,
+		sales_unit, supplier_barcode, sales_price,
+		input_tax, output_tax,
+		sales_tax,
+		pro_status, is_promotion, is_adjust_price,
+		manage_category,
+		discount_limit, origin_land,
+		service_fee_type, format_type,
+		stat_category,
+		commission_rate,notes,product_abbr,)
+		values
+		(#{sid,jdbcType=BIGINT},
+		#{storeCode,jdbcType=VARCHAR},
+		#{shopName,jdbcType=VARCHAR},
+		#{shoppeCode,jdbcType=VARCHAR},
+		#{shoppeName,jdbcType=VARCHAR},
+		#{productCode,jdbcType=VARCHAR},
+		#{codeType,jdbcType=INTEGER},
+		#{bigCodePrice,jdbcType=DECIMAL},
+		#{supplyCode,jdbcType=VARCHAR},
+		#{offerNo,jdbcType=VARCHAR},
+		#{brandCode,jdbcType=VARCHAR},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{optUserSid,jdbcType=VARCHAR},
+		#{productName,jdbcType=VARCHAR},
+		#{productType,jdbcType=INTEGER},
+		#{productCategory,jdbcType=INTEGER},
+		#{stanName,jdbcType=VARCHAR},
+		#{articleNum,jdbcType=VARCHAR},
+		#{salesUnit,jdbcType=VARCHAR},
+		#{supplierBarcode,jdbcType=VARCHAR},
+		#{salesPrice,jdbcType=DECIMAL},
+		#{inputTax,jdbcType=DECIMAL},
+		#{outputTax,jdbcType=DECIMAL},
+		#{salesTax,jdbcType=DECIMAL},
+		#{proStatus,jdbcType=INTEGER},
+		#{isPromotion,jdbcType=INTEGER},
+		#{isAdjustPrice,jdbcType=INTEGER},
+		#{manageCategory,jdbcType=VARCHAR},
+		#{discountLimit,jdbcType=DECIMAL},
+		#{originLand,jdbcType=VARCHAR},
+		#{serviceFeeType,jdbcType=VARCHAR},
+		#{formatType,jdbcType=INTEGER},
+		#{statCategory,jdbcType=VARCHAR},
+		#{commissionRate,jdbcType=DECIMAL},
+		#{notes,jdbcType=VARCHAR},
+		#{productAbbr,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" keyProperty="sid" useGeneratedKeys="true"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProduct">
+		insert into pcm_erp_product
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="storeCode != null">
+				store_code,
+			</if>
+			<if test="shopName != null">
+				shop_name,
+			</if>
+			<if test="shoppeCode != null">
+				shoppe_code,
+			</if>
+			<if test="shoppeName != null">
+				shoppe_name,
+			</if>
+			<if test="productCode != null">
+				product_code,
+			</if>
+			<if test="codeType != null">
+				code_type,
+			</if>
+			<if test="bigCodePrice != null">
+				big_code_price,
+			</if>
+			<if test="supplyCode != null">
+				supply_code,
+			</if>
+			<if test="offerNo != null">
+				offer_no,
+			</if>
+			<if test="brandCode != null">
+				brand_code,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid,
+			</if>
+			<if test="productName != null">
+				product_name,
+			</if>
+			<if test="productType != null">
+				product_type,
+			</if>
+			<if test="productCategory != null">
+				product_category,
+			</if>
+			<if test="stanName != null">
+				stan_name,
+			</if>
+			<if test="articleNum != null">
+				article_num,
+			</if>
+			<if test="salesUnit != null">
+				sales_unit,
+			</if>
+			<if test="supplierBarcode != null">
+				supplier_barcode,
+			</if>
+			<if test="salesPrice != null">
+				sales_price,
+			</if>
+			<if test="inputTax != null">
+				input_tax,
+			</if>
+			<if test="outputTax != null">
+				output_tax,
+			</if>
+			<if test="salesTax != null">
+				sales_tax,
+			</if>
+			<if test="proStatus != null">
+				pro_status,
+			</if>
+			<if test="isPromotion != null">
+				is_promotion,
+			</if>
+			<if test="isAdjustPrice != null">
+				is_adjust_price,
+			</if>
+			<if test="manageCategory != null">
+				manage_category,
+			</if>
+			<if test="discountLimit != null">
+				discount_limit,
+			</if>
+			<if test="originLand != null">
+				origin_land,
+			</if>
+			<if test="serviceFeeType != null">
+				service_fee_type,
+			</if>
+			<if test="formatType != null">
+				format_type,
+			</if>
+			<if test="statCategory != null">
+				stat_category,
+			</if>
+			<if test="commissionRate != null">
+				commission_rate,
+			</if>
+			<if test="notes != null">
+				notes,
+			</if>
+			<if test="productAbbr != null">
+				product_abbr,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="storeCode != null">
+				#{storeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="shopName != null">
+				#{shopName,jdbcType=VARCHAR},
+			</if>
+			<if test="shoppeCode != null">
+				#{shoppeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="shoppeName != null">
+				#{shoppeName,jdbcType=VARCHAR},
+			</if>
+			<if test="productCode != null">
+				#{productCode,jdbcType=VARCHAR},
+			</if>
+			<if test="codeType != null">
+				#{codeType,jdbcType=INTEGER},
+			</if>
+			<if test="bigCodePrice != null">
+				#{bigCodePrice,jdbcType=DECIMAL},
+			</if>
+			<if test="supplyCode != null">
+				#{supplyCode,jdbcType=VARCHAR},
+			</if>
+			<if test="offerNo != null">
+				#{offerNo,jdbcType=VARCHAR},
+			</if>
+			<if test="brandCode != null">
+				#{brandCode,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optUserSid != null">
+				#{optUserSid,jdbcType=VARCHAR},
+			</if>
+			<if test="productName != null">
+				#{productName,jdbcType=VARCHAR},
+			</if>
+			<if test="productType != null">
+				#{productType,jdbcType=INTEGER},
+			</if>
+			<if test="productCategory != null">
+				#{productCategory,jdbcType=INTEGER},
+			</if>
+			<if test="stanName != null">
+				#{stanName,jdbcType=VARCHAR},
+			</if>
+			<if test="articleNum != null">
+				#{articleNum,jdbcType=VARCHAR},
+			</if>
+			<if test="salesUnit != null">
+				#{salesUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="supplierBarcode != null">
+				#{supplierBarcode,jdbcType=VARCHAR},
+			</if>
+			<if test="salesPrice != null">
+				#{salesPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="inputTax != null">
+				#{inputTax,jdbcType=DECIMAL},
+			</if>
+			<if test="outputTax != null">
+				#{outputTax,jdbcType=DECIMAL},
+			</if>
+			<if test="salesTax != null">
+				#{salesTax,jdbcType=DECIMAL},
+			</if>
+			<if test="proStatus != null">
+				#{proStatus,jdbcType=INTEGER},
+			</if>
+			<if test="isPromotion != null">
+				#{isPromotion,jdbcType=INTEGER},
+			</if>
+			<if test="isAdjustPrice != null">
+				#{isAdjustPrice,jdbcType=INTEGER},
+			</if>
+			<if test="manageCategory != null">
+				#{manageCategory,jdbcType=VARCHAR},
+			</if>
+			<if test="discountLimit != null">
+				#{discountLimit,jdbcType=DECIMAL},
+			</if>
+			<if test="originLand != null">
+				#{originLand,jdbcType=VARCHAR},
+			</if>
+			<if test="serviceFeeType != null">
+				#{serviceFeeType,jdbcType=VARCHAR},
+			</if>
+			<if test="formatType != null">
+				#{formatType,jdbcType=INTEGER},
+			</if>
+			<if test="statCategory != null">
+				#{statCategory,jdbcType=VARCHAR},
+			</if>
+			<if test="commissionRate != null">
+				#{commissionRate,jdbcType=DECIMAL},
+			</if>
+			<if test="notes != null">
+				#{notes,jdbcType=VARCHAR},
+			</if>
+			<if test="productAbbr != null">
+				#{productAbbr,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProduct">
+		update pcm_erp_product
+		<set>
+			<if test="storeCode != null">
+				store_code = #{storeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="shopName != null">
+				shop_name = #{shopName,jdbcType=VARCHAR},
+			</if>
+			<if test="shoppeCode != null">
+				shoppe_code = #{shoppeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="shoppeName != null">
+				shoppe_name = #{shoppeName,jdbcType=VARCHAR},
+			</if>
+			<if test="productCode != null">
+				product_code = #{productCode,jdbcType=VARCHAR},
+			</if>
+			<if test="codeType != null">
+				code_type = #{codeType,jdbcType=INTEGER},
+			</if>
+			<if test="bigCodePrice != null">
+				big_code_price = #{bigCodePrice,jdbcType=DECIMAL},
+			</if>
+			<if test="supplyCode != null">
+				supply_code = #{supplyCode,jdbcType=VARCHAR},
+			</if>
+			<if test="offerNo != null">
+				offer_no = #{offerNo,jdbcType=VARCHAR},
+			</if>
+			<if test="brandCode != null">
+				brand_code = #{brandCode,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid = #{optUserSid,jdbcType=VARCHAR},
+			</if>
+			<if test="productName != null">
+				product_name = #{productName,jdbcType=VARCHAR},
+			</if>
+			<if test="productType != null">
+				product_type = #{productType,jdbcType=INTEGER},
+			</if>
+			<if test="productCategory != null">
+				product_category = #{productCategory,jdbcType=INTEGER},
+			</if>
+			<if test="stanName != null">
+				stan_name = #{stanName,jdbcType=VARCHAR},
+			</if>
+			<if test="articleNum != null">
+				article_num = #{articleNum,jdbcType=VARCHAR},
+			</if>
+			<if test="salesUnit != null">
+				sales_unit = #{salesUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="supplierBarcode != null">
+				supplier_barcode = #{supplierBarcode,jdbcType=VARCHAR},
+			</if>
+			<if test="salesPrice != null">
+				sales_price = #{salesPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="inputTax != null">
+				input_tax = #{inputTax,jdbcType=DECIMAL},
+			</if>
+			<if test="outputTax != null">
+				output_tax = #{outputTax,jdbcType=DECIMAL},
+			</if>
+			<if test="salesTax != null">
+				sales_tax = #{salesTax,jdbcType=DECIMAL},
+			</if>
+			<if test="proStatus != null">
+				pro_status = #{proStatus,jdbcType=INTEGER},
+			</if>
+			<if test="isPromotion != null">
+				is_promotion = #{isPromotion,jdbcType=INTEGER},
+			</if>
+			<if test="isAdjustPrice != null">
+				is_adjust_price = #{isAdjustPrice,jdbcType=INTEGER},
+			</if>
+			<if test="manageCategory != null">
+				manage_category = #{manageCategory,jdbcType=VARCHAR},
+			</if>
+			<if test="discountLimit != null">
+				discount_limit = #{discountLimit,jdbcType=DECIMAL},
+			</if>
+			<if test="originLand != null">
+				origin_land = #{originLand,jdbcType=VARCHAR},
+			</if>
+			<if test="serviceFeeType != null">
+				service_fee_type = #{serviceFeeType,jdbcType=VARCHAR},
+			</if>
+			<if test="formatType != null">
+				format_type = #{formatType,jdbcType=INTEGER},
+			</if>
+			<if test="statCategory != null">
+				stat_category = #{statCategory,jdbcType=VARCHAR},
+			</if>
+			<if test="commissionRate != null">
+				commission_rate = #{commissionRate,jdbcType=DECIMAL},
+			</if>
+			<if test="notes != null">
+				notes = #{notes,jdbcType=VARCHAR},
+			</if>
+			<if test="productAbbr != null">
+				product_abbr = #{productAbbr,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByCodeSelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProduct">
+		update pcm_erp_product
+		<set>
+			<if test="storeCode != null">
+				store_code = #{storeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="shopName != null">
+				shop_name = #{shopName,jdbcType=VARCHAR},
+			</if>
+			<if test="shoppeCode != null">
+				shoppe_code = #{shoppeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="shoppeName != null">
+				shoppe_name = #{shoppeName,jdbcType=VARCHAR},
+			</if>
+			<if test="productCode != null">
+				product_code = #{productCode,jdbcType=VARCHAR},
+			</if>
+			<if test="codeType != null">
+				code_type = #{codeType,jdbcType=INTEGER},
+			</if>
+			<if test="bigCodePrice != null">
+				big_code_price = #{bigCodePrice,jdbcType=DECIMAL},
+			</if>
+			<if test="supplyCode != null">
+				supply_code = #{supplyCode,jdbcType=VARCHAR},
+			</if>
+			<if test="offerNo != null">
+				offer_no = #{offerNo,jdbcType=VARCHAR},
+			</if>
+			<if test="brandCode != null">
+				brand_code = #{brandCode,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid = #{optUserSid,jdbcType=VARCHAR},
+			</if>
+			<if test="productName != null">
+				product_name = #{productName,jdbcType=VARCHAR},
+			</if>
+			<if test="productType != null">
+				product_type = #{productType,jdbcType=INTEGER},
+			</if>
+			<if test="productCategory != null">
+				product_category = #{productCategory,jdbcType=INTEGER},
+			</if>
+			<if test="stanName != null">
+				stan_name = #{stanName,jdbcType=VARCHAR},
+			</if>
+			<if test="articleNum != null">
+				article_num = #{articleNum,jdbcType=VARCHAR},
+			</if>
+			<if test="salesUnit != null">
+				sales_unit = #{salesUnit,jdbcType=VARCHAR},
+			</if>
+			<if test="supplierBarcode != null">
+				supplier_barcode = #{supplierBarcode,jdbcType=VARCHAR},
+			</if>
+			<if test="salesPrice != null">
+				sales_price = #{salesPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="inputTax != null">
+				input_tax = #{inputTax,jdbcType=DECIMAL},
+			</if>
+			<if test="outputTax != null">
+				output_tax = #{outputTax,jdbcType=DECIMAL},
+			</if>
+			<if test="salesTax != null">
+				sales_tax = #{salesTax,jdbcType=DECIMAL},
+			</if>
+			<if test="proStatus != null">
+				pro_status = #{proStatus,jdbcType=INTEGER},
+			</if>
+			<if test="isPromotion != null">
+				is_promotion = #{isPromotion,jdbcType=INTEGER},
+			</if>
+			<if test="isAdjustPrice != null">
+				is_adjust_price = #{isAdjustPrice,jdbcType=INTEGER},
+			</if>
+			<if test="manageCategory != null">
+				manage_category = #{manageCategory,jdbcType=VARCHAR},
+			</if>
+			<if test="discountLimit != null">
+				discount_limit = #{discountLimit,jdbcType=DECIMAL},
+			</if>
+			<if test="originLand != null">
+				origin_land = #{originLand,jdbcType=VARCHAR},
+			</if>
+			<if test="serviceFeeType != null">
+				service_fee_type = #{serviceFeeType,jdbcType=VARCHAR},
+			</if>
+			<if test="formatType != null">
+				format_type = #{formatType,jdbcType=INTEGER},
+			</if>
+			<if test="statCategory != null">
+				stat_category = #{statCategory,jdbcType=VARCHAR},
+			</if>
+			<if test="commissionRate != null">
+				commission_rate = #{commissionRate,jdbcType=DECIMAL},
+			</if>
+			<if test="notes != null">
+				notes = #{notes,jdbcType=VARCHAR},
+			</if>
+			<if test="productAbbr != null">
+				product_abbr = #{productAbbr,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where product_code = #{productCode,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProduct">
+		update pcm_erp_product
+		set store_code =
+		#{storeCode,jdbcType=VARCHAR},
+		shop_name =
+		#{shopName,jdbcType=VARCHAR},
+		shoppe_code =
+		#{shoppeCode,jdbcType=VARCHAR},
+		shoppe_name =
+		#{shoppeName,jdbcType=VARCHAR},
+		product_code =
+		#{productCode,jdbcType=VARCHAR},
+		code_type =
+		#{codeType,jdbcType=INTEGER},
+		big_code_price =
+		#{bigCodePrice,jdbcType=DECIMAL},
+		supply_code =
+		#{supplyCode,jdbcType=VARCHAR},
+		offer_no = #{offerNo,jdbcType=VARCHAR},
+		brand_code = #{brandCode,jdbcType=VARCHAR},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP},
+		opt_user_sid =
+		#{optUserSid,jdbcType=VARCHAR},
+		product_name =
+		#{productName,jdbcType=VARCHAR},
+		product_type =
+		#{productType,jdbcType=INTEGER},
+		product_category =
+		#{productCategory,jdbcType=INTEGER},
+		stan_name =
+		#{stanName,jdbcType=VARCHAR},
+		article_num =
+		#{articleNum,jdbcType=VARCHAR},
+		sales_unit =
+		#{salesUnit,jdbcType=VARCHAR},
+		supplier_barcode =
+		#{supplierBarcode,jdbcType=VARCHAR},
+		sales_price =
+		#{salesPrice,jdbcType=DECIMAL},
+		input_tax =
+		#{inputTax,jdbcType=DECIMAL},
+		output_tax =
+		#{outputTax,jdbcType=DECIMAL},
+		sales_tax =
+		#{salesTax,jdbcType=DECIMAL},
+		pro_status =
+		#{proStatus,jdbcType=INTEGER},
+		is_promotion =
+		#{isPromotion,jdbcType=INTEGER},
+		is_adjust_price =
+		#{isAdjustPrice,jdbcType=INTEGER},
+		manage_category =
+		#{manageCategory,jdbcType=VARCHAR},
+		discount_limit =
+		#{discountLimit,jdbcType=DECIMAL},
+		origin_land =
+		#{originLand,jdbcType=VARCHAR},
+		service_fee_type =
+		#{serviceFeeType,jdbcType=VARCHAR},
+		format_type =
+		#{formatType,jdbcType=INTEGER},
+		stat_category =
+		#{statCategory,jdbcType=VARCHAR},
+		commission_rate =
+		#{commissionRate,jdbcType=DECIMAL},
+		notes = #{notes,jdbcType=VARCHAR},
+		product_abbr = #{productAbbr,jdbcType=VARCHAR}
+		where sid =
+		#{sid,jdbcType=BIGINT}
+	</update>
+	
+	<select id="selectRateCodeByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_erp_product
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="storeCode != null">
+				and store_code = #{storeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="shopName != null">
+				and shop_name = #{shopName,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeCode != null">
+				and shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeName != null">
+				and shoppe_name = #{shoppeName,jdbcType=VARCHAR}
+			</if>
+			<if test="productCode != null">
+				and product_code = #{productCode,jdbcType=VARCHAR}
+			</if>
+			<if test="codeType != null">
+				and code_type = 4 
+			</if>
+			<if test="bigCodePrice != null">
+				and big_code_price = #{bigCodePrice,jdbcType=DECIMAL}
+			</if>
+			<if test="supplyCode != null">
+				and supply_code = #{supplyCode,jdbcType=VARCHAR}
+			</if>
+			<if test="offerNo != null">
+				and offer_no = #{offerNo,jdbcType=VARCHAR}
+			</if>
+			<if test="brandCode != null">
+				and brand_code = #{brandCode,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				and update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=VARCHAR}
+			</if>
+			<if test="productName != null">
+				and product_name = #{productName,jdbcType=VARCHAR}
+			</if>
+			<if test="productType != null">
+				and product_type = #{productType,jdbcType=INTEGER}
+			</if>
+			<if test="productCategory != null">
+				and product_category =
+				#{productCategory,jdbcType=INTEGER}
+			</if>
+			<if test="stanName != null">
+				and stan_name = #{stanName,jdbcType=VARCHAR}
+			</if>
+			<if test="articleNum != null">
+				and article_num = #{articleNum,jdbcType=VARCHAR}
+			</if>
+			<if test="salesUnit != null">
+				and sales_unit = #{salesUnit,jdbcType=VARCHAR}
+			</if>
+			<if test="supplierBarcode != null">
+				and supplier_barcode =
+				#{supplierBarcode,jdbcType=VARCHAR}
+			</if>
+			<if test="salesPrice != null">
+				and sales_price = #{salesPrice,jdbcType=DECIMAL}
+			</if>
+			<if test="inputTax != null">
+				and input_tax = #{inputTax,jdbcType=DECIMAL}
+			</if>
+			<if test="outputTax != null">
+				and output_tax = #{outputTax,jdbcType=DECIMAL}
+			</if>
+			<if test="salesTax != null">
+				and sales_tax = #{salesTax,jdbcType=DECIMAL}
+			</if>
+			<if test="proStatus != null">
+				and pro_status = #{proStatus,jdbcType=INTEGER}
+			</if>
+			<if test="isPromotion != null">
+				and is_promotion = #{isPromotion,jdbcType=INTEGER}
+			</if>
+			<if test="isAdjustPrice != null">
+				and is_adjust_price = #{isAdjustPrice,jdbcType=INTEGER}
+			</if>
+			<if test="manageCategory != null">
+				and manage_category = #{manageCategory,jdbcType=VARCHAR}
+			</if>
+			<if test="discountLimit != null">
+				and discount_limit = #{discountLimit,jdbcType=DECIMAL}
+			</if>
+			<if test="originLand != null">
+				and origin_land = #{originLand,jdbcType=VARCHAR}
+			</if>
+			<if test="serviceFeeType != null">
+				and service_fee_type = #{serviceFeeType,jdbcType=VARCHAR}
+			</if>
+			<if test="formatType != null">
+				and format_type = #{formatType,jdbcType=INTEGER}
+			</if>
+			<if test="statCategory != null">
+				and stat_category = #{statCategory,jdbcType=VARCHAR}
+			</if>
+			<if test="commissionRate != null">
+				and commission_rate = #{commissionRate,jdbcType=DECIMAL}
+			</if>
+			<if test="notes != null">
+				and notes = #{notes,jdbcType=VARCHAR}
+			</if>
+			<if test="productAbbr != null">
+				and product_abbr = #{productAbbr,jdbcType=VARCHAR}
+			</if>
+		</where>
+		<if test="limit != null">
+			limit
+			#{start}, #{limit}
+		</if>
+	</select>
+	
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_erp_product
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="storeCode != null">
+				and store_code = #{storeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="shopName != null">
+				and shop_name = #{shopName,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeCode != null">
+				and shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeName != null">
+				and shoppe_name = #{shoppeName,jdbcType=VARCHAR}
+			</if>
+			<if test="productCode != null">
+				and product_code = #{productCode,jdbcType=VARCHAR}
+			</if>
+			<if test="codeType != null">
+				and code_type = #{codeType,jdbcType=INTEGER}
+			</if>
+			<if test="bigCodePrice != null">
+				and big_code_price = #{bigCodePrice,jdbcType=DECIMAL}
+			</if>
+			<if test="supplyCode != null">
+				and supply_code = #{supplyCode,jdbcType=VARCHAR}
+			</if>
+			<if test="offerNo != null">
+				and offer_no = #{offerNo,jdbcType=VARCHAR}
+			</if>
+			<if test="brandCode != null">
+				and brand_code = #{brandCode,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				and update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=VARCHAR}
+			</if>
+			<if test="productName != null">
+				and product_name = #{productName,jdbcType=VARCHAR}
+			</if>
+			<if test="productType != null">
+				and product_type = #{productType,jdbcType=INTEGER}
+			</if>
+			<if test="productCategory != null">
+				and product_category =
+				#{productCategory,jdbcType=INTEGER}
+			</if>
+			<if test="stanName != null">
+				and stan_name = #{stanName,jdbcType=VARCHAR}
+			</if>
+			<if test="articleNum != null">
+				and article_num = #{articleNum,jdbcType=VARCHAR}
+			</if>
+			<if test="salesUnit != null">
+				and sales_unit = #{salesUnit,jdbcType=VARCHAR}
+			</if>
+			<if test="supplierBarcode != null">
+				and supplier_barcode =
+				#{supplierBarcode,jdbcType=VARCHAR}
+			</if>
+			<if test="salesPrice != null">
+				and sales_price = #{salesPrice,jdbcType=DECIMAL}
+			</if>
+			<if test="inputTax != null">
+				and input_tax = #{inputTax,jdbcType=DECIMAL}
+			</if>
+			<if test="outputTax != null">
+				and output_tax = #{outputTax,jdbcType=DECIMAL}
+			</if>
+			<if test="salesTax != null">
+				and sales_tax = #{salesTax,jdbcType=DECIMAL}
+			</if>
+			<if test="proStatus != null">
+				and pro_status = #{proStatus,jdbcType=INTEGER}
+			</if>
+			<if test="isPromotion != null">
+				and is_promotion = #{isPromotion,jdbcType=INTEGER}
+			</if>
+			<if test="isAdjustPrice != null">
+				and is_adjust_price = #{isAdjustPrice,jdbcType=INTEGER}
+			</if>
+			<if test="manageCategory != null">
+				and manage_category = #{manageCategory,jdbcType=VARCHAR}
+			</if>
+			<if test="discountLimit != null">
+				and discount_limit = #{discountLimit,jdbcType=DECIMAL}
+			</if>
+			<if test="originLand != null">
+				and origin_land = #{originLand,jdbcType=VARCHAR}
+			</if>
+			<if test="serviceFeeType != null">
+				and service_fee_type = #{serviceFeeType,jdbcType=VARCHAR}
+			</if>
+			<if test="formatType != null">
+				and format_type = #{formatType,jdbcType=INTEGER}
+			</if>
+			<if test="statCategory != null">
+				and stat_category = #{statCategory,jdbcType=VARCHAR}
+			</if>
+			<if test="commissionRate != null">
+				and commission_rate = #{commissionRate,jdbcType=DECIMAL}
+			</if>
+			<if test="notes != null">
+				and notes = #{notes,jdbcType=VARCHAR}
+			</if>
+			<if test="productAbbr != null">
+				and product_abbr = #{productAbbr,jdbcType=VARCHAR}
+			</if>
+		</where>
+		<if test="limit != null">
+			limit
+			#{start}, #{limit}
+		</if>
+	</select>
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_erp_product
+		<where>
+			<if test="sidList != null">
+				and sid in
+				<foreach collection="sidList" item="itemSid" index="index"
+					open="(" close=")" separator=",">
+					#{itemSid,jdbcType=VARCHAR}
+				</foreach>
+			</if>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="storeCode != null">
+				and store_code = #{storeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="shopName != null">
+				and shop_name = #{shopName,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeCode != null">
+				and shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeName != null">
+				and shoppe_name = #{shoppeName,jdbcType=VARCHAR}
+			</if>
+			<if test="productCode != null">
+				and product_code = #{productCode,jdbcType=VARCHAR}
+			</if>
+			<if test="codeType != null">
+				and code_type = #{codeType,jdbcType=INTEGER}
+			</if>
+			<if test="bigCodePrice != null">
+				and big_code_price = #{bigCodePrice,jdbcType=DECIMAL}
+			</if>
+			<if test="supplyCode != null">
+				and supply_code = #{supplyCode,jdbcType=VARCHAR}
+			</if>
+			<if test="offerNo != null">
+				and offer_no = #{offerNo,jdbcType=VARCHAR}
+			</if>
+			<if test="brandCode != null">
+				and brand_code = #{brandCode,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				and update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=VARCHAR}
+			</if>
+			<if test="productName != null">
+				and product_name = #{productName,jdbcType=VARCHAR}
+			</if>
+			<if test="productType != null">
+				and product_type = #{productType,jdbcType=INTEGER}
+			</if>
+			<if test="productCategory != null">
+				and product_category =
+				#{productCategory,jdbcType=INTEGER}
+			</if>
+			<if test="stanName != null">
+				and stan_name = #{stanName,jdbcType=VARCHAR}
+			</if>
+			<if test="articleNum != null">
+				and article_num = #{articleNum,jdbcType=VARCHAR}
+			</if>
+			<if test="salesUnit != null">
+				and sales_unit = #{salesUnit,jdbcType=VARCHAR}
+			</if>
+			<if test="supplierBarcode != null">
+				and supplier_barcode =
+				#{supplierBarcode,jdbcType=VARCHAR}
+			</if>
+			<if test="salesPrice != null">
+				and sales_price = #{salesPrice,jdbcType=DECIMAL}
+			</if>
+			<if test="inputTax != null">
+				and input_tax = #{inputTax,jdbcType=DECIMAL}
+			</if>
+			<if test="outputTax != null">
+				and output_tax = #{outputTax,jdbcType=DECIMAL}
+			</if>
+			<if test="salesTax != null">
+				and sales_tax = #{salesTax,jdbcType=DECIMAL}
+			</if>
+			<if test="proStatus != null">
+				and pro_status = #{proStatus,jdbcType=INTEGER}
+			</if>
+			<if test="isPromotion != null">
+				and is_promotion = #{isPromotion,jdbcType=INTEGER}
+			</if>
+			<if test="isAdjustPrice != null">
+				and is_adjust_price = #{isAdjustPrice,jdbcType=INTEGER}
+			</if>
+			<if test="manageCategory != null">
+				and manage_category = #{manageCategory,jdbcType=VARCHAR}
+			</if>
+			<if test="discountLimit != null">
+				and discount_limit = #{discountLimit,jdbcType=DECIMAL}
+			</if>
+			<if test="originLand != null">
+				and origin_land = #{originLand,jdbcType=VARCHAR}
+			</if>
+			<if test="serviceFeeType != null">
+				and service_fee_type = #{serviceFeeType,jdbcType=VARCHAR}
+			</if>
+			<if test="formatType != null">
+				and format_type = #{formatType,jdbcType=INTEGER}
+			</if>
+			<if test="statCategory != null">
+				and stat_category = #{statCategory,jdbcType=VARCHAR}
+			</if>
+			<if test="commissionRate != null">
+				and commission_rate = #{commissionRate,jdbcType=DECIMAL}
+			</if>
+			<if test="notes != null">
+				and notes = #{notes,jdbcType=VARCHAR}
+			</if>
+			<if test="productAbbr != null">
+				and product_abbr = #{productAbbr,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by
+		sid asc
+		<if test="limit != null">
+			limit
+			#{start}, #{limit}
+		</if>
+	</select>
+	<!-- erp商品下发 -->
+	<select id="selectErpPageByParam" parameterType="java.util.Map"
+		resultMap="resultMap2">
+		select
+		erp.sid, erp.store_code, erp.shop_name, erp.shoppe_code,
+		erp.shoppe_name,
+		product_code,code_type, erp.big_code_price,
+		erp.supply_code, erp.offer_no,
+		erp.brand_code, erp.update_time,
+		erp.opt_user_sid, erp.product_name,
+		product_type,product_category,
+		stan_name, article_num,
+		sales_unit,
+		supplier_barcode, sales_price,
+		input_tax,
+		output_tax, sales_tax, pro_status, is_promotion,
+		is_adjust_price, manage_category,
+		discount_limit,
+		origin_land,
+		service_fee_type, format_type,
+		stat_category,commission_rate,
+		brg.brand_sid as groupBrandCode
+		from
+		pcm_erp_product erp
+		left join
+		pcm_shoppe sp on erp.shoppe_code= sp.shoppe_code
+		left join
+		pcm_organization org on sp.shop_sid=org.sid
+		left join pcm_brand br on
+		br.brand_sid = erp.brand_code
+		left join pcm_brand brg on
+		brg.sid=br.parent_sid
+		<where>
+			1=1
+			<if test="sidList != null">
+				and erp.sid in
+				<foreach collection="sidList" item="itemSid" index="index"
+					open="(" close=")" separator=",">
+					#{itemSid,jdbcType=VARCHAR}
+				</foreach>
+			</if>
+			<if test="sid != null">
+				and erp.sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="storeCode != null">
+				and erp.store_code = #{storeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="shopName != null">
+				and erp.shop_name = #{shopName,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeCode != null">
+				and erp.shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeName != null">
+				and erp.shoppe_name = #{shoppeName,jdbcType=VARCHAR}
+			</if>
+			<if test="productCode != null">
+				and erp.product_code = #{productCode,jdbcType=VARCHAR}
+			</if>
+			<if test="codeType != null">
+				and erp.code_type = #{codeType,jdbcType=INTEGER}
+			</if>
+			<if test="bigCodePrice != null">
+				and erp.big_code_price = #{bigCodePrice,jdbcType=DECIMAL}
+			</if>
+			<if test="supplyCode != null">
+				and erp.supply_code = #{supplyCode,jdbcType=VARCHAR}
+			</if>
+			<if test="offerNo != null">
+				and offer_no = #{offerNo,jdbcType=VARCHAR}
+			</if>
+			<if test="brandCode != null">
+				and erp.brand_code = #{brandCode,jdbcType=VARCHAR}
+			</if>
+			<if test="groupBrandCode != null">
+				and brg.vrand_sid = #{groupBrandCode,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				and erp.update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and erp.opt_user_sid = #{optUserSid,jdbcType=VARCHAR}
+			</if>
+			<if test="productName != null">
+				and erp.product_name = #{productName,jdbcType=VARCHAR}
+			</if>
+			<if test="productType != null">
+				and erp.product_type = #{productType,jdbcType=INTEGER}
+			</if>
+			<if test="productCategory != null">
+				and erp.product_category =
+				#{productCategory,jdbcType=INTEGER}
+			</if>
+			<if test="stanName != null">
+				and erp.stan_name = #{stanName,jdbcType=VARCHAR}
+			</if>
+			<if test="articleNum != null">
+				and article_num = #{articleNum,jdbcType=VARCHAR}
+			</if>
+			<if test="salesUnit != null">
+				and sales_unit = #{salesUnit,jdbcType=VARCHAR}
+			</if>
+			<if test="supplierBarcode != null">
+				and supplier_barcode =
+				#{supplierBarcode,jdbcType=VARCHAR}
+			</if>
+			<if test="salesPrice != null">
+				and sales_price = #{salesPrice,jdbcType=DECIMAL}
+			</if>
+			<if test="inputTax != null">
+				and input_tax = #{inputTax,jdbcType=DECIMAL}
+			</if>
+			<if test="outputTax != null">
+				and output_tax = #{outputTax,jdbcType=DECIMAL}
+			</if>
+			<if test="salesTax != null">
+				and sales_tax = #{salesTax,jdbcType=DECIMAL}
+			</if>
+			<if test="proStatus != null">
+				and pro_status = #{proStatus,jdbcType=INTEGER}
+			</if>
+			<if test="isPromotion != null">
+				and is_promotion = #{isPromotion,jdbcType=INTEGER}
+			</if>
+			<if test="isAdjustPrice != null">
+				and is_adjust_price = #{isAdjustPrice,jdbcType=INTEGER}
+			</if>
+			<if test="manageCategory != null">
+				and manage_category = #{manageCategory,jdbcType=VARCHAR}
+			</if>
+			<if test="discountLimit != null">
+				and discount_limit = #{discountLimit,jdbcType=DECIMAL}
+			</if>
+			<if test="originLand != null">
+				and origin_land = #{originLand,jdbcType=VARCHAR}
+			</if>
+			<if test="serviceFeeType != null">
+				and service_fee_type = #{serviceFeeType,jdbcType=VARCHAR}
+			</if>
+			<if test="formatType != null">
+				and format_type = #{formatType,jdbcType=INTEGER}
+			</if>
+			<if test="statCategory != null">
+				and stat_category = #{statCategory,jdbcType=VARCHAR}
+			</if>
+			<if test="commissionRate != null">
+				and commission_rate = #{commissionRate,jdbcType=DECIMAL}
+			</if>
+			<if test="notes != null">
+				and notes = #{notes,jdbcType=VARCHAR}
+			</if>
+			<if test="productAbbr != null">
+				and product_abbr = #{productAbbr,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by
+		erp.sid asc
+		<if test="limit != null">
+			limit
+			#{start}, #{limit}
+		</if>
+	</select>
+
+
+	<select id="selectPageByParamPage" parameterType="java.util.Map"
+		resultType="com.wangfj.product.maindata.domain.vo.ErpProPageDto">
+		SELECT
+		ifnull(erp.sid,"") as sid,
+		ifnull(erp.store_code,"") as
+		storeCode,
+		ifnull(erp.shop_name,"") as shopName,
+		ifnull(erp.shoppe_code,"") as shoppeCode,
+		ifnull(erp.shoppe_name,"") as
+		shoppeName,
+		ifnull(erp.product_code,"") as productCode,
+		ifnull(erp.code_type,"") as codeType,
+		ifnull(erp.big_code_price,"") as
+		bigCodePrice,
+		ifnull(erp.supply_code,"") as supplyCode,
+		ifnull(erp.offer_no,"") as offerNo,
+		ifnull(erp.brand_code,"") as
+		brandCode,
+		ifnull(erp.update_time,"") as updateTime,
+		ifnull(erp.opt_user_sid,"") as optUserSid,
+		ifnull(erp.product_name,"")
+		as productName,
+		ifnull(erp.product_type,"") as productType,
+		ifnull(erp.product_category,"") as productCategory,
+		ifnull(erp.stan_name,"") as stanName,
+		ifnull(erp.article_num,"") as
+		articleNum,
+		ifnull(erp.sales_unit,"") as salesUnit,
+		ifnull(erp.supplier_barcode,"") as supplierBarcode,
+		ifnull(erp.sales_price,"") as salesPrice,
+		ifnull(erp.input_tax,"") as
+		inputTax,
+		ifnull(erp.output_tax,"") as outputTax,
+		ifnull(erp.sales_tax,"") as salesTax,
+		ifnull(erp.pro_status,"") as
+		proStatus,
+		ifnull(erp.is_promotion,"") as isPromotion,
+		ifnull(erp.is_adjust_price,"") as isAdjustPrice,
+		ifnull(erp.manage_category,"") as manageCategory,
+		ifnull(erp.discount_limit,"") as discountLimit,
+		ifnull(erp.origin_land,"") as originLand,
+		ifnull(erp.service_fee_type,"") as serviceFeeType,
+		ifnull(erp.format_type,"") as formatType,
+		ifnull(erp.stat_category,"")
+		as statCategory,
+		ifnull(erp.commission_rate,"") as commissionRate,
+		ifnull(brg.brand_sid,"") AS brandCode,
+		ifnull(brg.brand_name,"") as
+		brandName,
+		ifnull(supply.supply_name,"") AS supplyName
+		FROM
+		pcm_erp_product erp
+		LEFT JOIN pcm_shoppe sp ON erp.shoppe_code =
+		sp.shoppe_code
+		LEFT JOIN pcm_organization org ON sp.shop_sid = org.sid
+		LEFT JOIN pcm_brand brg ON brg.brand_sid = erp.brand_code AND org.store_type = brg.shop_type
+		LEFT JOIN
+		pcm_supply_info supply ON erp.supply_code = supply.supply_code
+		<where>
+			1=1
+			<if test="cateList != null" >
+				and erp.manage_category IN 
+				<foreach collection="cateList" item="cateCode" index="index"
+					open="(" close=")" separator=",">
+					#{cateCode,jdbcType=VARCHAR}
+				</foreach>
+			</if>
+			<if test="sid != null">
+				and erp.sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="storeCode != null">
+				and erp.store_code = #{storeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="shopName != null">
+				and erp.shop_name = #{shopName,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeCode != null">
+				and erp.shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeName != null">
+				and erp.shoppe_name = #{shoppeName,jdbcType=VARCHAR}
+			</if>
+			<if test="productCode != null">
+				and erp.product_code = #{productCode,jdbcType=VARCHAR}
+			</if>
+			<if test="codeType != null">
+				and erp.code_type = #{codeType,jdbcType=INTEGER}
+			</if>
+			<if test="bigCodePrice != null">
+				and erp.big_code_price = #{bigCodePrice,jdbcType=DECIMAL}
+			</if>
+			<if test="supplyCode != null">
+				and erp.supply_code = #{supplyCode,jdbcType=VARCHAR}
+			</if>
+			<if test="offerNo != null">
+				and offer_no = #{offerNo,jdbcType=VARCHAR}
+			</if>
+			<if test="brandCode != null">
+				and erp.brand_code = #{brandCode,jdbcType=VARCHAR}
+			</if>
+			<if test="groupBrandCode != null">
+				and brg.vrand_sid = #{groupBrandCode,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				and erp.update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and erp.opt_user_sid = #{optUserSid,jdbcType=VARCHAR}
+			</if>
+			<if test="productName != null">
+				and erp.product_name like '%${productName}%'
+			</if>
+			<if test="productType != null">
+				and erp.product_type = #{productType,jdbcType=INTEGER}
+			</if>
+			<if test="productCategory != null">
+				and erp.product_category =
+				#{productCategory,jdbcType=INTEGER}
+			</if>
+			<if test="stanName != null">
+				and erp.stan_name = #{stanName,jdbcType=VARCHAR}
+			</if>
+			<if test="articleNum != null">
+				and article_num = #{articleNum,jdbcType=VARCHAR}
+			</if>
+			<if test="salesUnit != null">
+				and sales_unit = #{salesUnit,jdbcType=VARCHAR}
+			</if>
+			<if test="supplierBarcode != null">
+				and supplier_barcode =
+				#{supplierBarcode,jdbcType=VARCHAR}
+			</if>
+			<if test="salesPrice != null">
+				and sales_price = #{salesPrice,jdbcType=DECIMAL}
+			</if>
+			<if test="inputTax != null">
+				and input_tax = #{inputTax,jdbcType=DECIMAL}
+			</if>
+			<if test="outputTax != null">
+				and output_tax = #{outputTax,jdbcType=DECIMAL}
+			</if>
+			<if test="salesTax != null">
+				and sales_tax = #{salesTax,jdbcType=DECIMAL}
+			</if>
+			<if test="proStatus != null">
+				and pro_status = #{proStatus,jdbcType=INTEGER}
+			</if>
+			<if test="isPromotion != null">
+				and is_promotion = #{isPromotion,jdbcType=INTEGER}
+			</if>
+			<if test="isAdjustPrice != null">
+				and is_adjust_price = #{isAdjustPrice,jdbcType=INTEGER}
+			</if>
+			<if test="manageCategory != null">
+				and manage_category = #{manageCategory,jdbcType=VARCHAR}
+			</if>
+			<if test="discountLimit != null">
+				and discount_limit = #{discountLimit,jdbcType=DECIMAL}
+			</if>
+			<if test="originLand != null">
+				and origin_land = #{originLand,jdbcType=VARCHAR}
+			</if>
+			<if test="serviceFeeType != null">
+				and service_fee_type = #{serviceFeeType,jdbcType=VARCHAR}
+			</if>
+			<if test="formatType != null">
+				and format_type = #{formatType,jdbcType=INTEGER}
+			</if>
+			<if test="statCategory != null">
+				and stat_category = #{statCategory,jdbcType=VARCHAR}
+			</if>
+			<if test="commissionRate != null">
+				and commission_rate = #{commissionRate,jdbcType=DECIMAL}
+			</if>
+			<if test="notes != null">
+				and notes = #{notes,jdbcType=VARCHAR}
+			</if>
+			<if test="productAbbr != null">
+				and product_abbr = #{productAbbr,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by
+		erp.sid desc
+		<if test="limit != null">
+			limit
+			#{start}, #{limit}
+		</if>
+	</select>
+
+
+
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(sid)
+		from pcm_erp_product
+		<where>
+			<if test="cateList != null" >
+				and manage_category IN 
+				<foreach collection="cateList" item="cateCode" index="index"
+					open="(" close=")" separator=",">
+					#{cateCode,jdbcType=VARCHAR}
+				</foreach>
+			</if>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="storeCode != null">
+				and store_code = #{storeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="shopName != null">
+				and shop_name = #{shopName,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeCode != null">
+				and shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeName != null">
+				and shoppe_name = #{shoppeName,jdbcType=VARCHAR}
+			</if>
+			<if test="productCode != null">
+				and product_code = #{productCode,jdbcType=VARCHAR}
+			</if>
+			<if test="codeType != null">
+				and code_type = #{codeType,jdbcType=INTEGER}
+			</if>
+			<if test="bigCodePrice != null">
+				and big_code_price = #{bigCodePrice,jdbcType=DECIMAL}
+			</if>
+			<if test="supplyCode != null">
+				and supply_code = #{supplyCode,jdbcType=VARCHAR}
+			</if>
+			<if test="offerNo != null">
+				and offer_no = #{offerNo,jdbcType=VARCHAR}
+			</if>
+			<if test="brandCode != null">
+				and brand_code = #{brandCode,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				and update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=VARCHAR}
+			</if>
+			<if test="productName != null">
+				and product_name like '%${productName}%'
+			</if>
+			<if test="productType != null">
+				and product_type = #{productType,jdbcType=INTEGER}
+			</if>
+			<if test="productCategory != null">
+				and product_category =
+				#{productCategory,jdbcType=INTEGER}
+			</if>
+			<if test="stanName != null">
+				and stan_name = #{stanName,jdbcType=VARCHAR}
+			</if>
+			<if test="articleNum != null">
+				and article_num = #{articleNum,jdbcType=VARCHAR}
+			</if>
+			<if test="salesUnit != null">
+				and sales_unit = #{salesUnit,jdbcType=VARCHAR}
+			</if>
+			<if test="supplierBarcode != null">
+				and supplier_barcode =
+				#{supplierBarcode,jdbcType=VARCHAR}
+			</if>
+			<if test="salesPrice != null">
+				and sales_price = #{salesPrice,jdbcType=DECIMAL}
+			</if>
+			<if test="inputTax != null">
+				and input_tax = #{inputTax,jdbcType=DECIMAL}
+			</if>
+			<if test="outputTax != null">
+				and output_tax = #{outputTax,jdbcType=DECIMAL}
+			</if>
+			<if test="salesTax != null">
+				and sales_tax = #{salesTax,jdbcType=DECIMAL}
+			</if>
+			<if test="proStatus != null">
+				and pro_status = #{proStatus,jdbcType=INTEGER}
+			</if>
+			<if test="isPromotion != null">
+				and is_promotion = #{isPromotion,jdbcType=INTEGER}
+			</if>
+			<if test="isAdjustPrice != null">
+				and is_adjust_price = #{isAdjustPrice,jdbcType=INTEGER}
+			</if>
+			<if test="manageCategory != null">
+				and manage_category = #{manageCategory,jdbcType=VARCHAR}
+			</if>
+			<if test="discountLimit != null">
+				and discount_limit = #{discountLimit,jdbcType=DECIMAL}
+			</if>
+			<if test="originLand != null">
+				and origin_land = #{originLand,jdbcType=VARCHAR}
+			</if>
+			<if test="serviceFeeType != null">
+				and service_fee_type = #{serviceFeeType,jdbcType=VARCHAR}
+			</if>
+			<if test="formatType != null">
+				and format_type = #{formatType,jdbcType=INTEGER}
+			</if>
+			<if test="statCategory != null">
+				and stat_category = #{statCategory,jdbcType=VARCHAR}
+			</if>
+			<if test="commissionRate != null">
+				and commission_rate = #{commissionRate,jdbcType=DECIMAL}
+			</if>
+			<if test="notes != null">
+				and notes = #{notes,jdbcType=VARCHAR}
+			</if>
+			<if test="productAbbr != null">
+				and product_abbr = #{productAbbr,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	
+	
+	<!-- 根据供应商编码、业态、经营方式、门店 获取 专柜列表 （扣率码 （要约号、管理分类代码、统计分类、折扣底线）） -->
+	<select id="GetShoppeInfoAndErp" parameterType="java.util.Map" resultMap="GetShopInfoResultMap">
+	SELECT
+	sup.supply_code AS supplierCode,
+	sup.supply_name AS supplierName,
+	ps.shoppe_code AS shoppeCode,
+	pep.product_code AS erpcode,
+	pep.offer_no AS contractList,
+	pep.discount_limit AS discountLimit,
+	pep.stat_category AS statCategory,
+	pep.manage_category AS manageCategory
+	FROM (SELECT * from pcm_organization WHERE organization_type = 3 
+	<if test="shopCode!=null">  <!-- 门店编码 -->
+	AND organization_code = #{shopCode,jdbcType=VARCHAR}
+	</if>
+	) org
+	INNER JOIN pcm_supply_info sup
+	ON org.organization_code = sup.shop_sid
+	<if test="operateMode!=null">  <!-- 经营方式 -->
+	  AND sup.business_pattern = #{operateMode,jdbcType=VARCHAR}
+	</if>
+	<if test="supplierCode!=null">  <!-- 供应商编码 -->
+	  AND sup.supply_code = #{supplierCode,jdbcType=VARCHAR}
+	</if>
+	INNER JOIN pcm_supply_shoppe_relation pssr
+	ON pssr.supply_sid = sup.sid
+	INNER JOIN pcm_shoppe ps ON pssr.shoppe_sid = ps.sid
+	AND ps.shop_sid = org.sid
+	<if test="type!=null">  <!-- 业态 -->
+	  AND ps.industry_condition_sid = #{type,jdbcType=VARCHAR}
+	</if>
+	INNER JOIN pcm_erp_product pep ON pep.shoppe_code = ps.shoppe_code
+	AND pep.code_type = 4  
+	</select>
+</mapper>

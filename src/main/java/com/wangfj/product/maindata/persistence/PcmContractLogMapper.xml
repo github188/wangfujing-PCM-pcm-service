@@ -1,0 +1,708 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmContractLogMapper">
+    <resultMap id="BaseResultMap"
+               type="com.wangfj.product.maindata.domain.entity.PcmContractLog">
+        <id column="sid" property="sid" jdbcType="BIGINT"/>
+        <result column="contract_code" property="contractCode"
+                jdbcType="VARCHAR"/>
+        <result column="store_code" property="storeCode" jdbcType="VARCHAR"/>
+        <result column="supply_code" property="supplyCode" jdbcType="VARCHAR"/>
+        <result column="manage_type" property="manageType" jdbcType="INTEGER"/>
+        <result column="buy_type" property="buyType" jdbcType="INTEGER"/>
+        <result column="oper_mode" property="operMode" jdbcType="INTEGER"/>
+        <result column="business_type" property="businessType"
+                jdbcType="INTEGER"/>
+        <result column="input_tax" property="inputTax" jdbcType="DECIMAL"/>
+        <result column="output_tax" property="outputTax" jdbcType="DECIMAL"/>
+        <result column="commission_rate" property="commissionRate"
+                jdbcType="DECIMAL"/>
+        <result column="opt_time" property="optTime" jdbcType="TIMESTAMP"/>
+        <result column="col1" property="col1" jdbcType="VARCHAR"/>
+        <result column="col2" property="col2" jdbcType="VARCHAR"/>
+        <result column="col3" property="col3" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+		sid, contract_code, store_code, supply_code, manage_type,
+		buy_type,
+		oper_mode, business_type,
+		input_tax, output_tax,
+		commission_rate, opt_time, col1, col2, col3
+	</sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_contract_log
+        where sid = #{sid,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_contract_log
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+    <insert id="insert"
+            parameterType="com.wangfj.product.maindata.domain.entity.PcmContractLog">
+		insert into pcm_contract_log (sid, contract_code,
+		store_code,
+		supply_code, manage_type, buy_type,
+		oper_mode,
+		business_type, input_tax,
+		output_tax, commission_rate, opt_time,
+		col1,
+		col2, col3)
+		values (#{sid,jdbcType=BIGINT},
+		#{contractCode,jdbcType=VARCHAR},
+		#{storeCode,jdbcType=VARCHAR},
+		#{supplyCode,jdbcType=VARCHAR}, #{manageType,jdbcType=INTEGER},
+		#{buyType,jdbcType=INTEGER},
+		#{operMode,jdbcType=INTEGER},
+		#{businessType,jdbcType=INTEGER},
+		#{inputTax,jdbcType=DECIMAL},
+		#{outputTax,jdbcType=DECIMAL}, #{commissionRate,jdbcType=DECIMAL},
+		#{optTime,jdbcType=TIMESTAMP},
+		#{col1,jdbcType=VARCHAR},
+		#{col2,jdbcType=VARCHAR},
+		#{col3,jdbcType=VARCHAR})
+	</insert>
+    <insert id="insertSelective"
+            parameterType="com.wangfj.product.maindata.domain.entity.PcmContractLog">
+        insert into pcm_contract_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                sid,
+            </if>
+            <if test="contractCode != null">
+                contract_code,
+            </if>
+            <if test="storeCode != null">
+                store_code,
+            </if>
+            <if test="supplyCode != null">
+                supply_code,
+            </if>
+            <if test="manageType != null">
+                manage_type,
+            </if>
+            <if test="buyType != null">
+                buy_type,
+            </if>
+            <if test="operMode != null">
+                oper_mode,
+            </if>
+            <if test="businessType != null">
+                business_type,
+            </if>
+            <if test="inputTax != null">
+                input_tax,
+            </if>
+            <if test="outputTax != null">
+                output_tax,
+            </if>
+            <if test="commissionRate != null">
+                commission_rate,
+            </if>
+            <if test="optTime != null">
+                opt_time,
+            </if>
+            <if test="col1 != null">
+                col1,
+            </if>
+            <if test="col2 != null">
+                col2,
+            </if>
+            <if test="col3 != null">
+                col3,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                #{sid,jdbcType=BIGINT},
+            </if>
+            <if test="contractCode != null">
+                #{contractCode,jdbcType=VARCHAR},
+            </if>
+            <if test="storeCode != null">
+                #{storeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyCode != null">
+                #{supplyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="manageType != null">
+                #{manageType,jdbcType=INTEGER},
+            </if>
+            <if test="buyType != null">
+                #{buyType,jdbcType=INTEGER},
+            </if>
+            <if test="operMode != null">
+                #{operMode,jdbcType=INTEGER},
+            </if>
+            <if test="businessType != null">
+                #{businessType,jdbcType=INTEGER},
+            </if>
+            <if test="inputTax != null">
+                #{inputTax,jdbcType=DECIMAL},
+            </if>
+            <if test="outputTax != null">
+                #{outputTax,jdbcType=DECIMAL},
+            </if>
+            <if test="commissionRate != null">
+                #{commissionRate,jdbcType=DECIMAL},
+            </if>
+            <if test="optTime != null">
+                #{optTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="col1 != null">
+                #{col1,jdbcType=VARCHAR},
+            </if>
+            <if test="col2 != null">
+                #{col2,jdbcType=VARCHAR},
+            </if>
+            <if test="col3 != null">
+                #{col3,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByParam"
+            parameterType="com.wangfj.product.maindata.domain.entity.PcmContractLog">
+        update pcm_contract_log
+        <set>
+            <if test="contractCode != null">
+                contract_code = #{contractCode,jdbcType=VARCHAR},
+            </if>
+            <if test="storeCode != null">
+                store_code = #{storeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyCode != null">
+                supply_code = #{supplyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="manageType != null">
+                manage_type = #{manageType,jdbcType=INTEGER},
+            </if>
+            <if test="buyType != null">
+                buy_type = #{buyType,jdbcType=INTEGER},
+            </if>
+            <if test="operMode != null">
+                oper_mode = #{operMode,jdbcType=INTEGER},
+            </if>
+            <if test="businessType != null">
+                business_type = #{businessType,jdbcType=INTEGER},
+            </if>
+            <if test="inputTax != null">
+                input_tax = #{inputTax,jdbcType=DECIMAL},
+            </if>
+            <if test="outputTax != null">
+                output_tax = #{outputTax,jdbcType=DECIMAL},
+            </if>
+            <if test="commissionRate != null">
+                commission_rate = #{commissionRate,jdbcType=DECIMAL},
+            </if>
+            <if test="optTime != null">
+                opt_time = #{optTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="col1 != null">
+                col1 = #{col1,jdbcType=VARCHAR},
+            </if>
+            <if test="col2 != null">
+                col2 = #{col2,jdbcType=VARCHAR},
+            </if>
+            <if test="col3 != null">
+                col3 = #{col3,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where contract_code = #{contractCode,jdbcType=VARCHAR} and store_code
+        = #{storeCode,jdbcType=VARCHAR} and supply_code =
+        #{supplyCode,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.wangfj.product.maindata.domain.entity.PcmContractLog">
+        update pcm_contract_log
+        <set>
+            <if test="contractCode != null">
+                contract_code = #{contractCode,jdbcType=VARCHAR},
+            </if>
+            <if test="storeCode != null">
+                store_code = #{storeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyCode != null">
+                supply_code = #{supplyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="manageType != null">
+                manage_type = #{manageType,jdbcType=INTEGER},
+            </if>
+            <if test="buyType != null">
+                buy_type = #{buyType,jdbcType=INTEGER},
+            </if>
+            <if test="operMode != null">
+                oper_mode = #{operMode,jdbcType=INTEGER},
+            </if>
+            <if test="businessType != null">
+                business_type = #{businessType,jdbcType=INTEGER},
+            </if>
+            <if test="inputTax != null">
+                input_tax = #{inputTax,jdbcType=DECIMAL},
+            </if>
+            <if test="outputTax != null">
+                output_tax = #{outputTax,jdbcType=DECIMAL},
+            </if>
+            <if test="commissionRate != null">
+                commission_rate = #{commissionRate,jdbcType=DECIMAL},
+            </if>
+            <if test="optTime != null">
+                opt_time = #{optTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="col1 != null">
+                col1 = #{col1,jdbcType=VARCHAR},
+            </if>
+            <if test="col2 != null">
+                col2 = #{col2,jdbcType=VARCHAR},
+            </if>
+            <if test="col3 != null">
+                col3 = #{col3,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey"
+            parameterType="com.wangfj.product.maindata.domain.entity.PcmContractLog">
+		update pcm_contract_log
+		set contract_code =
+		#{contractCode,jdbcType=VARCHAR},
+		store_code =
+		#{storeCode,jdbcType=VARCHAR},
+		supply_code =
+		#{supplyCode,jdbcType=VARCHAR},
+		manage_type =
+		#{manageType,jdbcType=INTEGER},
+		buy_type = #{buyType,jdbcType=INTEGER},
+		oper_mode = #{operMode,jdbcType=INTEGER},
+		business_type =
+		#{businessType,jdbcType=INTEGER},
+		input_tax =
+		#{inputTax,jdbcType=DECIMAL},
+		output_tax =
+		#{outputTax,jdbcType=DECIMAL},
+		commission_rate =
+		#{commissionRate,jdbcType=DECIMAL},
+		opt_time =
+		#{optTime,jdbcType=TIMESTAMP},
+		col1 = #{col1,jdbcType=VARCHAR},
+		col2 =
+		#{col2,jdbcType=VARCHAR},
+		col3 = #{col3,jdbcType=VARCHAR}
+		where sid =
+		#{sid,jdbcType=BIGINT}
+	</update>
+
+    <select id="selectListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_contract_log
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="contractCode != null">
+                and contract_code = #{contractCode,jdbcType=VARCHAR}
+            </if>
+            <if test="storeCode != null">
+                and store_code = #{storeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="supplyCode != null">
+                and supply_code = #{supplyCode,jdbcType=VARCHAR}
+            </if>
+            <if test="manageType != null">
+                and manage_type = #{manageType,jdbcType=INTEGER}
+            </if>
+            <if test="buyType != null">
+                and buy_type = #{buyType,jdbcType=INTEGER}
+            </if>
+            <if test="operMode != null">
+                and oper_mode = #{operMode,jdbcType=INTEGER}
+            </if>
+            <if test="businessType != null">
+                and business_type = #{businessType,jdbcType=INTEGER}
+            </if>
+            <if test="inputTax != null">
+                and input_tax = #{inputTax,jdbcType=DECIMAL}
+            </if>
+            <if test="outputTax != null">
+                and output_tax = #{outputTax,jdbcType=DECIMAL}
+            </if>
+            <if test="commissionRate != null">
+                and commission_rate = #{commissionRate,jdbcType=DECIMAL}
+            </if>
+            <if test="optTime != null">
+                and opt_time = #{optTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="col1 != null">
+                and col1 = #{col1,jdbcType=VARCHAR}
+            </if>
+            <if test="col2 != null">
+                and col2 = #{col2,jdbcType=VARCHAR}
+            </if>
+            <if test="col3 != null">
+                and col3 = #{col3,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <select id="selectPageListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_contract_log
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="contractCode != null">
+                and contract_code = #{contractCode,jdbcType=VARCHAR}
+            </if>
+            <if test="storeCode != null">
+                and store_code = #{storeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="supplyCode != null">
+                and supply_code = #{supplyCode,jdbcType=VARCHAR}
+            </if>
+            <if test="manageType != null">
+                and manage_type = #{manageType,jdbcType=INTEGER}
+            </if>
+            <if test="buyType != null">
+                and buy_type = #{buyType,jdbcType=INTEGER}
+            </if>
+            <if test="operMode != null">
+                and oper_mode = #{operMode,jdbcType=INTEGER}
+            </if>
+            <if test="businessType != null">
+                and business_type = #{businessType,jdbcType=INTEGER}
+            </if>
+            <if test="inputTax != null">
+                and input_tax = #{inputTax,jdbcType=DECIMAL}
+            </if>
+            <if test="outputTax != null">
+                and output_tax = #{outputTax,jdbcType=DECIMAL}
+            </if>
+            <if test="commissionRate != null">
+                and commission_rate = #{commissionRate,jdbcType=DECIMAL}
+            </if>
+            <if test="optTime != null">
+                and opt_time = #{optTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="col1 != null">
+                and col1 = #{col1,jdbcType=VARCHAR}
+            </if>
+            <if test="col2 != null">
+                and col2 = #{col2,jdbcType=VARCHAR}
+            </if>
+            <if test="col3 != null">
+                and col3 = #{col3,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by
+        sid asc
+        <if test="limit != null">
+            limit
+            #{start}, #{limit}
+        </if>
+    </select>
+    <select id="getCountByParam" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        select
+        count(*)
+        from pcm_contract_log
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="contractCode != null">
+                and contract_code = #{contractCode,jdbcType=VARCHAR}
+            </if>
+            <if test="storeCode != null">
+                and store_code = #{storeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="supplyCode != null">
+                and supply_code = #{supplyCode,jdbcType=VARCHAR}
+            </if>
+            <if test="manageType != null">
+                and manage_type = #{manageType,jdbcType=INTEGER}
+            </if>
+            <if test="buyType != null">
+                and buy_type = #{buyType,jdbcType=INTEGER}
+            </if>
+            <if test="operMode != null">
+                and oper_mode = #{operMode,jdbcType=INTEGER}
+            </if>
+            <if test="businessType != null">
+                and business_type = #{businessType,jdbcType=INTEGER}
+            </if>
+            <if test="inputTax != null">
+                and input_tax = #{inputTax,jdbcType=DECIMAL}
+            </if>
+            <if test="outputTax != null">
+                and output_tax = #{outputTax,jdbcType=DECIMAL}
+            </if>
+            <if test="commissionRate != null">
+                and commission_rate = #{commissionRate,jdbcType=DECIMAL}
+            </if>
+            <if test="optTime != null">
+                and opt_time = #{optTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="col1 != null">
+                and col1 = #{col1,jdbcType=VARCHAR}
+            </if>
+            <if test="col2 != null">
+                and col2 = #{col2,jdbcType=VARCHAR}
+            </if>
+            <if test="col3 != null">
+                and col3 = #{col3,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="findContractLogList"
+            resultType="com.wangfj.product.maindata.domain.vo.PcmContractLogPartDto"
+            parameterType="com.wangfj.product.maindata.domain.vo.PcmContractLogQueryDto">
+        select
+        sid AS
+        sid,contract_code AS contractCode,store_code AS
+        storeCode,supply_code AS supplyCode,manage_type AS
+        manageType,business_type AS businessType
+        from
+        pcm_contract_log
+        <where>
+            <if test="sid != null">
+                and sid = #{sid}
+            </if>
+            <if test="contractCode != null">
+                and contract_code = #{contractCode,jdbcType=VARCHAR}
+            </if>
+            <if test="storeCode != null">
+                and store_code = #{storeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="supplyCode != null">
+                and supply_code = #{supplyCode,jdbcType=VARCHAR}
+            </if>
+            <if test="manageType != null">
+                and manage_type = #{manageType}
+            </if>
+        </where>
+    </select>
+
+    <select id="findPageContractLog"
+            resultType="com.wangfj.product.maindata.domain.vo.PcmContractLogDto"
+            parameterType="com.wangfj.product.maindata.domain.vo.PcmContractLogQueryDto">
+        SELECT
+        sid AS sid,
+        contract_code AS contractCode,
+        store_code AS storeCode,
+        supply_code AS supplyCode,
+        manage_type AS manageType,
+        buy_type AS buyType,
+        oper_mode AS operMode,
+        business_type AS businessType,
+        input_tax AS inputTax,
+        output_tax AS outputTax,
+        commission_rate AS commissionRate,
+        col1 AS col1,
+        col2 AS col2,
+        col3 AS col3
+        FROM
+        pcm_contract_log
+        <where>
+            <if test="sid != null">
+                and sid = #{sid}
+            </if>
+            <if test="contractCode != null">
+                and contract_code = #{contractCode,jdbcType=VARCHAR}
+            </if>
+            <if test="storeCode != null">
+                and store_code = #{storeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="supplyCode != null">
+                and supply_code = #{supplyCode,jdbcType=VARCHAR}
+            </if>
+            <if test="manageType != null">
+                and manage_type = #{manageType}
+            </if>
+        </where>
+        ORDER BY
+        CONVERT (contract_code USING gbk)
+        <if test="start != null and limit != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+    <select id="findPageCountContractLog"
+            resultType="java.lang.Integer"
+            parameterType="com.wangfj.product.maindata.domain.vo.PcmContractLogQueryDto">
+        SELECT
+        COUNT(*)
+        FROM
+        pcm_contract_log
+        <where>
+            <if test="sid != null">
+                and sid = #{sid}
+            </if>
+            <if test="contractCode != null">
+                and contract_code = #{contractCode,jdbcType=VARCHAR}
+            </if>
+            <if test="storeCode != null">
+                and store_code = #{storeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="supplyCode != null">
+                and supply_code = #{supplyCode,jdbcType=VARCHAR}
+            </if>
+            <if test="manageType != null">
+                and manage_type = #{manageType}
+            </if>
+        </where>
+    </select>
+    
+    <!-- 供应商获取合同信息 -->
+    <select id="getContractLogFromPcmToSup"
+	parameterType="com.wangfj.product.maindata.domain.vo.GetContractLogForSupDto"
+	resultType="com.wangfj.product.maindata.domain.vo.GetContractLogResultForSupDto">
+	SELECT
+	clog.contract_code AS contractCode,
+	clog.supply_code AS
+	supplyCode,
+	sup.supply_name AS supplyName,
+	clog.store_code AS storeCode,
+	org.organization_name AS storeName,
+	clog.business_type AS businessType,
+	clog.manage_type AS manageType,
+	clog.buy_type AS buyType,
+	clog.oper_mode
+	AS operMode,
+	IFNULL(clog.input_tax,"") AS inputTax,
+	IFNULL(clog.output_tax,"") AS outputTax,
+	IFNULL(clog.commission_rate,"") AS commissionRate,
+	IFNULL(clog.col1,"") AS categoryCode,
+	IFNULL(cate.`name`,"") AS categoryName
+	FROM
+	(SELECT * from pcm_contract_log
+	<where>
+	    <if test="supplyCodeList != null">
+	    and  supply_code in
+	    </if>
+	    <if test="supplyCodeList != null">
+	         <foreach collection="supplyCodeList" item="supplyCode" index="index"
+                         open="(" close=")" separator=",">
+                    #{supplyCode,jdbcType=VARCHAR}
+             </foreach>
+	    </if>
+		<if test="contractCode != null"><!-- 合同编号 -->
+			AND contract_code = #{contractCode,jdbcType=VARCHAR}
+		</if>
+		<if test="manageType != null"><!-- 经营方式 -->
+			AND manage_type = #{manageType,jdbcType=BIGINT}
+		</if>
+		<if test="storeCode != null"><!-- 门店编码 -->
+			AND store_code = #{storeCode,jdbcType=VARCHAR}
+		</if>
+	</where>
+	)
+	clog
+	INNER JOIN pcm_supply_info sup ON sup.supply_code =
+	clog.supply_code
+	<if test="supplyName != null"><!-- 供应商名称 -->
+		AND sup.supply_name like '%${supplyName}%'
+	</if>
+	INNER JOIN pcm_organization org ON org.organization_code =
+	clog.store_code
+	LEFT JOIN pcm_category cate ON cate.category_code =
+	clog.col1
+	AND cate.`status` = 0
+	AND cate.is_display = 1
+	AND
+	cate.category_type = 3
+	<if test="limit != null">
+		limit
+		#{start}, #{limit}
+	</if>
+    </select>
+    
+    <!-- 供应商查询要约信息数量 -->
+    <select id="getContractLogCountFromPcmToSup"
+	parameterType="com.wangfj.product.maindata.domain.vo.GetContractLogForSupDto"
+	resultType="Integer">
+	SELECT count(*)
+	FROM
+	(SELECT * from pcm_contract_log
+	<where>  
+	    <if test="supplyCodeList != null">
+	    and  supply_code in
+	    </if>
+	    <if test="supplyCodeList != null">
+	         <foreach collection="supplyCodeList" item="supplyCode" index="index"
+                         open="(" close=")" separator=",">
+                    #{supplyCode,jdbcType=VARCHAR}
+             </foreach>
+	    </if>
+		<if test="contractCode != null"><!-- 合同编号 -->
+			AND contract_code = #{contractCode,jdbcType=VARCHAR}
+		</if>
+		<if test="manageType != null"><!-- 经营方式 -->
+			AND manage_type = #{manageType,jdbcType=BIGINT}
+		</if>
+		<if test="storeCode != null"><!-- 门店编码 -->
+			AND store_code = #{storeCode,jdbcType=VARCHAR}
+		</if>
+		
+	</where>
+	)
+	clog
+	INNER JOIN pcm_supply_info sup ON sup.supply_code =
+	clog.supply_code
+	<if test="supplyName != null"><!-- 供应商名称 -->
+		AND sup.supply_name like '%${supplyName}%'
+	</if>
+	INNER JOIN pcm_organization org ON org.organization_code =
+	clog.store_code
+	LEFT JOIN pcm_category cate ON cate.category_code =
+	clog.col1
+	AND cate.`status` = 0
+	AND cate.is_display = 1
+	AND
+	cate.category_type = 3
+    </select>
+    
+    
+    <!-- 供应商获取合同信息 para:开始时间，结束时间，门店+管理分类编码列表 -->
+    <select id="getContractLogCountFromPcmToSupByTime"
+	parameterType="com.wangfj.product.maindata.domain.vo.ContractLogFromPcmToSupDto"
+	resultType="Integer">
+	select count(*) from
+	(
+	SELECT
+	*
+	FROM
+	pcm_contract_log clog1
+	<where>
+		<if test="beginDate != null">
+			clog1.opt_time BETWEEN #{beginDate,jdbcType=TIMESTAMP}
+			AND #{endDate,jdbcType=TIMESTAMP}
+		</if>
+	</where>
+	)
+	clog
+	<where>
+		<if test="managerList != null">
+			<foreach collection="managerList" item="manager" index="index"
+				open="(" separator=")OR(" close=")">
+				<if test="manager.storeCode != null">
+					clog.store_code = #{manager.storeCode,jdbcType=VARCHAR}
+				</if>
+				<if test="manager.manageCategoryCode != null">
+					AND clog.col1 =
+					#{manager.manageCategoryCode,jdbcType=VARCHAR}
+				</if>
+			</foreach>
+		</if>
+
+	</where>
+</select>
+</mapper>

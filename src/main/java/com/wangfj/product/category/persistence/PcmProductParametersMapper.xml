@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.wangfj.product.category.persistence.PcmProductParametersMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.category.domain.entity.PcmProductParameters">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="product_sid" property="productSid" jdbcType="BIGINT" />
+		<result column="channel_sid" property="channelSid" jdbcType="BIGINT" />
+		<result column="category_sid" property="categorySid" jdbcType="BIGINT" />
+		<result column="category_name" property="categoryName"
+			jdbcType="VARCHAR" />
+		<result column="category_type" property="categoryType"
+			jdbcType="INTEGER" />
+		<result column="prop_sid" property="propSid" jdbcType="BIGINT" />
+		<result column="prop_name" property="propName" jdbcType="VARCHAR" />
+		<result column="value_sid" property="valueSid" jdbcType="BIGINT" />
+		<result column="value_name" property="valueName" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="ResultPro"
+		type="com.wangfj.product.category.domain.vo.PcmProductParametersVo">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="product_sid" property="productSid" jdbcType="BIGINT" />
+		<result column="channel_sid" property="channelSid" jdbcType="BIGINT" />
+		<result column="category_sid" property="categorySid" jdbcType="BIGINT" />
+		<result column="category_name" property="categoryName"
+			jdbcType="VARCHAR" />
+		<result column="prop_sid" property="propSid" jdbcType="BIGINT" />
+		<result column="prop_name" property="propName" jdbcType="VARCHAR" />
+		<result column="value_sid" property="valueSid" jdbcType="BIGINT" />
+		<result column="value_name" property="valueName" jdbcType="VARCHAR" />
+		<result column="identi" property="identi" jdbcType="VARCHAR" />
+		<result column="is_enum_prop" property="isEnumProp" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap
+		type="com.wangfj.product.maindata.domain.vo.SaveProductParametersDTO"
+		id="CateListResultMap">
+		<id column="spuCateSid" property="spuCateSid"></id>
+		<result column="spuSid" property="spuSid" />
+		<result column="channelSid" property="channelSid" />
+		<result column="categorySid" property="categorySid" />
+		<result column="categoryName" property="categoryName" />
+		<result column="categoryType" property="categoryType" />
+		<collection property="parameters" column="spuCateSid"
+			ofType="com.wangfj.product.maindata.domain.vo.ParametersDto">
+			<id column="propSid" property="propSid" />
+			<result column="propName" property="propName" />
+			<result column="valueSid" property="valueSid" />
+			<result column="valueName" property="valueName" />
+			<result column="notNull" property="notNull" />
+		</collection>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		sid, product_sid, channel_sid, category_sid, category_name,
+		category_type,prop_sid,
+		prop_name,
+		value_sid, value_name
+	</sql>
+	<select id="getPropInfoBySpuCode" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		SELECT
+		ppp.*
+		FROM
+		pcm_category AS cate
+		JOIN
+		pcm_product_parameters ppp ON cate.sid = ppp.category_sid
+		JOIN
+		pcm_product AS spu ON spu.sid = ppp.product_sid
+		where spu.product_sid =
+		#{spuCode,jdbcType=VARCHAR}
+		and cate.channel_sid =
+		#{channelSid,jdbcType=VARCHAR}
+	</select>
+	<select id="cateListSelect" resultMap="CateListResultMap"
+		parameterType="java.util.Map">
+		SELECT
+		DISTINCT
+		ppp.product_sid * 100000 + ppp.category_sid AS
+		spuCateSid,
+		ppp.product_sid AS spuSid,
+		ppp.channel_sid AS channelSid,
+		ppp.category_sid AS categorySid,
+		ppp.category_name AS categoryName,
+		ppp.category_type AS categoryType,
+		ppp.prop_sid AS propSid,
+		ppp.prop_name AS propName,
+		ppp.value_sid AS valueSid,
+		ppp.value_name AS
+		valueName,
+		pcpv.not_null AS notNull
+		FROM
+		pcm_product_parameters AS ppp
+		JOIN pcm_category_prop_values AS pcpv ON ppp.category_sid =
+		pcpv.category_sid
+		AND ppp.prop_sid = pcpv.props_sid
+		and
+		ppp.category_type = 3
+		<where>
+			<if test="spuSid != null">
+				product_sid = #{spuSid,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectListSelect"
+		resultType="com.wangfj.product.category.domain.vo.PcmProductParaDto"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductParameters">
+		SELECT
+		distinct
+		ppp.product_sid AS productSid,
+		ppp.channel_sid AS
+		channelSid,
+		ppp.category_sid AS categorySid,
+		ppp.category_name AS
+		categoryName,
+		ppp.category_type AS categoryType,
+		ppp.prop_sid AS
+		propSid,
+		ppp.prop_name AS propName,
+		ppp.value_sid AS valueSid,
+		ppp.value_name AS
+		valueName,
+		pcpv.not_null AS notNull
+		FROM
+		pcm_product_parameters AS ppp
+		JOIN pcm_category_prop_values AS pcpv ON
+		ppp.category_sid =
+		pcpv.category_sid
+		AND ppp.prop_sid = pcpv.props_sid
+		<where>
+			<if test="sid != null">
+				ppp.sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productSid != null">
+				and ppp.product_sid = #{productSid,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and ppp.channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and ppp.category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="categoryName != null">
+				and ppp.category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryType != null">
+				and ppp.category_type = #{categoryType,jdbcType=VARCHAR}
+			</if>
+			<if test="propSid != null">
+				and ppp.prop_sid = #{propSid,jdbcType=BIGINT}
+			</if>
+			<if test="propName != null">
+				and ppp.prop_name = #{propName,jdbcType=VARCHAR}
+			</if>
+			<if test="valueSid != null">
+				and ppp.value_sid = #{valueSid,jdbcType=BIGINT}
+			</if>
+			<if test="valueName != null">
+				and ppp.value_name = #{valueName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_product_parameters
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_product_parameters
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByProductSid">
+		delete from pcm_product_parameters
+		where product_sid =
+		#{productSid,jdbcType=BIGINT} and channel_sid =
+		#{channelSid,jdbcType=BIGINT} and category_sid
+		=#{categorySid,jdbcType=BIGINT}
+	</delete>
+	<!-- 添加之前删除表中数据 -->
+	<delete id="deleteByProductSid_1"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductParameters">
+		delete from pcm_product_parameters
+		<where>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="categoryType != null">
+				and category_type = #{categoryType,jdbcType=INTEGER}
+			</if>
+		</where>
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductParameters">
+		insert into pcm_product_parameters (sid, product_sid,
+		channel_sid,
+		category_sid, category_name, prop_sid,
+		prop_name,
+		value_sid, value_name
+		)
+		values (#{sid,jdbcType=BIGINT},
+		#{productSid,jdbcType=BIGINT},
+		#{channelSid,jdbcType=BIGINT},
+		#{categorySid,jdbcType=BIGINT}, #{categoryName,jdbcType=VARCHAR},
+		#{propSid,jdbcType=BIGINT},
+		#{propName,jdbcType=VARCHAR},
+		#{valueSid,jdbcType=BIGINT},
+		#{valueName,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductParameters">
+		insert into pcm_product_parameters
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="productSid != null">
+				product_sid,
+			</if>
+			<if test="channelSid != null">
+				channel_sid,
+			</if>
+			<if test="categorySid != null">
+				category_sid,
+			</if>
+			<if test="categoryName != null">
+				category_name,
+			</if>
+			<if test="categoryType != null">
+				category_type,
+			</if>
+			<if test="propSid != null">
+				prop_sid,
+			</if>
+			<if test="propName != null">
+				prop_name,
+			</if>
+			<if test="valueSid != null">
+				value_sid,
+			</if>
+			<if test="valueName != null">
+				value_name,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="productSid != null">
+				#{productSid,jdbcType=BIGINT},
+			</if>
+			<if test="channelSid != null">
+				#{channelSid,jdbcType=BIGINT},
+			</if>
+			<if test="categorySid != null">
+				#{categorySid,jdbcType=BIGINT},
+			</if>
+			<if test="categoryName != null">
+				#{categoryName,jdbcType=VARCHAR},
+			</if>
+			<if test="categoryType != null">
+				#{categoryType,jdbcType=VARCHAR},
+			</if>
+			<if test="propSid != null">
+				#{propSid,jdbcType=BIGINT},
+			</if>
+			<if test="propName != null">
+				#{propName,jdbcType=VARCHAR},
+			</if>
+			<if test="valueSid != null">
+				#{valueSid,jdbcType=BIGINT},
+			</if>
+			<if test="valueName != null">
+				#{valueName,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductParameters">
+		update pcm_product_parameters
+		<set>
+			<if test="productSid != null">
+				product_sid = #{productSid,jdbcType=BIGINT},
+			</if>
+			<if test="channelSid != null">
+				channel_sid = #{channelSid,jdbcType=BIGINT},
+			</if>
+			<if test="categorySid != null">
+				category_sid = #{categorySid,jdbcType=BIGINT},
+			</if>
+			<if test="categoryName != null">
+				category_name = #{categoryName,jdbcType=VARCHAR},
+			</if>
+			<if test="propSid != null">
+				prop_sid = #{propSid,jdbcType=BIGINT},
+			</if>
+			<if test="propName != null">
+				prop_name = #{propName,jdbcType=VARCHAR},
+			</if>
+			<if test="valueSid != null">
+				value_sid = #{valueSid,jdbcType=BIGINT},
+			</if>
+			<if test="valueName != null">
+				value_name = #{valueName,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductParameters">
+		update pcm_product_parameters
+		set product_sid =
+		#{productSid,jdbcType=BIGINT},
+		channel_sid =
+		#{channelSid,jdbcType=BIGINT},
+		category_sid =
+		#{categorySid,jdbcType=BIGINT},
+		category_name =
+		#{categoryName,jdbcType=VARCHAR},
+		prop_sid =
+		#{propSid,jdbcType=BIGINT},
+		prop_name = #{propName,jdbcType=VARCHAR},
+		value_sid = #{valueSid,jdbcType=BIGINT},
+		value_name =
+		#{valueName,jdbcType=VARCHAR}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_product_parameters
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=BIGINT}
+			</if>
+			<if test="categoryType != null">
+				and category_type = #{categoryType,jdbcType=INTEGER}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="propSid != null">
+				and prop_sid = #{propSid,jdbcType=BIGINT}
+			</if>
+			<if test="propName != null">
+				and prop_name = #{propName,jdbcType=VARCHAR}
+			</if>
+			<if test="valueSid != null">
+				and value_sid = #{valueSid,jdbcType=BIGINT}
+			</if>
+			<if test="valueName != null">
+				and value_name = #{valueName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_product_parameters
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="propSid != null">
+				and prop_sid = #{propSid,jdbcType=BIGINT}
+			</if>
+			<if test="propName != null">
+				and prop_name = #{propName,jdbcType=VARCHAR}
+			</if>
+			<if test="valueSid != null">
+				and value_sid = #{valueSid,jdbcType=BIGINT}
+			</if>
+			<if test="valueName != null">
+				and value_name = #{valueName,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_product_parameters
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="propSid != null">
+				and prop_sid = #{propSid,jdbcType=BIGINT}
+			</if>
+			<if test="propName != null">
+				and prop_name = #{propName,jdbcType=VARCHAR}
+			</if>
+			<if test="valueSid != null">
+				and value_sid = #{valueSid,jdbcType=BIGINT}
+			</if>
+			<if test="valueName != null">
+				and value_name = #{valueName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="selectCateBySpuCode" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductParameters">
+		select ppp.* from pcm_product_parameters as ppp join
+		pcm_category as
+		cate on cate.sid = ppp.category_sid
+		and cate.is_leaf = 'Y' 
+		and cate.status = 'Y' 
+		and cate.is_display = 1
+		<where>
+			<if test="sid != null">
+				and ppp.sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productSid != null">
+				and ppp.product_sid = #{productSid,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and ppp.channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and ppp.category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="categoryName != null">
+				and ppp.category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryType != null">
+				and ppp.category_type = #{categoryType,jdbcType=VARCHAR}
+			</if>
+			<if test="propSid != null">
+				and ppp.prop_sid = #{propSid,jdbcType=BIGINT}
+			</if>
+			<if test="propName != null">
+				and ppp.prop_name = #{propName,jdbcType=VARCHAR}
+			</if>
+			<if test="valueSid != null">
+				and ppp.value_sid = #{valueSid,jdbcType=BIGINT}
+			</if>
+			<if test="valueName != null">
+				and ppp.value_name = #{valueName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="selectList" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductParameters">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_product_parameters
+		<where>
+			<if test="sid != null">
+				sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="categoryType != null">
+				and category_type = #{categoryType,jdbcType=VARCHAR}
+			</if>
+			<if test="propSid != null">
+				and prop_sid = #{propSid,jdbcType=BIGINT}
+			</if>
+			<if test="propName != null">
+				and prop_name = #{propName,jdbcType=VARCHAR}
+			</if>
+			<if test="valueSid != null">
+				and value_sid = #{valueSid,jdbcType=BIGINT}
+			</if>
+			<if test="valueName != null">
+				and value_name = #{valueName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectProps" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductParameters">
+		select prop_sid, prop_name
+		from pcm_product_parameters
+		<where>
+			<if test="productSid != null">
+				product_sid = #{productSid,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+		</where>
+		group by prop_sid
+	</select>
+	<select id="selectValues" resultType="java.lang.String"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductParameters">
+		select value_name
+		from pcm_product_parameters
+		<where>
+			<if test="productSid != null">
+				product_sid = #{productSid,jdbcType=BIGINT}
+			</if>
+			<if test="propSid != null">
+				and prop_sid = #{propSid,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+	<select id="getShopName" resultType="java.lang.String"
+		parameterType="java.lang.Long">
+		select shop_name from v_ssd_product_stock_price
+		where
+		product_sid = #{productSid,jdbcType=BIGINT}
+		group by shop_name
+	</select>
+	<insert id="insertBatch" parameterType="java.util.List">
+		insert into pcm_product_parameters
+		(product_sid,channel_sid,category_sid,category_name,
+		prop_sid,prop_name,value_sid,value_name)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.productSid,jdbcType=BIGINT},
+			#{item.channelSid,jdbcType=BIGINT},
+			#{item.categorySid,jdbcType=BIGINT},
+			#{item.categoryName,jdbcType=VARCHAR},
+			#{item.propSid,jdbcType=BIGINT},
+			#{item.propName,jdbcType=VARCHAR},
+			#{item.valueSid,jdbcType=BIGINT},
+			#{item.valueName,jdbcType=VARCHAR}
+			)
+		</foreach>
+	</insert>
+
+	<select id="selectParasList" resultType="hashmap"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductParameters">
+		select
+		product_sid,prop_name,value_name
+		from pcm_product_parameters
+		<where>
+			<if test="sid != null">
+				sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="propSid != null">
+				and prop_sid = #{propSid,jdbcType=BIGINT}
+			</if>
+			<if test="propName != null">
+				and prop_name = #{propName,jdbcType=VARCHAR}
+			</if>
+			<if test="valueSid != null">
+				and value_sid = #{valueSid,jdbcType=BIGINT}
+			</if>
+			<if test="valueName != null">
+				and value_name = #{valueName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectListBySpuSid" resultMap="ResultPro"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductParameters">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_product_parameters
+		<where>
+			<if test="sid != null">
+				sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="propSid != null">
+				and prop_sid = #{propSid,jdbcType=BIGINT}
+			</if>
+			<if test="propName != null">
+				and prop_name = #{propName,jdbcType=VARCHAR}
+			</if>
+			<if test="valueSid != null">
+				and value_sid = #{valueSid,jdbcType=BIGINT}
+			</if>
+			<if test="valueName != null">
+				and value_name = #{valueName,jdbcType=VARCHAR}
+			</if>
+			<if test="identi != null">
+				and identi = #{identi,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectProductBySpuSid" resultMap="ResultPro"
+		parameterType="com.wangfj.product.category.domain.entity.PcmProductParameters">
+		SELECT pp.*, pc.is_enum_prop FROM pcm_product_parameters AS pp INNER
+		JOIN pcm_category_props_dict
+		as pc ON pc.props_sid =pp.prop_sid
+		<where>
+			<if test="sid != null">
+				sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="categoryName != null">
+				and category_name = #{categoryName,jdbcType=VARCHAR}
+			</if>
+			<if test="propSid != null">
+				and prop_sid = #{propSid,jdbcType=BIGINT}
+			</if>
+			<if test="propName != null">
+				and prop_name = #{propName,jdbcType=VARCHAR}
+			</if>
+			<if test="valueSid != null">
+				and value_sid = #{valueSid,jdbcType=BIGINT}
+			</if>
+			<if test="valueName != null">
+				and value_name = #{valueName,jdbcType=VARCHAR}
+			</if>
+
+		</where>
+	</select>
+
+
+</mapper>

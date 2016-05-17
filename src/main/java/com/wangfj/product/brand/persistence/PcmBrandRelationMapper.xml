@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.brand.persistence.PcmBrandRelationMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.brand.domain.entity.PcmBrandRelation">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="brand_sid" property="brandSid" jdbcType="VARCHAR" />
+		<result column="brand_root_sid" property="brandRootSid"
+			jdbcType="VARCHAR" />
+		<result column="opt_user" property="optUser" jdbcType="VARCHAR" />
+		<result column="opt_date" property="optDate" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, brand_sid, brand_root_sid, opt_user, opt_date, status
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_brand_relation
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<!-- 关联查询 -->
+	<!-- 查询所有 selectList -->
+	<select id="selectList" resultType="java.util.HashMap"
+		parameterType="java.util.Map">
+		SELECT
+		g.activity_big_pic,
+		b.brand_active_bit
+		FROM
+		pcm_brand_relation r
+		LEFT JOIN pcm_brand b ON b.sid = r.brand_sid
+		LEFT JOIN pcm_brand_group
+		g ON r.brand_root_sid = g.sid;
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=BIGINT}
+			</if>
+			<if test="brandRootSid != null">
+				and brand_root_sid = #{brandRootSid,jdbcType=BIGINT}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+
+	<!-- 品牌信息同步其他系统 -->
+	<select id="selectByBrands" resultType="java.util.HashMap"
+		parameterType="java.util.Map">
+		SELECT
+		g.brand_sid AS brandSid,
+		g.brand_name AS brandName,
+		g.brand_name_alias AS
+		brandNameAlias,
+		b.brand_sid AS storeBrandSid,
+		b.shop_type AS shopType
+		FROM
+		pcm_brand_group g
+		LEFT JOIN
+		pcm_brand_relation r ON r.brand_root_sid = g.brand_sid
+		LEFT JOIN
+		pcm_brand b ON
+		r.brand_sid = b.brand_sid
+		<where>
+			1=1
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="brandSid != null">
+				and g.brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandRootSid != null">
+				and brand_root_sid = #{brandRootSid,jdbcType=VARCHAR}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="brandName != null">
+				and g.brand_name = #{brandName,jdbcType=VARCHAR}
+			</if>
+			<if test="brandNameAlias != null">
+				and brand_name_alias = #{brandNameAlias,jdbcType=VARCHAR}
+			</if>
+			<if test="storeBrandSid != null">
+				and b.brand_sid = #{storeBrandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="shopType != null">
+				and shop_type = #{shopType,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by
+		g.brand_sid asc
+		<if test="limit != null">
+			limit #{start}, #{limit}
+		</if>
+	</select>
+
+	<select id="selectCountByBrand" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		SELECT
+		count(*)
+		FROM
+		pcm_brand_relation r
+		LEFT JOIN
+		pcm_brand_group g ON
+		r.brand_root_sid = g.sid
+		LEFT JOIN pcm_brand b ON
+		r.brand_sid = b.sid
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="brandSid != null">
+				and g.brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandRootSid != null">
+				and brand_root_sid = #{brandRootSid,jdbcType=VARCHAR}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="brandName != null">
+				and g.brand_name = #{brandName,jdbcType=VARCHAR}
+			</if>
+			<if test="brandNameAlias != null">
+				and brand_name_alias = #{brandNameAlias,jdbcType=VARCHAR}
+			</if>
+			<if test="storeBrandSid != null">
+				and b.brand_sid = #{storeBrandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="shopType != null">
+				and shop_type = #{shopType,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<!-- 查询所有 selectListByParam -->
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_brand_relation
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandRootSid != null">
+				and brand_root_sid = #{brandRootSid,jdbcType=VARCHAR}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+	<!-- 分页查询 -->
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_brand_relation
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandRootSid != null">
+				and brand_root_sid = #{brandRootSid,jdbcType=VARCHAR}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+		</where>
+		order by
+		sid asc
+		<if test="start != null and limit != null">
+			limit #{start}, #{limit}
+		</if>
+	</select>
+
+	<!-- 查询数量 -->
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_brand_relation
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandRootSid != null">
+				and brand_root_sid = #{brandRootSid,jdbcType=VARCHAR}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_brand_relation
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmBrandRelation">
+		insert into pcm_brand_relation (sid, brand_sid,
+		brand_root_sid,
+		opt_user, opt_date)
+		values (#{sid,jdbcType=BIGINT},
+		#{brandSid,jdbcType=BIGINT},
+		#{brandRootSid,jdbcType=BIGINT},
+		#{optUser,jdbcType=VARCHAR}, #{optDate,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmBrandRelation">
+		insert into pcm_brand_relation
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="brandSid != null">
+				brand_sid,
+			</if>
+			<if test="brandRootSid != null">
+				brand_root_sid,
+			</if>
+			<if test="optUser != null">
+				opt_user,
+			</if>
+			<if test="optDate != null">
+				opt_date,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="brandSid != null">
+				#{brandSid,jdbcType=VARCHAR},
+			</if>
+			<if test="brandRootSid != null">
+				#{brandRootSid,jdbcType=VARCHAR},
+			</if>
+			<if test="optUser != null">
+				#{optUser,jdbcType=VARCHAR},
+			</if>
+			<if test="optDate != null">
+				#{optDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmBrandRelation">
+		update pcm_brand_relation
+		<set>
+			<if test="brandSid != null">
+				brand_sid = #{brandSid,jdbcType=VARCHAR},
+			</if>
+			<if test="brandRootSid != null">
+				brand_root_sid = #{brandRootSid,jdbcType=VARCHAR},
+			</if>
+			<if test="optUser != null">
+				opt_user = #{optUser,jdbcType=VARCHAR},
+			</if>
+			<if test="optDate != null">
+				opt_date = #{optDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmBrandRelation">
+		update pcm_brand_relation
+		set brand_sid =
+		#{brandSid,jdbcType=VARCHAR},
+		brand_root_sid =
+		#{brandRootSid,jdbcType=VARCHAR},
+		opt_user =
+		#{optUser,jdbcType=VARCHAR},
+		opt_date = #{optDate,jdbcType=TIMESTAMP}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+</mapper>

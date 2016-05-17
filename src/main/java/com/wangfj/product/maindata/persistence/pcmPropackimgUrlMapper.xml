@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.pcmPropackimgUrlMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.maindata.domain.entity.pcmPropackimgUrl">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="sku_sid" property="skuSid" jdbcType="VARCHAR" />
+		<result column="color_code" property="colorCode" jdbcType="VARCHAR" />
+		<result column="picture_url" property="pictureUrl" jdbcType="VARCHAR" />
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+		<result column="c1" property="c1" jdbcType="VARCHAR" />
+		<result column="c2" property="c2" jdbcType="VARCHAR" />
+		<result column="c3" property="c3" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, sku_sid, color_code, picture_url, create_date, c1, c2, c3
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_propackimg_url
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from pcm_propackimg_url
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.maindata.domain.entity.pcmPropackimgUrl">
+		insert into pcm_propackimg_url (sid, sku_sid, color_code,
+		picture_url, create_date, c1,
+		c2, c3)
+		values (#{sid,jdbcType=BIGINT}, #{skuSid,jdbcType=VARCHAR},
+		#{colorCode,jdbcType=VARCHAR},
+		#{pictureUrl,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{c1,jdbcType=VARCHAR},
+		#{c2,jdbcType=VARCHAR}, #{c3,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.pcmPropackimgUrl">
+		insert into pcm_propackimg_url
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="skuSid != null">
+				sku_sid,
+			</if>
+			<if test="colorCode != null">
+				color_code,
+			</if>
+			<if test="pictureUrl != null">
+				picture_url,
+			</if>
+			<if test="createDate != null">
+				create_date,
+			</if>
+			<if test="c1 != null">
+				c1,
+			</if>
+			<if test="c2 != null">
+				c2,
+			</if>
+			<if test="c3 != null">
+				c3,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="skuSid != null">
+				#{skuSid,jdbcType=VARCHAR},
+			</if>
+			<if test="colorCode != null">
+				#{colorCode,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureUrl != null">
+				#{pictureUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="createDate != null">
+				#{createDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="c1 != null">
+				#{c1,jdbcType=VARCHAR},
+			</if>
+			<if test="c2 != null">
+				#{c2,jdbcType=VARCHAR},
+			</if>
+			<if test="c3 != null">
+				#{c3,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.pcmPropackimgUrl">
+		update pcm_propackimg_url
+		<set>
+			<if test="skuSid != null">
+				sku_sid = #{skuSid,jdbcType=VARCHAR},
+			</if>
+			<if test="colorCode != null">
+				color_code = #{colorCode,jdbcType=VARCHAR},
+			</if>
+			<if test="pictureUrl != null">
+				picture_url = #{pictureUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="createDate != null">
+				create_date = #{createDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="c1 != null">
+				c1 = #{c1,jdbcType=VARCHAR},
+			</if>
+			<if test="c2 != null">
+				c2 = #{c2,jdbcType=VARCHAR},
+			</if>
+			<if test="c3 != null">
+				c3 = #{c3,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.maindata.domain.entity.pcmPropackimgUrl">
+		update pcm_propackimg_url
+		set sku_sid = #{skuSid,jdbcType=VARCHAR},
+		color_code = #{colorCode,jdbcType=VARCHAR},
+		picture_url = #{pictureUrl,jdbcType=VARCHAR},
+		create_date = #{createDate,jdbcType=TIMESTAMP},
+		c1 = #{c1,jdbcType=VARCHAR},
+		c2 = #{c2,jdbcType=VARCHAR},
+		c3 = #{c3,jdbcType=VARCHAR}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+
+	<select id="selectListBySpuAndColor" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.maindata.domain.entity.pcmPropackimgUrl">
+		(SELECT
+		pic.sku_sid AS skuSid,
+		pic.color_code AS colorCode,
+		pic.picture_url AS pictureUrl
+		FROM pcm_picture_url pic
+		WHERE pic.is_thumbnail = 1
+		AND pic.is_model = 0
+		<if test="skuSid != null">
+			and sku_sid = #{skuSid,jdbcType=VARCHAR}
+		</if>
+		<if test="colorCode != null">
+			and color_code = #{colorCode,jdbcType=VARCHAR}
+		</if>
+		and if_delete=0
+		)
+		UNION
+		(
+		SELECT
+		pack.sku_sid AS skuSid,
+		pack.color_code AS colorCode,
+		pack.picture_url AS pictureUrl
+		FROM pcm_propackimg_url pack
+		<where>
+			<if test="skuSid != null">
+				and sku_sid = #{skuSid,jdbcType=VARCHAR}
+			</if>
+			<if test="colorCode != null">
+				and color_code = #{colorCode,jdbcType=VARCHAR}
+			</if>
+		</where>
+		)
+	</select>
+
+</mapper>

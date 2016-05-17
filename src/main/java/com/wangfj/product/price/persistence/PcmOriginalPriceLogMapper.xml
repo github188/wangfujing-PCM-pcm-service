@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.price.persistence.PcmOriginalPriceLogMapper" >
+  <resultMap id="BaseResultMap" type="com.wangfj.product.price.domain.entity.PcmOriginalPriceLog" >
+    <id column="sid" property="sid" jdbcType="BIGINT" />
+    <result column="product_detail_sid" property="productDetailSid" jdbcType="VARCHAR" />
+    <result column="old_original_price" property="oldOriginalPrice" jdbcType="DECIMAL" />
+    <result column="new_original_price" property="newOriginalPrice" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="opt_user" property="optUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sid, product_detail_sid, old_original_price, new_original_price, create_time, opt_user
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from pcm_original_price_log
+    where sid = #{sid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pcm_original_price_log
+    where sid = #{sid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangfj.product.price.domain.entity.PcmOriginalPriceLog" >
+    insert into pcm_original_price_log (sid, product_detail_sid, old_original_price, 
+      new_original_price, create_time, opt_user
+      )
+    values (#{sid,jdbcType=BIGINT}, #{productDetailSid,jdbcType=VARCHAR}, #{oldOriginalPrice,jdbcType=DECIMAL}, 
+      #{newOriginalPrice,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{optUser,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangfj.product.price.domain.entity.PcmOriginalPriceLog" >
+    insert into pcm_original_price_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="productDetailSid != null" >
+        product_detail_sid,
+      </if>
+      <if test="oldOriginalPrice != null" >
+        old_original_price,
+      </if>
+      <if test="newOriginalPrice != null" >
+        new_original_price,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="optUser != null" >
+        opt_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        #{sid,jdbcType=BIGINT},
+      </if>
+      <if test="productDetailSid != null" >
+        #{productDetailSid,jdbcType=VARCHAR},
+      </if>
+      <if test="oldOriginalPrice != null" >
+        #{oldOriginalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="newOriginalPrice != null" >
+        #{newOriginalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="optUser != null" >
+        #{optUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.price.domain.entity.PcmOriginalPriceLog" >
+    update pcm_original_price_log
+    <set >
+      <if test="productDetailSid != null" >
+        product_detail_sid = #{productDetailSid,jdbcType=VARCHAR},
+      </if>
+      <if test="oldOriginalPrice != null" >
+        old_original_price = #{oldOriginalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="newOriginalPrice != null" >
+        new_original_price = #{newOriginalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="optUser != null" >
+        opt_user = #{optUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangfj.product.price.domain.entity.PcmOriginalPriceLog" >
+    update pcm_original_price_log
+    set product_detail_sid = #{productDetailSid,jdbcType=VARCHAR},
+      old_original_price = #{oldOriginalPrice,jdbcType=DECIMAL},
+      new_original_price = #{newOriginalPrice,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      opt_user = #{optUser,jdbcType=VARCHAR}
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  
+  
+     <select id="selectListByParam" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    	<include refid="Base_Column_List" />
+    from pcm_original_price_log
+    <where>
+    <if test="productDetailSid != null" >
+        product_detail_sid = #{productDetailSid,jdbcType=VARCHAR},
+      </if>
+      <if test="oldOriginalPrice != null" >
+        old_original_price = #{oldOriginalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="newOriginalPrice != null" >
+        new_original_price = #{newOriginalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="optUser != null" >
+        opt_user = #{optUser,jdbcType=VARCHAR},
+      </if>
+    </where>
+  </select>
+  
+  <select id="selectPageListByParam" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    	<include refid="Base_Column_List" />
+    from pcm_original_price_log
+    <where>
+    <if test="productDetailSid != null" >
+        product_detail_sid = #{productDetailSid,jdbcType=VARCHAR},
+      </if>
+      <if test="oldOriginalPrice != null" >
+        old_original_price = #{oldOriginalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="newOriginalPrice != null" >
+        new_original_price = #{newOriginalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="optUser != null" >
+        opt_user = #{optUser,jdbcType=VARCHAR},
+      </if>
+    </where>
+    order by
+			sid asc
+		limit
+			#{start}, #{limit}
+  </select>
+  <select id="getCountByParam" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select 
+    	count(*)
+    from pcm_original_price_log
+    <where>
+    <if test="productDetailSid != null" >
+        product_detail_sid = #{productDetailSid,jdbcType=VARCHAR},
+      </if>
+      <if test="oldOriginalPrice != null" >
+        old_original_price = #{oldOriginalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="newOriginalPrice != null" >
+        new_original_price = #{newOriginalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="optUser != null" >
+        opt_user = #{optUser,jdbcType=VARCHAR},
+      </if>
+   </where>
+  </select>
+</mapper>

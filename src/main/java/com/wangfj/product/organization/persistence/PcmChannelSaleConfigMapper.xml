@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.wangfj.product.organization.persistence.PcmChannelSaleConfigMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.organization.domain.entity.PcmChannelSaleConfig">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="shoppe_pro_sid" property="shoppeProSid"
+			jdbcType="BIGINT" />
+		<result column="channel_sid" property="channelSid" jdbcType="VARCHAR" />
+		<result column="sale_stauts" property="saleStauts" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, shoppe_pro_sid, channel_sid, sale_stauts
+	</sql>
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_channel_sale_config
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_channel_sale_config
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.organization.domain.entity.PcmChannelSaleConfig">
+		insert into pcm_channel_sale_config (sid,
+		shoppe_pro_sid, channel_sid,
+		sale_stauts)
+		values
+		(#{sid,jdbcType=BIGINT}, #{shoppeProSid,jdbcType=BIGINT},
+		#{channelSid,jdbcType=VARCHAR},
+		#{saleStauts,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective" useGeneratedKeys="true"
+		keyProperty="sid"
+		parameterType="com.wangfj.product.organization.domain.entity.PcmChannelSaleConfig">
+		insert into pcm_channel_sale_config
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid,
+			</if>
+			<if test="channelSid != null">
+				channel_sid,
+			</if>
+			<if test="saleStauts != null">
+				sale_stauts,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="shoppeProSid != null">
+				#{shoppeProSid,jdbcType=BIGINT},
+			</if>
+			<if test="channelSid != null">
+				#{channelSid,jdbcType=VARCHAR},
+			</if>
+			<if test="saleStauts != null">
+				#{saleStauts,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.organization.domain.entity.PcmChannelSaleConfig">
+		update pcm_channel_sale_config
+		<set>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT},
+			</if>
+			<if test="channelSid != null">
+				channel_sid = #{channelSid,jdbcType=VARCHAR},
+			</if>
+			<if test="saleStauts != null">
+				sale_stauts = #{saleStauts,jdbcType=INTEGER},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.organization.domain.entity.PcmChannelSaleConfig">
+		update pcm_channel_sale_config
+		set shoppe_pro_sid =
+		#{shoppeProSid,jdbcType=BIGINT},
+		channel_sid =
+		#{channelSid,jdbcType=VARCHAR},
+		sale_stauts =
+		#{saleStauts,jdbcType=INTEGER}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_channel_sale_config
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=VARCHAR}
+			</if>
+			<if test="saleStauts != null">
+				and sale_stauts = #{saleStauts,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_channel_sale_config
+		<where>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=VARCHAR}
+			</if>
+			<if test="saleStauts != null">
+				and sale_stauts = #{saleStauts,jdbcType=INTEGER}
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_channel_sale_config
+		<where>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=VARCHAR}
+			</if>
+			<if test="saleStauts != null">
+				and sale_stauts = #{saleStauts,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+	<select id="getChannelSaleByParam" resultType="String"
+		parameterType="com.wangfj.product.organization.domain.entity.PcmChannelSaleConfig">
+		select
+		pc.channel_code
+		from pcm_channel_sale_config as pcsc
+		JOIN pcm_channel as pc on pcsc.channel_sid = pc.channel_code
+		<where>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=VARCHAR}
+			</if>
+			<if test="saleStauts != null">
+				and sale_stauts = #{saleStauts,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+
+	<select id="findListByShoppeParam"
+		resultType="com.wangfj.product.organization.domain.vo.PcmChannelSaleConfigResultDto"
+		parameterType="com.wangfj.product.organization.domain.vo.PcmChannelSaleConfigQueryDto">
+		SELECT
+		pc.channel_code AS channelCode,
+		pc.channel_name AS channelName,
+		pcsc.sale_stauts AS saleStauts
+		FROM
+		(SELECT * FROM
+		pcm_channel_sale_config
+		<where>
+			<if test="shoppeProSid != null and shoppeProSid != ''">
+				and shoppe_pro_sid = #{shoppeProSid}
+			</if>
+		</where>
+		) pcsc
+		INNER
+		JOIN pcm_channel pc ON
+		pcsc.channel_sid = pc.channel_code
+		INNER JOIN
+		pcm_shoppe ps ON
+		pcsc.shoppe_pro_sid = ps.sid
+		WHERE
+		pcsc.sale_stauts = 0
+		AND pc.status = 0
+	</select>
+
+	<select id="findListByShoppeProParam"
+		resultType="com.wangfj.product.organization.domain.vo.PcmChannelSaleConfigResultDto"
+		parameterType="com.wangfj.product.organization.domain.vo.PcmChannelSaleConfigQueryDto">
+		SELECT
+		pc.channel_code AS channelCode,
+		pc.channel_name AS
+		channelName,
+		pcsc.sale_stauts AS saleStauts
+		FROM pcm_channel_sale_config
+		pcsc
+		INNER
+		JOIN pcm_channel pc ON
+		pcsc.channel_sid = pc.channel_code
+		INNER
+		JOIN
+		pcm_shoppe ps ON
+		pcsc.shoppe_pro_sid = ps.sid
+		INNER JOIN
+		pcm_shoppe_product psp ON ps.sid = psp.shoppe_sid
+		WHERE
+		pcsc.sale_stauts
+		= 0
+		AND pc.status = 0
+		AND psp.shoppe_pro_sid = #{shoppeProCode}
+	</select>
+
+
+</mapper>

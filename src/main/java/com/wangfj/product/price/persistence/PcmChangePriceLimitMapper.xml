@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.price.persistence.PcmChangePriceLimitMapper" >
+  <resultMap id="BaseResultMap" type="com.wangfj.product.price.domain.entity.PcmChangePriceLimit" >
+    <id column="sid" property="sid" jdbcType="BIGINT" />
+    <result column="shop_sid" property="shopSid" jdbcType="VARCHAR" />
+    <result column="level_type" property="levelType" jdbcType="INTEGER" />
+    <result column="level_value" property="levelValue" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_name" property="createName" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_name" property="updateName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sid, shop_sid, level_type, level_value, status, create_time, create_name, update_time, 
+    update_name
+  </sql>
+   
+   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from pcm_change_price_limit
+    where sid = #{sid,jdbcType=BIGINT}
+  </select> 
+ <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pcm_change_price_limit
+    where sid = #{sid,jdbcType=BIGINT}
+  </delete> 
+ <insert id="insert" parameterType="com.wangfj.product.price.domain.entity.PcmChangePriceLimit" >
+    insert into pcm_change_price_limit (sid, shop_sid, level_type, 
+      level_value, status, create_time, 
+      create_name, update_time, update_name
+      )
+    values (#{sid,jdbcType=BIGINT}, #{shopSid,jdbcType=VARCHAR}, #{levelType,jdbcType=INTEGER}, 
+      #{levelValue,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" 
+  parameterType="com.wangfj.product.price.domain.entity.PcmChangePriceLimit" 
+  useGeneratedKeys="true" keyProperty="sid">
+    insert into pcm_change_price_limit
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="shopSid != null" >
+        shop_sid,
+      </if>
+      <if test="levelType != null" >
+        level_type,
+      </if>
+      <if test="levelValue != null" >
+        level_value,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createName != null" >
+        create_name,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateName != null" >
+        update_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        #{sid,jdbcType=BIGINT},
+      </if>
+      <if test="shopSid != null" >
+        #{shopSid,jdbcType=VARCHAR},
+      </if>
+      <if test="levelType != null" >
+        #{levelType,jdbcType=INTEGER},
+      </if>
+      <if test="levelValue != null" >
+        #{levelValue,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createName != null" >
+        #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateName != null" >
+        #{updateName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+<update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.price.domain.entity.PcmChangePriceLimit" >
+    update pcm_change_price_limit
+    <set >
+      <if test="shopSid != null" >
+        shop_sid = #{shopSid,jdbcType=VARCHAR},
+      </if>
+      <if test="levelType != null" >
+        level_type = #{levelType,jdbcType=INTEGER},
+      </if>
+      <if test="levelValue != null" >
+        level_value = #{levelValue,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createName != null" >
+        create_name = #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateName != null" >
+        update_name = #{updateName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+ 
+ <!-- 根据门店号查询阀值 -->
+  <select id="selectPriceLimitByShopSid" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		SELECT * FROM `pcm_change_price_limit` 
+		where shop_sid = #{shopSid,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 根据门店编号查询阀值 -->
+  <select id="selectPriceLimitByShopCode" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		SELECT P.* FROM `pcm_change_price_limit` P 
+		LEFT JOIN pcm_organization T 
+		ON P.shop_sid = T.sid 
+		AND T.organization_type = 3 
+		AND T.organization_status = 0 
+		WHERE T.organization_code = #{shopCode,jdbcType=VARCHAR} ;
+  </select>
+ 
+ <!-- 分页查询  -->
+	  <select id="selectPageList" resultType="com.wangfj.product.price.domain.vo.PcmChangePriceLimitDto"
+		parameterType="com.wangfj.product.price.domain.vo.SelectPcmPriceLimitDto">		
+		SELECT Ta1.shop_sid as shopSid,Ta1.shop_code as shopCode,Ta1.shop_name as shopName,
+		Ta1.upper as upper,Ta1.upper_status as upperStatus,
+		Ta2.lower as lower,Ta2.lower_status as lowerStatus
+		FROM
+		(SELECT T.shop_sid AS shop_sid,T.level_value AS upper,T.`status` AS upper_status,
+		P.organization_code AS shop_code,P.organization_name AS shop_name 
+		FROM `pcm_change_price_limit` T 
+		LEFT JOIN pcm_organization P 
+		ON T.shop_sid=P.sid WHERE T.level_type=0) Ta1
+		LEFT JOIN
+		(SELECT T.shop_sid AS shop_sid,T.level_value AS lower,T.`status` AS lower_status 
+		FROM `pcm_change_price_limit` T 
+		LEFT JOIN pcm_organization P 
+		ON T.shop_sid=P.sid WHERE T.level_type=1) Ta2
+		ON Ta1.shop_sid=Ta2.shop_sid
+		<where>
+		    <if test="shopSid != null">
+				Ta1.shop_sid = #{shopSid,jdbcType=VARCHAR}
+	        </if>
+	     </where>
+        <if test="start != null">
+			<if test="limit != null">
+				limit
+				#{start}, #{limit}
+			</if>
+		</if>
+	</select> 
+	
+	<!-- 查询所有已经添加过阀值的门店号 -->
+	<select id="selectAllShopSidFromPriceLimit" resultType="java.lang.Long">
+	    SELECT shop_sid FROM `pcm_change_price_limit` GROUP BY shop_sid
+	</select>
+	
+  <!-- 分页总数查询getPageCountByPara wangxuan -->
+	<select id="getPageCount" resultType="java.lang.Integer"
+		parameterType="com.wangfj.product.price.domain.vo.SelectPcmPriceLimitDto">
+		SELECT COUNT(T.shop_sid) FROM
+		(SELECT shop_sid FROM `pcm_change_price_limit`
+		 <where>
+		 1=1
+		    <if test="shopSid != null">
+				and shop_sid = #{shopSid,jdbcType=VARCHAR}
+	        </if>
+	     </where>
+	        GROUP BY shop_sid) T
+	</select>  
+</mapper>

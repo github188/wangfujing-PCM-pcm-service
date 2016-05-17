@@ -1,0 +1,1454 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.organization.persistence.PcmShoppeMapper">
+    <resultMap id="BaseResultMap"
+               type="com.wangfj.product.organization.domain.entity.PcmShoppe">
+        <id column="sid" property="sid" jdbcType="BIGINT"/>
+        <result column="group_sid" property="groupSid" jdbcType="BIGINT"/>
+        <result column="shop_sid" property="shopSid" jdbcType="BIGINT"/>
+        <result column="floor_sid" property="floorSid" jdbcType="BIGINT"/>
+        <result column="industry_condition_sid" property="industryConditionSid"
+                jdbcType="INTEGER"/>
+        <result column="shoppe_code" property="shoppeCode" jdbcType="VARCHAR"/>
+        <result column="shoppe_name" property="shoppeName" jdbcType="VARCHAR"/>
+        <result column="shoppe_status" property="shoppeStatus"
+                jdbcType="INTEGER"/>
+        <result column="goods_manage_type" property="goodsManageType"
+                jdbcType="INTEGER"/>
+        <result column="business_type_sid" property="businessTypeSid"
+                jdbcType="INTEGER"/>
+        <result column="opt_user" property="optUser" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="create_name" property="createName" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="shoppe_group" property="shoppeGroup" jdbcType="VARCHAR"/>
+        <result column="shoppe_type" property="shoppeType" jdbcType="VARCHAR"/>
+        <result column="shoppe_shipping_point" property="shoppeShippingPoint"
+                jdbcType="VARCHAR"/>
+        <result column="ref_counter" property="refCounter" jdbcType="VARCHAR"/>
+        <result column="negative_stock" property="negativeStock"
+                jdbcType="INTEGER"/>
+        <result column="is_shipping_point" property="isShippingPoint"
+                jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="ErpResultMap"
+               type="com.wangfj.product.maindata.domain.vo.ShoppeErpDto">
+        <result column="shoppeCode" property="shoppeCode" jdbcType="VARCHAR"/>
+        <result column="shoppeName" property="shoppeName" jdbcType="VARCHAR"/>
+        <collection property="erpList" resultMap="ErpMap"/>
+    </resultMap>
+    <resultMap id="ErpMap" type="java.lang.String">
+        <result column="productCode" property="productCode"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+		sid, group_sid, shop_sid, floor_sid,
+		industry_condition_sid,
+		shoppe_code,
+		shoppe_name, shoppe_status,
+		goods_manage_type,
+		business_type_sid, opt_user, update_time,
+		create_name,
+		create_time,shoppe_group,shoppe_type,shoppe_shipping_point,ref_counter,
+		negative_stock,is_shipping_point
+	</sql>
+
+    <select id="getShopCodeByShoppeSid" resultType="java.lang.String"
+            parameterType="com.wangfj.product.organization.domain.entity.PcmShoppe">
+        select n.organization_code from pcm_organization as n join pcm_shoppe
+        as e
+        on n.sid=e.shop_sid
+        <where>
+            n.organization_type=3
+            <if test="sid != null">
+                and e.sid = #{ sid,jdbcType=BIGINT}
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询下发给电商的数据 -->
+    <select id="pushShoppeToEBusiness" parameterType="java.util.Map"
+            resultType="java.util.Map">
+        SELECT
+        ps.shoppe_code AS ZGID,
+        psi.supply_code AS LIFNR,
+        ps.shoppe_name
+        AS ZGNAME,
+        po.organization_code AS STORECODE,
+        ps.industry_condition_sid
+        AS
+        BUSINESSTYPE,
+        ps.create_name AS ACTIONPERSON
+        FROM
+        (SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        pcm_shoppe
+        <where>
+            industry_condition_sid = 2
+            <if test="sid != null and sid != ''">
+                AND sid = #{sid}
+            </if>
+            <if test="shoppeStatus != null and shoppeStatus != ''">
+                AND shoppe_status = #{shoppeStatus}
+            </if>
+        </where>
+        ) ps
+        INNER JOIN
+        pcm_organization po ON ps.shop_sid = po.sid
+        AND
+        po.organization_type =
+        3
+        AND po.organization_status = 0
+        INNER JOIN
+        pcm_supply_shoppe_relation pssr ON ps.sid = pssr.shoppe_sid
+        AND
+        pssr.status = 0
+        INNER JOIN pcm_supply_info psi ON psi.sid =
+        pssr.supply_sid
+        AND pssr.status = 0
+    </select>
+
+    <!-- 供应商可以为空 查询下发给门店和促销的数据 -->
+    <select id="pushShoppeData" resultType="java.util.Map"
+            parameterType="java.util.Map">
+        SELECT
+        pse.shoppe_code AS code,
+        pse.shoppe_name AS name,
+        pon.organization_code AS storeCode,
+        pfr.floor_code AS floorCode,
+        pfr.floor_name AS floorName,
+        pse.shoppe_group AS counterGroup,
+        pse.industry_condition_sid AS businessType,
+        pse.shoppe_type AS
+        counterType,
+        pse.goods_manage_type AS counterInventoryType,
+        pse.shoppe_shipping_point AS counterShippingPoint,
+        pse.ref_counter AS
+        refCounter,
+        pse.shoppe_status AS counterStatus,
+        pse.negative_stock AS
+        isNegInventory,
+        pse.opt_user AS actionPerson,
+        psi.supply_code AS
+        supplierCode,
+        psi.erp_supplier_code AS supplierErpCode
+        FROM
+        (SELECT *
+        FROM
+        pcm_shoppe
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+        </where>
+        ) pse
+        INNER JOIN pcm_organization pon ON pse.shop_sid = pon.sid
+        AND
+        pon.organization_type = 3
+        AND pon.organization_status = 0
+        LEFT JOIN
+        pcm_floor pfr ON pse.floor_sid = pfr.sid
+        AND pfr.floor_status = 0
+        LEFT
+        JOIN pcm_supply_shoppe_relation pssr ON pse.sid = pssr.shoppe_sid
+        AND
+        pssr.status = 0
+        LEFT JOIN pcm_supply_info psi ON psi.sid =
+        pssr.supply_sid
+        AND pssr.status = 0
+    </select>
+
+    <!-- 供应商可以为空 -->
+    <select id="findShoppeByParamFromPcm" resultType="java.util.HashMap"
+            parameterType="java.util.Map">
+        select
+        pse.shoppe_code as shoppeCode,
+        pse.shoppe_name as shoppeName,
+        psi.supply_code as supplyCode,
+        psi.erp_supplier_code AS
+        supplierErpCode,
+        pon.organization_code as orgCode,
+        pfr.floor_code as
+        floorCode,
+        pfr.floor_name as floorName,
+        pse.shoppe_group as shoppeGroup,
+        pse.industry_condition_sid as
+        industryName,
+        pse.shoppe_type as
+        shoppeType,
+        pse.goods_manage_type as
+        goodManageType,
+        pse.shoppe_shipping_point as shippingPoint,
+        pse.ref_counter as
+        refCounter,
+        pse.shoppe_status as shoppeStatus,
+        pse.negative_stock as
+        negIiveStock,
+        psi.last_opt_user as optUser
+        from
+        pcm_shoppe pse
+        left join
+        pcm_organization pon on pse.shop_sid = pon.sid
+        left join pcm_floor pfr
+        on pse.floor_sid = pfr.sid
+        left join
+        pcm_supply_info psi on pse.shop_sid
+        =
+        (select sid from pcm_organization
+        where organization_code =
+        psi.shop_sid)
+        <where>
+            1=1
+            <if test="shoppeCode != null">
+                and pse.shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="orgCode != null">
+                and pon.organization_code = #{orgCode,jdbcType=VARCHAR}
+            </if>
+            <if test="supplyCode != null">
+                and psi.supply_code = #{supplyCode,jdbcType=VARCHAR}
+            </if>
+            <if test="floorCode != null">
+                and pfr.floor_code = #{floorCode,jdbcType=VARCHAR}
+            </if>
+            <if test="shoppeType != null">
+                and pse.shoppe_type = #{shoppeType,jdbcType=VARCHAR}
+            </if>
+            <if test="shoppeStatus != null">
+                and pse.shoppe_status = #{shoppeStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="sid!=null">
+                and pse.sid=#{sid,jdbcType=BIGINT}
+            </if>
+        </where>
+        <if test="start != null">
+            <if test="limit != null">
+                limit
+                #{start}, #{limit}
+            </if>
+        </if>
+    </select>
+    <!-- 条件查询 -->
+    <select id="findShoppeByParam" resultType="java.util.HashMap"
+            parameterType="java.util.Map">
+        SELECT
+        pse.create_time as createTime,pse.floor_sid as floorSid,
+        pse.goods_manage_type as goodManageType,
+        pse.industry_condition_sid as
+        industrySid,
+        pse.negative_stock as negIiveStock,
+        pse.opt_user as
+        optUser,pse.ref_counter as refCounter,
+        pse.shoppe_code as shoppeCode,
+        pse.shoppe_group as shoppeGroup,
+        pse.shoppe_name as shoppeName,
+        pse.shoppe_shipping_point as shippingPoint,
+        pse.shoppe_status as
+        shoppeStatus,
+        pse.shoppe_type as shoppeType,pse.shop_sid as shopSid,
+        pse.sid as sid ,pse.update_time as updateTime,
+        pse.is_shipping_point as
+        isShippingPoint
+        from pcm_shoppe pse
+        <!--, pf.floor_name as floorName, pi.industry_name as industryConditionName,
+            po.organization_name as shopName from pcm_shoppe pse join pcm_floor pf on
+            pse.floor_sid=pf.sid join pcm_industry_condition_dict pi on pse.industry_condition_sid
+            =pi.sid join pcm_organization po on pse.shop_sid=po.sid where po.organization_type=3 -->
+        <if test="start != null">
+            <if test="limit != null">
+                limit
+                #{start}, #{limit}
+            </if>
+        </if>
+    </select>
+    <select id="getShoppeSid"
+            resultType="com.wangfj.product.organization.domain.vo.PcmGetShoppeDto"
+            parameterType="java.lang.Long">
+		select
+		pse.shoppe_code AS shoppeCode,
+		pse.shoppe_name AS
+		shoppeName,
+		pse.industry_condition_sid AS industrySid,
+		pse.shoppe_type
+		AS
+		shoppeType,
+		pse.goods_manage_type AS goodManageType,
+		pse.shoppe_shipping_point AS shippingPoint,
+		pse.ref_counter AS
+		refCounter,
+		pse.shoppe_status AS shoppeStatus,
+		pse.negative_stock AS
+		negIiveStock,
+		pse.business_type_sid AS businessTypeSid,
+		pfr.floor_code
+		AS floorCode,
+		pfr.floor_name AS floorName,
+		pon.organization_code AS
+		orgCode,
+		pon.organization_name AS orgName
+		FROM
+		pcm_shoppe pse
+		JOIN
+		pcm_organization pon ON pon.sid = pse.shop_sid AND
+		pon.organization_type=3
+		left JOIN pcm_floor pfr ON pfr .sid
+		=pse.floor_sid
+		where pse.sid = #{sid,jdbcType=BIGINT}
+	</select>
+    <select id="getPcmGetShoppeDtoByShoppeSid"
+            resultType="com.wangfj.product.organization.domain.vo.PcmGetShoppeDto"
+            parameterType="java.lang.Long">
+        select
+
+
+        pse.create_time as createTime,pse.floor_sid as floorSid,
+        pse.goods_manage_type as
+        goodManageType,
+        pse.industry_condition_sid as
+        industrySid,
+        pse.negative_stock as negIiveStock,
+        pse.opt_user as
+        optUser,pse.ref_counter as refCounter,
+        pse.shoppe_code as shoppeCode,
+        pse.shoppe_group as shoppeGroup,
+        pse.shoppe_name as shoppeName,
+        pse.shoppe_shipping_point as shippingPoint,
+        pse.shoppe_status as
+        shoppeStatus,
+        pse.shoppe_type as shoppeType,pse.shop_sid as shopSid,
+        pse.sid as sid ,pse.update_time as updateTime,
+        pse.is_shipping_point as
+        isShippingPoint,
+        <!-- pse.shoppe_code AS shoppeCode, pse.shoppe_name AS shoppeName, pse.industry_condition_sid
+            AS industrySid, pse.shoppe_type AS shoppeType, pse.goods_manage_type AS goodManageType,
+            pse.shoppe_shipping_point AS shippingPoint, pse.ref_counter AS refCounter,
+            pse.shoppe_status AS shoppeStatus, pse.negative_stock AS negIiveStock, pse.business_type_sid
+            AS businessTypeSid, -->
+        pon.organization_code AS
+        orgCode,
+        pon.organization_name AS orgName
+        FROM
+        pcm_shoppe pse
+        JOIN
+        pcm_organization pon ON pon.sid = pse.shop_sid AND
+        pon.organization_type=3
+        where pse.sid = #{sid,jdbcType=BIGINT}
+    </select>
+    <select id="getCountShoppes" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+		SELECT
+		count(*)
+		FROM
+		pcm_shoppe
+	</select>
+    <!-- 判重 -->
+    <select id="getShoppeCount" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        SELECT
+        COUNT(*)
+        FROM
+        pcm_shoppe
+        <where>
+            1=1
+            <if test="shopSid != null">
+                and shop_sid = #{shopSid,jdbcType=BIGINT}
+            </if>
+            <if test="shoppeName != null">
+                and shoppe_name = #{shoppeName,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <select id="getCountByShoppe" resultType="java.lang.Integer"
+            parameterType="com.wangfj.product.organization.domain.entity.PcmShoppe">
+        SELECT
+        COUNT(*)
+        FROM
+        pcm_shoppe
+        <where>
+            <if test="shoppeName != null">
+                shoppe_name = #{shoppeName,jdbcType=VARCHAR}
+            </if>
+            <if test="shoppeCode!=null">
+                and shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="sid!=null">
+                and sid=#{sid,jdbcType=BIGINT}
+            </if>
+        </where>
+    </select>
+    <select id="getShoppesCount" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        SELECT
+        COUNT(*)
+        FROM
+        pcm_shoppe
+        <where>
+            1=1
+            <if test="shoppeName != null">
+                and shoppe_name = #{shoppeName,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="get" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_shoppe
+        where sid = #{sid,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_shoppe
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+    <insert id="insertSelective" useGeneratedKeys="true"
+            keyProperty="sid" parameterType="com.wangfj.product.organization.domain.entity.PcmShoppe">
+        insert into pcm_shoppe
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                sid,
+            </if>
+            <if test="groupSid != null">
+                group_sid,
+            </if>
+            <if test="shopSid != null">
+                shop_sid,
+            </if>
+            <if test="floorSid != null">
+                floor_sid,
+            </if>
+            <if test="industryConditionSid != null">
+                industry_condition_sid,
+            </if>
+            <if test="shoppeCode != null">
+                shoppe_code,
+            </if>
+            <if test="shoppeName != null">
+                shoppe_name,
+            </if>
+            <if test="shoppeStatus != null">
+                shoppe_status,
+            </if>
+            <if test="goodsManageType != null">
+                goods_manage_type,
+            </if>
+            <if test="businessTypeSid != null">
+                business_type_sid,
+            </if>
+            <if test="optUser != null">
+                opt_user,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="createName != null">
+                create_name,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="shoppeGroup != null">
+                shoppe_group,
+            </if>
+            <if test="shoppeType != null">
+                shoppe_type,
+            </if>
+            <if test="shoppeShippingPoint != null">
+                shoppe_shipping_point,
+            </if>
+            <if test="refCounter != null">
+                ref_counter,
+            </if>
+            <if test="negativeStock!= null">
+                negative_stock,
+            </if>
+            <if test="isShippingPoint!=null">
+                is_shipping_point
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                #{sid,jdbcType=BIGINT},
+            </if>
+            <if test="groupSid != null">
+                #{groupSid,jdbcType=BIGINT},
+            </if>
+            <if test="shopSid != null">
+                #{shopSid,jdbcType=BIGINT},
+            </if>
+            <if test="floorSid != null">
+                #{floorSid,jdbcType=BIGINT},
+            </if>
+            <if test="industryConditionSid != null">
+                #{industryConditionSid,jdbcType=INTEGER},
+            </if>
+            <if test="shoppeCode != null">
+                #{shoppeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="shoppeName != null">
+                #{shoppeName,jdbcType=VARCHAR},
+            </if>
+            <if test="shoppeStatus != null">
+                #{shoppeStatus,jdbcType=INTEGER},
+            </if>
+            <if test="goodsManageType != null">
+                #{goodsManageType,jdbcType=INTEGER},
+            </if>
+            <if test="businessTypeSid != null">
+                #{businessTypeSid,jdbcType=INTEGER},
+            </if>
+            <if test="optUser != null">
+                #{optUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createName != null">
+                #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="shoppeGroup != null">
+                #{shoppeGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="shoppeType != null">
+                #{shoppeType,jdbcType=VARCHAR},
+            </if>
+            <if test="shoppeShippingPoint != null">
+                #{shoppeShippingPoint,jdbcType=VARCHAR},
+            </if>
+            <if test="refCounter != null">
+                #{refCounter,jdbcType=VARCHAR},
+            </if>
+            <if test="negativeStock!=null">
+                #{negativeStock,jdbcType=BIGINT},
+            </if>
+            <if test="isShippingPoint!=null">
+                #{isShippingPoint,jdbcType=BIGINT}
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.wangfj.product.organization.domain.entity.PcmShoppe">
+        update pcm_shoppe
+        <set>
+            <if test="groupSid != null">
+                group_sid = #{groupSid,jdbcType=BIGINT},
+            </if>
+            <if test="shopSid != null">
+                shop_sid = #{shopSid,jdbcType=BIGINT},
+            </if>
+            <if test="floorSid != null">
+                floor_sid = #{floorSid,jdbcType=BIGINT},
+            </if>
+            <if test="industryConditionSid != null">
+                industry_condition_sid =
+                #{industryConditionSid,jdbcType=INTEGER},
+            </if>
+            <if test="shoppeCode != null">
+                shoppe_code = #{shoppeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="shoppeName != null">
+                shoppe_name = #{shoppeName,jdbcType=VARCHAR},
+            </if>
+            <if test="shoppeStatus != null">
+                shoppe_status = #{shoppeStatus,jdbcType=INTEGER},
+            </if>
+            <if test="goodsManageType != null">
+                goods_manage_type = #{goodsManageType,jdbcType=INTEGER},
+            </if>
+            <if test="businessTypeSid != null">
+                business_type_sid = #{businessTypeSid,jdbcType=INTEGER},
+            </if>
+            <if test="optUser != null">
+                opt_user = #{optUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createName != null">
+                create_name = #{createName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="shoppeGroup != null">
+                shoppe_group = #{shoppeGroup,jdbcType=VARCHAR},
+            </if>
+            <if test="shoppeType != null">
+                shoppe_type = #{shoppeType,jdbcType=VARCHAR},
+            </if>
+            <if test="shoppeShippingPoint != null">
+                shoppe_shipping_point =
+                #{shoppeShippingPoint,jdbcType=VARCHAR},
+            </if>
+            <if test="refCounter != null">
+                ref_counter = #{refCounter,jdbcType=VARCHAR},
+            </if>
+            <if test="negativeStock !=null">
+                negative_stock= #{negativeStock,jdbcType=BIGINT},
+            </if>
+            <if test="isShippingPoint!=null">
+                is_shipping_point = #{isShippingPoint,jdbcType=INTEGER}
+            </if>
+        </set>
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+
+    <select id="getShoppeSidByShopCode" parameterType="java.util.Map"
+            resultType="java.lang.String">
+        select max(e.sid) from pcm_shoppe e join
+        pcm_organization n on
+        e.shop_sid=n.sid
+        <where>
+            n.organization_type=3
+            <if test="organizationCode!=null">
+                and n.organization_code =
+                #{organizationCode,jdbcType=VARCHAR}
+            </if>
+            <if test="sid  !=null">
+                and n.sid= #{sid,jdbcType=BIGINT}
+            </if>
+        </where>
+    </select>
+
+    <select id="getMaxShoppeSidByShop" parameterType="java.util.Map"
+            resultType="java.lang.String">
+        SELECT
+        MAX(ps.sid)
+        FROM
+        pcm_shoppe ps
+        INNER JOIN (
+        SELECT
+        *
+        FROM
+        pcm_organization
+        WHERE
+        organization_type = 3
+        <if test="groupSid != null">
+            and group_sid = #{groupSid,jdbcType=BIGINT}
+        </if>
+        <if test="sid != null">
+            and sid = #{sid,jdbcType=BIGINT}
+        </if>
+        ) po ON ps.shop_sid = po.sid
+    </select>
+
+    <select id="getMaxEShoppeCode" parameterType="java.util.Map"
+            resultType="java.util.Map">
+		SELECT
+		MAX(ps.shoppe_code) AS maxEShoppeCode
+		FROM
+		pcm_shoppe
+		ps
+		WHERE
+		ps.shoppe_code LIKE CONCAT(#{shopCode}, #{shoppeCodeStart},
+		'____')
+		AND
+		ps.industry_condition_sid = 2
+	</select>
+
+    <select id="getMaxEBusinessShoppeCode" parameterType="java.util.Map"
+            resultType="java.util.Map">
+		SELECT
+		MAX(ps.shoppe_code) AS maxEShoppeCode
+		FROM
+		pcm_shoppe
+		ps
+		WHERE
+		ps.shoppe_code LIKE CONCAT(#{shopCode}, '_____')
+		AND
+		ps.industry_condition_sid = 2
+	</select>
+    <!--  -->
+    <select id="selectListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_shoppe
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="groupSid != null">
+                and group_sid = #{groupSid,jdbcType=BIGINT}
+            </if>
+            <if test="shopSid != null">
+                and shop_sid = #{shopSid,jdbcType=BIGINT}
+            </if>
+            <if test="floorSid != null">
+                and floor_sid = #{floorSid,jdbcType=BIGINT}
+            </if>
+            <if test="industryConditionSid != null">
+                and industry_condition_sid =
+                #{industryConditionSid,jdbcType=INTEGER}
+            </if>
+            <if test="shoppeCode != null">
+                and shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="shoppeType != null">
+                and shoppe_type = #{shoppeType,jdbcType=VARCHAR}
+            </if>
+            <if test="shoppeName != null">
+                and shoppe_name = #{shoppeName,jdbcType=VARCHAR}
+            </if>
+            <if test="shoppeStatus != null">
+                and shoppe_status = #{shoppeStatus,jdbcType=INTEGER}
+            </if>
+            <if test="goodsManageType != null">
+                and goods_manage_type =
+                #{goodsManageType,jdbcType=INTEGER}
+            </if>
+            <if test="businessTypeSid != null">
+                and business_type_sid =
+                #{businessTypeSid,jdbcType=INTEGER}
+            </if>
+            <if test="optUser != null">
+                and opt_user = #{optUser,jdbcType=VARCHAR}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createName != null">
+                and create_name = #{createName,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
+    <select id="selectShoppeListForPis" resultMap="ErpResultMap"
+            parameterType="com.wangfj.product.maindata.domain.vo.PcmContractLogDto">
+        SELECT
+        sh.shoppe_code AS shoppeCode,
+        sh.shoppe_name AS shoppeName,
+        erp.product_code AS productCode
+        FROM
+        pcm_shoppe sh
+        JOIN pcm_organization org ON org.sid = sh.shop_sid
+        AND org.organization_type = 3
+        AND org.organization_status = 0
+        INNER JOIN pcm_supply_shoppe_relation pssr ON sh.sid = pssr.shoppe_sid
+        AND pssr.status = 0
+        INNER JOIN pcm_supply_info psi ON pssr.supply_sid = psi.sid
+        AND pssr.status = 0
+        LEFT JOIN pcm_erp_product erp ON erp.shoppe_code = sh.shoppe_code
+        AND erp.supply_code = #{supplyCode}
+        AND erp.code_type = 4
+        WHERE
+        sh.industry_condition_sid = #{businessType}
+        AND sh.shoppe_status = 1
+        AND org.organization_code = #{storeCode}
+        <if test="supplyCode != null">
+            AND psi.supply_code = #{supplyCode}
+        </if>
+    </select>
+
+    <select id="selectPageListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_shoppe
+        <where>
+            <if test="floorSid != null">
+                and floor_sid = #{floorSid,jdbcType=BIGINT}
+            </if>
+            <if test="industryConditionSid != null">
+                and industry_condition_sid =
+                #{industryConditionSid,jdbcType=INTEGER}
+            </if>
+            <if test="shoppeCode != null">
+                and shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="shoppeName != null">
+                and shoppe_name = #{shoppeName,jdbcType=VARCHAR}
+            </if>
+            <if test="shoppeStatus != null">
+                and shoppe_status = #{shoppeStatus,jdbcType=INTEGER}
+            </if>
+            <if test="goodsManageType != null">
+                and goods_manage_type =
+                #{goodsManageType,jdbcType=INTEGER}
+            </if>
+            <if test="businessTypeSid != null">
+                and business_type_sid =
+                #{businessTypeSid,jdbcType=INTEGER}
+            </if>
+            <if test="optUser != null">
+                and opt_user = #{optUser,jdbcType=VARCHAR}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createName != null">
+                and create_name = #{createName,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="isShippingPoint!=null">
+                and is_shipping_point =
+                #{isShippingPoint,jdbcType=INTEGER}
+            </if>
+        </where>
+        order by
+        sid asc
+        limit
+        #{start}, #{limit}
+    </select>
+    <select id="getCountByParam" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        select
+        count(*)
+        from
+        pcm_shoppe
+        pse
+        join pcm_organization pon on
+        pse.shop_sid =
+        pon.organization_code
+        left join pcm_floor pfr on
+        pse.floor_sid
+        =
+        pfr.floor_code
+        join pcm_industry_condition_dict picd on
+        pse.industry_condition_sid = picd.sid
+        join pcm_shoppe_product psp
+        on
+        psp.shoppe_sid = pse.shoppe_code
+        join
+        pcm_supply_shoppe_relation pssr on
+        pse.shoppe_code = pssr.shoppe_sid
+        join pcm_supply_info psi on
+        psi.supply_code = pssr.supply_sid
+        <where>
+            1=1
+            <if test="shoppeCode != null">
+                and pse.shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="orgCode != null">
+                and pon.organization_code = #{orgCode,jdbcType=VARCHAR}
+            </if>
+            <if test="supplyCode != null">
+                and psi.supply_code = #{supplyCode,jdbcType=VARCHAR}
+            </if>
+            <if test="floorCode != null">
+                and pfr.floor_code = #{floorCode,jdbcType=VARCHAR}
+            </if>
+            <if test="shoppeType != null">
+                and pse.shoppe_type = ${shoppeType,jdbcType=VARCHAR}
+            </if>
+            <if test="shoppeStatus != null">
+                and pse.shoppe_status = ${shoppeStatus,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_shoppe
+        where sid = #{sid,jdbcType=BIGINT}
+    </select>
+
+    <!-- 查询有效门店下的专柜List selectShoppeListByParam wangxuan -->
+    <select id="selectShoppeListByParam"
+            resultType="com.wangfj.product.organization.domain.vo.PcmShoppeResultDto"
+            parameterType="com.wangfj.product.organization.domain.vo.SelectPcmShoppeDto">
+        SELECT
+        ps.sid AS sid,
+        ps.group_sid AS groupSid,
+        ps.shop_sid AS shopSid,
+        po.organization_name AS shopName,
+        po.organization_code AS shopCode,
+        ps.floor_sid AS floorSid,
+        pf.floor_name AS floorName,
+        pf.floor_code AS floorCode,
+        ps.industry_condition_sid AS industryConditionSid,
+        ps.shoppe_code AS shoppeCode,
+        ps.shoppe_name AS shoppeName,
+        ps.shoppe_status AS shoppeStatus,
+        ps.shoppe_group AS shoppeGroup,
+        ps.shoppe_type AS shoppeType,
+        ps.shoppe_shipping_point AS shoppeShippingPoint,
+        ps.ref_counter AS refCounter,
+        ps.negative_stock AS negativeStock,
+        ps.is_shipping_point AS isShippingPoint,
+        psi.supply_code AS supplyCode,
+        psi.supply_name AS supplyName,
+        psi.sid AS supplySid
+        FROM
+        pcm_shoppe ps
+        INNER JOIN pcm_organization po ON ps.shop_sid = po.sid
+        LEFT JOIN pcm_floor pf ON ps.floor_sid = pf.sid
+        AND pf.floor_status = 0
+        INNER JOIN pcm_supply_shoppe_relation pssr ON pssr.shoppe_sid = ps.sid
+        INNER JOIN pcm_supply_info psi ON pssr.supply_sid = psi.sid
+        WHERE
+        po.organization_type = 3
+        AND po.organization_status = 0
+        AND pssr.status = 0
+        <if test="sid != null">
+            and ps.sid = #{sid,jdbcType=BIGINT}
+        </if>
+        <if test="groupSid != null">
+            and ps.group_sid = #{groupSid,jdbcType=BIGINT}
+        </if>
+        <if test="shopSid != null">
+            and ps.shop_sid = #{shopSid,jdbcType=BIGINT}
+        </if>
+        <if test="floorSid != null">
+            and ps.floor_sid = #{floorSid,jdbcType=BIGINT}
+        </if>
+        <if test="industryConditionSid != null">
+            and ps.industry_condition_sid = #{industryConditionSid,jdbcType=INTEGER}
+        </if>
+        <if test="shoppeCode != null">
+            and ps.shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+        </if>
+        <if test="shoppeName != null">
+            and ps.shoppe_name like "%"#{shoppeName,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="shoppeStatus != null">
+            and ps.shoppe_status = #{shoppeStatus,jdbcType=INTEGER}
+        </if>
+        <if test="shoppeType != null">
+            and ps.shoppe_type = #{shoppeType,jdbcType=VARCHAR}
+        </if>
+        <if test="floorCode != null and floorCode != ''">
+            AND pf.floor_code = #{floorCode}
+        </if>
+        <if test="floorName != null and floorName != ''">
+            AND pf.floor_name LIKE "%"#{floorName}"%"
+        </if>
+        <if test="supplySid != null">
+            AND psi.sid = #{supplySid}
+        </if>
+        ORDER BY
+        CONVERT(ps.shoppe_name USING gbk) ASC
+    </select>
+
+    <!-- 分页查询selectPageByPara niuzhifan -->
+    <select id="selectPageByPara"
+            resultType="com.wangfj.product.organization.domain.vo.PcmShoppeResultDto"
+            parameterType="com.wangfj.product.organization.domain.vo.SelectPcmShoppeDto">
+        SELECT
+        ps.sid AS sid,ps.group_sid AS groupSid,
+        ps.shop_sid AS shopSid,
+        po.organization_name AS
+        shopName,
+        po.organization_code AS shopCode,
+        ps.floor_sid AS
+        floorSid,
+        pf.floor_name AS floorName,
+        pf.floor_code AS
+        floorCode,
+        ps.industry_condition_sid AS industryConditionSid,
+        ps.shoppe_code AS
+        shoppeCode,
+        ps.shoppe_name AS shoppeName,
+        ps.shoppe_status AS
+        shoppeStatus,
+        ps.goods_manage_type AS
+        goodsManageType,
+        ps.business_type_sid AS businessTypeSid,
+        ps.opt_user AS
+        optUser,
+        ps.update_time AS updateTimes,
+        ps.create_time AS createTimes,
+        ps.create_name AS createName,
+        ps.shoppe_group AS shoppeGroup,
+        ps.shoppe_type AS shoppeType,
+        ps.shoppe_shipping_point AS
+        shoppeShippingPoint,
+        ps.ref_counter AS refCounter,
+        ps.negative_stock AS
+        negativeStock,
+        ps.is_shipping_point AS isShippingPoint
+        FROM
+        (
+        SELECT
+        *
+        FROM
+        pcm_shoppe
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="groupSid != null">
+                and group_sid = #{groupSid,jdbcType=BIGINT}
+            </if>
+            <if test="shopSid != null">
+                and shop_sid = #{shopSid,jdbcType=BIGINT}
+            </if>
+            <if test="floorSid != null">
+                and floor_sid = #{floorSid,jdbcType=BIGINT}
+            </if>
+            <if test="industryConditionSid != null">
+                and industry_condition_sid =
+                #{industryConditionSid,jdbcType=INTEGER}
+            </if>
+            <if test="businessTypeSid !=null">
+                and business_type_sid=#{businessTypeSid,jdbcType=INTEGER}
+            </if>
+            <if test="shoppeCode != null">
+                and shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="shoppeName != null">
+                and shoppe_name like "%"#{shoppeName,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="shoppeStatus != null">
+                and shoppe_status = #{shoppeStatus,jdbcType=INTEGER}
+            </if>
+            <if test="shoppeType != null">
+                and shoppe_type = #{shoppeType,jdbcType=VARCHAR}
+            </if>
+        </where>
+        ) ps
+        LEFT JOIN pcm_organization po ON ps.shop_sid = po.sid
+        AND
+        po.organization_type = 3
+        AND
+        po.organization_status = 0
+        LEFT JOIN
+        pcm_floor pf ON
+        ps.floor_sid = pf.sid
+        AND
+        pf.floor_status = 0
+        <where>
+            <if test="floorCode != null and floorCode != ''">
+                AND pf.floor_code = #{floorCode}
+            </if>
+            <if test="floorName != null and floorName != ''">
+                AND pf.floor_name LIKE "%"#{floorName}"%"
+            </if>
+        </where>
+        ORDER BY
+        ps.sid
+        DESC
+        <if test="start != null and limit != null">
+            LIMIT #{start}, #{limit}
+        </if>
+    </select>
+
+    <!-- 分页查询getPageCountByPara niuzhifan -->
+    <select id="getPageCountByPara" resultType="java.lang.Integer"
+            parameterType="com.wangfj.product.organization.domain.vo.SelectPcmShoppeDto">
+        SELECT
+        COUNT(ps.sid)
+        FROM
+        (
+        SELECT
+        *
+        FROM
+        pcm_shoppe
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="groupSid != null">
+                and group_sid = #{groupSid,jdbcType=BIGINT}
+            </if>
+            <if test="shopSid != null">
+                and shop_sid = #{shopSid,jdbcType=BIGINT}
+            </if>
+            <if test="floorSid != null">
+                and floor_sid = #{floorSid,jdbcType=BIGINT}
+            </if>
+            <if test="industryConditionSid != null">
+                and industry_condition_sid =
+                #{industryConditionSid,jdbcType=INTEGER}
+            </if>
+            <if test="businessTypeSid !=null">
+                and business_type_sid=#{businessTypeSid,jdbcType=INTEGER}
+            </if>
+            <if test="shoppeCode != null">
+                and shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="shoppeName != null">
+                and shoppe_name like "%"#{shoppeName,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="shoppeStatus != null">
+                and shoppe_status = #{shoppeStatus,jdbcType=INTEGER}
+            </if>
+            <if test="shoppeType != null">
+                and shoppe_type = #{shoppeType,jdbcType=VARCHAR}
+            </if>
+        </where>
+        ) ps
+        LEFT JOIN pcm_organization po ON ps.shop_sid
+        = po.sid
+        AND
+        po.organization_type = 3
+        AND
+        po.organization_status = 0
+        LEFT JOIN
+        pcm_floor pf ON ps.floor_sid = pf.sid
+        AND pf.floor_status = 0
+        <where>
+            <if test="floorCode != null and floorCode != ''">
+                AND pf.floor_code = #{floorCode}
+            </if>
+            <if test="floorName != null and floorName != ''">
+                AND pf.floor_name LIKE "%"#{floorName}"%"
+            </if>
+        </where>
+    </select>
+
+    <!-- 分页查询关联供应商 findPageByPara -->
+    <select id="findPageByPara"
+            resultType="com.wangfj.product.organization.domain.vo.PcmShoppeResultDto"
+            parameterType="com.wangfj.product.organization.domain.vo.SelectPcmShoppeDto">
+        SELECT
+        ps.sid AS sid,
+        ps.group_sid AS groupSid,
+        ps.shop_sid AS shopSid,
+        po.organization_name AS shopName,
+        po.organization_code AS shopCode,
+        ps.floor_sid AS floorSid,
+        pf.floor_name AS floorName,
+        pf.floor_code AS floorCode,
+        ps.industry_condition_sid AS industryConditionSid,
+        ps.shoppe_code AS shoppeCode,
+        ps.shoppe_name AS shoppeName,
+        ps.shoppe_status AS shoppeStatus,
+        ps.shoppe_group AS shoppeGroup,
+        ps.shoppe_type AS shoppeType,
+        ps.goods_manage_type AS goodsManageType,
+        ps.shoppe_shipping_point AS shoppeShippingPoint,
+        ps.ref_counter AS refCounter,
+        ps.negative_stock AS negativeStock,
+        ps.is_shipping_point AS isShippingPoint,
+        psi.sid AS supplySid,
+        psi.supply_code AS supplyCode,
+        psi.supply_name AS supplyName,
+        psi.business_pattern AS businessPattern
+        FROM
+        pcm_shoppe ps
+        INNER JOIN pcm_organization po ON ps.shop_sid = po.sid
+        LEFT JOIN pcm_floor pf ON ps.floor_sid = pf.sid
+        AND pf.floor_status = 0
+        INNER JOIN pcm_supply_shoppe_relation pssr ON pssr.shoppe_sid = ps.sid
+        INNER JOIN pcm_supply_info psi ON pssr.supply_sid = psi.sid
+        WHERE
+        po.organization_type = 3
+        AND po.organization_status = 0
+        AND pssr.status = 0
+        <if test="sid != null">
+            and ps.sid = #{sid,jdbcType=BIGINT}
+        </if>
+        <if test="groupSid != null">
+            and ps.group_sid = #{groupSid,jdbcType=BIGINT}
+        </if>
+        <if test="shopSid != null">
+            and ps.shop_sid = #{shopSid,jdbcType=BIGINT}
+        </if>
+        <if test="floorSid != null">
+            and ps.floor_sid = #{floorSid,jdbcType=BIGINT}
+        </if>
+        <if test="industryConditionSid != null">
+            and ps.industry_condition_sid = #{industryConditionSid,jdbcType=INTEGER}
+        </if>
+        <if test="shoppeCode != null">
+            and ps.shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+        </if>
+        <if test="shoppeName != null">
+            and ps.shoppe_name like "%"#{shoppeName,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="shoppeStatus != null">
+            and ps.shoppe_status = #{shoppeStatus,jdbcType=INTEGER}
+        </if>
+        <if test="shoppeType != null">
+            and ps.shoppe_type = #{shoppeType,jdbcType=VARCHAR}
+        </if>
+        <if test="floorCode != null and floorCode != ''">
+            AND pf.floor_code = #{floorCode}
+        </if>
+        <if test="floorName != null and floorName != ''">
+            AND pf.floor_name LIKE "%"#{floorName}"%"
+        </if>
+        <if test="supplySid != null">
+            AND psi.sid = #{supplySid}
+        </if>
+        <if test="supplyCode != null">
+            AND psi.supply_code = #{supplyCode}
+        </if>
+        ORDER BY
+        ps.sid
+        DESC
+        <if test="start != null and limit != null">
+            LIMIT #{start}, #{limit}
+        </if>
+    </select>
+
+    <!-- 分页查询关联供应商 findPageCountByPara -->
+    <select id="findPageCountByPara" resultType="java.lang.Integer"
+            parameterType="com.wangfj.product.organization.domain.vo.SelectPcmShoppeDto">
+        SELECT
+        COUNT(*)
+        FROM
+        pcm_shoppe ps
+        INNER JOIN pcm_organization po ON ps.shop_sid = po.sid
+        LEFT JOIN pcm_floor pf ON ps.floor_sid = pf.sid
+        AND pf.floor_status = 0
+        INNER JOIN pcm_supply_shoppe_relation pssr ON pssr.shoppe_sid = ps.sid
+        INNER JOIN pcm_supply_info psi ON pssr.supply_sid = psi.sid
+        WHERE
+        po.organization_type = 3
+        AND po.organization_status = 0
+        AND pssr.status = 0
+        <if test="sid != null">
+            and ps.sid = #{sid,jdbcType=BIGINT}
+        </if>
+        <if test="groupSid != null">
+            and ps.group_sid = #{groupSid,jdbcType=BIGINT}
+        </if>
+        <if test="shopSid != null">
+            and ps.shop_sid = #{shopSid,jdbcType=BIGINT}
+        </if>
+        <if test="floorSid != null">
+            and ps.floor_sid = #{floorSid,jdbcType=BIGINT}
+        </if>
+        <if test="industryConditionSid != null">
+            and ps.industry_condition_sid = #{industryConditionSid,jdbcType=INTEGER}
+        </if>
+        <if test="shoppeCode != null">
+            and ps.shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+        </if>
+        <if test="shoppeName != null">
+            and ps.shoppe_name like "%"#{shoppeName,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="shoppeStatus != null">
+            and ps.shoppe_status = #{shoppeStatus,jdbcType=INTEGER}
+        </if>
+        <if test="shoppeType != null">
+            and ps.shoppe_type = #{shoppeType,jdbcType=VARCHAR}
+        </if>
+        <if test="floorCode != null and floorCode != ''">
+            AND pf.floor_code = #{floorCode}
+        </if>
+        <if test="floorName != null and floorName != ''">
+            AND pf.floor_name LIKE "%"#{floorName}"%"
+        </if>
+        <if test="supplySid != null">
+            AND psi.sid = #{supplySid}
+        </if>
+        <if test="supplyCode != null">
+            AND psi.supply_code = #{supplyCode}
+        </if>
+    </select>
+
+    <select id="findListShoppeForAddShoppeProduct"
+            resultType="com.wangfj.product.organization.domain.vo.PcmShoppeResultDto"
+            parameterType="com.wangfj.product.organization.domain.vo.SelectPcmShoppeDto">
+        SELECT
+        ps.sid AS sid,
+        ps.group_sid AS groupSid,
+        ps.shop_sid AS shopSid,
+        po.organization_name AS shopName,
+        po.organization_code AS shopCode,
+        ps.industry_condition_sid AS industryConditionSid,
+        ps.shoppe_code AS shoppeCode,
+        ps.shoppe_name AS shoppeName,
+        ps.shoppe_status AS shoppeStatus,
+        ps.shoppe_type AS goodsManageType,
+        psi.business_pattern AS businessTypeSid,
+        ps.shoppe_group AS shoppeGroup,
+        ps.shoppe_type AS shoppeType,
+        ps.shoppe_shipping_point AS shoppeShippingPoint,
+        ps.ref_counter AS refCounter,
+        ps.negative_stock AS negativeStock,
+        ps.is_shipping_point AS isShippingPoint,
+        pssr.supply_sid AS supplySid
+        FROM
+        pcm_shoppe ps
+        INNER JOIN pcm_organization po ON ps.shop_sid = po.sid
+        AND po.organization_type = 3
+        AND po.organization_status = 0
+        INNER JOIN pcm_supply_shoppe_relation pssr ON ps.sid = pssr.shoppe_sid
+        INNER JOIN pcm_supply_info psi ON pssr.supply_sid = psi.sid
+        WHERE
+        ps.shoppe_status = 1
+        AND pssr.status = 0
+        <if test="shopSid != null">
+            AND ps.shop_sid = #{shopSid}
+        </if>
+        <if test="shoppeType != null and shoppeType != ''">
+            AND ps.shoppe_type = #{shoppeType}
+        </if>
+        <if test="supplySid != null and supplySid != ''">
+            AND pssr.supply_sid = #{supplySid}
+        </if>
+        ORDER BY
+        CONVERT(ps.shoppe_name USING gbk)
+    </select>
+
+    <!-- 专柜导入终端,由主数据获取专柜信息 niuzhifan -->
+    <select id="getShoppeData" parameterType="java.util.Map"
+            resultType="com.wangfj.product.organization.domain.vo.PcmShoppeDataDto">
+        SELECT
+        ps.sid AS sid,
+        ps.shoppe_code AS code,
+        ps.shoppe_name AS name,
+        po.organization_code AS storeCode,
+        po.organization_name AS storeName,
+        psi.supply_code AS supplierCode,
+        psi.erp_supplier_code AS supplierErpCode,
+        ps.floor_sid AS floorSid,
+        ps.shop_sid AS shopSid,
+        pf.floor_code AS floorCode,
+        pf.floor_name AS floorName,
+        ps.industry_condition_sid AS industryConditionSid,
+        psi.business_pattern AS businessType,
+        psi.business_pattern AS businessTypeSid,
+        ps.shoppe_type AS counterType,
+        ps.shoppe_type AS counterInventoryType,
+        ps.negative_stock AS isNegInventory,
+        ps.shoppe_status AS counterStatus,
+        ps.ref_counter AS refCounter,
+        ps.shoppe_shipping_point AS counterShippingPoint
+        FROM
+        pcm_shoppe ps
+        INNER JOIN pcm_organization po ON ps.shop_sid = po.sid
+        AND po.organization_type = 3
+        AND po.organization_status = 0
+        LEFT JOIN pcm_supply_shoppe_relation pssr ON ps.sid = pssr.shoppe_sid
+        AND pssr.status = 0
+        LEFT JOIN pcm_supply_info psi ON pssr.supply_sid = psi.sid
+        LEFT JOIN pcm_floor pf ON ps.floor_sid = pf.sid
+        AND pf.floor_status = 0
+        <where>
+            <if test="storeCode != null">
+                AND po.organization_code = #{storeCode}
+            </if>
+            <if test="code != null">
+                AND ps.shoppe_code = #{code}
+            </if>
+            <if test="name != null">
+                AND ps.shoppe_name LIKE "%"#{name}"%"
+            </if>
+            <if test="industryConditionSid !=null">
+                AND ps.industry_condition_sid = #{industryConditionSid}
+            </if>
+            <if test="shoppeType !=null">
+                AND ps.shoppe_type = #{shoppeType}
+            </if>
+            <if test="supplyCode != null">
+                AND psi.supply_code = #{supplyCode}
+            </if>
+            <if test="businessTypeSid !=null">
+                AND psi.business_pattern = #{businessTypeSid}
+            </if>
+        </where>
+    </select>
+
+    <!-- 移动工作台调用主数据获取专柜信息 -->
+    <select id="getShoppeInfo"
+            resultType="com.wangfj.product.organization.domain.vo.PcmShoppeErpDto"
+            parameterType="com.wangfj.product.organization.domain.entity.PcmShoppe">
+        select
+        ps.shoppe_code as code ,
+        ps.shoppe_name as name,
+        po.organization_code as storeCode,
+        ps.shoppe_group as counterGroup,
+        ps.industry_condition_sid as businessType,
+        ps.floor_sid as sid,
+        ps.shoppe_type as counterType,
+        ps.goods_manage_type as
+        counterInventoryType,
+        ps.shoppe_shipping_point as counterShippingPoint,
+        ps.ref_counter as refCounter,
+        ps.shoppe_status as counterStatus,
+        ps.negative_stock as isNegInventory
+        from pcm_shoppe ps join
+        pcm_organization po on ps.shop_sid=po.sid and
+        po.organization_type=3
+        <where>
+            <if test="shopSid !=null">
+                ps.shop_sid = #{shopSid,jdbcType=BIGINT}
+            </if>
+
+            <if test="shoppeCode != null">
+                and ps.shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="shoppeName != null">
+                and ps.shoppe_name like
+                "%"#{shoppeName,jdbcType=VARCHAR}"%"
+            </if>
+        </where>
+    </select>
+    <update id="getStatusByShoppe" parameterType="java.util.Map">
+        update
+        pcm_channel_sale_config pcsc
+        set
+        <if test="saleStatus!=null">
+            pcsc.sale_stauts=#{saleStatus,jdbcType=BIGINT}
+        </if>
+        where pcsc.shoppe_pro_sid in
+        (select psp.sid from pcm_shoppe ps JOIN
+        pcm_shoppe_product psp on ps.sid =
+        psp.shoppe_sid
+        <where>
+            <if test="sid!=null">
+                and ps.sid= #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="shoppeCode != null">
+                and ps.shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="shoppeName != null">
+                and ps.shoppe_name = #{shoppeName,jdbcType=VARCHAR}
+            </if>
+        </where>
+        )
+    </update>
+
+    <!-- PAD -->
+    <select id="findShopAndShoppeByParam"
+            parameterType="com.wangfj.product.organization.domain.vo.PcmPadShoppeQueryDto"
+            resultType="com.wangfj.product.organization.domain.vo.PcmPadShoppeResultDto">
+        SELECT
+        ps.shoppe_code AS counterCode,
+        ps.shoppe_name AS counterName,
+        ps.negative_stock AS negativeStock,
+        po.organization_code AS storeCode,
+        po.organization_name AS storeName,
+        psi.supply_code AS supplyCode,
+        psi.supply_name AS supplyName
+        FROM
+        pcm_shoppe ps
+        INNER JOIN pcm_organization po ON ps.shop_sid = po.sid
+        INNER JOIN pcm_supply_shoppe_relation pssr ON pssr.shoppe_sid = ps.sid
+        INNER JOIN pcm_supply_info psi ON pssr.supply_sid = psi.sid
+        WHERE
+        po.organization_status = 0
+        AND po.organization_type = 3
+        AND pssr.status = 0
+        <if test="counterCode != null and counterCode != ''">
+            AND ps.shoppe_code = #{counterCode}
+        </if>
+    </select>
+
+    <!-- CMS 门店下对应的专柜 -->
+    <select id="findShoppeByShopParamToCMS"
+            parameterType="com.wangfj.product.organization.domain.vo.PcmInfoQueryDto"
+            resultType="com.wangfj.product.organization.domain.vo.PcmInfoResultDto">
+        SELECT
+        ps.shoppe_code AS shoppeCode,
+        ps.shoppe_name AS shoppeName
+        FROM
+        pcm_shoppe ps
+        INNER JOIN pcm_organization po ON ps.shop_sid = po.sid
+        AND po.organization_type = 3
+        AND po.organization_status = 0
+        AND
+        ps.shoppe_status = 1
+        <where>
+            <if test="shopCode != null and shopCode != ''">
+                and po.organization_code = #{shopCode}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

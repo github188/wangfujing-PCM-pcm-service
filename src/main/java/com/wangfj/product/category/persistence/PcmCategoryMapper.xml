@@ -1,0 +1,1783 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.category.persistence.PcmCategoryMapper">
+    <resultMap id="BaseResultMap"
+               type="com.wangfj.product.category.domain.entity.PcmCategory">
+        <id column="sid" property="sid" jdbcType="BIGINT"/>
+        <result column="category_sid" property="categorySid" jdbcType="BIGINT"/>
+        <result column="parent_sid" property="parentSid" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="is_parent" property="isParent" jdbcType="INTEGER"/>
+        <result column="is_self_built" property="isSelfBuilt" jdbcType="INTEGER"/>
+        <result column="is_leaf" property="isLeaf" jdbcType="INTEGER"/>
+        <result column="is_display" property="isDisplay" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="root_sid" property="rootSid" jdbcType="BIGINT"/>
+        <result column="level" property="level" jdbcType="INTEGER"/>
+        <result column="sort_order" property="sortOrder" jdbcType="INTEGER"/>
+        <result column="channel_sid" property="channelSid" jdbcType="BIGINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="search_path" property="searchPath" jdbcType="VARCHAR"/>
+        <result column="category_type" property="categoryType"
+                jdbcType="INTEGER"/>
+        <result column="shop_sid" property="shopSid" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="erp_type" property="erpType" jdbcType="INTEGER"/>
+        <result column="is_market" property="isMarket" jdbcType="INTEGER"/>
+        <result column="success_time" property="successTime" jdbcType="TIMESTAMP"/>
+        <result column="group_sid" property="groupSid" jdbcType="VARCHAR"/>
+        <result column="category_code" property="categoryCode"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="CateVOMap"
+               type="com.wangfj.product.category.domain.vo.ProductCateVO">
+        <id column="sid" property="sid" jdbcType="BIGINT"/>
+        <result column="name" property="nodeName" jdbcType="VARCHAR"/>
+        <result column="parent_sid" property="fatherNodeSid" jdbcType="BIGINT"/>
+        <result column="sort_order" property="nodeSeq" jdbcType="BIGINT"/>
+        <result column="level" property="nodeLevel" jdbcType="BIGINT"/>
+        <result column="root_sid" property="rootSid" jdbcType="BIGINT"/>
+        <result column="status" property="isDisplay" jdbcType="BIGINT"/>
+        <result column="pro_count" property="productCount" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap type="com.wangfj.product.category.domain.vo.ClassDTO"
+               id="ClassDTOMap">
+        <id column="sid" property="sid" jdbcType="INTEGER"/>
+        <result column="name" property="nodeName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="MwCateVOMap"
+               type="com.wangfj.product.category.domain.vo.MwCateVO">
+        <id column="SID" jdbcType="VARCHAR" property="sid"/>
+        <result column="NODE_NAME" jdbcType="VARCHAR" property="nodeName"/>
+        <result column="PRODUCT_COUNT" jdbcType="DECIMAL" property="productCount"/>
+    </resultMap>
+
+    <resultMap id="categoryChannelMap"
+               type="com.wangfj.product.category.domain.vo.CategoryByChannelVo">
+        <id column="category_sid" jdbcType="VARCHAR" property="code"/>
+        <result column="parent_sid" jdbcType="VARCHAR" property="parentCode"/>
+        <result column="parent_sid" jdbcType="VARCHAR" property="parentCode"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="root_sid" jdbcType="VARCHAR" property="catalogCode"/>
+        <result column="channel_sid" jdbcType="VARCHAR" property="channelSid"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+		sid, category_sid, parent_sid, name, is_parent,
+		is_self_built, is_display,
+		status,
+		root_sid, level, sort_order,
+		channel_sid, create_time, search_path,
+		category_type,
+		shop_sid,
+		description,
+		erp_type,is_leaf,is_market,success_time,group_sid,category_code
+	</sql>
+
+    <select id="getCateInfoBySpuCode" resultMap="BaseResultMap"
+            parameterType="Map">
+        SELECT DISTINCT
+        cate.*
+        FROM
+        pcm_category AS cate
+        JOIN pcm_product_parameters AS ppp ON cate.sid = ppp.category_sid
+        JOIN pcm_product AS spu ON spu.sid = ppp.product_sid
+        where
+        cate.category_type = 3
+        and cate.is_leaf = 'Y'
+        and cate.`status` = 'Y'
+        and cate.is_display = 1
+        <if test="spuCode != null">
+            and spu.product_sid = #{spuCode,jdbcType=VARCHAR}
+        </if>
+        <if test="channelSid != null">
+            and cate.channel_sid = #{channelSid,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="get" resultMap="BaseResultMap" parameterType="Long">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_category
+        where
+        sid = #{sid,jdbcType=BIGINT}
+    </select>
+
+    <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_category
+        where
+        category_sid != 1
+    </select>
+
+    <select id="selectCategory" resultMap="ClassDTOMap"
+            parameterType="com.wangfj.product.category.domain.entity.PcmCategory">
+		select
+		category_sid as sid ,name
+		from pcm_category
+		where
+		parent_sid = #{parentSid,jdbcType=BIGINT}
+		and channel_sid =
+		#{channelSid,jdbcType=BIGINT}
+	</select>
+
+
+    <select id="selectMwCategory" parameterType="java.lang.Long"
+            resultMap="MwCateVOMap">
+		select sct.category_sid as sid,sct.name as
+		NODE_NAME,sct.parent_sid,count(spc.product_sid) as product_count
+		from
+		pcm_category sct LEFT JOIN pcm_product_category spc on sct.sid =
+		spc.category_sid
+		where sct.parent_sid = #{parentSid,jdbcType=BIGINT}
+		and sct.channel_sid = 2
+		GROUP BY sct.sid ,sct.name ,sct.parent_sid
+	</select>
+
+    <!-- 分类下发查询 -->
+    <select id="publishCategoryFromPCM"
+            resultType="com.wangfj.product.category.domain.vo.PublishCategoryDto"
+            parameterType="java.util.Map">
+        select
+        pc.sid as sid, pc.category_sid as categorySid, pc.parent_sid as parentSid,
+        pc.name as name, pc.is_parent as isParent, pc.is_self_built as
+        isSelfBuilt,
+        pc.is_display as isDisplay,pc.status as status,pc.root_sid as rootSid,
+        pc.level as level, pc.sort_order as sortOrder, pc.channel_sid as channelSid,
+        pc.create_time as createTime, pc.search_path as searchPath,
+        pc.category_type as categoryType,pc.shop_sid as shopSid,
+        pc.description as description, pc.erp_type as erpType, pc.is_leaf as
+        isLeaf,
+        pc.is_market as isMarket,pc.success_time as successTime,
+        pc.group_sid as groupSid,pc.category_code as categoryCode,
+        ppc.category_code as parentCode
+        from
+        pcm_category as pc
+        left join pcm_category ppc on
+        pc.parent_sid=ppc.sid
+        <where>
+            pc.level != 0
+            <if test="sid != null">
+                and pc.sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="name != null">
+                and pc.name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="categorySid != null">
+                and pc.category_sid = #{categorySid,jdbcType=BIGINT}
+            </if>
+            <if test="categoryType != null">
+                and pc.category_type = #{categoryType,jdbcType=VARCHAR}
+            </if>
+            <if test="parentSid != null">
+                and pc.parent_sid = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="isParent != null">
+                and pc.is_parent = #{isParent,jdbcType=INTEGER}
+            </if>
+            <if test="isSelfBuilt != null">
+                and pc.is_self_built = #{isSelfBuilt,jdbcType=INTEGER}
+            </if>
+            <if test="isDisplay != null">
+                and pc.is_display = #{isDisplay,jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and pc.status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="rootSid != null">
+                and pc.root_sid = #{rootSid,jdbcType=BIGINT}
+            </if>
+            <if test="level != null">
+                and pc.level = #{level,jdbcType=INTEGER}
+            </if>
+            <if test="sortOrder != null">
+                and pc.sort_order = #{sortOrder,jdbcType=INTEGER}
+            </if>
+            <if test="channelSid != null">
+                and pc.channel_sid = #{channelSid,jdbcType=BIGINT}
+            </if>
+            <if test="createTime != null">
+                and pc.create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="searchPath != null">
+                and pc.sort_order = #{searchPath,jdbcType=VARCHAR}
+            </if>
+            <if test="isLeaf != null">
+                and pc.is_leaf = #{isLeaf,jdbcType=INTEGER}
+            </if>
+            <if test="isMarket != null">
+                and pc.is_market = #{isMarket,jdbcType=INTEGER}
+            </if>
+            <if test="shopSid != null">
+                and pc.shop_sid = #{shopSid,jdbcType=VARCHAR}
+            </if>
+            <if test="successTime != null">
+                and pc.success_time = #{successTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="groupSid != null">
+                and pc.group_sid = #{groupSid,jdbcType=VARCHAR}
+            </if>
+            <if test="categoryCode != null">
+                and pc.category_code = #{categoryCode,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by
+        sid asc
+        <if test="limit != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+    <!-- 分类下发查询count -->
+    <select id="getCountCategoryFromPCM" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        select
+        count(1)
+        from
+        pcm_category
+        <where>
+            1=1
+            <if test="categoryType != null">
+                and category_Type = #{categoryType,jdbcType=INTEGER}
+            </if>
+            <if test="name != null">
+                and NAME LIKE '%${name}%'
+            </if>
+            <if test="categorySid != null">
+                and category_sid = #{categorySid,jdbcType=BIGINT}
+            </if>
+            <if test="parentSid != null">
+                and SJCODE = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="isLeaf != null">
+                and FLAG = #{isLeaf,jdbcType=BIGINT}
+            </if>
+            <if test="level != null">
+                and TYPE = #{level,jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and STATUS = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="shopSid != null">
+                and StoreCode = #{shopSid,jdbcType=BIGINT}
+            </if>
+            <if test="rootSid != null">
+                and catalogCode = #{rootSid,jdbcType=BIGINT}
+            </if>
+            <if test="channelSid != null">
+                and channelCode = #{channelSid,jdbcType=BIGINT}
+            </if>
+            <if test="isMarket != null">
+                and ISZG = #{isMarket,jdbcType=BIGINT}
+            </if>
+        </where>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_category
+        where sid = #{sid,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_category
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+
+    <delete id="deleteCate">
+		delete from pcm_category
+		where category_sid =
+		#{p1,jdbcType=BIGINT} and channel_sid = #{p2,jdbcType=BIGINT}
+	</delete>
+
+    <insert id="insert"
+            parameterType="com.wangfj.product.category.domain.entity.PcmCategory">
+		insert into pcm_category (sid, category_sid, parent_sid,
+		name, is_parent, is_self_built,
+		is_display, status, root_sid,
+		level,
+		sort_order, channel_sid,
+		create_time, search_path, category_type,
+		shop_sid, description, erp_type,is_market,is_leaf,success_time,
+		group_sid,category_code
+		)
+		values
+		(#{sid,jdbcType=BIGINT},
+		#{categorySid,jdbcType=BIGINT},
+		#{parentSid,jdbcType=BIGINT},
+		#{name,jdbcType=VARCHAR},
+		#{isParent,jdbcType=INTEGER},
+		#{isSelfBuilt,jdbcType=INTEGER},
+		#{isDisplay,jdbcType=INTEGER},
+		#{status,jdbcType=INTEGER},
+		#{rootSid,jdbcType=BIGINT},
+		#{level,jdbcType=INTEGER},
+		#{sortOrder,jdbcType=INTEGER},
+		#{channelSid,jdbcType=BIGINT},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{searchPath,jdbcType=VARCHAR},
+		#{categoryType,jdbcType=INTEGER},
+		#{shopSid,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{erpType,jdbcType=INTEGER},#{isLeaf,jdbcType=INTEGER},#{isMarket,jdbcType=INTEGER},#{successTime,jdbcType=TIMESTAMP},
+		#{groupSid,jdbcType=VARCHAR},
+		#{categoryCode,jdbcType=VARCHAR}
+		)
+	</insert>
+
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into pcm_category (category_sid, parent_sid, name, is_parent,
+        is_self_built, is_display,
+        status,
+        root_sid, level, sort_order,
+        channel_sid, create_time, search_path,
+        category_type,
+        shop_sid,
+        description, erp_type,is_leaf,is_market,success_time,
+        group_sid,category_code)
+        values
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            (#{item.categorySid,jdbcType=BIGINT},
+            #{item.categorySid,jdbcType=BIGINT},
+            #{item.parentSid,jdbcType=BIGINT},
+            #{item.name,jdbcType=VARCHAR},
+            #{item.isParent,jdbcType=INTEGER},
+            #{item.isSelfBuilt,jdbcType=INTEGER},
+            #{item.isDisplay,jdbcType=INTEGER},
+            #{item.status,jdbcType=INTEGER},
+            #{item.rootSid,jdbcType=BIGINT},
+            #{item.level,jdbcType=INTEGER},
+            #{item.sortOrder,jdbcType=INTEGER},
+            #{item.channelSid,jdbcType=BIGINT},
+            #{item.createTime,jdbcType=TIMESTAMP},
+            #{item.searchPath,jdbcType=VARCHAR},
+            #{item.categoryType,jdbcType=INTEGER},
+            #{item.shopSid,jdbcType=VARCHAR},
+            #{item.description,jdbcType=VARCHAR},
+            #{item.erpType,jdbcType=INTEGER},#{item.isLeaf,jdbcType=INTEGER},#{item.isMarket,jdbcType=INTEGER},#{item.successTime,jdbcType=TIMESTAMP},
+            #{item.groupSid,jdbcType=VARCHAR},
+            #{item.categoryCode,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <insert id="insertSelective"
+            parameterType="com.wangfj.product.category.domain.entity.PcmCategory"
+            useGeneratedKeys="true" keyProperty="sid">
+        insert into pcm_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                sid,
+            </if>
+            <if test="categorySid != null">
+                category_sid,
+            </if>
+            <if test="parentSid != null">
+                parent_sid,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="isParent != null">
+                is_parent,
+            </if>
+            <if test="isSelfBuilt != null">
+                is_self_built,
+            </if>
+            <if test="isDisplay != null">
+                is_display,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="rootSid != null">
+                root_sid,
+            </if>
+            <if test="level != null">
+                level,
+            </if>
+            <if test="sortOrder != null">
+                sort_order,
+            </if>
+            <if test="channelSid != null">
+                channel_sid,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="searchPath != null">
+                search_path,
+            </if>
+            <if test="categoryType != null">
+                category_type,
+            </if>
+            <if test="shopSid != null">
+                shop_sid,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="erpType != null">
+                erp_type,
+            </if>
+            <if test="isLeaf != null">
+                is_leaf,
+            </if>
+            <if test="isMarket != null">
+                is_market,
+            </if>
+            <if test="successTime != null">
+                success_time,
+            </if>
+            <if test="groupSid != null">
+                group_sid,
+            </if>
+            <if test="categoryCode != null">
+                category_code,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                #{sid,jdbcType=BIGINT},
+            </if>
+            <if test="categorySid != null">
+                #{categorySid,jdbcType=BIGINT},
+            </if>
+            <if test="parentSid != null">
+                #{parentSid,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="isParent != null">
+                #{isParent,jdbcType=INTEGER},
+            </if>
+            <if test="isSelfBuilt != null">
+                #{isSelfBuilt,jdbcType=INTEGER},
+            </if>
+            <if test="isDisplay != null">
+                #{isDisplay,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="rootSid != null">
+                #{rootSid,jdbcType=BIGINT},
+            </if>
+            <if test="level != null">
+                #{level,jdbcType=INTEGER},
+            </if>
+            <if test="sortOrder != null">
+                #{sortOrder,jdbcType=INTEGER},
+            </if>
+            <if test="channelSid != null">
+                #{channelSid,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="searchPath != null">
+                #{searchPath,jdbcType=VARCHAR},
+            </if>
+            <if test="categoryType != null">
+                #{categoryType,jdbcType=INTEGER},
+            </if>
+            <if test="shopSid != null">
+                #{shopSid,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="erpType != null">
+                #{erpType,jdbcType=INTEGER},
+            </if>
+            <if test="isLeaf != null">
+                #{isLeaf,jdbcType=INTEGER},
+            </if>
+            <if test="isMarket != null">
+                #{isMarket,jdbcType=INTEGER},
+            </if>
+            <if test="successTime != null">
+                #{successTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="groupSid != null">
+                #{groupSid,jdbcType=VARCHAR},
+            </if>
+            <if test="categoryCode != null">
+                #{categoryCode,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.wangfj.product.category.domain.entity.PcmCategory">
+        update pcm_category
+        <set>
+            <if test="categorySid != null">
+                category_sid = #{categorySid,jdbcType=BIGINT},
+            </if>
+            <if test="parentSid != null">
+                parent_sid = #{parentSid,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="isParent != null">
+                is_parent = #{isParent,jdbcType=INTEGER},
+            </if>
+            <if test="isSelfBuilt != null">
+                is_self_built = #{isSelfBuilt,jdbcType=INTEGER},
+            </if>
+            <if test="isDisplay != null">
+                is_display = #{isDisplay,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="rootSid != null">
+                root_sid = #{rootSid,jdbcType=BIGINT},
+            </if>
+            <if test="level != null">
+                level = #{level,jdbcType=INTEGER},
+            </if>
+            <if test="sortOrder != null">
+                sort_order = #{sortOrder,jdbcType=INTEGER},
+            </if>
+            <if test="channelSid != null">
+                channel_sid = #{channelSid,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="searchPath != null">
+                search_path = #{searchPath,jdbcType=VARCHAR},
+            </if>
+            <if test="categoryType != null">
+                category_type = #{categoryType,jdbcType=INTEGER},
+            </if>
+            <if test="shopSid != null">
+                shop_sid = #{shopSid,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="erpType != null">
+                erp_type = #{erpType,jdbcType=INTEGER},
+            </if>
+            <if test="isLeaf != null">
+                is_leaf = #{isLeaf,jdbcType=INTEGER},
+            </if>
+            <if test="isMarket != null">
+                is_market = #{isMarket,jdbcType=INTEGER},
+            </if>
+            <if test="successTime != null">
+                success_time = #{successTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="groupSid != null">
+                group_sid = #{groupSid,jdbcType=VARCHAR},
+            </if>
+            <if test="categoryCode != null">
+                category_code = #{categoryCode,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+    <update id="updateByListSelective" parameterType="hashMap">
+        update pcm_category
+        <set>
+            <if test="categorySid != null">
+                category_sid = #{categorySid,jdbcType=BIGINT},
+            </if>
+            <if test="parentSid != null">
+                parent_sid = #{parentSid,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="isParent != null">
+                is_parent = #{isParent,jdbcType=INTEGER},
+            </if>
+            <if test="isSelfBuilt != null">
+                is_self_built = #{isSelfBuilt,jdbcType=INTEGER},
+            </if>
+            <if test="isDisplay != null">
+                is_display = #{isDisplay,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="rootSid != null">
+                root_sid = #{rootSid,jdbcType=BIGINT},
+            </if>
+            <if test="level != null">
+                level = #{level,jdbcType=INTEGER},
+            </if>
+            <if test="levelDis != null">
+                level = level+(#{levelDis}),
+            </if>
+            <if test="sortOrder != null">
+                sort_order = #{sortOrder,jdbcType=INTEGER},
+            </if>
+            <if test="channelSid != null">
+                channel_sid = #{channelSid,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="searchPath != null">
+                search_path = #{searchPath,jdbcType=VARCHAR},
+            </if>
+            <if test="categoryType != null">
+                category_type = #{categoryType,jdbcType=INTEGER},
+            </if>
+            <if test="shopSid != null">
+                shop_sid = #{shopSid,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="erpType != null">
+                erp_type = #{erpType,jdbcType=INTEGER},
+            </if>
+            <if test="isLeaf != null">
+                is_leaf = #{isLeaf,jdbcType=INTEGER},
+            </if>
+            <if test="isMarket != null">
+                is_market = #{isMarket,jdbcType=INTEGER},
+            </if>
+            <if test="successTime != null">
+                success_time = #{successTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="groupSid != null">
+                group_sid = #{groupSid,jdbcType=VARCHAR},
+            </if>
+            <if test="categoryCode != null">
+                category_code = #{categoryCode,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where sid in
+        <foreach collection="list" open="(" close=")" item="item"
+                 separator=",">
+            ${item.sid}
+        </foreach>
+    </update>
+    <update id="updateByPrimaryKey"
+            parameterType="com.wangfj.product.category.domain.entity.PcmCategory">
+		update pcm_category
+		set category_sid =
+		#{categorySid,jdbcType=BIGINT},
+		parent_sid =
+		#{parentSid,jdbcType=BIGINT},
+		name = #{name,jdbcType=VARCHAR},
+		is_parent = #{isParent,jdbcType=INTEGER},
+		is_self_built =
+		#{isSelfBuilt,jdbcType=INTEGER},
+		is_display =
+		#{isDisplay,jdbcType=INTEGER},
+		status = #{status,jdbcType=INTEGER},
+		root_sid = #{rootSid,jdbcType=BIGINT},
+		level =
+		#{level,jdbcType=INTEGER},
+		sort_order = #{sortOrder,jdbcType=INTEGER},
+		channel_sid = #{channelSid,jdbcType=BIGINT},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		search_path =
+		#{searchPath,jdbcType=VARCHAR},
+		category_type =
+		#{categoryType,jdbcType=INTEGER},
+		shop_sid =
+		#{shopSid,jdbcType=VARCHAR},
+		description =
+		#{description,jdbcType=VARCHAR},
+		erp_type =
+		#{erpType,jdbcType=INTEGER},
+		is_leaf = #{isLeaf,jdbcType=INTEGER},
+		is_market = #{isMarket,jdbcType=INTEGER},
+		success_time=#{successTime,jdbcType=TIMESTAMP},
+		group_sid =
+		#{groupSid,jdbcType=VARCHAR},
+		category_code =
+		#{categoryCode,jdbcType=VARCHAR}
+		where sid =
+		#{sid,jdbcType=BIGINT}
+	</update>
+
+    <update id="updateCate"
+            parameterType="com.wangfj.product.category.domain.entity.PcmCategory">
+        update pcm_category
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where category_sid = #{categorySid,jdbcType=BIGINT} and channel_sid =
+        #{channelSid,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectProCount" resultType="java.lang.String"
+            parameterType="com.wangfj.product.category.domain.entity.PcmCategory">
+        select count(distinct sp.sid)
+        from pcm_product as sp join
+        pcm_product_category spc on sp.sid=spc.product_sid
+        join pcm_category sc
+        on
+        sc.sid=spc.category_sid
+        <where>
+            <!-- 品类 -->
+            <if test="categorySid!=null">
+                sc.category_sid = #{categorySid,jdbcType=BIGINT}
+            </if>
+            <if test="channelSid!=null">
+                and sc.channel_sid = #{channelSid,jdbcType=BIGINT}
+            </if>
+        </where>
+        group by sc.sid
+    </select>
+
+
+    <select id="selectListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_category
+        <where>
+            1=1
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="name != null">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="categorySid != null">
+                and category_sid = #{categorySid,jdbcType=BIGINT}
+            </if>
+            <if test="categoryType != null">
+                and category_type = #{categoryType,jdbcType=VARCHAR}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="isParent != null">
+                and is_parent = #{isParent,jdbcType=INTEGER}
+            </if>
+            <if test="isSelfBuilt != null">
+                and is_self_built = #{isSelfBuilt,jdbcType=INTEGER}
+            </if>
+            <if test="isDisplay != null">
+                and is_display = #{isDisplay,jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="rootSid != null">
+                and root_sid = #{rootSid,jdbcType=BIGINT}
+            </if>
+            <if test="level != null">
+                and level = #{level,jdbcType=INTEGER}
+            </if>
+            <if test="sortOrder != null">
+                and sort_order = #{sortOrder,jdbcType=INTEGER}
+            </if>
+            <if test="channelSid != null">
+                and channel_sid = #{channelSid,jdbcType=BIGINT}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="searchPath != null">
+                and sort_order = #{searchPath,jdbcType=VARCHAR}
+            </if>
+            <if test="isLeaf != null">
+                and is_leaf = #{isLeaf,jdbcType=INTEGER}
+            </if>
+            <if test="isMarket != null">
+                and is_market = #{isMarket,jdbcType=INTEGER}
+            </if>
+            <if test="shopSid != null">
+                and shop_sid = #{shopSid,jdbcType=VARCHAR}
+            </if>
+            <if test="successTime != null">
+                and success_time = #{successTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="groupSid != null">
+                and group_sid = #{groupSid,jdbcType=VARCHAR}
+            </if>
+            <if test="categoryCode != null">
+                and category_code = #{categoryCode,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by
+        sort_order asc
+    </select>
+
+    <!-- 品类树查询 -->
+    <select id="selectList" resultMap="BaseResultMap"
+            parameterType="com.wangfj.product.category.domain.entity.PcmCategory">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_category
+        <where>
+            1=1
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="name != null">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="categorySid != null">
+                and category_sid = #{categorySid,jdbcType=BIGINT}
+            </if>
+            <if test="categoryType != null">
+                and category_type = #{categoryType,jdbcType=VARCHAR}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="isParent != null">
+                and is_parent = #{isParent,jdbcType=INTEGER}
+            </if>
+            <if test="isSelfBuilt != null">
+                and is_self_built = #{isSelfBuilt,jdbcType=INTEGER}
+            </if>
+            <if test="isDisplay != null">
+                and is_display = #{isDisplay,jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="rootSid != null">
+                and root_sid = #{rootSid,jdbcType=BIGINT}
+            </if>
+            <if test="level != null">
+                and level = #{level,jdbcType=INTEGER}
+            </if>
+            <if test="sortOrder != null">
+                and sort_order = #{sortOrder,jdbcType=INTEGER}
+            </if>
+            <if test="channelSid != null">
+                and channel_sid = #{channelSid,jdbcType=BIGINT}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="searchPath != null">
+                and sort_order = #{searchPath,jdbcType=VARCHAR}
+            </if>
+            <if test="isLeaf != null">
+                and is_leaf = #{isLeaf,jdbcType=INTEGER}
+            </if>
+            <if test="isMarket != null">
+                and is_market = #{isMarket,jdbcType=INTEGER}
+            </if>
+            <if test="shopSid != null">
+                and shop_sid = #{shopSid,jdbcType=VARCHAR}
+            </if>
+            <if test="successTime != null">
+                and success_time = #{successTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="groupSid != null">
+                and group_sid = #{groupSid,jdbcType=VARCHAR}
+            </if>
+            <if test="categoryCode != null">
+                and category_code = #{categoryCode,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by parent_sid,sort_order
+    </select>
+
+    <!-- 根据品类的根节点父节点查询三级节点 生成规格表数据 -->
+    <select id="selectByRootSid" resultMap="BaseResultMap"
+            parameterType="com.wangfj.product.category.domain.entity.PcmCategory">
+        select
+        <include refid="Base_Column_List"/>
+        from ssd_category
+        <where>
+            1=1
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="name != null">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="categorySid != null">
+                and category_sid = #{categorySid,jdbcType=BIGINT}
+            </if>
+            <if test="categoryType != null">
+                and category_type = #{categoryType,jdbcType=VARCHAR}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="isParent != null">
+                and is_parent = #{isParent,jdbcType=INTEGER}
+            </if>
+            <if test="isSelfBuilt != null">
+                and is_self_built = #{isSelfBuilt,jdbcType=INTEGER}
+            </if>
+            <if test="isDisplay != null">
+                and is_display = #{isDisplay,jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="rootSid != null">
+                and root_sid = #{rootSid,jdbcType=BIGINT}
+            </if>
+            <if test="level != null">
+                and level = #{level,jdbcType=INTEGER}
+            </if>
+            <if test="sortOrder != null">
+                and sort_order = #{sortOrder,jdbcType=INTEGER}
+            </if>
+            <if test="channelSid != null">
+                and channel_sid = #{channelSid,jdbcType=BIGINT}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="searchPath != null">
+                and sort_order = #{searchPath,jdbcType=VARCHAR}
+            </if>
+            <if test="isLeaf != null">
+                and is_leaf = #{isLeaf,jdbcType=INTEGER}
+            </if>
+            <if test="isMarket != null">
+                and is_market = #{isMarket,jdbcType=INTEGER}
+            </if>
+            <if test="shopSid != null">
+                and shop_sid = #{shopSid,jdbcType=VARCHAR}
+            </if>
+            <if test="successTime != null">
+                and success_time = #{successTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="groupSid != null">
+                and group_sid = #{groupSid,jdbcType=VARCHAR}
+            </if>
+            <if test="categoryCode != null">
+                and category_code = #{categoryCode,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by parent_sid,sort_order
+    </select>
+
+    <select id="selectByProductSid" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+		select t1.* from pcm_category t1 LEFT JOIN
+		pcm_product_category t2 on t1.sid=t2.category_sid
+		where
+		t2.product_sid=#{productsid}
+		order by t1.sid desc
+	</select>
+
+    <select id="selectListInnerByParam" resultType="java.util.HashMap"
+            parameterType="java.util.Map">
+        select
+        category_sid,name,level,channel_name
+        from pcm_category as pca
+        inner join pcm_channel as pch on
+        pca.channel_sid=pch.sid
+        <where>
+            1=1
+            <if test="name != null">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="category_sid != null">
+                and category_sid = #{category_sid,jdbcType=BIGINT}
+            </if>
+        </where>
+    </select>
+
+    <!-- 通过条件查询 -->
+    <select id="selectCategoryListByParam" resultMap="BaseResultMap"
+            parameterType="com.wangfj.product.category.domain.vo.SelectCategoryParamDto">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_category
+        <where>
+            1=1
+            <if test="name != null">
+                and name LIKE '%${name}%'
+            </if>
+            <if test="categorySid != null">
+                and category_sid LIKE '%${categorySid}%'
+            </if>
+            <if test="categoryType != null">
+                and category_type = #{categoryType,jdbcType=VARCHAR}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="isParent != null">
+                and is_parent = #{isParent,jdbcType=INTEGER}
+            </if>
+            <if test="isSelfBuilt != null">
+                and is_self_built = #{isSelfBuilt,jdbcType=INTEGER}
+            </if>
+            <if test="isDisplay != null">
+                and is_display = #{isDisplay,jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="rootSid != null">
+                and root_sid = #{rootSid,jdbcType=BIGINT}
+            </if>
+            <if test="level != null">
+                and level = #{level,jdbcType=INTEGER}
+            </if>
+            <if test="sortOrder != null">
+                and sort_order = #{sortOrder,jdbcType=INTEGER}
+            </if>
+            <if test="channelSid != null">
+                and channel_sid = #{channelSid,jdbcType=BIGINT}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="searchPath != null">
+                and sort_order = #{searchPath,jdbcType=VARCHAR}
+            </if>
+            <if test="isLeaf != null">
+                and is_leaf = #{isLeaf,jdbcType=INTEGER}
+            </if>
+            <if test="isMarket != null">
+                and is_market = #{isMarket,jdbcType=INTEGER}
+            </if>
+            <if test="shopSid != null">
+                and shop_sid = #{shopSid,jdbcType=VARCHAR}
+            </if>
+            <if test="successTime != null">
+                and success_time = #{successTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="groupSid != null">
+                and group_sid = #{groupSid,jdbcType=VARCHAR}
+            </if>
+            <if test="categoryCode != null">
+                and category_code = #{categoryCode,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by
+        sort_order asc
+        <if test="start != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+    <!-- 通过条件查询记录数 -->
+    <select id="getCategpryCount" resultType="java.lang.Integer"
+            parameterType="com.wangfj.product.category.domain.vo.SelectCategoryParamDto">
+        select
+        count(1)
+        from
+        pcm_category
+        <where>
+            1=1
+            <if test="name != null">
+                and name LIKE '%${name}%'
+            </if>
+            <if test="categorySid != null">
+                and category_sid LIKE '%${categorySid}%'
+            </if>
+            <if test="categoryType != null">
+                and category_type = #{categoryType,jdbcType=VARCHAR}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="isParent != null">
+                and is_parent = #{isParent,jdbcType=INTEGER}
+            </if>
+            <if test="isSelfBuilt != null">
+                and is_self_built = #{isSelfBuilt,jdbcType=INTEGER}
+            </if>
+            <if test="isDisplay != null">
+                and is_display = #{isDisplay,jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="rootSid != null">
+                and root_sid = #{rootSid,jdbcType=BIGINT}
+            </if>
+            <if test="level != null">
+                and level = #{level,jdbcType=INTEGER}
+            </if>
+            <if test="sortOrder != null">
+                and sort_order = #{sortOrder,jdbcType=INTEGER}
+            </if>
+            <if test="channelSid != null">
+                and channel_sid = #{channelSid,jdbcType=BIGINT}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="searchPath != null">
+                and sort_order = #{searchPath,jdbcType=VARCHAR}
+            </if>
+            <if test="isLeaf != null">
+                and is_leaf = #{isLeaf,jdbcType=INTEGER}
+            </if>
+            <if test="isMarket != null">
+                and is_market = #{isMarket,jdbcType=INTEGER}
+            </if>
+            <if test="shopSid != null">
+                and shop_sid = #{shopSid,jdbcType=VARCHAR}
+            </if>
+            <if test="successTime != null">
+                and success_time = #{successTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="groupSid != null">
+                and group_sid = #{groupSid,jdbcType=VARCHAR}
+            </if>
+            <if test="categoryCode != null">
+                and category_code = #{categoryCode,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectCategoryByName" resultMap="BaseResultMap"
+            parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_category
+        <where>
+            1=1
+            <if test="name != null">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="rootSid != null">
+                and root_sid = #{rootSid}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=VARCHAR}
+            </if>
+            <if test="categorySid != null">
+                and category_sid = #{categorySid,jdbcType=VARCHAR}
+            </if>
+            <if test="isDisplay != null">
+                and is_display = #{isDisplay,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <!-- 通过条件分页查询 -->
+    <select id="selectPageListByParam" resultMap="BaseResultMap"
+            parameterType="com.wangfj.product.category.domain.entity.PcmCategory">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_category
+        <where>
+            1=1 and is_display=1
+            <if test="sid != null">
+                and sid = #{sid}
+            </if>
+            <if test="name != null">
+                and name LIKE '%${name}%'
+            </if>
+            <if test="categorySid != null">
+                and category_sid = #{categorySid,jdbcType=VARCHAR}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="isParent != null">
+                and is_parent = #{isParent,jdbcType=INTEGER}
+            </if>
+            <if test="isSelfBuilt != null">
+                and is_self_built = #{isSelfBuilt,jdbcType=INTEGER}
+            </if>
+            <if test="isDisplay != null">
+                and is_display = #{isDisplay,jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="shopSid != null">
+                and shop_sid = #{shopSid,jdbcType=VARCHAR}
+            </if>
+            <if test="rootSid != null">
+                and root_sid = #{rootSid,jdbcType=BIGINT}
+            </if>
+            <if test="level != null">
+                and level = #{level,jdbcType=INTEGER}
+            </if>
+            <if test="sortOrder != null">
+                and sort_order = #{sortOrder,jdbcType=INTEGER}
+            </if>
+            <if test="channelSid != null">
+                and channel_sid = #{channelSid,jdbcType=BIGINT}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="searchPath != null">
+                and search_path = #{searchPath,jdbcType=VARCHAR}
+            </if>
+            <if test="isLeaf != null">
+                and is_leaf = #{isLeaf,jdbcType=INTEGER}
+            </if>
+            <if test="isMarket != null">
+                and is_market = #{isMarket,jdbcType=INTEGER}
+            </if>
+            <if test="successTime != null">
+                and success_time = #{successTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="categoryType != null">
+                and category_type = #{categoryType,jdbcType=VARCHAR}
+            </if>
+            <if test="groupSid != null">
+                and group_sid = #{groupSid,jdbcType=VARCHAR}
+            </if>
+            <if test="categoryCode != null">
+                and category_code = #{categoryCode,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by sort_order
+    </select>
+    <!-- 查询分类的类型用in() -->
+    <select id="selectPageListByCategoryVO" resultMap="BaseResultMap"
+            parameterType="com.wangfj.product.category.domain.vo.CategoryVO">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_category
+        <where>
+            1=1 and is_display=1
+            <if test="name != null">
+                and name LIKE '%${name}%'
+            </if>
+            <if test="categorySid != null">
+                and category_sid = #{categorySid,jdbcType=VARCHAR}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="isParent != null">
+                and is_parent = #{isParent,jdbcType=INTEGER}
+            </if>
+            <if test="isSelfBuilt != null">
+                and is_self_built = #{isSelfBuilt,jdbcType=INTEGER}
+            </if>
+            <if test="isDisplay != null">
+                and is_display = #{isDisplay,jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="shopSid != null">
+                and shop_sid = #{shopSid,jdbcType=VARCHAR}
+            </if>
+            <if test="rootSid != null">
+                and root_sid = #{rootSid,jdbcType=BIGINT}
+            </if>
+            <if test="level != null">
+                and level = #{level,jdbcType=INTEGER}
+            </if>
+            <if test="sortOrder != null">
+                and sort_order = #{sortOrder,jdbcType=INTEGER}
+            </if>
+            <if test="channelSid != null">
+                and channel_sid = #{channelSid,jdbcType=BIGINT}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="searchPath != null">
+                and search_path = #{searchPath,jdbcType=VARCHAR}
+            </if>
+            <if test="isLeaf != null">
+                and is_leaf = #{isLeaf,jdbcType=INTEGER}
+            </if>
+            <if test="isMarket != null">
+                and is_market = #{isMarket,jdbcType=INTEGER}
+            </if>
+            <if test="successTime != null">
+                and success_time = #{successTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="groupSid != null">
+                and group_sid = #{groupSid,jdbcType=VARCHAR}
+            </if>
+            <if test="categoryCode != null">
+                and category_code = #{categoryCode,jdbcType=VARCHAR}
+            </if>
+            <if test="categoryType != null">
+                and category_type in
+                <foreach item="item" index="index" collection="categoryType"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by sort_order
+    </select>
+    <!-- 查询个数以map为参数 -->
+    <select id="getCountByParam" resultType="java.lang.Integer"
+            parameterType="java.util.HashMap">
+        select
+        count(1)
+        from pcm_category
+        <where>
+            1=1
+            <if test="name != null">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="categorySid != null">
+                and category_sid = #{categorySid,jdbcType=VARCHAR}
+            </if>
+            <if test="categoryType != null">
+                and category_type = #{categoryType,jdbcType=VARCHAR}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="isParent != null">
+                and is_parent = #{isParent,jdbcType=INTEGER}
+            </if>
+            <if test="isSelfBuilt != null">
+                and is_self_built = #{isSelfBuilt,jdbcType=INTEGER}
+            </if>
+            <if test="isDisplay != null">
+                and is_display = #{isDisplay,jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="rootSid != null">
+                and root_sid = #{rootSid,jdbcType=BIGINT}
+            </if>
+            <if test="level != null">
+                and level = #{level,jdbcType=INTEGER}
+            </if>
+            <if test="sortOrder != null">
+                and sort_order = #{sortOrder,jdbcType=INTEGER}
+            </if>
+            <if test="channelSid != null">
+                and channel_sid = #{channelSid,jdbcType=BIGINT}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="searchPath != null">
+                and sort_order = #{searchPath,jdbcType=VARCHAR}
+            </if>
+            <if test="isLeaf != null">
+                and is_leaf = #{isLeaf,jdbcType=INTEGER}
+            </if>
+            <if test="isMarket != null">
+                and is_market = #{isMarket,jdbcType=INTEGER}
+            </if>
+            <if test="shopSid != null">
+                and shop_sid = #{shopSid,jdbcType=VARCHAR}
+            </if>
+            <if test="successTime != null">
+                and success_time = #{successTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="groupSid != null">
+                and group_sid = #{groupSid,jdbcType=VARCHAR}
+            </if>
+            <if test="categoryCode != null">
+                and category_code = #{categoryCode,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <select id="selectCategoryCodeByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+		select
+		category_sid
+		from pcm_category
+		where sid =
+		#{sid,jdbcType=BIGINT}
+	</select>
+    <select id="selectByParentSid" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_category
+        <where>
+            1=1
+            and is_display=1
+            <if test="parent_sid != null">
+                and parent_sid = #{parent_sid,jdbcType=BIGINT}
+            </if>
+            <if test="categorySid != null">
+                and category_sid = #{categorySid,jdbcType=BIGINT}
+            </if>
+            <if test="category_type != null">
+                and category_type = #{category_type,jdbcType=INTEGER}
+            </if>
+            <if test="groupSid != null">
+                and group_sid = #{groupSid,jdbcType=VARCHAR}
+            </if>
+            <if test="categoryCode != null">
+                and category_code = #{categoryCode,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <!-- 通过品类编码查询品类信息 -->
+    <select id="selectByCategorySid" resultMap="BaseResultMap"
+            parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_category where sid =
+        #{categorySid}
+        and is_display=1
+    </select>
+
+    <select id="selectByGLCategorySid" resultMap="BaseResultMap"
+            parameterType="com.wangfj.product.category.domain.vo.PcmAddCategoryDto">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_category where category_code =
+        #{parentSid}
+        and shop_sid = #{shopSid}
+        and is_display=1
+    </select>
+
+    <!-- 通过管理分类id查询专柜商品信息 -->
+    <select id="selectShoppeByCateSid" resultType="java.util.HashMap"
+            parameterType="com.wangfj.product.category.domain.vo.SelectCategoryParamDto">
+		SELECT psp.* from pcm_shoppe_product AS psp
+		INNER JOIN
+		pcm_category as pc ON
+		psp.category_sid=pc.sid where pc.category_type=1
+		and pc.sid
+		= #{sid,jdbcType=BIGINT}
+		and pc.is_display=1
+	</select>
+
+    <!-- 通过管理分类id查询专柜商品信息条数 -->
+    <select id="getShoppeCountBySid" resultType="java.lang.Integer"
+            parameterType="java.lang.Long">
+		SELECT count(1) from pcm_shoppe_product AS psp
+		INNER JOIN
+		pcm_category as pc ON
+		psp.category_sid=pc.sid where pc.category_type=1
+		and pc.sid
+		= #{categorySid,jdbcType=BIGINT}
+		and pc.is_display=1
+	</select>
+
+    <!-- 根据指定的ID找出相应的品类 -->
+    <select id="selectListIn" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_category
+        <where>
+            <foreach item="item" index="index" collection="list" open=" "
+                     separator="or" close=" ">
+                sid = #{item}
+            </foreach>
+        </where>
+    </select>
+
+
+    <!-- 获取所有分类 根据参数获取 一二三级 -->
+    <select id="getProductStanCategorys" parameterType="java.util.Map"
+            resultType="hashmap">
+        SELECT
+        category_sid,
+        name
+        FROM
+        ssd_category
+        <where>
+            1=1
+            <if test="channelSid != null">
+                and channel_sid = #{channelSid,jdbcType=BIGINT}
+            </if>
+            <if test="level !=null">
+                AND level = #{level,jdbcType=BIGINT}
+            </if>
+        </where>
+    </select>
+    <!-- 获取根节点父节点 -->
+    <select id="selectRootParentName" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        ssd_category t
+        WHERE
+        t.channel_sid = 2
+        AND t.category_sid IN (
+        SELECT
+        parent_sid
+        FROM
+        ssd_category
+        WHERE
+        category_sid = #{categorySid}
+        AND
+        channel_sid = 2
+        and is_display=1
+        GROUP BY category_sid)
+    </select>
+
+    <select id="getIndustryCategorys" resultType="java.util.HashMap">
+		SELECT
+		category_sid
+		as code,
+		parent_sid as parentCode,
+		name
+		FROM
+		pcm_category
+		WHERE
+		category_type = 0
+		and is_display=1
+	</select>
+
+
+    <select id="getCountByCategoryType" resultType="java.lang.Integer">
+		SELECT count(1)
+		FROM pcm_category WHERE category_type in (0,2) and
+		parent_sid=0
+		and is_display=1
+	</select>
+
+    <!-- 通过条件查询返回实体类 -->
+    <select id="getByParams" resultMap="BaseResultMap"
+            parameterType="com.wangfj.product.category.domain.entity.PcmCategory">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_category
+        <where>
+            1=1
+            <if test="name != null">
+                and name LIKE '%${name}%'
+            </if>
+            <if test="categorySid != null">
+                and category_sid = #{categorySid,jdbcType=VARCHAR}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid,jdbcType=BIGINT}
+            </if>
+            <if test="isParent != null">
+                and is_parent = #{isParent,jdbcType=INTEGER}
+            </if>
+            <if test="isSelfBuilt != null">
+                and is_self_built = #{isSelfBuilt,jdbcType=INTEGER}
+            </if>
+            <if test="isDisplay != null">
+                and is_display = #{isDisplay,jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="shopSid != null">
+                and shop_sid = #{shopSid,jdbcType=VARCHAR}
+            </if>
+            <if test="rootSid != null">
+                and root_sid = #{rootSid,jdbcType=BIGINT}
+            </if>
+            <if test="level != null">
+                and level = #{level,jdbcType=INTEGER}
+            </if>
+            <if test="sortOrder != null">
+                and sort_order = #{sortOrder,jdbcType=INTEGER}
+            </if>
+            <if test="channelSid != null">
+                and channel_sid = #{channelSid,jdbcType=BIGINT}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="searchPath != null">
+                and search_path = #{searchPath,jdbcType=VARCHAR}
+            </if>
+            <if test="isLeaf != null">
+                and is_leaf = #{isLeaf,jdbcType=INTEGER}
+            </if>
+            <if test="isMarket != null">
+                and is_market = #{isMarket,jdbcType=INTEGER}
+            </if>
+            <if test="successTime != null">
+                and success_time = #{successTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="categoryType != null">
+                and category_type = #{categoryType,jdbcType=VARCHAR}
+            </if>
+            <if test="groupSid != null">
+                and group_sid = #{groupSid,jdbcType=VARCHAR}
+            </if>
+            <if test="categoryCode != null">
+                and category_code = #{categoryCode,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <select id="selectByChannel" resultMap="categoryChannelMap"
+            parameterType="java.util.Map">
+        SELECT * from
+        <if test='channelSid != "0"'>
+          pcm_category pc INNER JOIN pcm_channel pch ON pc.channel_sid = pch.sid
+          WHERE pc.category_type=3
+          <if test="display != null">
+            and pc.is_display = #{display,jdbcType=INTEGER}
+          </if>
+          <if test="status != null">
+            and pc.status = #{status,jdbcType=VARCHAR}
+          </if>
+            and pch.channel_code = #{channelSid,jdbcType=VARCHAR}     
+        </if>
+        <if test='channelSid == "0"'>
+          pcm_category as pc 
+          WHERE pc.category_type=3
+          <if test="display != null">
+            and pc.is_display = #{display,jdbcType=INTEGER}
+          </if>
+          <if test="status != null">
+            and pc.status = #{status,jdbcType=VARCHAR}
+          </if>
+            and pc.channel_sid = '0'
+         </if>
+    </select>
+    <!-- 通过or条件查询 -->
+    <select id="selectListOrParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_category
+        <where>
+            1=1
+            and is_display=1
+            <if test="name != null">
+                and name LIKE '%${name}%'
+            </if>
+            <if test="categorySid != null">
+                or category_sid = #{categorySid,jdbcType=VARCHAR}
+            </if>
+
+        </where>
+    </select>
+    <select id="selectAllSubNodeByCateSid" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+		SELECT
+		cate_1.*
+		FROM
+		pcm_category AS cate_1
+		JOIN (
+		SELECT
+		sid,level,root_sid
+		FROM
+		pcm_category
+		WHERE
+		sid =
+		#{cateSid,jdbcType=VARCHAR}
+		) AS
+		cate_2
+		WHERE
+		cate_1.root_sid =
+		cate_2.root_sid
+		AND cate_1.level > cate_2.level
+	</select>
+    <select id="selectCateBySidList" resultMap="BaseResultMap"
+            parameterType="list">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        pcm_category
+        WHERE
+        sid in
+        <foreach collection="list" index="index" item="item" open="("
+                 separator="," close=")">
+            #{item.sid}
+        </foreach>
+        and category_type=3
+        and status='Y'
+        and is_display=1
+    </select>
+
+    <!--根据参数查询分类的所有上级 findCategoryByParam -->
+    <select id="findCategoryByParam" parameterType="com.wangfj.product.category.domain.vo.PcmCategoryQueryDto"
+            resultType="java.util.Map">
+        SELECT
+        sid AS sid,
+        category_sid AS categorySid,
+        parent_sid AS parentSid,
+        name AS name,
+        category_code AS categoryCode,
+        is_display AS isDisplay
+        FROM
+        pcm_category
+        <where>
+            <if test="sid != null">
+                and sid = #{sid}
+            </if>
+            <if test="categorySid != null">
+                and category_sid = #{categorySid}
+            </if>
+            <if test="categoryType != null">
+                and category_type = #{categoryType}
+            </if>
+            <if test="parentSid != null">
+                and parent_sid = #{parentSid}
+            </if>
+            <if test="isDisplay != null">
+                and is_display = #{isDisplay}
+            </if>
+            <if test="shopCode != null">
+                and shop_sid = #{shopCode}
+            </if>
+            <if test="categoryCode != null">
+                and category_code = #{categoryCode}
+            </if>
+        </where>
+        ORDER BY
+        sid DESC
+    </select>
+    <!-- 根据管理分类编码获取子节点编码 -->
+	<select id="getChildNodeCodeByParentCode" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+		cate1.category_code AS manager,
+		cate1.level AS level
+		FROM
+		(
+		SELECT
+		category_code,
+		level,
+		parent_sid
+		FROM
+		pcm_category cate
+		<where>
+		  <if test="categoryType != null"><!-- 分类类型  -->
+		    AND cate.category_type = #{categoryType,jdbcType=INTEGER}
+		  </if>
+		  <if test="level != null"><!-- 分类等级 -->
+		   AND cate.`level` = #{level,jdbcType=INTEGER}
+		  </if>
+		  <if test="shopCode != null"><!-- 门店编码 -->
+		   AND cate.shop_sid = #{shopCode,jdbcType=VARCHAR}
+		  </if>
+		</where>
+		) cate1
+		WHERE
+		cate1.parent_sid IN (
+		SELECT
+		sid
+		FROM
+		pcm_category
+		<where>
+		  <if test="managerList != null"><!-- 分类编码 -->
+		    AND category_code IN
+		    <foreach collection="managerList" item="manager" index="index"
+				    open="(" separator="," close=")">
+					#{manager.manager,jdbcType=VARCHAR}<!-- managerlist里有manager和level，取manager -->
+			</foreach>
+		  </if>
+		  <if test="categoryType != null"><!-- 分类类型 -->
+		    AND category_type = #{categoryType,jdbcType=INTEGER}
+		  </if>
+		  <if test="shopCode != null"><!-- 门店编码 -->
+		   AND shop_sid = #{shopCode,jdbcType=VARCHAR}
+		  </if>
+		</where>
+		)
+    </select>
+
+</mapper>

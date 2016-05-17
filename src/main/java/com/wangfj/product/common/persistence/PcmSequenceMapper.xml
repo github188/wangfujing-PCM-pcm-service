@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.common.persistence.PcmSequenceMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.common.domain.entity.PcmSequence">
+		<id column="seq" property="seq" jdbcType="BIGINT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="current_value" property="currentValue"
+			jdbcType="INTEGER" />
+		<result column="increment" property="increment" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		seq, name, current_value, increment
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_sequence
+		where seq = #{seq,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_sequence
+		where seq = #{seq,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.wangfj.product.common.domain.entity.PcmSequence">
+		insert into pcm_sequence (seq,
+		name, current_value,
+		increment)
+		values (#{seq,jdbcType=BIGINT},
+		#{name,jdbcType=VARCHAR},
+		#{currentValue,jdbcType=INTEGER},
+		#{increment,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective" parameterType="com.wangfj.product.common.domain.entity.PcmSequence">
+		insert into pcm_sequence
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="seq != null">
+				seq,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="currentValue != null">
+				current_value,
+			</if>
+			<if test="increment != null">
+				increment,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="seq != null">
+				#{seq,jdbcType=BIGINT},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="currentValue != null">
+				#{currentValue,jdbcType=INTEGER},
+			</if>
+			<if test="increment != null">
+				#{increment,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.common.domain.entity.PcmSequence">
+		update pcm_sequence
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="currentValue != null">
+				current_value = #{currentValue,jdbcType=INTEGER},
+			</if>
+			<if test="increment != null">
+				increment = #{increment,jdbcType=INTEGER},
+			</if>
+		</set>
+		where seq = #{seq,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.wangfj.product.common.domain.entity.PcmSequence">
+		update
+		pcm_sequence
+		set name = #{name,jdbcType=VARCHAR},
+		current_value =
+		#{currentValue,jdbcType=INTEGER},
+		increment =
+		#{increment,jdbcType=INTEGER}
+		where seq = #{seq,jdbcType=BIGINT}
+	</update>
+
+	<insert id="generateSeq" parameterType="com.wangfj.product.common.domain.vo.PcmSequenceDto"
+		useGeneratedKeys="true" keyProperty="seq">
+		insert into pcm_sequence
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="seq != null">
+				seq,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="currentValue != null">
+				current_value,
+			</if>
+			<if test="increment != null">
+				increment,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="seq != null">
+				#{seq,jdbcType=BIGINT},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="currentValue != null">
+				#{currentValue,jdbcType=INTEGER},
+			</if>
+			<if test="increment != null">
+				#{increment,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+</mapper>

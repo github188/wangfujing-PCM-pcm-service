@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmSaleCodeMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.maindata.domain.entity.PcmSaleCode">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="supply_sid" property="supplySid" jdbcType="BIGINT" />
+		<result column="shoppe_sid" property="shoppeSid" jdbcType="BIGINT" />
+		<result column="sale_code" property="saleCode" jdbcType="VARCHAR" />
+		<result column="opt_user_sid" property="optUserSid" jdbcType="BIGINT" />
+		<result column="opt_update_time" property="optUpdateTime"
+			jdbcType="TIMESTAMP" />
+		<result column="memo" property="memo" jdbcType="VARCHAR" />
+		<result column="supply_saling_time" property="supplySalingTime"
+			jdbcType="TIMESTAMP" />
+		<result column="supply_shop_code" property="supplyShopCode"
+			jdbcType="VARCHAR" />
+		<result column="contract_code" property="contractCode"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, supply_sid, shoppe_sid, sale_code, opt_user_sid, opt_update_time,
+		memo, supply_saling_time,
+		supply_shop_code, contract_code
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_sale_code
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from pcm_sale_code
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmSaleCode">
+		insert into pcm_sale_code (sid, supply_sid, shoppe_sid,
+		sale_code, opt_user_sid, opt_update_time,
+		memo, supply_saling_time, supply_shop_code,
+		contract_code)
+		values (#{sid,jdbcType=BIGINT}, #{supplySid,jdbcType=BIGINT},
+		#{shoppeSid,jdbcType=BIGINT},
+		#{saleCode,jdbcType=VARCHAR}, #{optUserSid,jdbcType=BIGINT}, #{optUpdateTime,jdbcType=TIMESTAMP},
+		#{memo,jdbcType=VARCHAR}, #{supplySalingTime,jdbcType=TIMESTAMP},
+		#{supplyShopCode,jdbcType=VARCHAR},
+		#{contractCode,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmSaleCode">
+		insert into pcm_sale_code
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="supplySid != null">
+				supply_sid,
+			</if>
+			<if test="shoppeSid != null">
+				shoppe_sid,
+			</if>
+			<if test="saleCode != null">
+				sale_code,
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid,
+			</if>
+			<if test="optUpdateTime != null">
+				opt_update_time,
+			</if>
+			<if test="memo != null">
+				memo,
+			</if>
+			<if test="supplySalingTime != null">
+				supply_saling_time,
+			</if>
+			<if test="supplyShopCode != null">
+				supply_shop_code,
+			</if>
+			<if test="contractCode != null">
+				contract_code,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="supplySid != null">
+				#{supplySid,jdbcType=BIGINT},
+			</if>
+			<if test="shoppeSid != null">
+				#{shoppeSid,jdbcType=BIGINT},
+			</if>
+			<if test="saleCode != null">
+				#{saleCode,jdbcType=VARCHAR},
+			</if>
+			<if test="optUserSid != null">
+				#{optUserSid,jdbcType=BIGINT},
+			</if>
+			<if test="optUpdateTime != null">
+				#{optUpdateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="memo != null">
+				#{memo,jdbcType=VARCHAR},
+			</if>
+			<if test="supplySalingTime != null">
+				#{supplySalingTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="supplyShopCode != null">
+				#{supplyShopCode,jdbcType=VARCHAR},
+			</if>
+			<if test="contractCode != null">
+				#{contractCode,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmSaleCode">
+		update pcm_sale_code
+		<set>
+			<if test="supplySid != null">
+				supply_sid = #{supplySid,jdbcType=BIGINT},
+			</if>
+			<if test="shoppeSid != null">
+				shoppe_sid = #{shoppeSid,jdbcType=BIGINT},
+			</if>
+			<if test="saleCode != null">
+				sale_code = #{saleCode,jdbcType=VARCHAR},
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid = #{optUserSid,jdbcType=BIGINT},
+			</if>
+			<if test="optUpdateTime != null">
+				opt_update_time = #{optUpdateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="memo != null">
+				memo = #{memo,jdbcType=VARCHAR},
+			</if>
+			<if test="supplySalingTime != null">
+				supply_saling_time = #{supplySalingTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="supplyShopCode != null">
+				supply_shop_code = #{supplyShopCode,jdbcType=VARCHAR},
+			</if>
+			<if test="contractCode != null">
+				contract_code = #{contractCode,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmSaleCode">
+		update pcm_sale_code
+		set supply_sid = #{supplySid,jdbcType=BIGINT},
+		shoppe_sid = #{shoppeSid,jdbcType=BIGINT},
+		sale_code = #{saleCode,jdbcType=VARCHAR},
+		opt_user_sid = #{optUserSid,jdbcType=BIGINT},
+		opt_update_time = #{optUpdateTime,jdbcType=TIMESTAMP},
+		memo = #{memo,jdbcType=VARCHAR},
+		supply_saling_time = #{supplySalingTime,jdbcType=TIMESTAMP},
+		supply_shop_code = #{supplyShopCode,jdbcType=VARCHAR},
+		contract_code = #{contractCode,jdbcType=VARCHAR}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_sale_code
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="supplySid != null">
+				and supply_sid = #{supplySid,jdbcType=BIGINT}
+			</if>
+			<if test="shoppeSid != null">
+				and shoppe_sid = #{shoppeSid,jdbcType=BIGINT}
+			</if>
+			<if test="saleCode != null">
+				and sale_code = #{saleCode,jdbcType=VARCHAR}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+			<if test="optUpdateTime != null">
+				and opt_update_time = #{optUpdateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="memo != null">
+				and memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="supplySalingTime != null">
+				and supply_saling_time = #{supplySalingTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="supplyShopCode != null">
+				and supply_shop_code = #{supplyShopCode,jdbcType=VARCHAR}
+			</if>
+			<if test="contractCode != null">
+				and contract_code = #{contractCode,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_sale_code
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="supplySid != null">
+				and supply_sid = #{supplySid,jdbcType=BIGINT}
+			</if>
+			<if test="shoppeSid != null">
+				and shoppe_sid = #{shoppeSid,jdbcType=BIGINT}
+			</if>
+			<if test="saleCode != null">
+				and sale_code = #{saleCode,jdbcType=VARCHAR}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+			<if test="optUpdateTime != null">
+				and opt_update_time = #{optUpdateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="memo != null">
+				and memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="supplySalingTime != null">
+				and supply_saling_time = #{supplySalingTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="supplyShopCode != null">
+				and supply_shop_code = #{supplyShopCode,jdbcType=VARCHAR}
+			</if>
+			<if test="contractCode != null">
+				and contract_code = #{contractCode,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by
+		sid asc
+		<if test="limit!=null">
+			limit
+			#{start}, #{limit}
+		</if>
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_sale_code
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="supplySid != null">
+				and supply_sid = #{supplySid,jdbcType=BIGINT}
+			</if>
+			<if test="shoppeSid != null">
+				and shoppe_sid = #{shoppeSid,jdbcType=BIGINT}
+			</if>
+			<if test="saleCode != null">
+				and sale_code = #{saleCode,jdbcType=VARCHAR}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+			<if test="optUpdateTime != null">
+				and opt_update_time = #{optUpdateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="memo != null">
+				and memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="supplySalingTime != null">
+				and supply_saling_time = #{supplySalingTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="supplyShopCode != null">
+				and supply_shop_code = #{supplyShopCode,jdbcType=VARCHAR}
+			</if>
+			<if test="contractCode != null">
+				and contract_code = #{contractCode,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+</mapper>

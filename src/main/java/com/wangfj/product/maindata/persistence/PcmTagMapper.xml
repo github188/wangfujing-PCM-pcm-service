@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmTagMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.maindata.domain.entity.PcmTag">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="tag_name" property="tagName" jdbcType="VARCHAR" />
+		<result column="tag_code" property="tagCode" jdbcType="VARCHAR" />
+		<result column="tag_type" property="tagType" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="opt_user_sid" property="optUserSid" jdbcType="BIGINT" />
+		<result column="begin_date" property="beginDate" jdbcType="TIMESTAMP" />
+		<result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+		<result column="operater_name" property="operaterName"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, tag_name,tag_code,tag_type, status, create_time,
+		update_time, opt_user_sid, begin_date, end_date, operater_name
+	</sql>
+	<!-- 获得指定时间段内开始的活动 -->
+	<select id="selectActiveByStartTimeFrame" resultType="java.util.HashMap"
+		parameterType="java.util.HashMap">
+		select
+		sid as 'activeId',
+		tag_name as 'activeName',
+		case WHEN end_date >=
+		NOW() then 'true'
+		ELSE 'false' end as 'continued'
+		from pcm_tag
+		<where>
+			<if test="status != null">
+				and status = #{status,jdbcType=BIGINT}
+			</if>
+			<if test="tagType != null">
+				and tag_type = #{tagType,jdbcType=BIGINT}
+			</if>
+			<if test="beginTime != null">
+				and begin_date >= #{beginTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endTime != null">
+				and #{endTime,jdbcType=TIMESTAMP} >= begin_date
+			</if>
+			<if test="start !=null">
+				limit #{start},
+			</if>
+			<if test="limit !=null">
+				#{limit}
+			</if>
+		</where>
+	</select>
+	<select id="getTagCountByStartTimeFrame" resultType="java.lang.Integer"
+		parameterType="java.util.HashMap">
+		select count(*)
+		from pcm_tag
+		<where>
+			<if test="status != null">
+				and status = #{status,jdbcType=BIGINT}
+			</if>
+			<if test="tagType != null">
+				and tag_type = #{tagType,jdbcType=BIGINT}
+			</if>
+			<if test="beginTime != null">
+				and begin_date >= #{beginTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endTime != null">
+				and #{endTime,jdbcType=TIMESTAMP} >= begin_date
+			</if>
+		</where>
+	</select>
+	<!-- 获得指定时间段内结束的活动 -->
+	<select id="selectActiveByEndTimeFrame" resultType="java.util.HashMap"
+		parameterType="java.util.HashMap">
+		select
+		sid as 'activeId'
+		from pcm_tag
+		<where>
+			<if test="status != null">
+				and status = #{status,jdbcType=BIGINT}
+			</if>
+			<if test="tagType != null">
+				and tag_type = #{tagType,jdbcType=BIGINT}
+			</if>
+			<if test="beginTime != null">
+				and end_date >= #{beginTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endTime != null">
+				and #{endTime,jdbcType=TIMESTAMP} >= end_date
+			</if>
+			<if test="start !=null">
+				limit #{start},
+			</if>
+			<if test="limit !=null">
+				#{limit}
+			</if>
+		</where>
+	</select>
+	<select id="getTagCountByEndTimeFrame" resultType="java.lang.Integer"
+		parameterType="java.util.HashMap">
+		select count(*)
+		from pcm_tag
+		<where>
+			<if test="status != null">
+				and status = #{status,jdbcType=BIGINT}
+			</if>
+			<if test="tagType != null">
+				and tag_type = #{tagType,jdbcType=BIGINT}
+			</if>
+			<if test="beginTime != null">
+				and end_date >= #{beginTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endTime != null">
+				and #{endTime,jdbcType=TIMESTAMP} >= end_date
+			</if>
+		</where>
+	</select>
+	<!-- 获取指定时间点有效的活动 -->
+	<select id="selectActiveByTimePoint" resultType="java.util.Map" parameterType="java.util.Map">
+	  select 
+	  sid as 'activeId',
+	  tag_name as 'activeName'
+	  from pcm_tag
+	  <where>
+	    <if test="status != null">
+				and status = #{status,jdbcType=BIGINT}
+			</if>
+			<if test="tagType != null">
+				and tag_type = #{tagType,jdbcType=BIGINT}
+			</if>
+			<if test="timePoint != null">
+				and #{timePoint} between begin_date and end_date
+			</if>
+			<if test="start !=null">
+				limit #{start},
+			</if>
+			<if test="limit !=null">
+				#{limit}
+			</if>
+	  </where>
+	</select>
+	<select id="getActiveCountByTimePoint" resultType="java.lang.Integer" parameterType="java.util.Map">
+	  select 
+	  count(*)
+	  from pcm_tag
+	  <where>
+	    <if test="status != null">
+				and status = #{status,jdbcType=BIGINT}
+			</if>
+			<if test="tagType != null">
+				and tag_type = #{tagType,jdbcType=BIGINT}
+			</if>
+			<if test="timePoint != null">
+				and #{timePoint} between begin_date and end_date
+			</if>
+	  </where>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_tag
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_tag
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+
+	<select id="getTagNameInfoByProCode" parameterType="java.util.Map"
+		resultType="String">
+		SELECT
+		tag.tag_name
+		FROM
+		pcm_shoppe_product AS pro
+		JOIN pcm_product_tag AS
+		ppt ON
+		ppt.product_sid = pro.shoppe_pro_sid
+		JOIN pcm_tag AS tag ON
+		tag.sid =
+		ppt.tag_sid
+		JOIN pcm_pro_detail AS sku on sku.sid =
+		pro.product_detail_sid
+		<where>
+			NOW() BETWEEN tag.begin_date
+			AND tag.end_date
+			<if test="proCode != null">
+				and pro.shoppe_pro_sid = #{proCode,jdbcType=VARCHAR}
+			</if>
+			<if test="proSid != null">
+				and pro.sid = #{proSid,jdbcType=VARCHAR}
+			</if>
+			<if test="skuSid != null">
+				and sku.sid = #{skuSid,jdbcType=VARCHAR}
+			</if>
+			<if test="skuCode != null">
+				and sku.product_detail_sid = #{skuCode,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<!-- 添加所有信息 -->
+	<insert id="insert" parameterType="com.wangfj.product.maindata.domain.entity.PcmTag">
+		insert into pcm_tag (sid,
+		tag_name, status,
+		create_time, update_time, opt_user_sid
+		tag_code,tag_type,begin_date, end_date, operater_name )
+		values
+		(#{sid,jdbcType=BIGINT}, #{tagName,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP}, #{optUserSid,jdbcType=BIGINT},
+		#{tagCode,jdbcType=VARCHAR}, #{tagType,jdbcType=INTEGER}),
+		#{beginDate,jdbcType=TIMESTAMP}),
+		#{endDate,jdbcType=TIMESTAMP}),
+		#{operaterName,jdbcType=VARCHAR})
+	</insert>
+
+	<!-- 添加部分信息 -->
+	<insert id="insertSelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmTag"
+		useGeneratedKeys="true" keyProperty="sid">
+		insert into pcm_tag
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="tagName != null">
+				tag_name,
+			</if>
+			<if test="tagCode != null">
+				tag_code,
+			</if>
+			<if test="tagType != null">
+				tag_type,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid,
+			</if>
+			<if test="beginDate != null">
+				begin_date,
+			</if>
+			<if test="endDate != null">
+				end_date,
+			</if>
+			<if test="operaterName != null">
+				operater_name,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="tagName != null">
+				#{tagName,jdbcType=VARCHAR},
+			</if>
+			<if test="tagCode != null">
+				#{tagCode,jdbcType=VARCHAR},
+			</if>
+			<if test="tagType != null">
+				#{tagType,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optUserSid != null">
+				#{optUserSid,jdbcType=BIGINT},
+			</if>
+			<if test="beginDate != null">
+				#{beginDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endDate != null">
+				#{endDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="operaterName != null">
+				#{operaterName,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<!-- 根据sid修改部分信息 -->
+	<update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmTag">
+		update pcm_tag
+		<set>
+			<if test="tagName != null">
+				tag_name = #{tagName,jdbcType=VARCHAR},
+			</if>
+			<if test="tagCode != null">
+				tag_code = #{tagCode,jdbcType=VARCHAR},
+			</if>
+			<if test="tagType != null">
+				tag_type = #{tagType,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid = #{optUserSid,jdbcType=BIGINT},
+			</if>
+			<if test="beginDate != null">
+				begin_date = #{beginDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endDate != null">
+				end_date = #{endDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="operaterName != null">
+				operater_name = #{operaterName,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.wangfj.product.maindata.domain.entity.PcmTag">
+		update pcm_tag
+		set
+		tag_name = #{tagName,jdbcType=VARCHAR},
+		status =
+		#{status,jdbcType=INTEGER},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP},
+		opt_user_sid =
+		#{optUserSid,jdbcType=BIGINT},
+		tag_code = #{tagCode,jdbcType=VARCHAR},
+		tag_type = #{tagType,jdbcType=INTEGER},
+		begin_date =
+		#{beginDate,jdbcType=TIMESTAMP},
+		end_date =
+		#{endDate,jdbcType=TIMESTAMP},
+		operater_name =
+		#{operaterName,jdbcType=VARCHAR}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_tag tag
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="tagName != null">
+				and tag_name = #{tagName,jdbcType=VARCHAR}
+			</if>
+			<if test="tagCode != null">
+				and tag_code = #{tagCode,jdbcType=VARCHAR}
+			</if>
+			<if test="tagType != null">
+				and tag_type = #{tagType,jdbcType=INTEGER}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTime != null">
+				and update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+			<if test="beginDate != null">
+				and begin_date >= #{beginDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endDate != null">
+				and #{endDate,jdbcType=TIMESTAMP} >= end_date
+			</if>
+			<if test="operaterName != null">
+				and operater_name = #{operaterName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectListByParam1" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		tag.sid as sid,
+		tag.tag_name as tag_name,
+		tag.tag_code as
+		tag_code,
+		tag.tag_type as tag_type,
+		tag.status as status,
+		tag.create_time as create_time,
+		tag.update_time as update_time,
+		tag.opt_user_sid as opt_user_sid,
+		tag.begin_date as begin_date,
+		tag.end_date as end_date,
+		tag.operater_name as operater_name
+		from
+		pcm_tag tag
+		<if test="shoppeProSid != null">
+			, pcm_product_tag proTag
+		</if>
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="tagName != null">
+				and tag_name = #{tagName,jdbcType=VARCHAR}
+			</if>
+			<if test="tagCode != null">
+				and tag_code = #{tagCode,jdbcType=VARCHAR}
+			</if>
+			<if test="tagType != null">
+				and tag_type = #{tagType,jdbcType=INTEGER}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTime != null">
+				and update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+			<if test="beginDate != null">
+				and begin_date >= #{beginDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endDate != null">
+				and #{endDate,jdbcType=TIMESTAMP} >= end_date
+			</if>
+			<if test="operaterName != null">
+				and operater_name = #{operaterName,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeProSid != null">
+				and proTag.tag_sid=tag.sid
+				and
+				proTag.product_sid=#{shoppeProSid}
+			</if>
+		</where>
+	</select>
+
+	<!-- 分页查询 -->
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_tag
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="tagName != null">
+				and tag_name = #{tagName,jdbcType=VARCHAR}
+			</if>
+			<if test="tagCode != null">
+				and tag_code = #{tagCode,jdbcType=VARCHAR}
+			</if>
+			<if test="tagType != null">
+				and tag_type = #{tagType,jdbcType=INTEGER}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTime != null">
+				and update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+			<if test="beginDate != null">
+				and begin_date >= #{beginDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endDate != null">
+				and #{endDate,jdbcType=TIMESTAMP} >= end_date
+			</if>
+			<if test="operaterName != null">
+				and operater_name = #{operaterName,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by
+		sid desc
+		<if test="limit != null">
+			limit
+			#{start}, #{limit}
+		</if>
+	</select>
+	<!-- 查询条数 -->
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_tag
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="tagName != null">
+				and tag_name = #{tagName,jdbcType=VARCHAR}
+			</if>
+			<if test="tagCode != null">
+				and tag_code = #{tagCode,jdbcType=VARCHAR}
+			</if>
+			<if test="tagType != null">
+				and tag_type = #{tagType,jdbcType=INTEGER}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTime != null">
+				and update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+			<if test="beginDate != null">
+				and begin_date >= #{beginDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endDate != null">
+				and #{endDate,jdbcType=TIMESTAMP} >= end_date
+			</if>
+			<if test="operaterName != null">
+				and operater_name = #{operaterName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+
+</mapper>

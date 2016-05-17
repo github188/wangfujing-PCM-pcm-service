@@ -1,0 +1,1566 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmProductMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.maindata.domain.entity.PcmProduct">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="product_sid" property="productSid" jdbcType="VARCHAR" />
+		<result column="product_name" property="productName" jdbcType="VARCHAR" />
+		<result column="primary_attr" property="primaryAttr" jdbcType="VARCHAR" />
+		<result column="product_sku" property="productSku" jdbcType="VARCHAR" />
+		<result column="brand_sid" property="brandSid" jdbcType="VARCHAR" />
+		<result column="brand_root_sid" property="brandRootSid"
+			jdbcType="VARCHAR" />
+		<result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+		<result column="pro_active_bit" property="proActiveBit"
+			jdbcType="INTEGER" />
+		<result column="pro_selling" property="proSelling" jdbcType="INTEGER" />
+		<result column="activity_flg" property="activityFlg" jdbcType="INTEGER" />
+		<result column="pro_picture" property="proPicture" jdbcType="VARCHAR" />
+		<result column="category_sid" property="categorySid" jdbcType="BIGINT" />
+		<result column="sex_sid" property="sexSid" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="awesome" property="awesome" jdbcType="BIGINT" />
+		<result column="pro_desc_sid" property="proDescSid" jdbcType="BIGINT" />
+		<result column="product_name_alias" property="productNameAlias"
+			jdbcType="VARCHAR" />
+		<result column="pro_selling_time" property="proSellingTime"
+			jdbcType="TIMESTAMP" />
+		<result column="year_to_market" property="yearToMarket"
+			jdbcType="VARCHAR" />
+		<result column="short_des" property="shortDes" jdbcType="VARCHAR" />
+		<result column="edit_flag" property="editFlag" jdbcType="INTEGER" />
+		<result column="special_des" property="specialDes" jdbcType="VARCHAR" />
+		<result column="season_code" property="seasonCode" jdbcType="VARCHAR" />
+		<result column="long_desc" property="longDesc" jdbcType="VARCHAR" />
+		<result column="industry_condition" property="industryCondition"
+			jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap type="com.wangfj.product.maindata.domain.vo.SpuPageDto"
+		id="SpuResultMap">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="product_sid" property="spuCode" jdbcType="BIGINT" />
+		<result column="product_sku" property="modelCode" jdbcType="VARCHAR" />
+		<result column="primary_attr" property="primaryAttr" jdbcType="VARCHAR" />
+		<result column="product_name" property="productName" jdbcType="VARCHAR" />
+		<result column="brand_sid" property="brandGroupCode" jdbcType="VARCHAR" />
+		<result column="brand_name" property="brandGroupName" jdbcType="VARCHAR" />
+		<result column="pro_selling" property="spuSale" jdbcType="INTEGER" />
+		<result column="category_sid" property="category" jdbcType="BIGINT" />
+		<result column="stat_category" property="statCategory"
+			jdbcType="BIGINT" />
+		<result column="category_name" property="categoryName"
+			jdbcType="VARCHAR" />
+		<result column="stat_category_name" property="statCategoryName"
+			jdbcType="VARCHAR" />
+		<result column="season_code" property="seasonCode" jdbcType="VARCHAR" />
+		<result column="season" property="season" jdbcType="VARCHAR" />
+		<result column="year_to_market" property="onMarketDate"
+			jdbcType="VARCHAR" />
+		<result column="activity_flg" property="activityFlg" jdbcType="INTEGER" />
+		<result column="pro_picture" property="proPicture" jdbcType="VARCHAR" />
+		<result column="sex_sid" property="sexSid" jdbcType="INTEGER" />
+		<result column="awesome" property="awesome" jdbcType="VARCHAR" />
+		<result column="long_desc" property="longDes" jdbcType="VARCHAR" />
+		<result column="pro_selling_time" property="proSellingTime"
+			jdbcType="TIMESTAMP" />
+		<result column="short_des" property="shortDes" jdbcType="VARCHAR" />
+		<result column="edit_flag" property="editFlag" jdbcType="INTEGER" />
+		<result column="special_des" property="specialDes" jdbcType="VARCHAR" />
+		<result column="pro_active_bit" property="proActiveBit"
+			jdbcType="INTEGER" />
+		<result column="industry_condition" property="industryCondition"
+			jdbcType="INTEGER" />
+		<!-- <result column="attributeList" property="proActiveBit" jdbcType="VARCHAR" 
+			/> -->
+		<!-- <result column="tagList" property="proActiveBit" jdbcType="VARCHAR" 
+			/> -->
+		<!-- <result column="currentPage" property="proActiveBit" jdbcType="INTEGER" 
+			/> -->
+		<!-- <result column="pageSize" property="proActiveBit" jdbcType="INTEGER" 
+			/> -->
+		<!-- <result column="start" property="proActiveBit" jdbcType="INTEGER" 
+			/> -->
+		<!-- <result column="limit" property="proActiveBit" jdbcType="INTEGER" 
+			/> -->
+	</resultMap>
+	<resultMap type="com.wangfj.product.maindata.domain.vo.PublishCacheDto"
+		id="Publish_Pro">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+	</resultMap>
+
+	<resultMap id="SpuSearchResultMap"
+		type="com.wangfj.product.maindata.domain.vo.SearchSpuDto">
+		<id column="spuId" property="spuId"></id>
+		<result column="spuName" property="spuName" />
+		<result column="model" property="model" />
+		<result column="brandId" property="brandId" />
+		<result column="activeBit" property="activeBit" />
+		<result column="onSell" property="onSell" />
+		<result column="pageDescription" property="pageDescription" />
+		<result column="onSellSince" property="onSellSince" />
+		<result column="longDesc" property="longDesc"/>
+		<result column="shortDesc" property="shortDesc"/>
+		<collection property="aliases" resultMap="aliasMap" />
+		<collection property="categoryIds" resultMap="categoryMap" />
+		<collection property="tags" resultMap="tagMap" />
+		<collection property="propertyValues" resultMap="propertyMap" />
+	</resultMap>
+	<resultMap id="aliasMap" type="java.lang.String">
+		<result column="aliases" property="aliases" />
+	</resultMap>
+	<resultMap id="categoryMap" type="java.lang.String">
+		<result column="categoryId" property="categoryId" />
+	</resultMap>
+	<resultMap id="tagMap" type="com.wangfj.product.maindata.domain.vo.TagsDto">
+		<id column="tagId" property="tagId" />
+		<result column="tag" property="tag" />
+	</resultMap>
+	<resultMap id="propertyMap"
+		type="com.wangfj.product.maindata.domain.vo.SearchPropDto">
+		<id column="propertyId" property="propertyId" />
+		<result column="categoryId2" property="categoryId" />
+		<result column="propertyName" property="propertyName" />
+		<result column="propertyOrder" property="propertyOrder" />
+		<result column="enumProperty" property="enumProperty" />
+		<result column="propertyValueId" property="propertyValueId" />
+		<result column="propertyValue" property="propertyValue" />
+	</resultMap>
+	
+	<resultMap id="CatePropResultMap"
+		type="com.wangfj.product.maindata.domain.vo.ProCateChannelDto">
+		<id column="spuCode" property="spuCode" />
+		<result column="cateName" property="cateName" />
+		<result column="channelName" property="channelName" />
+		<collection property="propList" resultMap="PropListMap" />
+	</resultMap>
+	<resultMap id="PropListMap" type="com.wangfj.product.maindata.domain.vo.ProPropValueDto">
+		<id column="propName" property="propName" />
+	<result column="valueName" property="valueName" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		sid, product_sid, product_name, product_sku, brand_sid,
+		brand_root_sid,
+		brand_name,
+		pro_active_bit, pro_selling, activity_flg,
+		pro_picture, category_sid, sex_sid,
+		create_time,
+		awesome, pro_desc_sid,
+		pro_selling_time,
+		year_to_market,
+		short_des,edit_flag,special_des,season_code,primary_attr,industry_condition,
+		long_desc
+	</sql>
+	<!-- resultMap="CatePropResultMap" -->	
+	<select id="getCatePropBySpuCode" 	resultType="com.wangfj.product.maindata.domain.vo.ProCateChannelDto"
+	parameterType="HashMap">
+		SELECT
+			spu.product_sid as spuCode ,
+			cate.`name` as cateName,
+			ppp.prop_name as propName,
+			ppp.value_name as valueName,
+			IFNULL(channel.channel_name,'全渠道') as channelName
+		FROM
+			pcm_product AS spu
+		JOIN pcm_product_parameters AS ppp ON ppp.product_sid = spu.sid
+		JOIN pcm_category AS cate ON cate.sid = ppp.category_sid 
+		AND cate.category_type = 3
+		AND cate.`status` = 'Y'
+		AND cate.is_display = 1
+		AND cate.is_leaf = 'Y'
+		LEFT JOIN pcm_channel AS channel ON channel.sid = ppp.channel_sid
+		<where>
+			<if test="spuCode != null">
+				spu.product_sid = #{spuCode}
+			</if>
+		</where>
+	</select>
+	<select id="pubLishPro" parameterType="java.util.Map" resultMap="Publish_Pro">
+		select
+		pro.sid as sid,
+		pro.shoppe_pro_sid as code,
+		1 as type
+		from
+		pcm_shoppe_product as pro
+		join
+		pcm_pro_detail as sku on
+		pro.product_detail_sid = sku.sid
+		join
+		pcm_product as spu on
+		sku.product_sid = spu.sid
+		<where>
+			<if test="spuSid != null">
+				and spu.sid = #{spuSid,jdbcType=BIGINT}
+			</if>
+			<if test="skuSid != null">
+				and sku.sid = #{skuSid,jdbcType=BIGINT}
+			</if>
+			<if test="proSid != null">
+				and pro.sid = #{proSid,jdbcType=BIGINT}
+			</if>
+		</where>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_product
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_product
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmProduct">
+		insert into pcm_product (sid, product_sid, product_name,
+		product_sku, brand_sid, brand_root_sid,
+		brand_name, pro_active_bit,
+		pro_selling,
+		activity_flg, pro_picture, category_sid,
+		sex_sid,
+		create_time, awesome,
+		pro_desc_sid, product_name_alias,
+		pro_selling_time,
+		year_to_market,short_des,edit_flag,special_des,season_code,primary_attr,industry_condition,
+		long_desc)
+		values
+		(#{sid,jdbcType=BIGINT},
+		#{productSid,jdbcType=VARCHAR},
+		#{productName,jdbcType=VARCHAR},
+		#{productSku,jdbcType=VARCHAR},
+		#{brandSid,jdbcType=VARCHAR},
+		#{brandRootSid,jdbcType=VARCHAR},
+		#{brandName,jdbcType=VARCHAR},
+		#{proActiveBit,jdbcType=INTEGER},
+		#{proSelling,jdbcType=INTEGER},
+		#{activityFlg,jdbcType=INTEGER},
+		#{proPicture,jdbcType=VARCHAR},
+		#{categorySid,jdbcType=BIGINT},
+		#{sexSid,jdbcType=INTEGER},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{awesome,jdbcType=BIGINT},
+		#{proDescSid,jdbcType=BIGINT},
+		#{productNameAlias,jdbcType=VARCHAR},
+		#{proSellingTime,jdbcType=TIMESTAMP},
+		#{yearToMarket,jdbcType=VARCHAR},#{shortDes,jdbcType=VARCHAR},
+		#{editFlag,jdbcType=INTEGER},#{specialDes,jdbcType=VARCHAR},#{seasonCode,jdbcType=VARCHAR},
+		#{primaryAttr,jdbcType=VARCHAR},
+		#{industryCondition,jdbcType=INTEGER},
+		#{longDesc,jdbcType=VARCHAR} )
+	</insert>
+	<insert id="insertSelective" useGeneratedKeys="true"
+		keyProperty="sid" parameterType="com.wangfj.product.maindata.domain.entity.PcmProduct">
+		insert into pcm_product
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="productSid != null">
+				product_sid,
+			</if>
+			<if test="productName != null">
+				product_name,
+			</if>
+			<if test="productSku != null">
+				product_sku,
+			</if>
+			<if test="brandSid != null">
+				brand_sid,
+			</if>
+			<if test="brandRootSid != null">
+				brand_root_sid,
+			</if>
+			<if test="brandName != null">
+				brand_name,
+			</if>
+			<if test="proActiveBit != null">
+				pro_active_bit,
+			</if>
+			<if test="proSelling != null">
+				pro_selling,
+			</if>
+			<if test="activityFlg != null">
+				activity_flg,
+			</if>
+			<if test="proPicture != null">
+				pro_picture,
+			</if>
+			<if test="categorySid != null">
+				category_sid,
+			</if>
+			<if test="sexSid != null">
+				sex_sid,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="awesome != null">
+				awesome,
+			</if>
+			<if test="proDescSid != null">
+				pro_desc_sid,
+			</if>
+			<if test="productNameAlias != null">
+				product_name_alias,
+			</if>
+			<if test="proSellingTime != null">
+				pro_selling_time,
+			</if>
+			<if test="yearToMarket != null">
+				year_to_market,
+			</if>
+			<if test="shortDes != null">
+				short_des,
+			</if>
+			<if test="editFlag != null">
+				edit_flag,
+			</if>
+			<if test="specialDes != null">
+				special_des,
+			</if>
+			<if test="seasonCode != null">
+				season_code,
+			</if>
+			<if test="primaryAttr != null">
+				primary_attr,
+			</if>
+			<if test="industryCondition != null">
+				industry_condition,
+			</if>
+			<if test="longDesc != null">
+				long_desc,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="productSid != null">
+				#{productSid,jdbcType=VARCHAR},
+			</if>
+			<if test="productName != null">
+				#{productName,jdbcType=VARCHAR},
+			</if>
+			<if test="productSku != null">
+				#{productSku,jdbcType=VARCHAR},
+			</if>
+			<if test="brandSid != null">
+				#{brandSid,jdbcType=VARCHAR},
+			</if>
+			<if test="brandRootSid != null">
+				#{brandRootSid,jdbcType=VARCHAR},
+			</if>
+			<if test="brandName != null">
+				#{brandName,jdbcType=VARCHAR},
+			</if>
+			<if test="proActiveBit != null">
+				#{proActiveBit,jdbcType=INTEGER},
+			</if>
+			<if test="proSelling != null">
+				#{proSelling,jdbcType=INTEGER},
+			</if>
+			<if test="activityFlg != null">
+				#{activityFlg,jdbcType=INTEGER},
+			</if>
+			<if test="proPicture != null">
+				#{proPicture,jdbcType=VARCHAR},
+			</if>
+			<if test="categorySid != null">
+				#{categorySid,jdbcType=BIGINT},
+			</if>
+			<if test="sexSid != null">
+				#{sexSid,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="awesome != null">
+				#{awesome,jdbcType=BIGINT},
+			</if>
+			<if test="proDescSid != null">
+				#{proDescSid,jdbcType=BIGINT},
+			</if>
+			<if test="productNameAlias != null">
+				#{productNameAlias,jdbcType=VARCHAR},
+			</if>
+			<if test="proSellingTime != null">
+				#{proSellingTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="yearToMarket != null">
+				#{yearToMarket,jdbcType=VARCHAR},
+			</if>
+			<if test="shortDes != null">
+				#{shortDes,jdbcType=VARCHAR},
+			</if>
+			<if test="editFlag != null">
+				#{editFlag,jdbcType=INTEGER},
+			</if>
+			<if test="specialDes != null">
+				#{specialDes,jdbcType=VARCHAR},
+			</if>
+			<if test="seasonCode != null">
+				#{seasonCode,jdbcType=VARCHAR},
+			</if>
+			<if test="primaryAttr != null">
+				#{primaryAttr,jdbcType=VARCHAR},
+			</if>
+			<if test="industryCondition != null">
+				#{industryCondition,jdbcType=INTEGER},
+			</if>
+			<if test="longDesc != null">
+				#{longDesc,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmProduct">
+		update pcm_product
+		<set>
+			<if test="productSid != null">
+				product_sid = #{productSid,jdbcType=VARCHAR},
+			</if>
+			<if test="productName != null">
+				product_name = #{productName,jdbcType=VARCHAR},
+			</if>
+			<if test="productSku != null">
+				product_sku = #{productSku,jdbcType=VARCHAR},
+			</if>
+			<if test="brandSid != null">
+				brand_sid = #{brandSid,jdbcType=VARCHAR},
+			</if>
+			<if test="brandRootSid != null">
+				brand_root_sid = #{brandRootSid,jdbcType=VARCHAR},
+			</if>
+			<if test="brandName != null">
+				brand_name = #{brandName,jdbcType=VARCHAR},
+			</if>
+			<if test="proActiveBit != null">
+				pro_active_bit = #{proActiveBit,jdbcType=INTEGER},
+			</if>
+			<if test="proSelling != null">
+				pro_selling = #{proSelling,jdbcType=INTEGER},
+			</if>
+			<if test="activityFlg != null">
+				activity_flg = #{activityFlg,jdbcType=INTEGER},
+			</if>
+			<if test="proPicture != null">
+				pro_picture = #{proPicture,jdbcType=VARCHAR},
+			</if>
+			<if test="categorySid != null">
+				category_sid = #{categorySid,jdbcType=BIGINT},
+			</if>
+			<if test="sexSid != null">
+				sex_sid = #{sexSid,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="awesome != null">
+				awesome = #{awesome,jdbcType=BIGINT},
+			</if>
+			<if test="proDescSid != null">
+				pro_desc_sid = #{proDescSid,jdbcType=BIGINT},
+			</if>
+			<if test="productNameAlias != null">
+				product_name_alias =
+				#{productNameAlias,jdbcType=VARCHAR},
+			</if>
+			<if test="proSellingTime != null">
+				pro_selling_time = #{proSellingTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="yearToMarket != null">
+				year_to_market = #{yearToMarket,jdbcType=VARCHAR},
+			</if>
+			<if test="shortDes != null">
+				short_des = #{shortDes,jdbcType=VARCHAR},
+			</if>
+			<if test="editFlag != null">
+				edit_flag = #{editFlag,jdbcType=INTEGER},
+			</if>
+			<if test="specialDes != null">
+				special_des = #{specialDes,jdbcType=VARCHAR},
+			</if>
+			<if test="seasonCode != null">
+				season_code = #{seasonCode,jdbcType=VARCHAR},
+			</if>
+			<if test="primaryAttr != null">
+				primary_attr = #{primaryAttr,jdbcType=VARCHAR},
+			</if>
+			<if test="industryCondition != null">
+				industry_condition =
+				#{industryCondition,jdbcType=INTEGER},
+			</if>
+			<if test="longDesc != null">
+				long_desc = #{longDesc,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmProduct">
+		update pcm_product
+		set product_sid =
+		#{productSid,jdbcType=VARCHAR},
+		product_name =
+		#{productName,jdbcType=VARCHAR},
+		product_sku =
+		#{productSku,jdbcType=VARCHAR},
+		brand_sid =
+		#{brandSid,jdbcType=VARCHAR},
+		brand_root_sid =
+		#{brandRootSid,jdbcType=VARCHAR},
+		brand_name =
+		#{brandName,jdbcType=VARCHAR},
+		pro_active_bit =
+		#{proActiveBit,jdbcType=INTEGER},
+		pro_selling =
+		#{proSelling,jdbcType=INTEGER},
+		activity_flg =
+		#{activityFlg,jdbcType=INTEGER},
+		pro_picture =
+		#{proPicture,jdbcType=VARCHAR},
+		category_sid =
+		#{categorySid,jdbcType=BIGINT},
+		sex_sid = #{sexSid,jdbcType=INTEGER},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		awesome =
+		#{awesome,jdbcType=BIGINT},
+		pro_desc_sid =
+		#{proDescSid,jdbcType=BIGINT},
+		product_name_alias =
+		#{productNameAlias,jdbcType=VARCHAR},
+		pro_selling_time =
+		#{proSellingTime,jdbcType=TIMESTAMP},
+		year_to_market =
+		#{yearToMarket,jdbcType=VARCHAR},
+		short_des =
+		#{shortDes,jdbcType=VARCHAR},
+		edit_flag = #{editFlag,jdbcType=INTEGER},
+		special_des = #{specialDes,jdbcType=VARCHAR},
+		season_code =
+		#{seasonCode,jdbcType=VARCHAR},
+		primary_attr =
+		#{primaryAttr,jdbcType=VARCHAR},
+		industry_condition =
+		#{industryCondition,jdbcType=INTEGER},
+		long_desc =
+		#{longDesc,jdbcType=VARCHAR}
+		where sid =
+		#{sid,jdbcType=BIGINT}
+	</update>
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_product
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=VARCHAR}
+			</if>
+			<if test="productName != null">
+				and product_name = #{productName,jdbcType=VARCHAR}
+			</if>
+			<if test="productSku != null">
+				and product_sku = #{productSku,jdbcType=VARCHAR}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandRootSid != null">
+				and brand_root_sid = #{brandRootSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandName != null">
+				and brand_name = #{brandName,jdbcType=VARCHAR}
+			</if>
+			<if test="proActiveBit != null">
+				and pro_active_bit = #{proActiveBit,jdbcType=INTEGER}
+			</if>
+			<if test="proSelling != null">
+				and pro_selling = #{proSelling,jdbcType=INTEGER}
+			</if>
+			<if test="activityFlg != null">
+				and activity_flg = #{activityFlg,jdbcType=INTEGER}
+			</if>
+			<if test="proPicture != null">
+				and pro_picture = #{proPicture,jdbcType=VARCHAR}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="sexSid != null">
+				and sex_sid = #{sexSid,jdbcType=INTEGER}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="awesome != null">
+				and awesome = #{awesome,jdbcType=BIGINT}
+			</if>
+			<if test="proDescSid != null">
+				and pro_desc_sid = #{proDescSid,jdbcType=BIGINT}
+			</if>
+			<if test="productNameAlias != null">
+				and product_name_alias =
+				#{productNameAlias,jdbcType=VARCHAR}
+			</if>
+			<if test="proSellingTime != null">
+				and pro_selling_time =
+				#{proSellingTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="yearToMarket != null">
+				and year_to_market = #{yearToMarket,jdbcType=VARCHAR}
+			</if>
+			<if test="shortDes != null">
+				and short_des = #{shortDes,jdbcType=VARCHAR}
+			</if>
+			<if test="editFlag != null">
+				and edit_flag = #{editFlag,jdbcType=INTEGER}
+			</if>
+			<if test="specialDes != null">
+				and special_des = #{specialDes,jdbcType=VARCHAR}
+			</if>
+			<if test="seasonCode != null">
+				and season_code = #{seasonCode,jdbcType=VARCHAR}
+			</if>
+			<if test="primaryAttr != null">
+				and primary_attr = #{primaryAttr,jdbcType=VARCHAR}
+			</if>
+			<if test="industryCondition != null">
+				and industry_condition =
+				#{industryCondition,jdbcType=INTEGER}
+			</if>
+			<if test="longDesc != null">
+				and long_desc = #{longDesc,jdbcType=VARCHAR}
+			</if>
+		</where>
+		<if test="limit != null">
+			limit
+			<if test="start != null">
+				#{start}
+			</if>
+			<if test="start == null">
+				0
+			</if>
+			,#{limit}
+		</if>
+	</select>
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_product
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=VARCHAR}
+			</if>
+			<if test="productName != null">
+				and product_name = #{productName,jdbcType=VARCHAR}
+			</if>
+			<if test="productSku != null">
+				and product_sku = #{productSku,jdbcType=VARCHAR}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandRootSid != null">
+				and brand_root_sid = #{brandRootSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandName != null">
+				and brand_name = #{brandName,jdbcType=VARCHAR}
+			</if>
+			<if test="proActiveBit != null">
+				and pro_active_bit = #{proActiveBit,jdbcType=INTEGER}
+			</if>
+			<if test="proSelling != null">
+				and pro_selling = #{proSelling,jdbcType=INTEGER}
+			</if>
+			<if test="activityFlg != null">
+				and activity_flg = #{activityFlg,jdbcType=INTEGER}
+			</if>
+			<if test="proPicture != null">
+				and pro_picture = #{proPicture,jdbcType=VARCHAR}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="sexSid != null">
+				and sex_sid = #{sexSid,jdbcType=INTEGER}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="awesome != null">
+				and awesome = #{awesome,jdbcType=BIGINT}
+			</if>
+			<if test="proDescSid != null">
+				and pro_desc_sid = #{proDescSid,jdbcType=BIGINT}
+			</if>
+			<if test="productNameAlias != null">
+				and product_name_alias =
+				#{productNameAlias,jdbcType=VARCHAR}
+			</if>
+			<if test="proSellingTime != null">
+				and pro_selling_time =
+				#{proSellingTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="yearToMarket != null">
+				and year_to_market = #{yearToMarket,jdbcType=VARCHAR}
+			</if>
+			<if test="shortDes != null">
+				and short_des = #{shortDes,jdbcType=VARCHAR}
+			</if>
+			<if test="editFlag != null">
+				and edit_flag = #{editFlag,jdbcType=INTEGER}
+			</if>
+			<if test="specialDes != null">
+				and special_des = #{specialDes,jdbcType=VARCHAR}
+			</if>
+			<if test="season_code != null">
+				season_code = #{seasonCode,jdbcType=VARCHAR}
+			</if>
+			<if test="primaryAttr != null">
+				and primary_attr = #{primaryAttr,jdbcType=VARCHAR}
+			</if>
+			<if test="industryCondition != null">
+				and industry_condition =
+				#{industryCondition,jdbcType=INTEGER}
+			</if>
+			<if test="longDesc != null">
+				and long_desc = #{longDesc,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by
+		sid desc
+		limit
+		#{start}, #{limit}
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_product
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="productSid != null">
+				and product_sid = #{productSid,jdbcType=VARCHAR}
+			</if>
+			<if test="productName != null">
+				and product_name = #{productName,jdbcType=VARCHAR}
+			</if>
+			<if test="productSku != null">
+				and product_sku = #{productSku,jdbcType=VARCHAR}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandRootSid != null">
+				and brand_root_sid = #{brandRootSid,jdbcType=VARCHAR}
+			</if>
+			<if test="brandName != null">
+				and brand_name = #{brandName,jdbcType=VARCHAR}
+			</if>
+			<if test="proActiveBit != null">
+				and pro_active_bit = #{proActiveBit,jdbcType=INTEGER}
+			</if>
+			<if test="proSelling != null">
+				and pro_selling = #{proSelling,jdbcType=INTEGER}
+			</if>
+			<if test="activityFlg != null">
+				and activity_flg = #{activityFlg,jdbcType=INTEGER}
+			</if>
+			<if test="proPicture != null">
+				and pro_picture = #{proPicture,jdbcType=VARCHAR}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="sexSid != null">
+				and sex_sid = #{sexSid,jdbcType=INTEGER}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="awesome != null">
+				and awesome = #{awesome,jdbcType=BIGINT}
+			</if>
+			<if test="proDescSid != null">
+				and pro_desc_sid = #{proDescSid,jdbcType=BIGINT}
+			</if>
+			<if test="productNameAlias != null">
+				and product_name_alias =
+				#{productNameAlias,jdbcType=VARCHAR}
+			</if>
+			<if test="proSellingTime != null">
+				and pro_selling_time =
+				#{proSellingTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="yearToMarket != null">
+				and year_to_market = #{yearToMarket,jdbcType=VARCHAR}
+			</if>
+			<if test="shortDes != null">
+				and short_des = #{shortDes,jdbcType=VARCHAR}
+			</if>
+			<if test="editFlag != null">
+				and edit_flag = #{editFlag,jdbcType=INTEGER}
+			</if>
+			<if test="specialDes != null">
+				and special_des = #{specialDes,jdbcType=VARCHAR}
+			</if>
+			<if test="seasonCode != null">
+				and season_code = #{seasonCode,jdbcType=VARCHAR}
+			</if>
+			<if test="primaryAttr != null">
+				and primary_attr = #{primaryAttr,jdbcType=VARCHAR}
+			</if>
+			<if test="industryCondition != null">
+				and industry_condition =
+				#{industryCondition,jdbcType=INTEGER}
+			</if>
+			<if test="longDesc != null">
+				and long_desc = #{longDesc,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<!-- 验证SPU是否存在 -->
+	<select id="selectProductByProSkuAndBrandSidIsExists" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		p.sid as sid,
+		p.product_sid as productSid,
+		p.product_name as
+		productName,
+		p.product_sku as productSku,
+		p.brand_sid as brandSid,
+		p.brand_root_sid
+		as brandRoot,
+		p.brand_name as brandName,
+		p.pro_active_bit as
+		proActiveBit,
+		p.pro_selling as proSelling,
+		p.activity_flg as
+		activityFlg,
+		p.pro_picture as proPicture,
+		p.category_sid as categorySid,
+		p.sex_sid as sexSid,
+		p.create_time as
+		createTime,
+		p.awesome as awesome,
+		p.pro_desc_sid as proDescSid,
+		p.pro_selling_time as
+		proSellingTime,
+		p.year_to_market as
+		yearToMarket,
+		p.short_des as shortDes,
+		p.edit_flag as
+		editFlag,
+		p.special_des as
+		specialDes,
+		p.primary_attr as primaryAttr
+		from pcm_product
+		p,pcm_brand_group
+		bg
+		<where>
+			p.brand_sid = bg.brand_sid
+			<if test="productSku != null">
+				and p.product_sku = #{productSku}
+			</if>
+			<if test="brandSid != null">
+				and p.brand_sid = #{brandSid}
+			</if>
+			<if test="primaryAttr != null">
+				and p.primary_attr = #{primaryAttr}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectCount" resultType="java.lang.Integer"
+		parameterType="com.wangfj.product.maindata.domain.vo.PcmProductDto">
+		select count(1)
+		from pcm_product
+		<where>
+			1=1
+			<if test="productName != null">
+				and product_name like
+				"%"#{productName,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="productSku != null">
+				and product_sku like "%"#{productSku,jdbcType=VARCHAR}"%"
+			</if>
+		</where>
+	</select>
+
+	<select id="selectPage1" resultType="java.util.HashMap"
+		parameterType="com.wangfj.product.maindata.domain.vo.PcmProductDto">
+		select
+		ssdproduct.*,
+		ssdbrand.brand_name as brandName
+		from pcm_product
+		ssdproduct left join pcm_brand ssdbrand
+		on ssdproduct.brand_sid =
+		ssdbrand.SID
+		<where>
+			1=1
+			<if test="productSku != null">
+				and ssdproduct.product_sku like
+				"%"#{productSku,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="productName != null">
+				and ssdproduct.product_name like
+				"%"#{productName,jdbcType=VARCHAR}"%"
+			</if>
+		</where>
+		limit #{start},#{pageSize}
+	</select>
+	<select id="selectSkuCodeBySpuCode" parameterType="String"
+		resultType="String">
+		SELECT
+		sku.product_detail_sid
+		FROM
+		pcm_pro_detail sku
+		JOIN
+		pcm_product spu ON spu.sid = sku.product_sid
+		WHERE
+		spu.product_sid =
+		#{spuCode,jdbcType=VARCHAR}
+	</select>
+	<select id="getProductCountByPara" resultType="java.lang.Integer"
+		parameterType="com.wangfj.product.maindata.domain.vo.SpuPageDto">
+		select
+		count(spu.sid)
+		from
+		pcm_product spu
+		JOIN
+		pcm_product_category ppc on
+		ppc.product_sid=spu.sid
+		JOIN
+		pcm_category cate ON cate.sid =
+		ppc.category_sid
+		AND cate.category_type=0
+		AND cate.is_leaf='Y'
+		AND
+		cate.status='Y' and cate.is_display = 1
+		left join
+		pcm_season_dict psd on
+		psd.sid=spu.season_code
+		<where>
+			1=1
+			<if test="sid != null">
+				and spu.sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="spuCode != null">
+				and spu.product_sid = #{spuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="modelCode != null">
+				and spu.product_sku = #{modelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="productName != null">
+				and spu.product_name like '%${productName}%'
+			</if>
+			<if test="brandGroupCode != null">
+				and spu.brand_sid = #{brandGroupCode,jdbcType=VARCHAR}
+			</if>
+			<if test="brandGroupName != brandGroupCode">
+				and spu.brand_name like '%${brandGroupName}%'
+			</if>
+			<if test="spuSale != null">
+				and spu.pro_selling = #{spuSale,jdbcType=INTEGER}
+			</if>
+			<if test="category != null">
+				and cate.category_sid = #{category,jdbcType=VARCHAR}
+			</if>
+			<if test="seasonCode != null">
+				and psd.season_code = #{seasonCode,jdbcType=VARCHAR}
+			</if>
+			<if test="season != null">
+				and psd.season = #{season,jdbcType=VARCHAR}
+			</if>
+			<if test="onMarketDate != null">
+				and spu.year_to_market = #{onMarketDate,jdbcType=VARCHAR}
+			</if>
+			<!-- <if test="proDesc != null"> -->
+			<!-- and ppd.content = #{proDesc} -->
+			<!-- </if> -->
+			<if test="activityFlg != null">
+				and spu.activity_flg = #{activityFlg,jdbcType=INTEGER}
+			</if>
+			<if test="proPicture != null">
+				and spu.pro_picture = #{proPicture,jdbcType=VARCHAR}
+			</if>
+			<if test="sexSid != null">
+				and spu.sex_sid = #{sexSid,jdbcType=INTEGER}
+			</if>
+			<if test="awesome != null">
+				and spu.awesome >= #{awesome,jdbcType=BIGINT}
+			</if>
+			<if test="proSellingTime != null">
+				and spu.pro_selling_time =
+				#{proSellingTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="shortDes != null">
+				and spu.short_des like '%${shortDes}%'
+			</if>
+			<if test="editFlag != null">
+				and spu.edit_flag = #{editFlag,jdbcType=INTEGER}
+			</if>
+			<if test="specialDes != null">
+				and spu.special_des like '%${specialDes}%'
+			</if>
+			<if test="proActiveBit != null">
+				and spu.pro_active_bit = #{proActiveBit,jdbcType=INTEGER}
+			</if>
+			<if test="primaryAttr != null">
+				and primary_attr = #{primaryAttr,jdbcType=VARCHAR}
+			</if>
+			<if test="industryCondition != null">
+				and industry_condition =
+				#{industryCondition,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+	<select id="selectProductPageByPara" resultMap="SpuResultMap"
+		parameterType="com.wangfj.product.maindata.domain.vo.SpuPageDto">
+		select
+		spu.sid as sid,
+		spu.product_sid,
+		spu.product_sku,
+		spu.product_name,
+		spu.brand_sid,
+		spu.brand_name,
+		spu.pro_selling,
+		cate.category_sid,
+		cate.name as category_name,
+		psd.season_code,
+		psd.season,
+		spu.year_to_market,
+		spu.activity_flg,
+		spu.pro_picture,
+		spu.sex_sid,
+		spu.awesome,
+		spu.pro_selling_time,
+		spu.long_desc,
+		spu.short_des,
+		spu.edit_flag,
+		spu.special_des,
+		spu.pro_active_bit,
+		spu.primary_attr,
+		spu.industry_condition
+		from
+		pcm_product spu
+		join
+		pcm_product_category ppc on ppc.product_sid=spu.sid
+		join
+		pcm_category
+		cate on cate.sid = ppc.category_sid
+		and
+		cate.category_type=0 and
+		cate.is_leaf='Y' and cate.status='Y' and
+		cate.is_display = 1
+		left join
+		pcm_season_dict psd on
+		psd.sid=spu.season_code
+		<!-- left join -->
+		<!-- pcm_product_desc ppd on -->
+		<!-- spu.pro_desc_sid=ppd.sid -->
+		<where>
+			1=1
+			<if test="sid != null">
+				and spu.sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="spuCode != null">
+				and spu.product_sid = #{spuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="modelCode != null">
+				and spu.product_sku = #{modelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="productName != null">
+				and spu.product_name like '%${productName}%'
+			</if>
+			<if test="brandGroupCode != null">
+				and spu.brand_sid = #{brandGroupCode,jdbcType=VARCHAR}
+			</if>
+			<if test="brandGroupName != brandGroupCode">
+				and spu.brand_name like '%${brandGroupName}%'
+			</if>
+			<if test="spuSale != null">
+				and spu.pro_selling = #{spuSale,jdbcType=INTEGER}
+			</if>
+			<if test="category != null">
+				and cate.category_sid = #{category,jdbcType=VARCHAR}
+			</if>
+			<if test="seasonCode != null">
+				and psd.season_code = #{seasonCode,jdbcType=VARCHAR}
+			</if>
+			<if test="season != null">
+				and psd.season = #{season,jdbcType=VARCHAR}
+			</if>
+			<if test="onMarketDate != null">
+				and spu.year_to_market = #{onMarketDate,jdbcType=VARCHAR}
+			</if>
+			<!-- <if test="proDesc != null"> -->
+			<!-- and ppd.content = #{proDesc} -->
+			<!-- </if> -->
+			<if test="activityFlg != null">
+				and spu.activity_flg = #{activityFlg,jdbcType=INTEGER}
+			</if>
+			<if test="proPicture != null">
+				and spu.pro_picture = #{proPicture,jdbcType=VARCHAR}
+			</if>
+			<if test="sexSid != null">
+				and spu.sex_sid = #{sexSid,jdbcType=INTEGER}
+			</if>
+			<if test="awesome != null">
+				and spu.awesome >= #{awesome,jdbcType=BIGINT}
+			</if>
+			<if test="proSellingTime != null">
+				and spu.pro_selling_time =
+				#{proSellingTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="shortDes != null">
+				and spu.short_des like '%${shortDes}%'
+			</if>
+			<if test="editFlag != null">
+				and spu.edit_flag = #{editFlag,jdbcType=INTEGER}
+			</if>
+			<if test="specialDes != null">
+				and spu.special_des like '%${specialDes}%'
+			</if>
+			<if test="proActiveBit != null">
+				and spu.pro_active_bit = #{proActiveBit,jdbcType=INTEGER}
+			</if>
+			<if test="primaryAttr != null">
+				and primary_attr = #{primaryAttr,jdbcType=VARCHAR}
+			</if>
+			<if test="industryCondition != null">
+				and industry_condition =
+				#{industryCondition,jdbcType=INTEGER}
+			</if>
+		</where>
+		order by
+		spu.sid desc
+		<if test="limit !=null">
+			limit
+			<if test="start !=null">
+				#{start}
+			</if>
+			<if test="start ==null">
+				0
+			</if>
+			,#{limit}
+		</if>
+	</select>
+	<!-- SPU 下发 -->
+	<select id="selectProductPageByPara2" resultMap="SpuResultMap"
+		parameterType="com.wangfj.product.maindata.domain.vo.SpuPageDto">
+		select
+		spu.sid as sid,
+		spu.product_sid,
+		spu.product_sku,
+		spu.product_name,
+		spu.brand_sid,
+		spu.brand_name,
+		spu.pro_selling,
+		cate.category_code as category_sid,
+		cate.name as category_name,
+		psd.season_code,
+		psd.season,
+		spu.year_to_market,
+		spu.activity_flg,
+		spu.pro_picture,
+		spu.sex_sid,
+		spu.awesome,
+		spu.pro_selling_time,
+		spu.long_desc,
+		spu.short_des,
+		spu.edit_flag,
+		spu.special_des,
+		spu.pro_active_bit,
+		spu.primary_attr,
+		spu.industry_condition
+		from
+		pcm_product spu
+		join
+		pcm_product_category ppc on ppc.product_sid=spu.sid
+		join
+		pcm_category
+		cate on cate.sid = ppc.category_sid
+		and
+		cate.category_type=0 and
+		cate.is_leaf='Y' and cate.status='Y' and
+		cate.is_display = 1
+		left join
+		pcm_season_dict psd on
+		psd.sid=spu.season_code
+		<!-- left join -->
+		<!-- pcm_product_desc ppd on -->
+		<!-- spu.pro_desc_sid=ppd.sid -->
+		<where>
+			1=1
+			<if test="sidList != null">
+				and spu.sid in
+				<foreach collection="sidList" item="itemSid" index="index"
+					open="(" close=")" separator=",">
+					#{itemSid,jdbcType=VARCHAR}
+				</foreach>
+			</if>
+			<if test="sid != null">
+				and spu.sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="spuCode != null">
+				and spu.product_sid = #{spuCode,jdbcType=VARCHAR}
+			</if>
+			<if test="modelCode != null">
+				and spu.product_sku = #{modelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="productName != null">
+				and spu.product_name like '%${productName}%'
+			</if>
+			<if test="brandGroupCode != null">
+				and spu.brand_sid = #{brandGroupCode,jdbcType=VARCHAR}
+			</if>
+			<if test="brandGroupName != brandGroupCode">
+				and spu.brand_name like '%${brandGroupName}%'
+			</if>
+			<if test="spuSale != null">
+				and spu.pro_selling = #{spuSale,jdbcType=INTEGER}
+			</if>
+			<if test="category != null">
+				and cate.category_sid = #{category,jdbcType=VARCHAR}
+			</if>
+			<if test="seasonCode != null">
+				and psd.season_code = #{seasonCode,jdbcType=VARCHAR}
+			</if>
+			<if test="season != null">
+				and psd.season = #{season,jdbcType=VARCHAR}
+			</if>
+			<if test="onMarketDate != null">
+				and spu.year_to_market = #{onMarketDate,jdbcType=VARCHAR}
+			</if>
+			<!-- <if test="proDesc != null"> -->
+			<!-- and ppd.content = #{proDesc} -->
+			<!-- </if> -->
+			<if test="activityFlg != null">
+				and spu.activity_flg = #{activityFlg,jdbcType=INTEGER}
+			</if>
+			<if test="proPicture != null">
+				and spu.pro_picture = #{proPicture,jdbcType=VARCHAR}
+			</if>
+			<if test="sexSid != null">
+				and spu.sex_sid = #{sexSid,jdbcType=INTEGER}
+			</if>
+			<if test="awesome != null">
+				and spu.awesome >= #{awesome,jdbcType=BIGINT}
+			</if>
+			<if test="proSellingTime != null">
+				and spu.pro_selling_time =
+				#{proSellingTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="shortDes != null">
+				and spu.short_des like '%${shortDes}%'
+			</if>
+			<if test="editFlag != null">
+				and spu.edit_flag = #{editFlag,jdbcType=INTEGER}
+			</if>
+			<if test="specialDes != null">
+				and spu.special_des like '%${specialDes}%'
+			</if>
+			<if test="proActiveBit != null">
+				and spu.pro_active_bit = #{proActiveBit,jdbcType=INTEGER}
+			</if>
+			<if test="primaryAttr != null">
+				and primary_attr = #{primaryAttr,jdbcType=VARCHAR}
+			</if>
+			<if test="industryCondition != null">
+				and industry_condition =
+				#{industryCondition,jdbcType=INTEGER}
+			</if>
+		</where>
+		order by
+		spu.sid desc
+		<if test="limit !=null">
+			limit
+			<if test="start !=null">
+				#{start}
+			</if>
+			<if test="start ==null">
+				0
+			</if>
+			,#{limit}
+		</if>
+	</select>
+	
+	<select id="supPublishFj" resultMap="SpuResultMap"
+		parameterType="Map">
+		select
+		spu.sid as sid,
+		spu.product_sid,
+		spu.product_sku,
+		spu.product_name,
+		spu.brand_sid,
+		spu.brand_name,
+		spu.pro_selling,
+		cate.category_code as category_sid,
+		cate.name as category_name,
+		psd.season_code,
+		psd.season,
+		spu.year_to_market,
+		spu.activity_flg,
+		spu.pro_picture,
+		spu.sex_sid,
+		spu.awesome,
+		spu.pro_selling_time,
+		spu.long_desc,
+		spu.short_des,
+		spu.edit_flag,
+		spu.special_des,
+		spu.pro_active_bit,
+		spu.primary_attr,
+		spu.industry_condition
+		from
+		pcm_product spu
+		join
+		pcm_product_category ppc on ppc.product_sid=spu.sid
+		join
+		pcm_category
+		cate on cate.sid = ppc.category_sid
+		and
+		cate.category_type=0 and
+		cate.is_leaf='Y' and cate.status='Y' and
+		cate.is_display = 1
+		left join
+		pcm_season_dict psd on
+		psd.sid=spu.season_code
+		<where>
+			1=1
+			<if test="sidList != null">
+				and spu.sid in
+				<foreach collection="sidList" item="itemSid" index="index"
+					open="(" close=")" separator=",">
+					#{itemSid,jdbcType=VARCHAR}
+				</foreach>
+			</if>
+		</where>
+		<if test="num != null">
+			limit #{num}
+		</if>
+	</select>
+	
+	
+	<!-- 根据末级节点查询spu商品 -->
+	<select id="selectSpuByIsLeaf" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.category.domain.vo.SelectCategoryParamDto">
+		SELECT
+		pp.*
+		FROM
+		pcm_product AS pp,
+		pcm_category c,
+		pcm_product_category pc
+		WHERE
+		pp.sid = pc.product_sid
+		AND pc.category_sid
+		= c.sid
+		AND c.is_leaf = 'Y'
+		AND c.sid = #{sid,jdbcType=BIGINT}
+		order by
+		c.sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+	<!-- 根据末级节点查询spu商品条数 -->
+	<select id="selectSpuCountByIsLeaf" resultType="java.lang.Integer"
+		parameterType="com.wangfj.product.category.domain.vo.SelectCategoryParamDto">
+		SELECT
+		count(1)
+		FROM
+		pcm_product AS pp,
+		pcm_category c,
+		pcm_product_category pc
+		WHERE
+		pp.sid = pc.product_sid
+		AND pc.category_sid
+		= c.sid
+		AND c.is_leaf = 'Y'
+		AND c.sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<select id="searchSpu"
+		parameterType="com.wangfj.product.maindata.domain.vo.PcmSearchSpuDto"
+		resultType="java.util.Map">
+		select
+		spu.product_sid as spuCode,
+		spu.product_name as
+		productName,
+		spu.product_sku as model,
+		spu.product_name_alias as
+		aliases,
+		cate.category_sid as factoryCategoryCode
+		from pcm_product as
+		spu
+		join
+		pcm_product_category ppc on ppc.product_sid=spu.sid
+		join
+		pcm_category
+		cate on cate.sid = ppc.category_sid
+		and
+		cate.category_type=0 and
+		cate.is_leaf='Y' and cate.status='Y' and
+		cate.is_display = 1
+		where
+		spu.product_sid =
+		#{spuCode,jdbcType=VARCHAR}
+	</select>
+	<select id="selectSpuByCodeForSearch" parameterType="java.lang.String"
+		resultMap="SpuSearchResultMap">
+		select
+		spu.product_sid as spuId,
+		spu.product_name as spuName,
+ 		spu.long_desc AS longDesc,
+ 		spu.short_des AS shortDesc,
+		spu.product_sku as model,
+		spu.brand_sid as brandId,
+		ifNull(spu.activity_flg,1) as activeBit,
+		if(spu.pro_selling=0,'false','true') as onSell,
+		if(spu.product_name_alias='',null,spu.product_name_alias) as aliases,
+		spu.long_desc as pageDescription,
+		spu.pro_selling_time as onSellSince,
+		cateTemp.categoryId as categoryId,
+		tagTemp.tagId as tagId,
+		tagTemp.tag
+		as tag,
+		ppp.propertyId as propertyId,
+		ppp.propertyName as propertyName,
+		ppp.enumProperty as enumProperty,
+		ppp.propertyValueId as
+		propertyValueId,
+		ppp.propertyValue as propertyValue,
+		ppp.categoryId2 as
+		categoryId2
+		from
+		pcm_product as spu
+		left join
+		(SELECT
+		ppp.product_sid AS
+		spuSid,
+		cate.category_sid AS categoryId
+		FROM
+		pcm_product_parameters as
+		ppp
+		JOIN pcm_category cate ON ppp.category_sid = cate.sid
+		AND
+		cate.category_type = 3
+		AND cate.is_leaf = 'Y'
+		AND cate. STATUS = 'Y'
+		AND
+		cate.is_display = 1) as cateTemp
+		on cateTemp.spuSid=spu.sid
+		left join
+		(select
+		ppt.product_sid as spuSid,
+		tag.tag_code as tagId,
+		tag.tag_name as
+		tag
+		from
+		pcm_product_tag ppt
+		join
+		pcm_tag tag on tag.sid=ppt.tag_sid
+		and
+		tag.status=0
+		where
+		ppt.flag=0) as tagTemp
+		on tagTemp.spuSid=spu.sid
+		left
+		join
+		(select
+		p1.product_sid,
+		p1.category_sid as categoryId2,
+		p1.prop_sid
+		as propertyId,
+		p1.prop_name as propertyName,
+		if(pcpd.is_enum_prop=0,'true','false') as enumProperty,
+		p1.value_sid as
+		propertyValueId,
+		p1.value_name as propertyValue
+		from
+		pcm_product_parameters p1
+		join
+		pcm_category_props_dict pcpd on
+		p1.prop_sid=pcpd.sid
+		join
+		pcm_category as cate_1 on cate_1.sid =
+		p1.category_sid and cate_1.status='Y' and
+		cate_1.is_display = 1
+		where
+		p1.category_type=3
+		) ppp
+		on ppp.product_sid = spu.sid
+		<where>
+			1=1
+			AND spu.pro_selling = 1
+			<if test="code != null">and spu.product_sid = #{code}</if>
+			<if test="sidList != null">
+				and spu.sid in
+				<foreach collection="sidList" item="itemSid" index="index"
+					open="(" close=")" separator=",">
+					#{itemSid,jdbcType=VARCHAR}
+				</foreach>
+			</if>
+		</where>
+	</select>
+
+	<select id="selectSpuByCateAndBrand" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT
+		ppr.product_sid,
+		ppr.brand_root_sid,
+		pc1.category_sid
+		FROM
+		pcm_product ppr
+		LEFT JOIN (
+		SELECT
+		cate1.*, ppc1.product_sid
+		FROM
+		pcm_category cate1
+		JOIN pcm_product_category ppc1 ON cate1.sid =
+		ppc1.category_sid
+		AND cate1.category_type = 0
+		AND cate1.is_leaf = 'Y'
+		AND cate1. STATUS = 'Y'
+		) pc1 ON pc1.product_sid = ppr.sid
+		WHERE
+		ppr.brand_sid = #{brandRootSid,jdbcType=VARCHAR}
+		AND pc1.category_sid =
+		#{categorySid,jdbcType=VARCHAR}
+		AND ppr.pro_selling = 1
+	</select>
+	<select id="judgeproductRepeat" parameterType="Map" resultType="Map">
+		SELECT
+			spu.product_sid,
+			count(1)
+		FROM
+			pcm_product AS spu
+		GROUP BY
+			spu.brand_root_sid
+			<if test="industryCondition == 0 || industryCondition == 2">
+				,spu.product_sku
+			</if>
+			<if test="industryCondition == 1">
+				,spu.primary_attr
+			</if>
+		HAVING
+			count(1) > 1
+	</select>
+</mapper>

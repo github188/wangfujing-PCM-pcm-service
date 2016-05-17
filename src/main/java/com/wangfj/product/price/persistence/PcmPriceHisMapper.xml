@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.price.persistence.PcmPriceHisMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.price.domain.entity.PcmPriceHis">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="shoppe_pro_sid" property="shoppeProSid"
+			jdbcType="VARCHAR" />
+		<result column="promotion_price" property="promotionPrice"
+			jdbcType="DECIMAL" />
+		<result column="current_price" property="currentPrice"
+			jdbcType="DECIMAL" />
+		<result column="original_price" property="originalPrice"
+			jdbcType="DECIMAL" />
+		<result column="off_value" property="offValue" jdbcType="DECIMAL" />
+		<result column="promotion_begin_time" property="promotionBeginTime"
+			jdbcType="TIMESTAMP" />
+		<result column="promotion_end_time" property="promotionEndTime"
+			jdbcType="TIMESTAMP" />
+		<result column="product_sid" property="productSid" jdbcType="BIGINT" />
+		<result column="promotion_backup" property="promotionBackup"
+			jdbcType="DECIMAL" />
+		<result column="channel_sid" property="channelSid" jdbcType="INTEGER" />
+		<result column="unit" property="unit" jdbcType="VARCHAR" />
+		<result column="price_channel" property="priceChannel"
+			jdbcType="VARCHAR" />
+		<result column="promotion_no" property="promotionNo" jdbcType="INTEGER" />
+		<result column="price_type" property="priceType" jdbcType="INTEGER" />
+		<result column="system_time" property="systemTime" jdbcType="TIMESTAMP" />
+		<result column="ifdel" property="ifdel" jdbcType="INTEGER" />
+		<result column="attribute1" property="attribute1" jdbcType="VARCHAR" />
+		<result column="attribute2" property="attribute2" jdbcType="VARCHAR" />
+		<result column="attribute3" property="attribute3" jdbcType="VARCHAR" />
+		<result column="attribute4" property="attribute4" jdbcType="VARCHAR" />
+		<result column="attribute5" property="attribute5" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, shoppe_pro_sid, promotion_price, current_price,
+		original_price,
+		off_value, promotion_begin_time,
+		promotion_end_time,
+		product_sid, promotion_backup, channel_sid, unit, price_channel,
+		promotion_no, price_type, system_time, ifdel, attribute1, attribute2,
+		attribute3,
+		attribute4, attribute5
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_price_his
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_price_his
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.wangfj.product.price.domain.entity.PcmPriceHis">
+		insert into pcm_price_his
+		(sid, shoppe_pro_sid, promotion_price,
+		current_price, original_price,
+		off_value,
+		promotion_begin_time, promotion_end_time,
+		product_sid,
+		promotion_backup, channel_sid,
+		unit, price_channel, promotion_no,
+		price_type, system_time, ifdel,
+		attribute1, attribute2, attribute3,
+		attribute4, attribute5)
+		values (#{sid,jdbcType=BIGINT},
+		#{shoppeProSid,jdbcType=VARCHAR},
+		#{promotionPrice,jdbcType=DECIMAL},
+		#{currentPrice,jdbcType=DECIMAL}, #{originalPrice,jdbcType=DECIMAL},
+		#{offValue,jdbcType=DECIMAL},
+		#{promotionBeginTime,jdbcType=TIMESTAMP},
+		#{promotionEndTime,jdbcType=TIMESTAMP},
+		#{productSid,jdbcType=BIGINT},
+		#{promotionBackup,jdbcType=DECIMAL}, #{channelSid,jdbcType=INTEGER},
+		#{unit,jdbcType=VARCHAR}, #{priceChannel,jdbcType=VARCHAR},
+		#{promotionNo,jdbcType=INTEGER},
+		#{priceType,jdbcType=INTEGER},
+		#{systemTime,jdbcType=TIMESTAMP}, #{ifdel,jdbcType=INTEGER},
+		#{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR},
+		#{attribute3,jdbcType=VARCHAR},
+		#{attribute4,jdbcType=VARCHAR},
+		#{attribute5,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.wangfj.product.price.domain.entity.PcmPrice">
+		insert into pcm_price_his
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid,
+			</if>
+			<if test="promotionPrice != null">
+				promotion_price,
+			</if>
+			<if test="currentPrice != null">
+				current_price,
+			</if>
+			<if test="originalPrice != null">
+				original_price,
+			</if>
+			<if test="offValue != null">
+				off_value,
+			</if>
+			<if test="promotionBeginTime != null">
+				promotion_begin_time,
+			</if>
+			<if test="promotionEndTime != null">
+				promotion_end_time,
+			</if>
+			<if test="productSid != null">
+				product_sid,
+			</if>
+			<if test="promotionBackup != null">
+				promotion_backup,
+			</if>
+			<if test="channelSid != null">
+				channel_sid,
+			</if>
+			<if test="unit != null">
+				unit,
+			</if>
+			<if test="priceChannel != null">
+				price_channel,
+			</if>
+			<if test="promotionNo != null">
+				promotion_no,
+			</if>
+			<if test="priceType != null">
+				price_type,
+			</if>
+			<if test="systemTime != null">
+				system_time,
+			</if>
+			<if test="ifdel != null">
+				ifdel,
+			</if>
+			<if test="attribute1 != null">
+				attribute1,
+			</if>
+			<if test="attribute2 != null">
+				attribute2,
+			</if>
+			<if test="attribute3 != null">
+				attribute3,
+			</if>
+			<if test="attribute4 != null">
+				attribute4,
+			</if>
+			<if test="attribute5 != null">
+				attribute5,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="shoppeProSid != null">
+				#{shoppeProSid,jdbcType=VARCHAR},
+			</if>
+			<if test="promotionPrice != null">
+				#{promotionPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="currentPrice != null">
+				#{currentPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="originalPrice != null">
+				#{originalPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="offValue != null">
+				#{offValue,jdbcType=DECIMAL},
+			</if>
+			<if test="promotionBeginTime != null">
+				#{promotionBeginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="promotionEndTime != null">
+				#{promotionEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="productSid != null">
+				#{productSid,jdbcType=BIGINT},
+			</if>
+			<if test="promotionBackup != null">
+				#{promotionBackup,jdbcType=DECIMAL},
+			</if>
+			<if test="channelSid != null">
+				#{channelSid,jdbcType=INTEGER},
+			</if>
+			<if test="unit != null">
+				#{unit,jdbcType=VARCHAR},
+			</if>
+			<if test="priceChannel != null">
+				#{priceChannel,jdbcType=VARCHAR},
+			</if>
+			<if test="promotionNo != null">
+				#{promotionNo,jdbcType=INTEGER},
+			</if>
+			<if test="priceType != null">
+				#{priceType,jdbcType=INTEGER},
+			</if>
+			<if test="systemTime != null">
+				#{systemTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="ifdel != null">
+				#{ifdel,jdbcType=INTEGER},
+			</if>
+			<if test="attribute1 != null">
+				#{attribute1,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute2 != null">
+				#{attribute2,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute3 != null">
+				#{attribute3,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute4 != null">
+				#{attribute4,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute5 != null">
+				#{attribute5,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.price.domain.entity.PcmPriceHis">
+		update pcm_price_his
+		<set>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR},
+			</if>
+			<if test="promotionPrice != null">
+				promotion_price = #{promotionPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="currentPrice != null">
+				current_price = #{currentPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="originalPrice != null">
+				original_price = #{originalPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="offValue != null">
+				off_value = #{offValue,jdbcType=DECIMAL},
+			</if>
+			<if test="promotionBeginTime != null">
+				promotion_begin_time =
+				#{promotionBeginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="promotionEndTime != null">
+				promotion_end_time =
+				#{promotionEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="productSid != null">
+				product_sid = #{productSid,jdbcType=BIGINT},
+			</if>
+			<if test="promotionBackup != null">
+				promotion_backup = #{promotionBackup,jdbcType=DECIMAL},
+			</if>
+			<if test="channelSid != null">
+				channel_sid = #{channelSid,jdbcType=INTEGER},
+			</if>
+			<if test="unit != null">
+				unit = #{unit,jdbcType=VARCHAR},
+			</if>
+			<if test="priceChannel != null">
+				price_channel = #{priceChannel,jdbcType=VARCHAR},
+			</if>
+			<if test="promotionNo != null">
+				promotion_no = #{promotionNo,jdbcType=INTEGER},
+			</if>
+			<if test="priceType != null">
+				price_type = #{priceType,jdbcType=INTEGER},
+			</if>
+			<if test="systemTime != null">
+				system_time = #{systemTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="ifdel != null">
+				ifdel = #{ifdel,jdbcType=INTEGER},
+			</if>
+			<if test="attribute1 != null">
+				attribute1 = #{attribute1,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute2 != null">
+				attribute2 = #{attribute2,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute3 != null">
+				attribute3 = #{attribute3,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute4 != null">
+				attribute4 = #{attribute4,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute5 != null">
+				attribute5 = #{attribute5,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.wangfj.product.price.domain.entity.PcmPriceHis">
+		update
+		pcm_price_his
+		set shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR},
+		promotion_price = #{promotionPrice,jdbcType=DECIMAL},
+		current_price =
+		#{currentPrice,jdbcType=DECIMAL},
+		original_price =
+		#{originalPrice,jdbcType=DECIMAL},
+		off_value =
+		#{offValue,jdbcType=DECIMAL},
+		promotion_begin_time =
+		#{promotionBeginTime,jdbcType=TIMESTAMP},
+		promotion_end_time =
+		#{promotionEndTime,jdbcType=TIMESTAMP},
+		product_sid =
+		#{productSid,jdbcType=BIGINT},
+		promotion_backup =
+		#{promotionBackup,jdbcType=DECIMAL},
+		channel_sid =
+		#{channelSid,jdbcType=INTEGER},
+		unit = #{unit,jdbcType=VARCHAR},
+		price_channel = #{priceChannel,jdbcType=VARCHAR},
+		promotion_no =
+		#{promotionNo,jdbcType=INTEGER},
+		price_type =
+		#{priceType,jdbcType=INTEGER},
+		system_time =
+		#{systemTime,jdbcType=TIMESTAMP},
+		ifdel = #{ifdel,jdbcType=INTEGER},
+		attribute1 = #{attribute1,jdbcType=VARCHAR},
+		attribute2 =
+		#{attribute2,jdbcType=VARCHAR},
+		attribute3 =
+		#{attribute3,jdbcType=VARCHAR},
+		attribute4 =
+		#{attribute4,jdbcType=VARCHAR},
+		attribute5 =
+		#{attribute5,jdbcType=VARCHAR}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+</mapper>

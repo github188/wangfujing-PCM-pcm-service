@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.category.persistence.PcmCategoryMqMapper" >
+  <resultMap id="BaseResultMap" type="com.wangfj.product.category.domain.entity.PcmCategoryMq" >
+    <id column="sid" property="sid" jdbcType="BIGINT" />
+    <result column="msg_context" property="msgContext" jdbcType="VARCHAR" />
+    <result column="msg_total_num" property="msgTotalNum" jdbcType="VARCHAR" />
+    <result column="msg_sequence" property="msgSequence" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.wangfj.product.category.domain.entity.PcmCategoryMq" extends="BaseResultMap" >
+    <result column="item" property="item" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sid, msg_context, msg_total_num, msg_sequence, flag
+  </sql>
+  <sql id="Blob_Column_List" >
+    item
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from pcm_category_mq
+    where sid = #{sid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pcm_category_mq
+    where sid = #{sid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangfj.product.category.domain.entity.PcmCategoryMq" >
+    insert into pcm_category_mq (sid, msg_context, msg_total_num, 
+      msg_sequence, flag, item
+      )
+    values (#{sid,jdbcType=BIGINT}, #{msgContext,jdbcType=VARCHAR}, #{msgTotalNum,jdbcType=VARCHAR}, 
+      #{msgSequence,jdbcType=VARCHAR}, #{flag,jdbcType=INTEGER}, #{item,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangfj.product.category.domain.entity.PcmCategoryMq" >
+    insert into pcm_category_mq
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="msgContext != null" >
+        msg_context,
+      </if>
+      <if test="msgTotalNum != null" >
+        msg_total_num,
+      </if>
+      <if test="msgSequence != null" >
+        msg_sequence,
+      </if>
+      <if test="flag != null" >
+        flag,
+      </if>
+      <if test="item != null" >
+        item,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        #{sid,jdbcType=BIGINT},
+      </if>
+      <if test="msgContext != null" >
+        #{msgContext,jdbcType=VARCHAR},
+      </if>
+      <if test="msgTotalNum != null" >
+        #{msgTotalNum,jdbcType=VARCHAR},
+      </if>
+      <if test="msgSequence != null" >
+        #{msgSequence,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="item != null" >
+        #{item,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.category.domain.entity.PcmCategoryMq" >
+    update pcm_category_mq
+    <set >
+      <if test="msgContext != null" >
+        msg_context = #{msgContext,jdbcType=VARCHAR},
+      </if>
+      <if test="msgTotalNum != null" >
+        msg_total_num = #{msgTotalNum,jdbcType=VARCHAR},
+      </if>
+      <if test="msgSequence != null" >
+        msg_sequence = #{msgSequence,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        flag = #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="item != null" >
+        item = #{item,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateSelective" parameterType="com.wangfj.product.category.domain.entity.PcmCategoryMq" >
+    update pcm_category_mq
+    <set >
+      <if test="msgContext != null" >
+        msg_context = #{msgContext,jdbcType=VARCHAR},
+      </if>
+      <if test="msgTotalNum != null" >
+        msg_total_num = #{msgTotalNum,jdbcType=VARCHAR},
+      </if>
+      <if test="msgSequence != null" >
+        msg_sequence = #{msgSequence,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        flag = #{flag,jdbcType=BIGINT},
+      </if>
+      <if test="item != null" >
+        item = #{item,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where msg_context = #{msgContext,jdbcType=BIGINT}
+  </update>
+  
+  
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wangfj.product.category.domain.entity.PcmCategoryMq" >
+    update pcm_category_mq
+    set msg_context = #{msgContext,jdbcType=VARCHAR},
+      msg_total_num = #{msgTotalNum,jdbcType=VARCHAR},
+      msg_sequence = #{msgSequence,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=INTEGER},
+      item = #{item,jdbcType=LONGVARCHAR}
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangfj.product.category.domain.entity.PcmCategoryMq" >
+    update pcm_category_mq
+    set msg_context = #{msgContext,jdbcType=VARCHAR},
+      msg_total_num = #{msgTotalNum,jdbcType=VARCHAR},
+      msg_sequence = #{msgSequence,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=INTEGER}
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  
+   <select id="selectList" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from pcm_category_mq
+    where msg_context = #{msgContext,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmSaleUnitDictMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.maindata.domain.entity.PcmSaleUnitDict">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="unit_code" property="unitCode" jdbcType="VARCHAR" />
+		<result column="unit_name" property="unitName" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, unit_code, unit_name
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_sale_unit_dict
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_sale_unit_dict
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmSaleUnitDict">
+		insert into pcm_sale_unit_dict (sid, unit_code,
+		unit_name
+		)
+		values (#{sid,jdbcType=BIGINT},
+		#{unitCode,jdbcType=VARCHAR},
+		#{unitName,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmSaleUnitDict">
+		insert into pcm_sale_unit_dict
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="unitCode != null">
+				unit_code,
+			</if>
+			<if test="unitName != null">
+				unit_name,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="unitCode != null">
+				#{unitCode,jdbcType=VARCHAR},
+			</if>
+			<if test="unitName != null">
+				#{unitName,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmSaleUnitDict">
+		update pcm_sale_unit_dict
+		<set>
+			<if test="unitCode != null">
+				unit_code = #{unitCode,jdbcType=VARCHAR},
+			</if>
+			<if test="unitName != null">
+				unit_name = #{unitName,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.maindata.domain.entity.PcmSaleUnitDict">
+		update pcm_sale_unit_dict
+		set unit_code =
+		#{unitCode,jdbcType=VARCHAR},
+		unit_name = #{unitName,jdbcType=VARCHAR}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_sale_unit_dict
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="unitCode != null">
+				and unit_code = #{unitCode,jdbcType=VARCHAR}
+			</if>
+			<if test="unitName != null">
+				and unit_name = #{unitName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_sale_unit_dict
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="unitCode != null">
+				and unit_code = #{unitCode,jdbcType=VARCHAR}
+			</if>
+			<if test="unitName != null">
+				and unit_name = #{unitName,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_sale_unit_dict
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="unitCode != null">
+				and unit_code = #{unitCode,jdbcType=VARCHAR}
+			</if>
+			<if test="unitName != null">
+				and unit_name = #{unitName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<!-- selectListByParamForPad移动工作台调用主数据获取单位信息 wangxuan -->
+	<select id="selectListByParamForPad" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_sale_unit_dict
+		<where>
+			<if test="unitCode != null">
+				and unit_code like "%"#{unitCode,jdbcType=VARCHAR}"%"
+			</if>
+		</where>
+	</select>
+
+
+
+
+
+
+
+</mapper>

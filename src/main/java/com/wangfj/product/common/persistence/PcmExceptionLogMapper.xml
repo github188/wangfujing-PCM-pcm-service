@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangfj.product.common.persistence.PcmExceptionLogMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.common.domain.entity.PcmExceptionLog">
+		<id column="SID" jdbcType="BIGINT" property="sid" />
+		<result column="uuid" jdbcType="VARCHAR" property="uuid" />
+		<result column="Interface_Name" jdbcType="VARCHAR" property="interfaceName" />
+		<result column="Exception_Type" jdbcType="VARCHAR" property="exceptionType" />
+		<result column="Create_Time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="ResolveBy" jdbcType="VARCHAR" property="resolveby" />
+		<result column="Process_Status" jdbcType="INTEGER" property="processStatus" />
+		<result column="Update_Time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="Error_Message" jdbcType="LONGVARCHAR" property="errorMessage" />
+		<result column="Data_Content" jdbcType="LONGVARCHAR" property="dataContent" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		SID, uuid,Interface_Name, Exception_Type, Create_Time,
+		ResolveBy,
+		Process_Status, Update_Time,Error_Message, Data_Content
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_exception_log
+		where SID = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_exception_log
+		where SID = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.common.domain.entity.PcmExceptionLog">
+		insert into pcm_exception_log (SID, Interface_Name,
+		Exception_Type,
+		Create_Time, ResolveBy, Process_Status,
+		Update_Time,
+		Error_Message, Data_Content
+		)
+		values (#{sid,jdbcType=BIGINT},
+		#{interfaceName,jdbcType=VARCHAR},
+		#{exceptionType,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}, #{resolveby,jdbcType=VARCHAR},
+		#{processStatus,jdbcType=INTEGER},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{errorMessage,jdbcType=LONGVARCHAR},
+		#{dataContent,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.common.domain.vo.PcmExceptionLogDto">
+		insert into pcm_exception_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="uuid != null">
+				uuid,
+			</if>
+			<if test="interfaceName != null">
+				Interface_Name,
+			</if>
+			<if test="exceptionType != null">
+				Exception_Type,
+			</if>
+			<if test="errorMessage != null">
+				Error_Message,
+			</if>
+			<if test="dataContent != null">
+				Data_Content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="uuid != null">
+				#{uuid,jdbcType=VARCHAR},
+			</if>
+			<if test="interfaceName != null">
+				#{interfaceName,jdbcType=VARCHAR},
+			</if>
+			<if test="exceptionType != null">
+				#{exceptionType,jdbcType=VARCHAR},
+			</if>
+			<if test="errorMessage != null">
+				#{errorMessage,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="dataContent != null">
+				#{dataContent,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.common.domain.entity.PcmExceptionLog">
+		update pcm_exception_log
+		<set>
+			<if test="interfaceName != null">
+				Interface_Name = #{interfaceName,jdbcType=VARCHAR},
+			</if>
+			<if test="exceptionType != null">
+				Exception_Type = #{exceptionType,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				Create_Time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="resolveby != null">
+				ResolveBy = #{resolveby,jdbcType=VARCHAR},
+			</if>
+			<if test="processStatus != null">
+				Process_Status = #{processStatus,jdbcType=INTEGER},
+			</if>
+			<if test="updateTime != null">
+				Update_Time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="errorMessage != null">
+				Error_Message = #{errorMessage,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="dataContent != null">
+				Data_Content = #{dataContent,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where SID = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs"
+		parameterType="com.wangfj.product.common.domain.entity.PcmExceptionLog">
+		update pcm_exception_log
+		set Interface_Name =
+		#{interfaceName,jdbcType=VARCHAR},
+		Exception_Type =
+		#{exceptionType,jdbcType=VARCHAR},
+		Create_Time =
+		#{createTime,jdbcType=TIMESTAMP},
+		ResolveBy =
+		#{resolveby,jdbcType=VARCHAR},
+		Process_Status =
+		#{processStatus,jdbcType=INTEGER},
+		Update_Time =
+		#{updateTime,jdbcType=TIMESTAMP},
+		Error_Message =
+		#{errorMessage,jdbcType=LONGVARCHAR},
+		Data_Content =
+		#{dataContent,jdbcType=LONGVARCHAR}
+		where SID = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.common.domain.entity.PcmExceptionLog">
+		update pcm_exception_log
+		set Interface_Name =
+		#{interfaceName,jdbcType=VARCHAR},
+		Exception_Type =
+		#{exceptionType,jdbcType=VARCHAR},
+		Create_Time =
+		#{createTime,jdbcType=TIMESTAMP},
+		ResolveBy =
+		#{resolveby,jdbcType=VARCHAR},
+		Process_Status =
+		#{processStatus,jdbcType=INTEGER},
+		Update_Time =
+		#{updateTime,jdbcType=TIMESTAMP}
+		where SID = #{sid,jdbcType=BIGINT}
+	</update>
+	<!--分页查询 selectPage-->
+	<select id="selectPage" parameterType="com.wangfj.product.common.domain.vo.PcmExceptionLogDtos"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_exception_log
+		<where>
+			<if test="sid != null">
+				and SID = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="uuid != null">
+				and uuid = #{uuid,jdbcType=VARCHAR}
+			</if>
+			<if test="interfaceName != null">
+				and Interface_Name = #{interfaceName,jdbcType=VARCHAR}
+			</if>
+			<if test="exceptionType != null">
+				and Exception_Type = #{exceptionType,jdbcType=VARCHAR}
+			</if>
+			<if test="createTimes != null">
+				and Create_Time = #{createTimes,jdbcType=TIMESTAMP}
+			</if>
+			<if test="resolveby != null">
+				and ResolveBy = #{resolveby,jdbcType=VARCHAR}
+			</if>
+			<if test="processStatus != null">
+				and Process_Status = #{processStatus,jdbcType=INTEGER}
+			</if>
+			<if test="updateTimes != null">
+				and Update_Time = #{updateTimes,jdbcType=TIMESTAMP}
+			</if>
+			<if test="errorMessage != null">
+				and Error_Message = #{errorMessage,jdbcType=LONGVARCHAR}
+			</if>
+			<if test="dataContent != null">
+				and Data_Content = #{dataContent,jdbcType=LONGVARCHAR}
+			</if>
+			<if test="startTime != null">
+				and Create_Time &gt;
+				#{startTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endTime != null">
+				and Create_Time &lt;
+				#{endTime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+		order by
+		SID desc
+		<if test="start != null and limit != null">
+			limit #{start}, #{limit}
+		</if>
+	</select>
+	<!-- 查询数量 -->
+	<select id="getCountByParam" resultType="java.lang.Long"
+		parameterType="com.wangfj.product.common.domain.vo.PcmExceptionLogDtos">
+		select
+		count(*)
+		from pcm_exception_log
+		<where>
+			<if test="sid != null">
+				and SID = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="uuid != null">
+				and uuid = #{uuid,jdbcType=VARCHAR}
+			</if>
+			<if test="interfaceName != null">
+				and Interface_Name = #{interfaceName,jdbcType=VARCHAR}
+			</if>
+			<if test="exceptionType != null">
+				and Exception_Type = #{exceptionType,jdbcType=VARCHAR}
+			</if>
+			<if test="createTimes != null">
+				and Create_Time = #{createTimes,jdbcType=TIMESTAMP}
+			</if>
+			<if test="resolveby != null">
+				and ResolveBy = #{resolveby,jdbcType=VARCHAR}
+			</if>
+			<if test="processStatus != null">
+				and Process_Status = #{processStatus,jdbcType=INTEGER}
+			</if>
+			<if test="updateTimes != null">
+				and Update_Time = #{updateTimes,jdbcType=TIMESTAMP}
+			</if>
+			<if test="errorMessage != null">
+				and Error_Message = #{errorMessage,jdbcType=LONGVARCHAR}
+			</if>
+			<if test="dataContent != null">
+				and Data_Content = #{dataContent,jdbcType=LONGVARCHAR}
+			</if>
+			<if test="startTime != null">
+				and Create_Time &gt;
+				#{startTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endTime != null">
+				and Create_Time &lt;
+				#{endTime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+</mapper>

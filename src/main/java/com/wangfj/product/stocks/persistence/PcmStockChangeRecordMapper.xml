@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.wangfj.product.stocks.persistence.PcmStockChangeRecordMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.stocks.domain.entity.PcmStockChangeRecord">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="bills_no" property="billsNo" jdbcType="VARCHAR" />
+		<result column="shoppe_pro_sid" property="shoppeProSid"
+			jdbcType="VARCHAR" />
+		<result column="stock_sid" property="stockSid" jdbcType="BIGINT" />
+		<result column="change_sum" property="changeSum" jdbcType="BIGINT" />
+		<result column="change_type_sid" property="changeTypeSid"
+			jdbcType="INTEGER" />
+		<result column="change_time" property="changeTime" jdbcType="TIMESTAMP" />
+		<result column="note" property="note" jdbcType="VARCHAR" />
+		<result column="pro_sum" property="proSum" jdbcType="BIGINT" />
+		<result column="field1" property="field1" jdbcType="VARCHAR" />
+		<result column="field2" property="field2" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="StockChangeRecordHisResultMap"
+		type="com.wangfj.product.stocks.domain.vo.PcmStockChangeRecordHisDto">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="bills_no" property="billsNo" jdbcType="VARCHAR" />
+		<result column="shoppe_pro_sid" property="shoppeProSid"
+			jdbcType="VARCHAR" />
+		<result column="stock_sid" property="stockSid" jdbcType="BIGINT" />
+		<result column="change_sum" property="changeSum" jdbcType="BIGINT" />
+		<result column="change_type_sid" property="changeTypeSid"
+			jdbcType="INTEGER" />
+		<result column="change_time" property="changeTime" jdbcType="VARCHAR" />
+		<result column="note" property="note" jdbcType="VARCHAR" />
+		<result column="pro_sum" property="proSum" jdbcType="BIGINT" />
+		<result column="field1" property="field1" jdbcType="VARCHAR" />
+		<result column="field2" property="field2" jdbcType="VARCHAR" />
+		<result column="channel_sid" property="channelSid" jdbcType="VARCHAR" />
+		<result column="channel_name" property="channelName" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, bills_no, shoppe_pro_sid, stock_sid, change_sum,
+		change_type_sid,
+		change_time,
+		note,pro_sum,field1,field2
+	</sql>
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_stock_change_record
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_stock_change_record
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.stocks.domain.entity.PcmStockChangeRecord">
+		insert into pcm_stock_change_record (sid, bills_no,
+		shoppe_pro_sid,
+		stock_sid, change_sum, change_type_sid,
+		change_time,
+		note)
+		values (#{sid,jdbcType=BIGINT}, #{billsNo,jdbcType=VARCHAR},
+		#{shoppeProSid,jdbcType=VARCHAR},
+		#{stockSid,jdbcType=BIGINT},
+		#{changeSum,jdbcType=BIGINT}, #{changeTypeSid,jdbcType=INTEGER},
+		#{changeTime,jdbcType=TIMESTAMP}, #{note,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.stocks.domain.entity.PcmStockChangeRecord"
+		useGeneratedKeys="true" keyProperty="sid">
+		insert into pcm_stock_change_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="billsNo != null">
+				bills_no,
+			</if>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid,
+			</if>
+			<if test="stockSid != null">
+				stock_sid,
+			</if>
+			<if test="changeSum != null">
+				change_sum,
+			</if>
+			<if test="changeTypeSid != null">
+				change_type_sid,
+			</if>
+			<if test="changeTime != null">
+				change_time,
+			</if>
+			<if test="note != null">
+				note,
+			</if>
+			<if test="proSum != null">
+				pro_sum,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="billsNo != null">
+				#{billsNo,jdbcType=VARCHAR},
+			</if>
+			<if test="shoppeProSid != null">
+				#{shoppeProSid,jdbcType=VARCHAR},
+			</if>
+			<if test="stockSid != null">
+				#{stockSid,jdbcType=BIGINT},
+			</if>
+			<if test="changeSum != null">
+				#{changeSum,jdbcType=BIGINT},
+			</if>
+			<if test="changeTypeSid != null">
+				#{changeTypeSid,jdbcType=INTEGER},
+			</if>
+			<if test="changeTime != null">
+				#{changeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="note != null">
+				#{note,jdbcType=VARCHAR},
+			</if>
+			<if test="proSum != null">
+				#{proSum,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.stocks.domain.entity.PcmStockChangeRecord">
+		update pcm_stock_change_record
+		<set>
+			<if test="billsNo != null">
+				bills_no = #{billsNo,jdbcType=VARCHAR},
+			</if>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR},
+			</if>
+			<if test="stockSid != null">
+				stock_sid = #{stockSid,jdbcType=BIGINT},
+			</if>
+			<if test="changeSum != null">
+				change_sum = #{changeSum,jdbcType=BIGINT},
+			</if>
+			<if test="changeTypeSid != null">
+				change_type_sid = #{changeTypeSid,jdbcType=INTEGER},
+			</if>
+			<if test="changeTime != null">
+				change_time = #{changeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="note != null">
+				note = #{note,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.stocks.domain.entity.PcmStockChangeRecord">
+		update pcm_stock_change_record
+		set bills_no =
+		#{billsNo,jdbcType=VARCHAR},
+		shoppe_pro_sid =
+		#{shoppeProSid,jdbcType=VARCHAR},
+		stock_sid =
+		#{stockSid,jdbcType=BIGINT},
+		change_sum = #{changeSum,jdbcType=BIGINT},
+		change_type_sid = #{changeTypeSid,jdbcType=INTEGER},
+		change_time =
+		#{changeTime,jdbcType=TIMESTAMP},
+		note = #{note,jdbcType=VARCHAR}
+		where
+		sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_stock_change_record
+		<where>
+			1=1
+			<if test="billsNo != null">
+				and bills_no = #{billsNo,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+			</if>
+			<if test="stockSid != null">
+				and stock_sid = #{stockSid,jdbcType=BIGINT}
+			</if>
+			<if test="changeSum != null">
+				and change_sum = #{changeSum,jdbcType=BIGINT}
+			</if>
+			<if test="changeTypeSid != null">
+				and change_type_sid = #{changeTypeSid,jdbcType=INTEGER}
+			</if>
+			<if test="changeTime != null">
+				and change_time = #{changeTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="note != null">
+				and note = #{note,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_stock_change_record
+		<where>
+			<if test="billsNo != null">
+				and bills_no = #{billsNo,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+			</if>
+			<if test="stockSid != null">
+				and stock_sid = #{stockSid,jdbcType=BIGINT}
+			</if>
+			<if test="changeSum != null">
+				and change_sum = #{changeSum,jdbcType=BIGINT}
+			</if>
+			<if test="changeTypeSid != null">
+				and change_type_sid = #{changeTypeSid,jdbcType=INTEGER}
+			</if>
+			<if test="changeTime != null">
+				and change_time = #{changeTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="note != null">
+				and note = #{note,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_stock_change_record
+		<where>
+			<if test="billsNo != null">
+				and bills_no = #{billsNo,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+			</if>
+			<if test="stockSid != null">
+				and stock_sid = #{stockSid,jdbcType=BIGINT}
+			</if>
+			<if test="changeSum != null">
+				and change_sum = #{changeSum,jdbcType=BIGINT}
+			</if>
+			<if test="changeTypeSid != null">
+				and change_type_sid = #{changeTypeSid,jdbcType=INTEGER}
+			</if>
+			<if test="changeTime != null">
+				and change_time = #{changeTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="note != null">
+				and note = #{note,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<!-- 查询库位变更历史记录 -->
+	<select id="selectStockChangeHisRecordbyStockType" resultMap="StockChangeRecordHisResultMap"
+		parameterType="com.wangfj.product.stocks.domain.vo.PcmStockChangeRecordHisDto">
+		SELECT pscr.bills_no,
+		pscr.shoppe_pro_sid,
+		change_sum ,
+		pscr.pro_sum,
+		note,
+		change_type_sid,
+		ps.channel_sid,
+		pc.channel_name,
+		DATE_FORMAT(pscr.change_time,'%Y-%m-%d %H:%i:%S') as change_time
+		FROM
+		pcm_stock_change_record pscr
+		INNER JOIN pcm_stock
+		ps ON ps.sid =
+		pscr.stock_sid
+		INNER JOIN pcm_channel pc on
+		pc.channel_code=ps.channel_sid
+		<where>
+			<if test="shoppeProSid != null">
+				and pscr.shoppe_pro_sid =
+				#{shoppeProSid,jdbcType=VARCHAR}
+			</if>
+			<if test="changeTypeSid =='1001'">
+				AND change_type_sid IN ( '1001', '1021','1022', '1023', '1012',
+				'1013')
+			</if>
+			<if test="changeTypeSid !='1001'">
+				AND change_type_sid=#{changeTypeSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid == null">
+				and channel_sid = '0'
+			</if>
+		</where>
+		ORDER BY change_time
+		<if test="start != null">
+			<if test="limit != null">
+				limit
+				#{start}, #{limit}
+			</if>
+		</if>
+	</select>
+	<!-- 查询库位变更历史记录总数 -->
+	<select id="selectStockChangeHisRecordbyStockTypeCount"
+		resultType="java.lang.Integer"
+		parameterType="com.wangfj.product.stocks.domain.vo.PcmStockChangeRecordHisDto">
+		SELECT count(*)
+		FROM
+		pcm_stock_change_record pscr
+		INNER JOIN pcm_stock
+		ps
+		ON ps.sid =
+		pscr.stock_sid
+		INNER JOIN pcm_channel pc on
+		pc.channel_code=ps.channel_sid
+		<where>
+			<if test="shoppeProSid != null">
+				and pscr.shoppe_pro_sid =
+				#{shoppeProSid,jdbcType=VARCHAR}
+			</if>
+			<if test="changeTypeSid =='1001'">
+				AND change_type_sid IN ( '1001', '1022', '1023', '1012',
+				'1013')
+			</if>
+			<if test="changeTypeSid !='1001'">
+				AND change_type_sid=#{changeTypeSid,jdbcType=VARCHAR}
+			</if>
+			<if test="channelSid != null">
+				and channel_sid = #{channelSid}
+			</if>
+			<if test="channelSid == null">
+				and channel_sid = '0'
+			</if>
+		</where>
+		ORDER BY change_time
+	</select>
+</mapper>

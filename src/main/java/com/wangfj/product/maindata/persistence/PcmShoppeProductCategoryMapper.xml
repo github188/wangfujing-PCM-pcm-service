@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmShoppeProductCategoryMapper" >
+  <resultMap id="BaseResultMap" type="com.wangfj.product.maindata.domain.entity.PcmShoppeProductCategory" >
+    <id column="sid" property="sid" jdbcType="BIGINT" />
+    <result column="shoppe_pro_sid" property="shoppeProSid" jdbcType="VARCHAR" />
+    <result column="category_sid" property="categorySid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sid, shoppe_pro_sid, category_sid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from pcm_shoppe_product_category
+    where sid = #{sid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pcm_shoppe_product_category
+    where sid = #{sid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangfj.product.maindata.domain.entity.PcmShoppeProductCategory" >
+    insert into pcm_shoppe_product_category (sid, shoppe_pro_sid, category_sid
+      )
+    values (#{sid,jdbcType=BIGINT}, #{shoppeProSid,jdbcType=VARCHAR}, #{categorySid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmShoppeProductCategory" >
+    insert into pcm_shoppe_product_category
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="shoppeProSid != null" >
+        shoppe_pro_sid,
+      </if>
+      <if test="categorySid != null" >
+        category_sid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        #{sid,jdbcType=BIGINT},
+      </if>
+      <if test="shoppeProSid != null" >
+        #{shoppeProSid,jdbcType=VARCHAR},
+      </if>
+      <if test="categorySid != null" >
+        #{categorySid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmShoppeProductCategory" >
+    update pcm_shoppe_product_category
+    <set >
+      <if test="shoppeProSid != null" >
+        shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR},
+      </if>
+      <if test="categorySid != null" >
+        category_sid = #{categorySid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangfj.product.maindata.domain.entity.PcmShoppeProductCategory" >
+    update pcm_shoppe_product_category
+    set shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR},
+      category_sid = #{categorySid,jdbcType=VARCHAR}
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+</mapper>

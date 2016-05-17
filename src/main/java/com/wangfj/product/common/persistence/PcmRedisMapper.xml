@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.common.persistence.PcmRedisMapper">
+    <resultMap id="BaseResultMap" type="com.wangfj.product.common.domain.entity.PcmRedis">
+        <id column="sid" property="sid" jdbcType="BIGINT"/>
+        <result column="redisfField" property="redisffield" jdbcType="VARCHAR"/>
+        <result column="keyname" property="keyname" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="createTime" property="createtime" jdbcType="TIMESTAMP"/>
+        <result column="filed1" property="filed1" jdbcType="VARCHAR"/>
+        <result column="filed2" property="filed2" jdbcType="VARCHAR"/>
+        <result column="filed3" property="filed3" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.wangfj.product.common.domain.entity.PcmRedis" extends="BaseResultMap">
+        <result column="value" property="value" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        sid, redisfField, keyname, status, createTime, filed1, filed2, filed3
+    </sql>
+    <sql id="Blob_Column_List">
+        value
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from pcm_redis
+        where sid = #{sid,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from pcm_redis
+        where sid = #{sid,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.wangfj.product.common.domain.entity.PcmRedis">
+        insert into pcm_redis (sid, redisfField, keyname,
+        status, createTime, filed1,
+        filed2, filed3, value
+        )
+        values (#{sid,jdbcType=BIGINT}, #{redisffield,jdbcType=VARCHAR}, #{keyname,jdbcType=VARCHAR},
+        #{status,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{filed1,jdbcType=VARCHAR},
+        #{filed2,jdbcType=VARCHAR}, #{filed3,jdbcType=VARCHAR}, #{value,jdbcType=LONGVARCHAR}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.wangfj.product.common.domain.entity.PcmRedis" >
+        insert into pcm_redis
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="sid != null" >
+                sid,
+            </if>
+            <if test="redisffield != null" >
+                redisfField,
+            </if>
+            <if test="keyname != null" >
+                keyname,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+            <if test="createtime != null" >
+                createTime,
+            </if>
+            <if test="filed1 != null" >
+                filed1,
+            </if>
+            <if test="filed2 != null" >
+                filed2,
+            </if>
+            <if test="filed3 != null" >
+                filed3,
+            </if>
+            <if test="value != null" >
+                value,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="sid != null" >
+                #{sid,jdbcType=BIGINT},
+            </if>
+            <if test="redisffield != null" >
+                #{redisffield,jdbcType=VARCHAR},
+            </if>
+            <if test="keyname != null" >
+                #{keyname,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="filed1 != null" >
+                #{filed1,jdbcType=VARCHAR},
+            </if>
+            <if test="filed2 != null" >
+                #{filed2,jdbcType=VARCHAR},
+            </if>
+            <if test="filed3 != null" >
+                #{filed3,jdbcType=VARCHAR},
+            </if>
+            <if test="value != null" >
+                #{value,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.common.domain.entity.PcmRedis">
+        update pcm_redis
+        <set>
+            <if test="redisffield != null">
+                redisfField = #{redisffield,jdbcType=VARCHAR},
+            </if>
+            <if test="keyname != null">
+                keyname = #{keyname,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createtime != null">
+                createTime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="filed1 != null">
+                filed1 = #{filed1,jdbcType=VARCHAR},
+            </if>
+            <if test="filed2 != null">
+                filed2 = #{filed2,jdbcType=VARCHAR},
+            </if>
+            <if test="filed3 != null">
+                filed3 = #{filed3,jdbcType=VARCHAR},
+            </if>
+            <if test="value != null">
+                value = #{value,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wangfj.product.common.domain.entity.PcmRedis">
+        update pcm_redis
+        set redisfField = #{redisffield,jdbcType=VARCHAR},
+        keyname = #{keyname,jdbcType=VARCHAR},
+        status = #{status,jdbcType=INTEGER},
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+        filed1 = #{filed1,jdbcType=VARCHAR},
+        filed2 = #{filed2,jdbcType=VARCHAR},
+        filed3 = #{filed3,jdbcType=VARCHAR},
+        value = #{value,jdbcType=LONGVARCHAR}
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.wangfj.product.common.domain.entity.PcmRedis">
+        update pcm_redis
+        set redisfField = #{redisffield,jdbcType=VARCHAR},
+        keyname = #{keyname,jdbcType=VARCHAR},
+        status = #{status,jdbcType=INTEGER},
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+        filed1 = #{filed1,jdbcType=VARCHAR},
+        filed2 = #{filed2,jdbcType=VARCHAR},
+        filed3 = #{filed3,jdbcType=VARCHAR}
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectListByParam" resultMap="ResultMapWithBLOBs"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from pcm_redis
+        <where>
+            <if test="sid != null">
+                and sid=#{sid,jdbcType=BIGINT}
+            </if>
+            <if test="redisffield != null">
+                and redisfField = #{redisffield,jdbcType=VARCHAR}
+            </if>
+            <if test="keyname != null">
+                and keyname = #{keyname,jdbcType=VARCHAR}
+            </if>
+            <if test="value != null">
+                and value = #{value,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="createtime != null">
+                and createTime = #{createtime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="filed1 != null">
+                and filed1 = #{filed1,jdbcType=VARCHAR}
+            </if>
+            <if test="filed2 != null">
+                and filed2 = #{filed2,jdbcType=VARCHAR}
+            </if>
+            <if test="filed3 != null">
+                and filed3 = #{filed3,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectPageListByParam" resultMap="ResultMapWithBLOBs"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from pcm_redis
+        <where>
+            <if test="sid != null">
+                and sid=#{sid,jdbcType=BIGINT}
+            </if>
+            <if test="redisffield != null">
+                and redisfField = #{redisffield,jdbcType=VARCHAR}
+            </if>
+            <if test="keyname != null">
+                and keyname = #{keyname,jdbcType=VARCHAR}
+            </if>
+            <if test="value != null">
+                and value = #{value,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="createtime != null">
+                and createTime = #{createtime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="filed1 != null">
+                and filed1 = #{filed1,jdbcType=VARCHAR}
+            </if>
+            <if test="filed2 != null">
+                and filed2 = #{filed2,jdbcType=VARCHAR}
+            </if>
+            <if test="filed3 != null">
+                and filed3 = #{filed3,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by
+        sid asc
+        <if test="start != null and limit != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+    <select id="getCountByParam" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        select
+        count(*)
+        from pcm_redis
+        <where>
+            <if test="sid != null">
+                and sid=#{sid,jdbcType=BIGINT}
+            </if>
+            <if test="redisffield != null">
+                and redisfField = #{redisffield,jdbcType=VARCHAR}
+            </if>
+            <if test="keyname != null">
+                and keyname = #{keyname,jdbcType=VARCHAR}
+            </if>
+            <if test="value != null">
+                and value = #{value,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="createtime != null">
+                and createTime = #{createtime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="filed1 != null">
+                and filed1 = #{filed1,jdbcType=VARCHAR}
+            </if>
+            <if test="filed2 != null">
+                and filed2 = #{filed2,jdbcType=VARCHAR}
+            </if>
+            <if test="filed3 != null">
+                and filed3 = #{filed3,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="findPageRedis" resultMap="ResultMapWithBLOBs"
+            parameterType="com.wangfj.product.common.domain.vo.PcmRedisQueryDto">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from pcm_redis
+        <where>
+            <if test="sid != null">
+                and sid=#{sid,jdbcType=BIGINT}
+            </if>
+            <if test="redisffield != null">
+                and redisfField = #{redisffield,jdbcType=VARCHAR}
+            </if>
+            <if test="keyname != null">
+                and keyname = #{keyname,jdbcType=VARCHAR}
+            </if>
+            <if test="value != null">
+                and value = #{value,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="filed1 != null">
+                and filed1 = #{filed1,jdbcType=VARCHAR}
+            </if>
+            <if test="filed2 != null">
+                and filed2 = #{filed2,jdbcType=VARCHAR}
+            </if>
+            <if test="filed3 != null">
+                and filed3 = #{filed3,jdbcType=VARCHAR}
+            </if>
+        </where>
+        ORDER BY
+        createTime ASC
+        <if test="start != null and limit != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+    <select id="findPageCountRedis" resultType="java.lang.Integer"
+            parameterType="com.wangfj.product.common.domain.vo.PcmRedisQueryDto">
+        select
+        count(*)
+        from pcm_redis
+        <where>
+            <if test="sid != null">
+                and sid=#{sid,jdbcType=BIGINT}
+            </if>
+            <if test="redisffield != null">
+                and redisfField = #{redisffield,jdbcType=VARCHAR}
+            </if>
+            <if test="keyname != null">
+                and keyname = #{keyname,jdbcType=VARCHAR}
+            </if>
+            <if test="value != null">
+                and value = #{value,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="filed1 != null">
+                and filed1 = #{filed1,jdbcType=VARCHAR}
+            </if>
+            <if test="filed2 != null">
+                and filed2 = #{filed2,jdbcType=VARCHAR}
+            </if>
+            <if test="filed3 != null">
+                and filed3 = #{filed3,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+</mapper>

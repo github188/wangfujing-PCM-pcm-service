@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmShoppeProductExtendMapper" >
+  <resultMap id="BaseResultMap" type="com.wangfj.product.maindata.domain.entity.PcmShoppeProductExtend" >
+    <id column="sid" property="sid" jdbcType="BIGINT" />
+    <result column="shoppe_pro_sid" property="shoppeProSid" jdbcType="VARCHAR" />
+    <result column="is_card" property="isCard" jdbcType="VARCHAR" />
+    <result column="base_unit_code" property="baseUnitCode" jdbcType="VARCHAR" />
+    <result column="origin_country" property="originCountry" jdbcType="VARCHAR" />
+    <result column="is_origin_package" property="isOriginPackage" jdbcType="VARCHAR" />
+    <result column="xxhc_flag" property="xxhcFlag" jdbcType="VARCHAR" />
+    <result column="zcolor" property="zcolor" jdbcType="VARCHAR" />
+    <result column="zsize" property="zsize" jdbcType="VARCHAR" />
+    <result column="field1" property="field1" jdbcType="VARCHAR" />
+    <result column="field2" property="field2" jdbcType="VARCHAR" />
+    <result column="field3" property="field3" jdbcType="VARCHAR" />
+    <result column="field4" property="field4" jdbcType="VARCHAR" />
+    <result column="field5" property="field5" jdbcType="VARCHAR" />
+    <result column="field6" property="field6" jdbcType="VARCHAR" />
+    <result column="field7" property="field7" jdbcType="VARCHAR" />
+    <result column="field8" property="field8" jdbcType="VARCHAR" />
+    <result column="field9" property="field9" jdbcType="VARCHAR" />
+    <result column="field10" property="field10" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sid, shoppe_pro_sid, is_card, base_unit_code, origin_country, is_origin_package, 
+    xxhc_flag, zcolor, zsize, field1, field2, field3, field4, field5, field6, field7, 
+    field8, field9, field10
+  </sql>
+  <select id="getSidByShopProSid" resultType="java.lang.Long" parameterType="java.lang.Long" >
+    select 
+    sid 
+    from pcm_shoppe_product_extend
+    where shoppe_pro_sid = #{shoppe_pro_sid,jdbcType=BIGINT}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from pcm_shoppe_product_extend
+    where sid = #{sid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pcm_shoppe_product_extend
+    where sid = #{sid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangfj.product.maindata.domain.entity.PcmShoppeProductExtend" >
+    insert into pcm_shoppe_product_extend (sid, shoppe_pro_sid, is_card, 
+      base_unit_code, origin_country, is_origin_package, 
+      xxhc_flag, zcolor, zsize, 
+      field1, field2, field3, 
+      field4, field5, field6, 
+      field7, field8, field9, 
+      field10)
+    values (#{sid,jdbcType=BIGINT}, #{shoppeProSid,jdbcType=VARCHAR}, #{isCard,jdbcType=VARCHAR}, 
+      #{baseUnitCode,jdbcType=VARCHAR}, #{originCountry,jdbcType=VARCHAR}, #{isOriginPackage,jdbcType=VARCHAR}, 
+      #{xxhcFlag,jdbcType=VARCHAR}, #{zcolor,jdbcType=VARCHAR}, #{zsize,jdbcType=VARCHAR}, 
+      #{field1,jdbcType=VARCHAR}, #{field2,jdbcType=VARCHAR}, #{field3,jdbcType=VARCHAR}, 
+      #{field4,jdbcType=VARCHAR}, #{field5,jdbcType=VARCHAR}, #{field6,jdbcType=VARCHAR}, 
+      #{field7,jdbcType=VARCHAR}, #{field8,jdbcType=VARCHAR}, #{field9,jdbcType=VARCHAR}, 
+      #{field10,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmShoppeProductExtend" >
+    insert into pcm_shoppe_product_extend
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="shoppeProSid != null" >
+        shoppe_pro_sid,
+      </if>
+      <if test="isCard != null" >
+        is_card,
+      </if>
+      <if test="baseUnitCode != null" >
+        base_unit_code,
+      </if>
+      <if test="originCountry != null" >
+        origin_country,
+      </if>
+      <if test="isOriginPackage != null" >
+        is_origin_package,
+      </if>
+      <if test="xxhcFlag != null" >
+        xxhc_flag,
+      </if>
+      <if test="zcolor != null" >
+        zcolor,
+      </if>
+      <if test="zsize != null" >
+        zsize,
+      </if>
+      <if test="field1 != null" >
+        field1,
+      </if>
+      <if test="field2 != null" >
+        field2,
+      </if>
+      <if test="field3 != null" >
+        field3,
+      </if>
+      <if test="field4 != null" >
+        field4,
+      </if>
+      <if test="field5 != null" >
+        field5,
+      </if>
+      <if test="field6 != null" >
+        field6,
+      </if>
+      <if test="field7 != null" >
+        field7,
+      </if>
+      <if test="field8 != null" >
+        field8,
+      </if>
+      <if test="field9 != null" >
+        field9,
+      </if>
+      <if test="field10 != null" >
+        field10,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        #{sid,jdbcType=BIGINT},
+      </if>
+      <if test="shoppeProSid != null" >
+        #{shoppeProSid,jdbcType=VARCHAR},
+      </if>
+      <if test="isCard != null" >
+        #{isCard,jdbcType=VARCHAR},
+      </if>
+      <if test="baseUnitCode != null" >
+        #{baseUnitCode,jdbcType=VARCHAR},
+      </if>
+      <if test="originCountry != null" >
+        #{originCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="isOriginPackage != null" >
+        #{isOriginPackage,jdbcType=VARCHAR},
+      </if>
+      <if test="xxhcFlag != null" >
+        #{xxhcFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="zcolor != null" >
+        #{zcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="zsize != null" >
+        #{zsize,jdbcType=VARCHAR},
+      </if>
+      <if test="field1 != null" >
+        #{field1,jdbcType=VARCHAR},
+      </if>
+      <if test="field2 != null" >
+        #{field2,jdbcType=VARCHAR},
+      </if>
+      <if test="field3 != null" >
+        #{field3,jdbcType=VARCHAR},
+      </if>
+      <if test="field4 != null" >
+        #{field4,jdbcType=VARCHAR},
+      </if>
+      <if test="field5 != null" >
+        #{field5,jdbcType=VARCHAR},
+      </if>
+      <if test="field6 != null" >
+        #{field6,jdbcType=VARCHAR},
+      </if>
+      <if test="field7 != null" >
+        #{field7,jdbcType=VARCHAR},
+      </if>
+      <if test="field8 != null" >
+        #{field8,jdbcType=VARCHAR},
+      </if>
+      <if test="field9 != null" >
+        #{field9,jdbcType=VARCHAR},
+      </if>
+      <if test="field10 != null" >
+        #{field10,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmShoppeProductExtend" >
+    update pcm_shoppe_product_extend
+    <set >
+      <if test="shoppeProSid != null" >
+        shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR},
+      </if>
+      <if test="isCard != null" >
+        is_card = #{isCard,jdbcType=VARCHAR},
+      </if>
+      <if test="baseUnitCode != null" >
+        base_unit_code = #{baseUnitCode,jdbcType=VARCHAR},
+      </if>
+      <if test="originCountry != null" >
+        origin_country = #{originCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="isOriginPackage != null" >
+        is_origin_package = #{isOriginPackage,jdbcType=VARCHAR},
+      </if>
+      <if test="xxhcFlag != null" >
+        xxhc_flag = #{xxhcFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="zcolor != null" >
+        zcolor = #{zcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="zsize != null" >
+        zsize = #{zsize,jdbcType=VARCHAR},
+      </if>
+      <if test="field1 != null" >
+        field1 = #{field1,jdbcType=VARCHAR},
+      </if>
+      <if test="field2 != null" >
+        field2 = #{field2,jdbcType=VARCHAR},
+      </if>
+      <if test="field3 != null" >
+        field3 = #{field3,jdbcType=VARCHAR},
+      </if>
+      <if test="field4 != null" >
+        field4 = #{field4,jdbcType=VARCHAR},
+      </if>
+      <if test="field5 != null" >
+        field5 = #{field5,jdbcType=VARCHAR},
+      </if>
+      <if test="field6 != null" >
+        field6 = #{field6,jdbcType=VARCHAR},
+      </if>
+      <if test="field7 != null" >
+        field7 = #{field7,jdbcType=VARCHAR},
+      </if>
+      <if test="field8 != null" >
+        field8 = #{field8,jdbcType=VARCHAR},
+      </if>
+      <if test="field9 != null" >
+        field9 = #{field9,jdbcType=VARCHAR},
+      </if>
+      <if test="field10 != null" >
+        field10 = #{field10,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangfj.product.maindata.domain.entity.PcmShoppeProductExtend" >
+    update pcm_shoppe_product_extend
+    set shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR},
+      is_card = #{isCard,jdbcType=VARCHAR},
+      base_unit_code = #{baseUnitCode,jdbcType=VARCHAR},
+      origin_country = #{originCountry,jdbcType=VARCHAR},
+      is_origin_package = #{isOriginPackage,jdbcType=VARCHAR},
+      xxhc_flag = #{xxhcFlag,jdbcType=VARCHAR},
+      zcolor = #{zcolor,jdbcType=VARCHAR},
+      zsize = #{zsize,jdbcType=VARCHAR},
+      field1 = #{field1,jdbcType=VARCHAR},
+      field2 = #{field2,jdbcType=VARCHAR},
+      field3 = #{field3,jdbcType=VARCHAR},
+      field4 = #{field4,jdbcType=VARCHAR},
+      field5 = #{field5,jdbcType=VARCHAR},
+      field6 = #{field6,jdbcType=VARCHAR},
+      field7 = #{field7,jdbcType=VARCHAR},
+      field8 = #{field8,jdbcType=VARCHAR},
+      field9 = #{field9,jdbcType=VARCHAR},
+      field10 = #{field10,jdbcType=VARCHAR}
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+</mapper>

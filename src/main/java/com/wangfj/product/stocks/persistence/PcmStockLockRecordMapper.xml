@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.stocks.persistence.PcmStockLockRecordMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.stocks.domain.entity.PcmStockLockRecord">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="sale_no" property="saleNo" jdbcType="VARCHAR" />
+		<result column="bills_no" property="billsNo" jdbcType="VARCHAR" />
+		<result column="shoppe_pro_sid" property="shoppeProSid"
+			jdbcType="BIGINT" />
+		<result column="lock_sum" property="lockSum" jdbcType="BIGINT" />
+		<result column="lock_type_sid" property="lockTypeSid" jdbcType="BIGINT" />
+		<result column="lock_time" property="lockTime" jdbcType="TIMESTAMP" />
+		<result column="note" property="note" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid,sale_no, bills_no, shoppe_pro_sid, lock_sum,
+		lock_type_sid,
+		lock_time, note
+	</sql>
+	<!-- 判断是否已锁定 -->
+	<select id="selectLockByBillsNo"
+		parameterType="com.wangfj.product.stocks.domain.entity.PcmStockLockRecord"
+		resultType="java.lang.Integer">
+		select
+		count(*)
+		from
+		pcm_stock_lock_record
+		where bills_no =
+		#{billsNo,jdbcType=VARCHAR}
+		and
+		shoppe_pro_sid =
+		#{shoppeProSid,jdbcType=BIGINT}
+	</select>
+	<!-- 查询锁定数量 -->
+	<select id="selectLockCountByBillsNo" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		select
+		lock_sum
+		from
+		pcm_stock_lock_record
+		where bills_no =
+		#{billsNo,jdbcType=VARCHAR}
+		and
+		shoppe_pro_sid =
+		#{shoppeProSid,jdbcType=BIGINT}
+	</select>
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_stock_lock_record
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_stock_lock_record
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.stocks.domain.entity.PcmStockLockRecord"
+		useGeneratedKeys="true" keyProperty="sid">
+		insert into pcm_stock_lock_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="saleNo != null">
+				sale_no,
+			</if>
+			<if test="billsNo != null">
+				bills_no,
+			</if>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid,
+			</if>
+			<if test="lockSum != null">
+				lock_sum,
+			</if>
+			<if test="lockTypeSid != null">
+				lock_type_sid,
+			</if>
+			<if test="lockTime != null">
+				lock_time,
+			</if>
+			<if test="note != null">
+				note,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="saleNo != null">
+				#{saleNo,jdbcType=VARCHAR},
+			</if>
+			<if test="billsNo != null">
+				#{billsNo,jdbcType=VARCHAR},
+			</if>
+			<if test="shoppeProSid != null">
+				#{shoppeProSid,jdbcType=BIGINT},
+			</if>
+			<if test="lockSum != null">
+				#{lockSum,jdbcType=BIGINT},
+			</if>
+			<if test="lockTypeSid != null">
+				#{lockTypeSid,jdbcType=BIGINT},
+			</if>
+			<if test="lockTime != null">
+				#{lockTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="note != null">
+				#{note,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.stocks.domain.entity.PcmStockLockRecord">
+		update pcm_stock_lock_record
+		<set>
+			<if test="saleNo != null">
+				sale_no = #{saleNo,jdbcType=VARCHAR},
+			</if>
+			<if test="billsNo != null">
+				bills_no = #{billsNo,jdbcType=VARCHAR},
+			</if>
+			<if test="shoppeProSid != null">
+				shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT},
+			</if>
+			<if test="lockSum != null">
+				lock_sum = #{lockSum,jdbcType=BIGINT},
+			</if>
+			<if test="lockTypeSid != null">
+				lock_type_sid = #{lockTypeSid,jdbcType=BIGINT},
+			</if>
+			<if test="lockTime != null">
+				lock_time = #{lockTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="note != null">
+				note = #{note,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.stocks.domain.entity.PcmStockLockRecord">
+		update pcm_stock_lock_record
+		<set>
+			<if test="lockTypeSid != null">
+				lock_type_sid = #{lockTypeSid,jdbcType=BIGINT},
+			</if>
+			<if test="lockTime != null">
+				lock_time = #{lockTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="note != null">
+				note = #{note,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<where>
+			1=1
+			<if test="billsNo != null">
+				and bills_no = #{billsNo,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT}
+			</if>
+		</where>
+
+	</update>
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_stock_lock_record
+		<where>
+			1=1
+			<if test="billsNo != null">
+				and bills_no = #{billsNo,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT}
+			</if>
+			<if test="lockSum != null">
+				and lock_sum = #{lockSum,jdbcType=BIGINT}
+			</if>
+			<if test="lockTypeSid != null">
+				and lock_type_sid = #{lockTypeSid,jdbcType=BIGINT}
+			</if>
+			<if test="lockTime != null">
+				and lock_time = #{lockTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="note != null">
+				and note = #{note,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_stock_lock_record
+		<where>
+			<if test="billsNo != null">
+				and bills_no = #{billsNo,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT}
+			</if>
+			<if test="lockSum != null">
+				and lock_sum = #{lockSum,jdbcType=BIGINT}
+			</if>
+			<if test="lockTypeSid != null">
+				and lock_type_sid = #{lockTypeSid,jdbcType=BIGINT}
+			</if>
+			<if test="lockTime != null">
+				and lock_time = #{lockTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="note != null">
+				and note = #{note,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_stock_lock_record
+		<where>
+			<if test="billsNo != null">
+				and bills_no = #{billsNo,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT}
+			</if>
+			<if test="lockSum != null">
+				and lock_sum = #{lockSum,jdbcType=BIGINT}
+			</if>
+			<if test="lockTypeSid != null">
+				and lock_type_sid = #{lockTypeSid,jdbcType=BIGINT}
+			</if>
+			<if test="lockTime != null">
+				and lock_time = #{lockTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="note != null">
+				and note = #{note,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="selectLockCountByShoppePro" resultMap="BaseResultMap"
+		parameterType="com.wangfj.product.stocks.domain.entity.PcmStockLockRecord">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_stock_lock_record
+		<where>
+			1=1
+			<if test="billsNo != null">
+				and bills_no = #{billsNo,jdbcType=VARCHAR}
+			</if>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT}
+			</if>
+			<if test="lockSum != null">
+				and lock_sum = #{lockSum,jdbcType=BIGINT}
+			</if>
+			<if test="lockTypeSid != null">
+				and lock_type_sid = #{lockTypeSid,jdbcType=BIGINT}
+			</if>
+			<if test="lockTime != null">
+				and lock_time = #{lockTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="note != null">
+				and note = #{note,jdbcType=VARCHAR}
+			</if>
+		</where>
+		limit
+		0, 1
+	</select>
+
+	<!-- 更改锁定类型 -->
+	<update id="updateLockTypeByShoppePro" parameterType="java.util.Map">
+		update pcm_stock_lock_record
+		<set>
+			lock_type_sid = 1024
+		</set>
+		<where>
+			<if test="shoppeProSid != null">
+				and shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT}
+			</if>
+			<if test="lockType != null">
+				and lock_type_sid = #{lockType,jdbcType=INTEGER}
+			</if>
+		</where>
+	</update>
+	<!-- 根据销售单号查询锁库信息 -->
+	<select id="selectLockReocrdBySaleNo" resultMap="BaseResultMap"
+		parameterType="String">
+		SELECT sale_no,bills_no,COUNT(bills_no) as rowNum from
+		pcm_stock_lock_record
+		where sale_no= #{saleNo}
+		GROUP BY sale_no,bills_no
+		HAVING COUNT(bills_no)=2
+	</select>
+	<!--根据销售单行号删除锁库记录 -->
+	<delete id="deleteByBillsNo" parameterType="java.lang.String">
+		delete from
+		pcm_stock_lock_record
+		where
+		bills_no = #{billsNo}
+
+	</delete>
+</mapper>

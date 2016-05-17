@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.stocks.persistence.PcmLockTypeDictMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.stocks.domain.entity.PcmLockTypeDict">
+		<id column="sid" property="sid" jdbcType="INTEGER" />
+		<result column="lock_type_name" property="lockTypeName"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, lock_type_name
+	</sql>
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_lock_type_dict
+		where sid = #{sid,jdbcType=INTEGER}
+	</select>
+	<select id="selectSid" resultType="java.lang.Integer"
+		parameterType="com.wangfj.product.stocks.domain.entity.PcmLockTypeDict">
+		select
+		sid
+		from pcm_lock_type_dict
+		<where>
+			<if test="lockTypeName != null">
+				and lock_type_name = #{lockTypeName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		pcm_lock_type_dict
+		where sid = #{sid,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.stocks.domain.entity.PcmLockTypeDict">
+		insert into pcm_lock_type_dict (sid, lock_type_name)
+		values (#{sid,jdbcType=INTEGER}, #{lockTypeName,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.stocks.domain.entity.PcmLockTypeDict"
+		useGeneratedKeys="true" keyProperty="sid">
+		insert into pcm_lock_type_dict
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="lockTypeName != null">
+				lock_type_name,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=INTEGER},
+			</if>
+			<if test="lockTypeName != null">
+				#{lockTypeName,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.stocks.domain.entity.PcmLockTypeDict">
+		update pcm_lock_type_dict
+		<set>
+			<if test="lockTypeName != null">
+				lock_type_name = #{lockTypeName,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.stocks.domain.entity.PcmLockTypeDict">
+		update pcm_lock_type_dict
+		set lock_type_name =
+		#{lockTypeName,jdbcType=VARCHAR}
+		where sid = #{sid,jdbcType=INTEGER}
+	</update>
+
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_lock_type_dict
+		<where>
+			<if test="sid != null">
+				and sid != #{sid,jdbcType=INTEGER}
+			</if>
+			<if test="lockTypeName != null">
+				and lock_type_name = #{lockTypeName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_lock_type_dict
+		<where>
+			<if test="lockTypeName != null">
+				and lock_type_name = #{lockTypeName,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_lock_type_dict
+		<where>
+			<if test="lockTypeName != null">
+				and lock_type_name = #{lockTypeName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+</mapper>

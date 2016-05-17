@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.wangfj.product.limit.persistence.PcmProductOnlineLimitMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.limit.domain.entity.PcmProductOnlineLimit">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="brand_sid" property="brandSid" jdbcType="BIGINT" />
+		<result column="category_sid" property="categorySid" jdbcType="BIGINT" />
+		<result column="limit_value" property="limitValue" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="opt_name" property="optName" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="field1" property="field1" jdbcType="VARCHAR" />
+		<result column="field2" property="field2" jdbcType="VARCHAR" />
+		<result column="field3" property="field3" jdbcType="VARCHAR" />
+		<result column="field4" property="field4" jdbcType="VARCHAR" />
+		<result column="field5" property="field5" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, brand_sid, category_sid, limit_value, status,
+		create_time, opt_name,
+		update_time,
+		field1, field2, field3, field4,
+		field5
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_product_online_limit
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_product_online_limit
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.limit.domain.entity.PcmProductOnlineLimit">
+		insert into pcm_product_online_limit (sid, brand_sid,
+		category_sid,
+		limit_value, status, create_time,
+		opt_name, update_time,
+		field1,
+		field2, field3, field4,
+		field5)
+		values (#{sid,jdbcType=BIGINT},
+		#{brandSid,jdbcType=BIGINT},
+		#{categorySid,jdbcType=BIGINT},
+		#{limitValue,jdbcType=INTEGER}, #{status,jdbcType=INTEGER},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{optName,jdbcType=VARCHAR},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{field1,jdbcType=VARCHAR},
+		#{field2,jdbcType=VARCHAR}, #{field3,jdbcType=VARCHAR},
+		#{field4,jdbcType=VARCHAR},
+		#{field5,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.limit.domain.entity.PcmProductOnlineLimit">
+		insert into pcm_product_online_limit
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="brandSid != null">
+				brand_sid,
+			</if>
+			<if test="categorySid != null">
+				category_sid,
+			</if>
+			<if test="limitValue != null">
+				limit_value,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="optName != null">
+				opt_name,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="field1 != null">
+				field1,
+			</if>
+			<if test="field2 != null">
+				field2,
+			</if>
+			<if test="field3 != null">
+				field3,
+			</if>
+			<if test="field4 != null">
+				field4,
+			</if>
+			<if test="field5 != null">
+				field5,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="brandSid != null">
+				#{brandSid,jdbcType=BIGINT},
+			</if>
+			<if test="categorySid != null">
+				#{categorySid,jdbcType=BIGINT},
+			</if>
+			<if test="limitValue != null">
+				#{limitValue,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optName != null">
+				#{optName,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="field1 != null">
+				#{field1,jdbcType=VARCHAR},
+			</if>
+			<if test="field2 != null">
+				#{field2,jdbcType=VARCHAR},
+			</if>
+			<if test="field3 != null">
+				#{field3,jdbcType=VARCHAR},
+			</if>
+			<if test="field4 != null">
+				#{field4,jdbcType=VARCHAR},
+			</if>
+			<if test="field5 != null">
+				#{field5,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.limit.domain.entity.PcmProductOnlineLimit">
+		update pcm_product_online_limit
+		<set>
+			<if test="brandSid != null">
+				brand_sid = #{brandSid,jdbcType=BIGINT},
+			</if>
+			<if test="categorySid != null">
+				category_sid = #{categorySid,jdbcType=BIGINT},
+			</if>
+			<if test="limitValue != null">
+				limit_value = #{limitValue,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optName != null">
+				opt_name = #{optName,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="field1 != null">
+				field1 = #{field1,jdbcType=VARCHAR},
+			</if>
+			<if test="field2 != null">
+				field2 = #{field2,jdbcType=VARCHAR},
+			</if>
+			<if test="field3 != null">
+				field3 = #{field3,jdbcType=VARCHAR},
+			</if>
+			<if test="field4 != null">
+				field4 = #{field4,jdbcType=VARCHAR},
+			</if>
+			<if test="field5 != null">
+				field5 = #{field5,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.limit.domain.entity.PcmProductOnlineLimit">
+		update pcm_product_online_limit
+		set brand_sid =
+		#{brandSid,jdbcType=BIGINT},
+		category_sid =
+		#{categorySid,jdbcType=BIGINT},
+		limit_value =
+		#{limitValue,jdbcType=INTEGER},
+		status = #{status,jdbcType=INTEGER},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		opt_name =
+		#{optName,jdbcType=VARCHAR},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP},
+		field1 = #{field1,jdbcType=VARCHAR},
+		field2 = #{field2,jdbcType=VARCHAR},
+		field3 =
+		#{field3,jdbcType=VARCHAR},
+		field4 = #{field4,jdbcType=VARCHAR},
+		field5
+		= #{field5,jdbcType=VARCHAR}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+
+	<select id="selectListByParam" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_product_online_limit
+		<where>
+			<if test="sid != null and sid != ''">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="limitValue != null">
+				and limit_value = #{limitValue,jdbcType=INTEGER}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+			<if test="optName != null">
+				and opt_name = #{optName,jdbcType=VARCHAR}
+			</if>
+			<if test="field1 != null">
+				and field1 = #{field1,jdbcType=VARCHAR}
+			</if>
+			<if test="field2 != null">
+				and field2 = #{field2,jdbcType=VARCHAR}
+			</if>
+			<if test="field3 != null">
+				and field3 = #{field3,jdbcType=VARCHAR}
+			</if>
+			<if test="field4 != null">
+				and field4 = #{field4,jdbcType=VARCHAR}
+			</if>
+			<if test="field5 != null">
+				and field5 = #{field5,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectExistenceByParam" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM pcm_product_online_limit
+		<where>
+			<if test="brandSid != null and brandSid != ''">
+				AND brand_sid = #{brandSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null and categorySid != ''">
+				AND category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid == null">
+				AND category_sid IS NULL
+			</if>
+			<if test="status != null and status != ''">
+				AND status = #{status,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectProductLimitInfoList"
+		parameterType="com.wangfj.product.limit.domain.vo.PcmProductOnlineLimitQueryDto"
+		resultType="com.wangfj.product.limit.domain.vo.PcmProductOnlineLimitResultDto">
+		SELECT
+		ppol.sid AS sid,
+		ppol.brand_sid AS brandSid,
+		ppol.category_sid AS
+		categorySid,
+		pb.brand_name AS brandName,
+		pb.brand_sid AS brandCode,
+		pc.name AS
+		categoryName,
+		pc.category_sid AS categoryCode,
+		ppol.limit_value AS
+		limitValue,
+		ppol.status AS status
+		FROM
+		pcm_product_online_limit ppol
+		INNER JOIN pcm_brand pb
+		ON
+		ppol.brand_sid =
+		pb.sid
+		LEFT JOIN pcm_category pc
+		ON ppol.category_sid
+		=
+		pc.category_sid
+		AND pc.status = 0
+		AND pc.category_type = 0
+		AND
+		pc.is_leaf
+		= 'Y'
+		WHERE
+		ppol.status = 0
+		AND pb.status = 0
+		AND pb.brand_type
+		= 0
+		<if test="brandSid != null and brandSid != ''">
+			and ppol.brand_sid = #{brandSid}
+		</if>
+		<if test="categorySid != null and categorySid != ''">
+			and ppol.category_sid = #{categorySid}
+		</if>
+		ORDER BY
+		ppol.sid DESC
+		<if test="start !=null and limit != null">
+			LIMIT #{start},#{limit}
+		</if>
+	</select>
+
+	<select id="selectProductLimitInfoCount"
+		parameterType="com.wangfj.product.limit.domain.vo.PcmProductOnlineLimitQueryDto"
+		resultType="java.lang.Integer">
+		SELECT
+		COUNT(ppol.sid)
+		FROM pcm_product_online_limit ppol
+		INNER
+		JOIN
+		pcm_brand pb
+		ON
+		ppol.brand_sid = pb.sid
+		LEFT JOIN pcm_category
+		pc
+		ON
+		ppol.category_sid
+		=
+		pc.category_sid
+		AND pc.status = 0
+		AND
+		pc.category_type
+		= 0
+		AND
+		pc.is_leaf
+		= 'Y'
+		WHERE
+		ppol.status = 0
+		AND pb.status
+		= 0
+		AND
+		pb.brand_type
+		= 0
+		<if test="brandSid != null and brandSid != ''">
+			and ppol.brand_sid = #{brandSid}
+		</if>
+		<if test="categorySid != null and categorySid != ''">
+			and ppol.category_sid = #{categorySid}
+		</if>
+	</select>
+
+	<select id="selectAllProductLimitInfoList"
+		parameterType="com.wangfj.product.limit.domain.vo.PcmProductOnlineLimitQueryDto"
+		resultType="com.wangfj.product.limit.domain.vo.PcmProductOnlineLimitResultDto">
+		SELECT
+		ppol.sid AS sid,
+		ppol.brand_sid AS brandSid,
+		ppol.category_sid AS
+		categorySid,
+		pb.brand_name AS brandName,
+		pb.brand_sid AS brandCode,
+		pc.name AS
+		categoryName,
+		pc.category_sid AS categoryCode,
+		ppol.limit_value AS
+		limitValue,
+		ppol.status AS status
+		FROM
+		pcm_product_online_limit ppol
+		INNER JOIN pcm_brand pb
+		ON
+		ppol.brand_sid =
+		pb.sid
+		LEFT JOIN pcm_category pc
+		ON ppol.category_sid
+		=
+		pc.category_sid
+		AND pc.status = 0
+		AND pc.category_type = 0
+		AND
+		pc.is_leaf
+		= 'Y'
+		WHERE
+		pb.status = 0
+		AND pb.brand_type
+		= 0
+		<if test="status != null and status != ''">
+			ppol.status = #{status}
+		</if>
+		<if test="brandSid != null and brandSid != ''">
+			and ppol.brand_sid = #{brandSid}
+		</if>
+		<if test="categorySid != null and categorySid != ''">
+			and ppol.category_sid = #{categorySid}
+		</if>
+		ORDER BY
+		ppol.sid DESC
+		<if test="start !=null and limit != null">
+			LIMIT #{start},#{limit}
+		</if>
+	</select>
+
+	<select id="selectAllProductLimitInfoCount"
+		parameterType="com.wangfj.product.limit.domain.vo.PcmProductOnlineLimitQueryDto"
+		resultType="java.lang.Integer">
+		SELECT
+		COUNT(ppol.sid)
+		FROM pcm_product_online_limit ppol
+		INNER
+		JOIN
+		pcm_brand pb
+		ON
+		ppol.brand_sid = pb.sid
+		LEFT JOIN pcm_category
+		pc
+		ON
+		ppol.category_sid
+		=
+		pc.category_sid
+		AND pc.status = 0
+		AND
+		pc.category_type
+		= 0
+		AND
+		pc.is_leaf
+		= 'Y'
+		WHERE
+		pb.status = 0
+		AND pb.brand_type
+		= 0
+		<if test="status != null and status != ''">
+			ppol.status = #{status}
+		</if>
+		<if test="brandSid != null and brandSid != ''">
+			and ppol.brand_sid = #{brandSid}
+		</if>
+		<if test="categorySid != null and categorySid != ''">
+			and ppol.category_sid = #{categorySid}
+		</if>
+	</select>
+
+
+</mapper>

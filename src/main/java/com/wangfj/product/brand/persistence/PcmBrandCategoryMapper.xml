@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.brand.persistence.PcmBrandCategoryMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.brand.domain.entity.PcmBrandCategory">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="brand_sid" property="brandSid" jdbcType="BIGINT" />
+		<result column="category_sid" property="categorySid" jdbcType="BIGINT" />
+		<result column="size_picture_url" property="sizePictureUrl"
+			jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="opt_user" property="optUser" jdbcType="VARCHAR" />
+		<result column="opt_date" property="optDate" jdbcType="TIMESTAMP" />
+		<result column="field1" property="field1" jdbcType="VARCHAR" />
+		<result column="field2" property="field2" jdbcType="VARCHAR" />
+		<result column="field3" property="field3" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, brand_sid, category_sid, size_picture_url, status,
+		opt_user,
+		opt_date, field1,
+		field2, field3
+	</sql>
+	<select id="getBrandCateInfo" resultType="java.util.Map"
+		parameterType="com.wangfj.product.brand.domain.vo.PcmBrandCateDto">
+		SELECT DISTINCT
+			brand.brand_sid AS brandCode,
+			cate.category_sid AS cateCode,
+			cate.`name` AS cateName,
+			IFNULL(pbc.size_picture_url, "") AS sizePictureUrl
+		FROM
+			pcm_product AS spu
+		JOIN pcm_brand AS brand ON spu.brand_root_sid = brand.sid
+		JOIN pcm_product_category AS ppc ON spu.sid = ppc.product_sid
+		JOIN pcm_category AS cate ON ppc.category_sid = cate.sid
+		LEFT JOIN pcm_brand_category AS pbc ON cate.sid = pbc.category_sid
+		AND brand.sid = pbc.brand_sid
+		<where>
+			<if test="brandCode != null">
+				AND brand.brand_sid = #{brandCode,jdbcType=VARCHAR}
+			</if>
+			<if test="cateCode != null">
+				AND cate.category_sid = #{cateCode,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="getCateAndBrandSid" resultType="java.util.Map"
+		parameterType="com.wangfj.product.brand.domain.vo.PcmBrandCateDto">
+		SELECT
+		brand.sid AS brandSid,
+		cate.sid AS cateSid
+		FROM
+		pcm_brand AS brand
+		JOIN pcm_category AS cate
+		WHERE
+		brand.brand_sid =
+		#{brandCode,jdbcType=VARCHAR}
+		AND cate.category_sid =
+		#{cateCode,jdbcType=VARCHAR}
+	</select>
+	<!-- 查询所有 selectListByParam -->
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_brand_category
+		<where>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="sizePictureUrl != null">
+				and size_picture_url = #{sizePictureUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="field1 != null">
+				and field1 = #{field1,jdbcType=VARCHAR}
+			</if>
+			<if test="field2 != null">
+				and field2 = #{field2,jdbcType=VARCHAR}
+			</if>
+			<if test="field3 != null">
+				and field3 = #{field3,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<!-- 分页查询 -->
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_brand_category
+		<where>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="sizePictureUrl != null">
+				and size_picture_url = #{sizePictureUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="field1 != null">
+				and field1 = #{field1,jdbcType=VARCHAR}
+			</if>
+			<if test="field2 != null">
+				and field2 = #{field2,jdbcType=VARCHAR}
+			</if>
+			<if test="field3 != null">
+				and field3 = #{field3,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+	<!-- 查询数量 -->
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_brand_category
+		<where>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=BIGINT}
+			</if>
+			<if test="categorySid != null">
+				and category_sid = #{categorySid,jdbcType=BIGINT}
+			</if>
+			<if test="sizePictureUrl != null">
+				and size_picture_url = #{sizePictureUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+			<if test="optUser != null">
+				and opt_user = #{optUser,jdbcType=VARCHAR}
+			</if>
+			<if test="optDate != null">
+				and opt_date = #{optDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="field1 != null">
+				and field1 = #{field1,jdbcType=VARCHAR}
+			</if>
+			<if test="field2 != null">
+				and field2 = #{field2,jdbcType=VARCHAR}
+			</if>
+			<if test="field3 != null">
+				and field3 = #{field3,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_brand_category
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_brand_category
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmBrandCategory">
+		insert into pcm_brand_category (sid, brand_sid,
+		category_sid,
+		size_picture_url, status, opt_user,
+		opt_date, field1,
+		field2,
+		field3)
+		values (#{sid,jdbcType=BIGINT},
+		#{brandSid,jdbcType=BIGINT},
+		#{categorySid,jdbcType=BIGINT},
+		#{sizePictureUrl,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
+		#{optUser,jdbcType=VARCHAR},
+		#{optDate,jdbcType=TIMESTAMP},
+		#{field1,jdbcType=VARCHAR},
+		#{field2,jdbcType=VARCHAR},
+		#{field3,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmBrandCategory">
+		insert into pcm_brand_category
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="brandSid != null">
+				brand_sid,
+			</if>
+			<if test="categorySid != null">
+				category_sid,
+			</if>
+			<if test="sizePictureUrl != null">
+				size_picture_url,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="optUser != null">
+				opt_user,
+			</if>
+			<if test="optDate != null">
+				opt_date,
+			</if>
+			<if test="field1 != null">
+				field1,
+			</if>
+			<if test="field2 != null">
+				field2,
+			</if>
+			<if test="field3 != null">
+				field3,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="brandSid != null">
+				#{brandSid,jdbcType=BIGINT},
+			</if>
+			<if test="categorySid != null">
+				#{categorySid,jdbcType=BIGINT},
+			</if>
+			<if test="sizePictureUrl != null">
+				#{sizePictureUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="optUser != null">
+				#{optUser,jdbcType=VARCHAR},
+			</if>
+			<if test="optDate != null">
+				#{optDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="field1 != null">
+				#{field1,jdbcType=VARCHAR},
+			</if>
+			<if test="field2 != null">
+				#{field2,jdbcType=VARCHAR},
+			</if>
+			<if test="field3 != null">
+				#{field3,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmBrandCategory">
+		update pcm_brand_category
+		<set>
+			<if test="brandSid != null">
+				brand_sid = #{brandSid,jdbcType=BIGINT},
+			</if>
+			<if test="categorySid != null">
+				category_sid = #{categorySid,jdbcType=BIGINT},
+			</if>
+			<if test="sizePictureUrl != null">
+				size_picture_url = #{sizePictureUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="optUser != null">
+				opt_user = #{optUser,jdbcType=VARCHAR},
+			</if>
+			<if test="optDate != null">
+				opt_date = #{optDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="field1 != null">
+				field1 = #{field1,jdbcType=VARCHAR},
+			</if>
+			<if test="field2 != null">
+				field2 = #{field2,jdbcType=VARCHAR},
+			</if>
+			<if test="field3 != null">
+				field3 = #{field3,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmBrandCategory">
+		update pcm_brand_category
+		set brand_sid =
+		#{brandSid,jdbcType=BIGINT},
+		category_sid =
+		#{categorySid,jdbcType=BIGINT},
+		size_picture_url =
+		#{sizePictureUrl,jdbcType=VARCHAR},
+		status =
+		#{status,jdbcType=INTEGER},
+		opt_user = #{optUser,jdbcType=VARCHAR},
+		opt_date = #{optDate,jdbcType=TIMESTAMP},
+		field1 =
+		#{field1,jdbcType=VARCHAR},
+		field2 = #{field2,jdbcType=VARCHAR},
+		field3
+		= #{field3,jdbcType=VARCHAR}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+</mapper>

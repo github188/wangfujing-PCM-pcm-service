@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.wangfj.product.supplier.persistence.PcmSupplyShopCodeMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.supplier.domain.entity.PcmSupplyShopCode">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="shoppe_sid" property="shoppeSid" jdbcType="BIGINT" />
+		<result column="supply_sid" property="supplySid" jdbcType="BIGINT" />
+		<result column="promo_sale_code" property="promoSaleCode"
+			jdbcType="VARCHAR" />
+		<result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
+		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, shoppe_sid, supply_sid, promo_sale_code, begin_time, end_time
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_supply_shop_code
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from pcm_supply_shop_code
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.supplier.domain.entity.PcmSupplyShopCode">
+		insert into pcm_supply_shop_code (sid, shoppe_sid, supply_sid,
+		promo_sale_code, begin_time, end_time
+		)
+		values (#{sid,jdbcType=BIGINT}, #{shoppeSid,jdbcType=BIGINT},
+		#{supplySid,jdbcType=BIGINT},
+		#{promoSaleCode,jdbcType=VARCHAR}, #{beginTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.supplier.domain.entity.PcmSupplyShopCode">
+		insert into pcm_supply_shop_code
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="shoppeSid != null">
+				shoppe_sid,
+			</if>
+			<if test="supplySid != null">
+				supply_sid,
+			</if>
+			<if test="promoSaleCode != null">
+				promo_sale_code,
+			</if>
+			<if test="beginTime != null">
+				begin_time,
+			</if>
+			<if test="endTime != null">
+				end_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="shoppeSid != null">
+				#{shoppeSid,jdbcType=BIGINT},
+			</if>
+			<if test="supplySid != null">
+				#{supplySid,jdbcType=BIGINT},
+			</if>
+			<if test="promoSaleCode != null">
+				#{promoSaleCode,jdbcType=VARCHAR},
+			</if>
+			<if test="beginTime != null">
+				#{beginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				#{endTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.supplier.domain.entity.PcmSupplyShopCode">
+		update pcm_supply_shop_code
+		<set>
+			<if test="shoppeSid != null">
+				shoppe_sid = #{shoppeSid,jdbcType=BIGINT},
+			</if>
+			<if test="supplySid != null">
+				supply_sid = #{supplySid,jdbcType=BIGINT},
+			</if>
+			<if test="promoSaleCode != null">
+				promo_sale_code = #{promoSaleCode,jdbcType=VARCHAR},
+			</if>
+			<if test="beginTime != null">
+				begin_time = #{beginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.supplier.domain.entity.PcmSupplyShopCode">
+		update pcm_supply_shop_code
+		set shoppe_sid = #{shoppeSid,jdbcType=BIGINT},
+		supply_sid = #{supplySid,jdbcType=BIGINT},
+		promo_sale_code = #{promoSaleCode,jdbcType=VARCHAR},
+		begin_time = #{beginTime,jdbcType=TIMESTAMP},
+		end_time = #{endTime,jdbcType=TIMESTAMP}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<select id="validProRateCode"  resultMap="BaseResultMap" parameterType="com.wangfj.product.supplier.domain.entity.PcmSupplyShopCode" >
+		select 
+    	<include refid="Base_Column_List" />
+	    from pcm_supply_shop_code
+	    where
+	    	promo_sale_code = #{promoSaleCode,jdbcType=BIGINT}
+	    and 
+	    	begin_time <![CDATA[<=]]> #{beginTime,jdbcType=TIMESTAMP}
+	    and 
+			end_time <![CDATA[>=]]> #{endTime,jdbcType=TIMESTAMP}
+	</select>
+	<select id="selectProRateCode" resultType="com.wangfj.product.maindata.domain.vo.PromotionRateDto" parameterType="com.wangfj.product.maindata.domain.vo.PromotionRateDto">
+		select
+    		si.supply_code as supplierCode,
+    		sp.shoppe_code as counterCode,
+    		ssc.promo_sale_code as popCode,
+    		ssc.begin_time as beginTime,
+    		ssc.end_time as endTime
+		from
+    		pcm_supply_shop_code ssc
+    	join
+    		pcm_shoppe sp on sp.sid=ssc.shoppe_sid
+    	join
+    		pcm_organization org on org.sid=sp.shop_sid
+    	join
+    		pcm_supply_info si on si.shop_sid=org.organization_code and si.sid=ssc.supply_sid
+    	where 
+    		si.supply_code=#{supplierCode}
+    	and 
+    		sp.shoppe_code=#{counterCode}
+    	<if test="popCode != null">
+    		and ssc.promo_sale_code like '%${popCode}%'
+    	</if>
+	</select>
+</mapper>

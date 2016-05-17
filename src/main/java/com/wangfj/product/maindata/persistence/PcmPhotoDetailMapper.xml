@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmPhotoDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.wangfj.product.maindata.domain.entity.PcmPhotoDetail" >
+    <id column="sid" property="sid" jdbcType="BIGINT" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="brand_sid" property="brandSid" jdbcType="BIGINT" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="pro_sku" property="proSku" jdbcType="VARCHAR" />
+    <result column="pro_color" property="proColor" jdbcType="VARCHAR" />
+    <result column="color_sid" property="colorSid" jdbcType="BIGINT" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="stock_num" property="stockNum" jdbcType="DECIMAL" />
+    <result column="shop_sid" property="shopSid" jdbcType="BIGINT" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="supply_sid" property="supplySid" jdbcType="BIGINT" />
+    <result column="category_sid" property="categorySid" jdbcType="VARCHAR" />
+    <result column="original_price" property="originalPrice" jdbcType="DECIMAL" />
+    <result column="current_price" property="currentPrice" jdbcType="DECIMAL" />
+    <result column="current_off_value" property="currentOffValue" jdbcType="DECIMAL" />
+    <result column="pro_supply_price_sid" property="proSupplyPriceSid" jdbcType="BIGINT" />
+    <result column="pro_class_desc" property="proClassDesc" jdbcType="VARCHAR" />
+    <result column="pro_class_sid" property="proClassSid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sid, product_name, brand_sid, brand_name, pro_sku, pro_color, color_sid, company_name, 
+    stock_num, shop_sid, shop_name, supply_sid, category_sid, original_price, current_price, 
+    current_off_value, pro_supply_price_sid, pro_class_desc, pro_class_sid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from pcm_photo_detail
+    where sid = #{sid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pcm_photo_detail
+    where sid = #{sid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangfj.product.maindata.domain.entity.PcmPhotoDetail" >
+    insert into pcm_photo_detail (sid, product_name, brand_sid, 
+      brand_name, pro_sku, pro_color, 
+      color_sid, company_name, stock_num, 
+      shop_sid, shop_name, supply_sid, 
+      category_sid, original_price, current_price, 
+      current_off_value, pro_supply_price_sid, pro_class_desc, 
+      pro_class_sid)
+    values (#{sid,jdbcType=BIGINT}, #{productName,jdbcType=VARCHAR}, #{brandSid,jdbcType=BIGINT}, 
+      #{brandName,jdbcType=VARCHAR}, #{proSku,jdbcType=VARCHAR}, #{proColor,jdbcType=VARCHAR}, 
+      #{colorSid,jdbcType=BIGINT}, #{companyName,jdbcType=VARCHAR}, #{stockNum,jdbcType=DECIMAL}, 
+      #{shopSid,jdbcType=BIGINT}, #{shopName,jdbcType=VARCHAR}, #{supplySid,jdbcType=BIGINT}, 
+      #{categorySid,jdbcType=VARCHAR}, #{originalPrice,jdbcType=DECIMAL}, #{currentPrice,jdbcType=DECIMAL}, 
+      #{currentOffValue,jdbcType=DECIMAL}, #{proSupplyPriceSid,jdbcType=BIGINT}, #{proClassDesc,jdbcType=VARCHAR}, 
+      #{proClassSid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmPhotoDetail" >
+    insert into pcm_photo_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="brandSid != null" >
+        brand_sid,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="proSku != null" >
+        pro_sku,
+      </if>
+      <if test="proColor != null" >
+        pro_color,
+      </if>
+      <if test="colorSid != null" >
+        color_sid,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="stockNum != null" >
+        stock_num,
+      </if>
+      <if test="shopSid != null" >
+        shop_sid,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="supplySid != null" >
+        supply_sid,
+      </if>
+      <if test="categorySid != null" >
+        category_sid,
+      </if>
+      <if test="originalPrice != null" >
+        original_price,
+      </if>
+      <if test="currentPrice != null" >
+        current_price,
+      </if>
+      <if test="currentOffValue != null" >
+        current_off_value,
+      </if>
+      <if test="proSupplyPriceSid != null" >
+        pro_supply_price_sid,
+      </if>
+      <if test="proClassDesc != null" >
+        pro_class_desc,
+      </if>
+      <if test="proClassSid != null" >
+        pro_class_sid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        #{sid,jdbcType=BIGINT},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandSid != null" >
+        #{brandSid,jdbcType=BIGINT},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="proSku != null" >
+        #{proSku,jdbcType=VARCHAR},
+      </if>
+      <if test="proColor != null" >
+        #{proColor,jdbcType=VARCHAR},
+      </if>
+      <if test="colorSid != null" >
+        #{colorSid,jdbcType=BIGINT},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="stockNum != null" >
+        #{stockNum,jdbcType=DECIMAL},
+      </if>
+      <if test="shopSid != null" >
+        #{shopSid,jdbcType=BIGINT},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplySid != null" >
+        #{supplySid,jdbcType=BIGINT},
+      </if>
+      <if test="categorySid != null" >
+        #{categorySid,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPrice != null" >
+        #{originalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="currentPrice != null" >
+        #{currentPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="currentOffValue != null" >
+        #{currentOffValue,jdbcType=DECIMAL},
+      </if>
+      <if test="proSupplyPriceSid != null" >
+        #{proSupplyPriceSid,jdbcType=BIGINT},
+      </if>
+      <if test="proClassDesc != null" >
+        #{proClassDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="proClassSid != null" >
+        #{proClassSid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmPhotoDetail" >
+    update pcm_photo_detail
+    <set >
+      <if test="productName != null" >
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandSid != null" >
+        brand_sid = #{brandSid,jdbcType=BIGINT},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="proSku != null" >
+        pro_sku = #{proSku,jdbcType=VARCHAR},
+      </if>
+      <if test="proColor != null" >
+        pro_color = #{proColor,jdbcType=VARCHAR},
+      </if>
+      <if test="colorSid != null" >
+        color_sid = #{colorSid,jdbcType=BIGINT},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="stockNum != null" >
+        stock_num = #{stockNum,jdbcType=DECIMAL},
+      </if>
+      <if test="shopSid != null" >
+        shop_sid = #{shopSid,jdbcType=BIGINT},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplySid != null" >
+        supply_sid = #{supplySid,jdbcType=BIGINT},
+      </if>
+      <if test="categorySid != null" >
+        category_sid = #{categorySid,jdbcType=VARCHAR},
+      </if>
+      <if test="originalPrice != null" >
+        original_price = #{originalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="currentPrice != null" >
+        current_price = #{currentPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="currentOffValue != null" >
+        current_off_value = #{currentOffValue,jdbcType=DECIMAL},
+      </if>
+      <if test="proSupplyPriceSid != null" >
+        pro_supply_price_sid = #{proSupplyPriceSid,jdbcType=BIGINT},
+      </if>
+      <if test="proClassDesc != null" >
+        pro_class_desc = #{proClassDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="proClassSid != null" >
+        pro_class_sid = #{proClassSid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangfj.product.maindata.domain.entity.PcmPhotoDetail" >
+    update pcm_photo_detail
+    set product_name = #{productName,jdbcType=VARCHAR},
+      brand_sid = #{brandSid,jdbcType=BIGINT},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      pro_sku = #{proSku,jdbcType=VARCHAR},
+      pro_color = #{proColor,jdbcType=VARCHAR},
+      color_sid = #{colorSid,jdbcType=BIGINT},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      stock_num = #{stockNum,jdbcType=DECIMAL},
+      shop_sid = #{shopSid,jdbcType=BIGINT},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      supply_sid = #{supplySid,jdbcType=BIGINT},
+      category_sid = #{categorySid,jdbcType=VARCHAR},
+      original_price = #{originalPrice,jdbcType=DECIMAL},
+      current_price = #{currentPrice,jdbcType=DECIMAL},
+      current_off_value = #{currentOffValue,jdbcType=DECIMAL},
+      pro_supply_price_sid = #{proSupplyPriceSid,jdbcType=BIGINT},
+      pro_class_desc = #{proClassDesc,jdbcType=VARCHAR},
+      pro_class_sid = #{proClassSid,jdbcType=VARCHAR}
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  <select id="selectListByParam" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    	<include refid="Base_Column_List" />
+    from pcm_photo_detail
+    <where>
+      <if test="sid != null" >
+        and sid = #{sid,jdbcType=BIGINT}
+      </if>
+      <if test="productName != null" >
+        and product_name = #{productName,jdbcType=VARCHAR}
+      </if>
+      <if test="brandSid != null" >
+        and brand_sid = #{brandSid,jdbcType=BIGINT}
+      </if>
+      <if test="brandName != null" >
+        and brand_name = #{brandName,jdbcType=VARCHAR}
+      </if>
+      <if test="proSku != null" >
+        and pro_sku = #{proSku,jdbcType=VARCHAR}
+      </if>
+      <if test="proColor != null" >
+        and pro_color = #{proColor,jdbcType=VARCHAR}
+      </if>
+      <if test="colorSid != null" >
+        and color_sid = #{colorSid,jdbcType=BIGINT}
+      </if>
+      <if test="companyName != null" >
+        and company_name = #{companyName,jdbcType=VARCHAR}
+      </if>
+      <if test="stockNum != null" >
+        and stock_num = #{stockNum,jdbcType=DECIMAL}
+      </if>
+      <if test="shopSid != null" >
+        and shop_sid = #{shopSid,jdbcType=BIGINT}
+      </if>
+      <if test="shopName != null" >
+        and shop_name = #{shopName,jdbcType=VARCHAR}
+      </if>
+      <if test="supplySid != null" >
+        and supply_sid = #{supplySid,jdbcType=BIGINT}
+      </if>
+      <if test="categorySid != null" >
+        and category_sid = #{categorySid,jdbcType=VARCHAR}
+      </if>
+      <if test="originalPrice != null" >
+        and original_price = #{originalPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="currentPrice != null" >
+        and current_price = #{currentPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="currentOffValue != null" >
+        and current_off_value = #{currentOffValue,jdbcType=DECIMAL}
+      </if>
+      <if test="proSupplyPriceSid != null" >
+        and pro_supply_price_sid = #{proSupplyPriceSid,jdbcType=BIGINT}
+      </if>
+      <if test="proClassDesc != null" >
+        and pro_class_desc = #{proClassDesc,jdbcType=VARCHAR}
+      </if>
+      <if test="proClassSid != null" >
+        and pro_class_sid = #{proClassSid,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="selectPageListByParam" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    	<include refid="Base_Column_List" />
+    from pcm_photo_detail
+    <where>
+      <if test="sid != null" >
+        and sid = #{sid,jdbcType=BIGINT}
+      </if>
+      <if test="productName != null" >
+        and product_name = #{productName,jdbcType=VARCHAR}
+      </if>
+      <if test="brandSid != null" >
+        and brand_sid = #{brandSid,jdbcType=BIGINT}
+      </if>
+      <if test="brandName != null" >
+        and brand_name = #{brandName,jdbcType=VARCHAR}
+      </if>
+      <if test="proSku != null" >
+        and pro_sku = #{proSku,jdbcType=VARCHAR}
+      </if>
+      <if test="proColor != null" >
+        and pro_color = #{proColor,jdbcType=VARCHAR}
+      </if>
+      <if test="colorSid != null" >
+        and color_sid = #{colorSid,jdbcType=BIGINT}
+      </if>
+      <if test="companyName != null" >
+        and company_name = #{companyName,jdbcType=VARCHAR}
+      </if>
+      <if test="stockNum != null" >
+        and stock_num = #{stockNum,jdbcType=DECIMAL}
+      </if>
+      <if test="shopSid != null" >
+        and shop_sid = #{shopSid,jdbcType=BIGINT}
+      </if>
+      <if test="shopName != null" >
+        and shop_name = #{shopName,jdbcType=VARCHAR}
+      </if>
+      <if test="supplySid != null" >
+        and supply_sid = #{supplySid,jdbcType=BIGINT}
+      </if>
+      <if test="categorySid != null" >
+        and category_sid = #{categorySid,jdbcType=VARCHAR}
+      </if>
+      <if test="originalPrice != null" >
+        and original_price = #{originalPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="currentPrice != null" >
+        and current_price = #{currentPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="currentOffValue != null" >
+        and current_off_value = #{currentOffValue,jdbcType=DECIMAL}
+      </if>
+      <if test="proSupplyPriceSid != null" >
+        and pro_supply_price_sid = #{proSupplyPriceSid,jdbcType=BIGINT}
+      </if>
+      <if test="proClassDesc != null" >
+        and pro_class_desc = #{proClassDesc,jdbcType=VARCHAR}
+      </if>
+      <if test="proClassSid != null" >
+        and pro_class_sid = #{proClassSid,jdbcType=VARCHAR}
+      </if>
+    </where>
+        order by
+			sid asc
+		limit
+			#{start}, #{limit}
+  </select>
+  <select id="getCountByParam" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select 
+    	count(*)
+    from pcm_photo_detail
+    <where>
+      <if test="sid != null" >
+        and sid = #{sid,jdbcType=BIGINT}
+      </if>
+      <if test="productName != null" >
+        and product_name = #{productName,jdbcType=VARCHAR}
+      </if>
+      <if test="brandSid != null" >
+        and brand_sid = #{brandSid,jdbcType=BIGINT}
+      </if>
+      <if test="brandName != null" >
+        and brand_name = #{brandName,jdbcType=VARCHAR}
+      </if>
+      <if test="proSku != null" >
+        and pro_sku = #{proSku,jdbcType=VARCHAR}
+      </if>
+      <if test="proColor != null" >
+        and pro_color = #{proColor,jdbcType=VARCHAR}
+      </if>
+      <if test="colorSid != null" >
+        and color_sid = #{colorSid,jdbcType=BIGINT}
+      </if>
+      <if test="companyName != null" >
+        and company_name = #{companyName,jdbcType=VARCHAR}
+      </if>
+      <if test="stockNum != null" >
+        and stock_num = #{stockNum,jdbcType=DECIMAL}
+      </if>
+      <if test="shopSid != null" >
+        and shop_sid = #{shopSid,jdbcType=BIGINT}
+      </if>
+      <if test="shopName != null" >
+        and shop_name = #{shopName,jdbcType=VARCHAR}
+      </if>
+      <if test="supplySid != null" >
+        and supply_sid = #{supplySid,jdbcType=BIGINT}
+      </if>
+      <if test="categorySid != null" >
+        and category_sid = #{categorySid,jdbcType=VARCHAR}
+      </if>
+      <if test="originalPrice != null" >
+        and original_price = #{originalPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="currentPrice != null" >
+        and current_price = #{currentPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="currentOffValue != null" >
+        and current_off_value = #{currentOffValue,jdbcType=DECIMAL}
+      </if>
+      <if test="proSupplyPriceSid != null" >
+        and pro_supply_price_sid = #{proSupplyPriceSid,jdbcType=BIGINT}
+      </if>
+      <if test="proClassDesc != null" >
+        and pro_class_desc = #{proClassDesc,jdbcType=VARCHAR}
+      </if>
+      <if test="proClassSid != null" >
+        and pro_class_sid = #{proClassSid,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+</mapper>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.brand.persistence.PcmBrandAliasMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.brand.domain.entity.PcmBrandAlias">
+		<id column="sid" property="sid" jdbcType="BIGINT" />
+		<result column="brand_sid" property="brandSid" jdbcType="BIGINT" />
+		<result column="brand_alias" property="brandAlias" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, brand_sid, brand_alias
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_brand_alias
+		where sid = #{sid,jdbcType=BIGINT}
+	</select>
+
+	<!-- 查询所有 selectListByParam -->
+	<select id="selectListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_brand_alias
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=BIGINT}
+			</if>
+			<if test="brandAlias != null">
+				and brand_alias = #{brandAlias,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<!-- 分页查询 -->
+	<select id="selectPageListByParam" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_brand_alias
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=BIGINT}
+			</if>
+			<if test="brandAlias != null">
+				and brand_alias = #{brandAlias,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by
+		sid asc
+		limit
+		#{start}, #{limit}
+	</select>
+
+	<!-- 查询数量 -->
+	<select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_brand_alias
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="brandSid != null">
+				and brand_sid = #{brandSid,jdbcType=BIGINT}
+			</if>
+			<if test="brandAlias != null">
+				and brand_alias = #{brandAlias,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from pcm_brand_alias
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmBrandAlias">
+		insert into pcm_brand_alias (sid, brand_sid, brand_alias
+		)
+		values (#{sid,jdbcType=BIGINT}, #{brandSid,jdbcType=BIGINT},
+		#{brandAlias,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmBrandAlias">
+		insert into pcm_brand_alias
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="brandSid != null">
+				brand_sid,
+			</if>
+			<if test="brandAlias != null">
+				brand_alias,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=BIGINT},
+			</if>
+			<if test="brandSid != null">
+				#{brandSid,jdbcType=BIGINT},
+			</if>
+			<if test="brandAlias != null">
+				#{brandAlias,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmBrandAlias">
+		update pcm_brand_alias
+		<set>
+			<if test="brandSid != null">
+				brand_sid = #{brandSid,jdbcType=BIGINT},
+			</if>
+			<if test="brandAlias != null">
+				brand_alias = #{brandAlias,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.brand.domain.entity.PcmBrandAlias">
+		update pcm_brand_alias
+		set brand_sid = #{brandSid,jdbcType=BIGINT},
+		brand_alias = #{brandAlias,jdbcType=VARCHAR}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+</mapper>

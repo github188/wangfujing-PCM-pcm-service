@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.demo.persistence.StudentsMapper" >
+<resultMap id="BaseResultMap" type="com.wangfj.product.demo.domain.entity.Students" >
+    <id column="sid" property="sid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="birthday" property="birthday" jdbcType="DATE" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sid, name, age, birthday, idcard
+  </sql>
+  
+  <insert id="insert" parameterType="com.wangfj.product.demo.domain.entity.Students" useGeneratedKeys="true" keyProperty="sid" >
+    insert into student
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="idcard != null" >
+        idcard,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        #{sid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="idcard != null" >
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.wangfj.product.demo.domain.entity.Students" >
+    update student
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="idcard != null" >
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=INTEGER}
+  </update>
+  
+    <select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    	<include refid="Base_Column_List" />
+    from student
+    	where sid = #{sid,jdbcType=INTEGER}
+  </select>
+  
+  
+  <select id="selectListByParam" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    	<include refid="Base_Column_List" />
+    from student
+    <where>
+    	<if test="name != null" >
+        and name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="age != null" >
+        and age = #{age,jdbcType=INTEGER}
+      </if>
+      <if test="birthday != null" >
+        and birthday = #{birthday,jdbcType=DATE}
+      </if>
+      <if test="idcard != null" >
+        and idcard = #{idcard,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  
+  <select id="selectPageListByParam" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    	<include refid="Base_Column_List" />
+    from student
+    <where>
+    	<if test="name != null" >
+        and name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="age != null" >
+        and age = #{age,jdbcType=INTEGER}
+      </if>
+      <if test="birthday != null" >
+        and birthday = #{birthday,jdbcType=DATE}
+      </if>
+      <if test="idcard != null" >
+        and idcard = #{idcard,jdbcType=VARCHAR}
+      </if>
+    </where>
+    order by
+			sid asc
+		limit
+			#{start}, #{limit}
+  </select>
+  <select id="getCountByParam" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select 
+    	count(*)
+    from student
+    <where>
+      <if test="name != null" >
+        and name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="age != null" >
+        and age = #{age,jdbcType=INTEGER}
+      </if>
+      <if test="birthday != null" >
+        and birthday = #{birthday,jdbcType=DATE}
+      </if>
+      <if test="idcard != null" >
+        and idcard = #{idcard,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  
+  
+  
+  
+  
+  </mapper>

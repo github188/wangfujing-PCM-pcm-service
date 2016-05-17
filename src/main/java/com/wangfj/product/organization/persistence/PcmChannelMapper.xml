@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.organization.persistence.PcmChannelMapper">
+    <resultMap id="BaseResultMap"
+               type="com.wangfj.product.organization.domain.entity.PcmChannel">
+        <id column="sid" property="sid" jdbcType="BIGINT"/>
+        <result column="channel_code" property="channelCode" jdbcType="VARCHAR"/>
+        <result column="channel_name" property="channelName" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="opt_user" property="optUser" jdbcType="VARCHAR"/>
+        <result column="opt_date" property="optDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+		sid, channel_code, channel_name, status, opt_user, opt_date
+	</sql>
+    <select id="get" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_channel
+        where sid = #{sid,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		pcm_channel
+		where sid = #{sid,jdbcType=BIGINT}
+	</delete>
+    <insert id="insert"
+            parameterType="com.wangfj.product.organization.domain.entity.PcmChannel">
+		insert into pcm_channel (sid, channel_code,
+		channel_name,
+		status,
+		opt_user, opt_date)
+		values (#{sid,jdbcType=BIGINT},
+		#{channelCode,jdbcType=VARCHAR},
+		#{channelName,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER},
+		#{optUser,jdbcType=VARCHAR},
+		#{optDate,jdbcType=TIMESTAMP})
+	</insert>
+    <insert id="insertSelective"
+            parameterType="com.wangfj.product.organization.domain.entity.PcmChannel"
+            useGeneratedKeys="true" keyProperty="sid">
+        insert into pcm_channel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                sid,
+            </if>
+            <if test="channelCode != null">
+                channel_code,
+            </if>
+            <if test="channelName != null">
+                channel_name,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="optUser != null">
+                opt_user,
+            </if>
+            <if test="optDate != null">
+                opt_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                #{sid,jdbcType=BIGINT},
+            </if>
+            <if test="channelCode != null">
+                #{channelCode,jdbcType=VARCHAR},
+            </if>
+            <if test="channelName != null">
+                #{channelName,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="optUser != null">
+                #{optUser,jdbcType=VARCHAR},
+            </if>
+            <if test="optDate != null">
+                #{optDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.wangfj.product.organization.domain.entity.PcmChannel">
+        update pcm_channel
+        <set>
+            <if test="channelCode != null">
+                channel_code = #{channelCode,jdbcType=VARCHAR},
+            </if>
+            <if test="channelName != null">
+                channel_name = #{channelName,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="optUser != null">
+                opt_user = #{optUser,jdbcType=VARCHAR},
+            </if>
+            <if test="optDate != null">
+                opt_date = #{optDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey"
+            parameterType="com.wangfj.product.organization.domain.entity.PcmChannel">
+		update pcm_channel
+		set channel_code =
+		#{channelCode,jdbcType=VARCHAR},
+		channel_name =
+		#{channelName,jdbcType=VARCHAR},
+		status = #{status,jdbcType=INTEGER},
+		opt_user = #{optUser,jdbcType=VARCHAR},
+		opt_date =
+		#{optDate,jdbcType=TIMESTAMP}
+		where sid = #{sid,jdbcType=BIGINT}
+	</update>
+
+    <select id="pushChannelData" resultType="java.util.Map"
+            parameterType="java.util.Map">
+        SELECT
+        channel_code AS code,
+        channel_name AS name,
+        opt_user AS
+        actionPerson
+        FROM
+        pcm_channel
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_channel
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="channelCode != null">
+                and channel_code = #{channelCode,jdbcType=VARCHAR}
+            </if>
+            <if test="channelName != null">
+                and channel_name = #{channelName,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="optUser != null">
+                and opt_user = #{optUser,jdbcType=VARCHAR}
+            </if>
+            <if test="optDate != null">
+                and opt_date = #{optDate,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectPageListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_channel
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="channelCode != null">
+                and channel_code = #{channelCode,jdbcType=VARCHAR}
+            </if>
+            <if test="channelName != null">
+                and channel_name = #{channelName,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="optUser != null">
+                and opt_user = #{optUser,jdbcType=VARCHAR}
+            </if>
+            <if test="optDate != null">
+                and opt_date = #{optDate,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+        order by
+        sid desc
+        <if test="limit != null">
+            <if test="start != null">
+                limit
+                #{start}, #{limit}
+            </if>
+        </if>
+    </select>
+    <select id="getCountByParam" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        select
+        count(*)
+        from pcm_channel
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="channelCode != null">
+                and channel_code = #{channelCode,jdbcType=VARCHAR}
+            </if>
+            <if test="channelName != null">
+                and channel_name = #{channelName,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="optUser != null">
+                and opt_user = #{optUser,jdbcType=VARCHAR}
+            </if>
+            <if test="optDate != null">
+                and opt_date = #{optDate,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectList" resultMap="BaseResultMap"
+            parameterType="com.wangfj.product.organization.domain.entity.PcmChannel">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_channel
+        <where>
+            status=0
+            <if test="sid != null">
+                sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="channelCode != null">
+                and channel_code = #{channelCode,jdbcType=VARCHAR}
+            </if>
+            <if test="channelName != null">
+                and channel_name = #{channelName,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=BIGINT}
+            </if>
+            <if test="optUser != null">
+                and opt_user = #{optUser,jdbcType=VARCHAR}
+            </if>
+            <if test="optDate != null">
+                and opt_date = #{optDate,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+        order by sid asc
+    </select>
+
+    <!-- 分页查询selectPageByPara wangxuan -->
+    <select id="selectPageByPara" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_channel
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="channelCode != null">
+                and channel_code = #{channelCode,jdbcType=VARCHAR}
+            </if>
+            <if test="channelName != null">
+                and channel_name like
+                "%"#{channelName,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="optUser != null">
+                and opt_user = #{optUser,jdbcType=VARCHAR}
+            </if>
+            <if test="optDate != null">
+                and opt_date = #{optDate,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+        <if test="orderBy == 'sid'">
+            order by
+            sid desc
+        </if>
+        <if test="orderBy == 'channelName'">
+            ORDER BY
+            CONVERT(channel_name USING gbk)
+        </if>
+        <if test="limit != null and start != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+    <!-- 分页总数查询getPageCountByPara wangxuan -->
+    <select id="getPageCountByPara" resultType="java.lang.Integer"
+            parameterType="java.util.Map">
+        select
+        count(*)
+        from pcm_channel
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="channelCode != null">
+                and channel_code = #{channelCode,jdbcType=VARCHAR}
+            </if>
+            <if test="channelName != null">
+                and channel_name like
+                "%"#{channelName,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="optUser != null">
+                and opt_user = #{optUser,jdbcType=VARCHAR}
+            </if>
+            <if test="optDate != null">
+                and opt_date = #{optDate,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据SPU（编码）查询渠道 页面 拍照-->
+    <select id="findChannelBySPUPara" parameterType="java.util.Map"
+            resultType="com.wangfj.product.organization.domain.vo.PcmChannelDto">
+        SELECT
+            pc.sid AS sid,
+	        pc.channel_code AS channelCode,
+            pc.channel_name AS channelName
+        FROM
+            pcm_shoppe ps
+        INNER JOIN pcm_channel_sale_config pcsc ON pcsc.shoppe_pro_sid = ps.sid
+        AND pcsc.sale_stauts = 0
+        INNER JOIN pcm_channel pc ON pcsc.channel_sid = pc.channel_code
+        AND pcsc.sale_stauts = 0
+        WHERE
+            ps.sid IN (
+                SELECT
+                    ssu.shoppe_sid
+                FROM
+                    pcm_shoppe_product ssu
+                WHERE
+                    ssu.product_detail_sid IN (
+                        SELECT
+                            sku.sid
+                        FROM
+                            pcm_pro_detail sku
+                        WHERE
+                            sku.product_sid = (
+                                SELECT
+                                    spu.sid
+                                FROM
+                                    pcm_product spu
+                                WHERE
+                                    spu.product_sid =
+                                <if test="spuCode != null and !''.equals(spuCode.trim())">
+                                    #{spuCode}
+                                </if>
+                                <if test="spuCode == null or ''.equals(spuCode.trim())">
+                                    0
+                                </if>
+                                LIMIT 0,
+                                1
+                            )
+                    )
+            )
+    </select>
+
+    <!-- 根据SPU（编码）查询渠道 -->
+    <!--<select id="findChannelBySPUPara" parameterType="java.util.Map"
+            resultType="com.wangfj.product.organization.domain.vo.PcmChannelDto">
+        SELECT DISTINCT
+        pc.sid AS sid,
+        pc.channel_code AS channelCode,
+        pc.channel_name AS channelName,
+        pc.status AS status
+        FROM
+           pcm_channel pc
+        WHERE
+          pc.status = 0
+          AND pc.channel_code = '0'
+        <if test="spuCode != null and !''.equals(spuCode.trim())">
+            AND 1 = 1
+        </if>
+    </select>-->
+
+
+</mapper>

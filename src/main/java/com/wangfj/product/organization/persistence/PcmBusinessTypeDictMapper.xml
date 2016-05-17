@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.wangfj.product.organization.persistence.PcmBusinessTypeDictMapper">
+	<resultMap id="BaseResultMap"
+		type="com.wangfj.product.organization.domain.entity.PcmBusinessTypeDict">
+		<id column="sid" property="sid" jdbcType="INTEGER" />
+		<result column="business_code" property="businessCode"
+			jdbcType="VARCHAR" />
+		<result column="business_name" property="businessName"
+			jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="opt_user_sid" property="optUserSid" jdbcType="BIGINT" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		sid, business_code, business_name, create_time,
+		opt_user_sid,status
+	</sql>
+	<select id="get" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_business_type_dict
+		where sid = #{sid,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		pcm_business_type_dict
+		where sid = #{sid,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert"
+		parameterType="com.wangfj.product.organization.domain.entity.PcmBusinessTypeDict">
+		insert into pcm_business_type_dict (sid, business_code,
+		business_name,
+		create_time,
+		opt_user_sid,
+		status)
+		values
+		(#{sid,jdbcType=INTEGER},
+		#{businessCode,jdbcType=VARCHAR},
+		#{businessName,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{optUserSid,jdbcType=BIGINT},
+		#{status,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.wangfj.product.organization.domain.entity.PcmBusinessTypeDict"
+		useGeneratedKeys="true" keyProperty="sid">
+		insert into pcm_business_type_dict
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="businessCode != null">
+				business_code,
+			</if>
+			<if test="businessName != null">
+				business_name,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sid != null">
+				#{sid,jdbcType=INTEGER},
+			</if>
+			<if test="businessCode != null">
+				#{businessCode,jdbcType=VARCHAR},
+			</if>
+			<if test="businessName != null">
+				#{businessName,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optUserSid != null">
+				#{optUserSid,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER}
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.wangfj.product.organization.domain.entity.PcmBusinessTypeDict">
+		update pcm_business_type_dict
+		<set>
+			<if test="businessName != null">
+				business_name = #{businessName,jdbcType=VARCHAR},
+			</if>
+			<if test="businessCode != null">
+				business_code = #{businessCode,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="optUserSid != null">
+				opt_user_sid = #{optUserSid,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+		</set>
+		where sid = #{sid,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.wangfj.product.organization.domain.entity.PcmBusinessTypeDict">
+		update pcm_business_type_dict
+		set business_name =
+		#{businessName,jdbcType=VARCHAR},
+		business_code =
+		#{businessCode,jdbcType=VARCHAR},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		opt_user_sid =
+		#{optUserSid,jdbcType=BIGINT},
+		status = #{status,jdbcType=INTEGER},
+		where sid = #{sid,jdbcType=INTEGER}
+		
+	</update>
+	<select id="selectValidByParam"
+		parameterType="com.wangfj.product.organization.domain.entity.PcmBusinessTypeDict"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_business_type_dict
+		where
+		(business_name = #{businessName,jdbcType=VARCHAR}
+		or business_code = #{businessCode,jdbcType=VARCHAR})
+		and status=0
+		
+	</select>
+	<select id="selectPageListByParam" resultMap="BaseResultMap" parameterType="java.util.Map" >
+	    select 
+	    	<include refid="Base_Column_List" />
+	    from pcm_business_type_dict
+	    <where>
+	      <if test="sid != null" >
+	        and sid = #{sid,jdbcType=BIGINT}
+	      </if>
+			<if test="businessName != null">
+				and business_name = #{businessName,jdbcType=VARCHAR}
+			</if>
+			<if test="businessCode != null">
+				and business_code = #{businessCode,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+   		 </where>
+		order by
+		sid asc
+   		 <if test="limit != null">
+		limit
+		#{start}, #{limit}
+		</if>
+   	 </select>
+   	 <select id="getCountByParam" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select
+		count(*)
+		from pcm_business_type_dict
+		<where>
+			<if test="sid != null">
+				and sid = #{sid,jdbcType=BIGINT}
+			</if>
+			<if test="businessName != null">
+				and business_name = #{businessName,jdbcType=VARCHAR}
+			</if>
+			<if test="businessCode != null">
+				and business_code = #{businessCode,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="optUserSid != null">
+				and opt_user_sid = #{optUserSid,jdbcType=BIGINT}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+</mapper>
