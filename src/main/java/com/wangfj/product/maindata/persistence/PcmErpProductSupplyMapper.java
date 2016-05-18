@@ -1,11 +1,12 @@
 package com.wangfj.product.maindata.persistence;
 
+import com.wangfj.core.framework.base.persistence.BaseMapper;
 import com.wangfj.product.maindata.domain.entity.PcmErpProductSupply;
 
-public interface PcmErpProductSupplyMapper {
+public interface PcmErpProductSupplyMapper extends BaseMapper<PcmErpProductSupply> {
     int deleteByPrimaryKey(Long sid);
 
-    int insert(PcmErpProductSupply record);
+    Integer insert(PcmErpProductSupply record);
 
     int insertSelective(PcmErpProductSupply record);
 

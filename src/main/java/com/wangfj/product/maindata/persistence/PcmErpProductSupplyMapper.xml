@@ -12,7 +12,7 @@
     sid, supply_sid, erp_product_sid, shop_sid, status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from pcm_erp_product_supply
     where sid = #{sid,jdbcType=BIGINT}
@@ -90,4 +90,35 @@
       status = #{status,jdbcType=INTEGER}
     where sid = #{sid,jdbcType=BIGINT}
   </update>
+
+  <select id="selectListByParam" resultMap="BaseResultMap"
+          parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProductSupply">
+    select
+    <include refid="Base_Column_List" />
+    from pcm_erp_product_supply
+    <where>
+      <if test="sid != null">
+        and sid = #{sid,jdbcType=BIGINT}
+      </if>
+      <if test="supplySid != null">
+        and supply_sid = #{supplySid,jdbcType=VARCHAR}
+      </if>
+      <if test="erpProductSid != null">
+        and erp_product_sid = #{erpProductSid,jdbcType=VARCHAR}
+      </if>
+      <if test="shopSid != null">
+        and shop_sid = #{shopSid,jdbcType=VARCHAR}
+      </if>
+      <if test="status != null">
+        and status = #{status,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+
+
+
+
+
+
+
 </mapper>
