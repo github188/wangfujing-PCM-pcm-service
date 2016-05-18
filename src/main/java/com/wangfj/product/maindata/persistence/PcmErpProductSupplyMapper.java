@@ -1,0 +1,17 @@
+package com.wangfj.product.maindata.persistence;
+
+import com.wangfj.product.maindata.domain.entity.PcmErpProductSupply;
+
+public interface PcmErpProductSupplyMapper {
+    int deleteByPrimaryKey(Long sid);
+
+    int insert(PcmErpProductSupply record);
+
+    int insertSelective(PcmErpProductSupply record);
+
+    PcmErpProductSupply selectByPrimaryKey(Long sid);
+
+    int updateByPrimaryKeySelective(PcmErpProductSupply record);
+
+    int updateByPrimaryKey(PcmErpProductSupply record);
+}
