@@ -1376,9 +1376,15 @@
 		sp.shoppe_code
 		LEFT JOIN pcm_organization org ON sp.shop_sid = org.sid
 		LEFT JOIN pcm_brand brg ON brg.brand_sid = erp.brand_code AND org.store_type = brg.shop_type
-		LEFT JOIN
-		pcm_supply_info supply ON erp.supply_code = supply.supply_code
 		LEFT JOIN pcm_price pp ON pp.attribute2 = erp.store_code AND pp.shoppe_pro_sid = erp.product_code
+		<if test="supplyCode != null">
+			JOIN pcm_erp_product_supply peps ON peps.erp_product_sid = erp.product_code
+			AND peps.shop_sid = erp.store_code AND peps.`status` = 0
+			JOIN pcm_supply_info supply ON peps.supply_sid = supply.supply_code
+		</if>
+		<if test="supplyCode == null">
+			JOIN pcm_supply_info supply ON erp.supply_code = supply.supply_code
+		</if>
 		<where>
 			1=1
 			<if test="cateList != null" >
@@ -1387,6 +1393,9 @@
 					open="(" close=")" separator=",">
 					#{cateCode,jdbcType=VARCHAR}
 				</foreach>
+			</if>
+			<if test="supply != null">
+				and product_type = 1 or product_type = 0
 			</if>
 			<if test="sid != null">
 				and erp.sid = #{sid,jdbcType=BIGINT}
@@ -1515,8 +1524,16 @@
 	<select id="getCountByParam" resultType="java.lang.Integer"
 		parameterType="java.util.Map">
 		select
-		count(sid)
-		from pcm_erp_product
+		count(erp.sid)
+		from pcm_erp_product erp
+		<if test="supplyCode != null">
+			JOIN pcm_erp_product_supply peps ON peps.erp_product_sid = erp.product_code
+			AND peps.shop_sid = erp.store_code AND peps.`status` = 0
+			JOIN pcm_supply_info supply ON peps.supply_sid = supply.supply_code
+		</if>
+		<if test="supplyCode == null">
+			JOIN pcm_supply_info supply ON erp.supply_code = supply.supply_code
+		</if>
 		<where>
 			<if test="cateList != null" >
 				and manage_category IN 

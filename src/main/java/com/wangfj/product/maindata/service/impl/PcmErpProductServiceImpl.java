@@ -451,10 +451,14 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 				// ERP商品已存在
 				PcmErpProduct entity = createEntity(dto);// 创建实体
 				entity.setSid(listPro.get(0).getSid());// sid
+				if(listPro.get(0).getProductType() == 0 || listPro.get(0).getProductType() == 1){
+					entity.setSupplyCode(dto.getSupplierCode());
+				}else{
+					entity.setSupplyCode(null);
+				}
 				entity.setBrandCode(null);
 				entity.setShoppeCode(null);
 				entity.setShoppeName(null);
-				entity.setSupplyCode(null);
 				Integer result = erpProductMapper.updateByPrimaryKeySelective(entity);
 				if (result.intValue() != Constants.PUBLIC_1) {
 					logger.error(dto.getStoreCode() + "-" + dto.getProductCode() + "--"
@@ -1019,6 +1023,12 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 		}
 		if (paramMap.get("pageSize") != null) {
 			page.setPageSize((Integer) paramMap.get("pageSize"));
+		}
+		if(paramMap.get("supplyCode") != null){
+			if(((String)paramMap.get("supplyCode")).equals("1")){
+				paramMap.put("supplyCode", null);
+				paramMap.put("supply", 1);
+			}
 		}
 		if (paramMap.get("isAdjustPrice") != null) {
 			if (paramMap.get("isAdjustPrice").equals(Constants.Y)) {
