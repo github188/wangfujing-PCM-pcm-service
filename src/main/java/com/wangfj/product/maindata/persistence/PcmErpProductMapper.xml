@@ -1395,7 +1395,7 @@
 				</foreach>
 			</if>
 			<if test="supply != null">
-				and product_type = 1 or product_type = 0
+				and erp.product_type = 1 or product_type = 0
 			</if>
 			<if test="sid != null">
 				and erp.sid = #{sid,jdbcType=BIGINT}
@@ -1453,62 +1453,62 @@
 				and erp.stan_name = #{stanName,jdbcType=VARCHAR}
 			</if>
 			<if test="articleNum != null">
-				and article_num = #{articleNum,jdbcType=VARCHAR}
+				and erp.article_num = #{articleNum,jdbcType=VARCHAR}
 			</if>
 			<if test="salesUnit != null">
-				and sales_unit = #{salesUnit,jdbcType=VARCHAR}
+				and erp.sales_unit = #{salesUnit,jdbcType=VARCHAR}
 			</if>
 			<if test="supplierBarcode != null">
-				and supplier_barcode =
+				and erp.supplier_barcode =
 				#{supplierBarcode,jdbcType=VARCHAR}
 			</if>
 			<if test="salesPrice != null">
-				and sales_price = #{salesPrice,jdbcType=DECIMAL}
+				and erp.sales_price = #{salesPrice,jdbcType=DECIMAL}
 			</if>
 			<if test="inputTax != null">
-				and input_tax = #{inputTax,jdbcType=DECIMAL}
+				and erp.input_tax = #{inputTax,jdbcType=DECIMAL}
 			</if>
 			<if test="outputTax != null">
-				and output_tax = #{outputTax,jdbcType=DECIMAL}
+				and erp.output_tax = #{outputTax,jdbcType=DECIMAL}
 			</if>
 			<if test="salesTax != null">
-				and sales_tax = #{salesTax,jdbcType=DECIMAL}
+				and erp.sales_tax = #{salesTax,jdbcType=DECIMAL}
 			</if>
 			<if test="proStatus != null">
-				and pro_status = #{proStatus,jdbcType=INTEGER}
+				and erp.pro_status = #{proStatus,jdbcType=INTEGER}
 			</if>
 			<if test="isPromotion != null">
-				and is_promotion = #{isPromotion,jdbcType=INTEGER}
+				and erp.is_promotion = #{isPromotion,jdbcType=INTEGER}
 			</if>
 			<if test="isAdjustPrice != null">
-				and is_adjust_price = #{isAdjustPrice,jdbcType=INTEGER}
+				and erp.is_adjust_price = #{isAdjustPrice,jdbcType=INTEGER}
 			</if>
 			<if test="manageCategory != null">
-				and manage_category = #{manageCategory,jdbcType=VARCHAR}
+				and erp.manage_category = #{manageCategory,jdbcType=VARCHAR}
 			</if>
 			<if test="discountLimit != null">
-				and discount_limit = #{discountLimit,jdbcType=DECIMAL}
+				and erp.discount_limit = #{discountLimit,jdbcType=DECIMAL}
 			</if>
 			<if test="originLand != null">
-				and origin_land = #{originLand,jdbcType=VARCHAR}
+				and erp.origin_land = #{originLand,jdbcType=VARCHAR}
 			</if>
 			<if test="serviceFeeType != null">
-				and service_fee_type = #{serviceFeeType,jdbcType=VARCHAR}
+				and erp.service_fee_type = #{serviceFeeType,jdbcType=VARCHAR}
 			</if>
 			<if test="formatType != null">
-				and format_type = #{formatType,jdbcType=INTEGER}
+				and erp.format_type = #{formatType,jdbcType=INTEGER}
 			</if>
 			<if test="statCategory != null">
-				and stat_category = #{statCategory,jdbcType=VARCHAR}
+				and erp.stat_category = #{statCategory,jdbcType=VARCHAR}
 			</if>
 			<if test="commissionRate != null">
-				and commission_rate = #{commissionRate,jdbcType=DECIMAL}
+				and erp.commission_rate = #{commissionRate,jdbcType=DECIMAL}
 			</if>
 			<if test="notes != null">
-				and notes = #{notes,jdbcType=VARCHAR}
+				and erp.notes = #{notes,jdbcType=VARCHAR}
 			</if>
 			<if test="productAbbr != null">
-				and product_abbr = #{productAbbr,jdbcType=VARCHAR}
+				and erp.product_abbr = #{productAbbr,jdbcType=VARCHAR}
 			</if>
 		</where>
 		order by
@@ -1536,121 +1536,121 @@
 		</if>
 		<where>
 			<if test="cateList != null" >
-				and manage_category IN 
+				and erp.manage_category IN 
 				<foreach collection="cateList" item="cateCode" index="index"
 					open="(" close=")" separator=",">
 					#{cateCode,jdbcType=VARCHAR}
 				</foreach>
 			</if>
 			<if test="sid != null">
-				and sid = #{sid,jdbcType=BIGINT}
+				and erp.sid = #{sid,jdbcType=BIGINT}
 			</if>
 			<if test="storeCode != null">
-				and store_code = #{storeCode,jdbcType=VARCHAR}
+				and erp.store_code = #{storeCode,jdbcType=VARCHAR}
 			</if>
 			<if test="shopName != null">
-				and shop_name = #{shopName,jdbcType=VARCHAR}
+				and erp.shop_name = #{shopName,jdbcType=VARCHAR}
 			</if>
 			<if test="shoppeCode != null">
-				and shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
+				and erp.shoppe_code = #{shoppeCode,jdbcType=VARCHAR}
 			</if>
 			<if test="shoppeName != null">
-				and shoppe_name = #{shoppeName,jdbcType=VARCHAR}
+				and erp.shoppe_name = #{shoppeName,jdbcType=VARCHAR}
 			</if>
 			<if test="productCode != null">
-				and product_code = #{productCode,jdbcType=VARCHAR}
+				and erp.product_code = #{productCode,jdbcType=VARCHAR}
 			</if>
 			<if test="codeType != null">
-				and code_type = #{codeType,jdbcType=INTEGER}
+				and erp.code_type = #{codeType,jdbcType=INTEGER}
 			</if>
 			<if test="bigCodePrice != null">
-				and big_code_price = #{bigCodePrice,jdbcType=DECIMAL}
+				and erp.big_code_price = #{bigCodePrice,jdbcType=DECIMAL}
 			</if>
 			<if test="supplyCode != null">
-				and supply_code = #{supplyCode,jdbcType=VARCHAR}
+				and erp.supply_code = #{supplyCode,jdbcType=VARCHAR}
 			</if>
 			<if test="offerNo != null">
-				and offer_no = #{offerNo,jdbcType=VARCHAR}
+				and erp.offer_no = #{offerNo,jdbcType=VARCHAR}
 			</if>
 			<if test="brandCode != null">
-				and brand_code = #{brandCode,jdbcType=VARCHAR}
+				and erp.brand_code = #{brandCode,jdbcType=VARCHAR}
 			</if>
 			<if test="updateTime != null">
-				and update_time = #{updateTime,jdbcType=TIMESTAMP}
+				and erp.update_time = #{updateTime,jdbcType=TIMESTAMP}
 			</if>
 			<if test="optUserSid != null">
-				and opt_user_sid = #{optUserSid,jdbcType=VARCHAR}
+				and erp.opt_user_sid = #{optUserSid,jdbcType=VARCHAR}
 			</if>
 			<if test="productName != null">
-				and product_name like '%${productName}%'
+				and erp.product_name like '%${productName}%'
 			</if>
 			<if test="productType != null">
-				and product_type = #{productType,jdbcType=INTEGER}
+				and erp.product_type = #{productType,jdbcType=INTEGER}
 			</if>
 			<if test="productCategory != null">
-				and product_category =
+				and erp.product_category =
 				#{productCategory,jdbcType=INTEGER}
 			</if>
 			<if test="stanName != null">
-				and stan_name = #{stanName,jdbcType=VARCHAR}
+				and erp.stan_name = #{stanName,jdbcType=VARCHAR}
 			</if>
 			<if test="articleNum != null">
-				and article_num = #{articleNum,jdbcType=VARCHAR}
+				and erp.article_num = #{articleNum,jdbcType=VARCHAR}
 			</if>
 			<if test="salesUnit != null">
-				and sales_unit = #{salesUnit,jdbcType=VARCHAR}
+				and erp.sales_unit = #{salesUnit,jdbcType=VARCHAR}
 			</if>
 			<if test="supplierBarcode != null">
-				and supplier_barcode =
+				and erp.supplier_barcode =
 				#{supplierBarcode,jdbcType=VARCHAR}
 			</if>
 			<if test="salesPrice != null">
-				and sales_price = #{salesPrice,jdbcType=DECIMAL}
+				and erp.sales_price = #{salesPrice,jdbcType=DECIMAL}
 			</if>
 			<if test="inputTax != null">
-				and input_tax = #{inputTax,jdbcType=DECIMAL}
+				and erp.input_tax = #{inputTax,jdbcType=DECIMAL}
 			</if>
 			<if test="outputTax != null">
-				and output_tax = #{outputTax,jdbcType=DECIMAL}
+				and erp.output_tax = #{outputTax,jdbcType=DECIMAL}
 			</if>
 			<if test="salesTax != null">
-				and sales_tax = #{salesTax,jdbcType=DECIMAL}
+				and erp.sales_tax = #{salesTax,jdbcType=DECIMAL}
 			</if>
 			<if test="proStatus != null">
-				and pro_status = #{proStatus,jdbcType=INTEGER}
+				and erp.pro_status = #{proStatus,jdbcType=INTEGER}
 			</if>
 			<if test="isPromotion != null">
-				and is_promotion = #{isPromotion,jdbcType=INTEGER}
+				and erp.is_promotion = #{isPromotion,jdbcType=INTEGER}
 			</if>
 			<if test="isAdjustPrice != null">
-				and is_adjust_price = #{isAdjustPrice,jdbcType=INTEGER}
+				and erp.is_adjust_price = #{isAdjustPrice,jdbcType=INTEGER}
 			</if>
 			<if test="manageCategory != null">
-				and manage_category = #{manageCategory,jdbcType=VARCHAR}
+				and erp.manage_category = #{manageCategory,jdbcType=VARCHAR}
 			</if>
 			<if test="discountLimit != null">
-				and discount_limit = #{discountLimit,jdbcType=DECIMAL}
+				and erp.discount_limit = #{discountLimit,jdbcType=DECIMAL}
 			</if>
 			<if test="originLand != null">
-				and origin_land = #{originLand,jdbcType=VARCHAR}
+				and erp.origin_land = #{originLand,jdbcType=VARCHAR}
 			</if>
 			<if test="serviceFeeType != null">
-				and service_fee_type = #{serviceFeeType,jdbcType=VARCHAR}
+				and erp.service_fee_type = #{serviceFeeType,jdbcType=VARCHAR}
 			</if>
 			<if test="formatType != null">
-				and format_type = #{formatType,jdbcType=INTEGER}
+				and erp.format_type = #{formatType,jdbcType=INTEGER}
 			</if>
 			<if test="statCategory != null">
-				and stat_category = #{statCategory,jdbcType=VARCHAR}
+				and erp.stat_category = #{statCategory,jdbcType=VARCHAR}
 			</if>
 			<if test="commissionRate != null">
-				and commission_rate = #{commissionRate,jdbcType=DECIMAL}
+				and erp.commission_rate = #{commissionRate,jdbcType=DECIMAL}
 			</if>
 			<if test="notes != null">
-				and notes = #{notes,jdbcType=VARCHAR}
+				and erp.notes = #{notes,jdbcType=VARCHAR}
 			</if>
 			<if test="productAbbr != null">
-				and product_abbr = #{productAbbr,jdbcType=VARCHAR}
+				and erp.product_abbr = #{productAbbr,jdbcType=VARCHAR}
 			</if>
 		</where>
 	</select>
