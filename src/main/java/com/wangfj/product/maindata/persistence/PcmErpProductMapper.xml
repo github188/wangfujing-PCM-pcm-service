@@ -1422,7 +1422,7 @@
 				and erp.big_code_price = #{bigCodePrice,jdbcType=DECIMAL}
 			</if>
 			<if test="supplyCode != null">
-				and erp.supply_code = #{supplyCode,jdbcType=VARCHAR}
+				and supply.supply_code = #{supplyCode,jdbcType=VARCHAR}
 			</if>
 			<if test="offerNo != null">
 				and offer_no = #{offerNo,jdbcType=VARCHAR}
@@ -1567,7 +1567,7 @@
 				and erp.big_code_price = #{bigCodePrice,jdbcType=DECIMAL}
 			</if>
 			<if test="supplyCode != null">
-				and erp.supply_code = #{supplyCode,jdbcType=VARCHAR}
+				and supply.supply_code = #{supplyCode,jdbcType=VARCHAR}
 			</if>
 			<if test="offerNo != null">
 				and erp.offer_no = #{offerNo,jdbcType=VARCHAR}
