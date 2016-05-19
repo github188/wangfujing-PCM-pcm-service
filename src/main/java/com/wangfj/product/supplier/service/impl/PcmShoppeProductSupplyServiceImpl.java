@@ -160,7 +160,8 @@ public class PcmShoppeProductSupplyServiceImpl implements IPcmShoppeProductSuppl
                         ComErrorCodeConstants.ErrorCode.SUPPLYINFO_NOT_EXISTENCE.getMemo());
             }
         }
-        Map<String, Object> shoppeProductMap = null;
+        Map<String, Object> shoppeProductMap = null;//下发专柜商品参数
+        Integer productType = null;//大码商品经营方式
         if (productTypeFlag) {//判断商品类型-大码商品、专柜商品
             // 封装专柜商品sid
             Map<String, Object> paramShoppePro = new HashMap<String, Object>();
@@ -186,6 +187,7 @@ public class PcmShoppeProductSupplyServiceImpl implements IPcmShoppeProductSuppl
             paramMap.put("productCode", productCode);
             List<PcmErpProduct> list = erpProductMapper.selectListByParam(paramMap);
             if (list != null && list.size() == 1) {
+                productType = list.get(0).getProductType();
                 erpProductSupply.setShopSid(storeCode);
                 erpProductSupply.setErpProductSid(productCode);
             } else {
@@ -195,7 +197,9 @@ public class PcmShoppeProductSupplyServiceImpl implements IPcmShoppeProductSuppl
         }
 
         if (StringUtils.isNotEmpty(ACTION_CODE)) {
-            if (productTypeFlag) {//判断商品类型-大码商品、专柜商品
+            //判断商品类型-大码商品、专柜商品
+            if (productTypeFlag) {
+                //专柜商品
                 Map<String, Object> paramMap = new HashMap<String, Object>();
                 paramMap.put("supplySid", shoppeProductSupply.getSupplySid());
                 paramMap.put("shoppeProductSid", shoppeProductSupply.getShoppeProductSid());
@@ -221,23 +225,44 @@ public class PcmShoppeProductSupplyServiceImpl implements IPcmShoppeProductSuppl
                     }
                 }
             } else {
+                //大码
                 Map<String, Object> paramMap = new HashMap<String, Object>();
                 paramMap.put("supplySid", erpProductSupply.getSupplySid());
                 paramMap.put("shopSid", erpProductSupply.getShopSid());
                 paramMap.put("erpProductSid", erpProductSupply.getErpProductSid());
                 List<PcmErpProductSupply> list = erpProductSupplyMapper.selectListByParam(paramMap);
                 if (ACTION_CODE.trim().toUpperCase().equals(Constants.A)) {
-                    if (list.isEmpty()) {
-                        erpProductSupply.setStatus(Constants.PUBLIC_0);
-                        flag = erpProductSupplyMapper.insertSelective(erpProductSupply);
-                    } else if (list.size() == 1) {
-                        PcmErpProductSupply pcmErpProductSupply = list.get(0);
-                        pcmErpProductSupply.setStatus(Constants.PUBLIC_0);
-                        flag = erpProductSupplyMapper.updateByPrimaryKeySelective(pcmErpProductSupply);
+                    erpProductSupply.setStatus(Constants.PUBLIC_0);
+                    if (productType == Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3) {
+                        //联营大码只能有一个供应商
+                        paramMap.clear();
+                        paramMap.put("shopSid", erpProductSupply.getShopSid());
+                        paramMap.put("erpProductSid", erpProductSupply.getErpProductSid());
+                        List<PcmErpProductSupply> listU = erpProductSupplyMapper.selectListByParam(paramMap);
+                        if (listU.isEmpty()) {
+                            flag = erpProductSupplyMapper.insertSelective(erpProductSupply);
+                        } else if (listU.size() == 1) {
+                            PcmErpProductSupply pcmErpProductSupply = listU.get(0);
+                            pcmErpProductSupply.setSupplySid(erpProductSupply.getSupplySid());
+                            pcmErpProductSupply.setStatus(Constants.PUBLIC_0);
+                           flag = erpProductSupplyMapper.updateByPrimaryKeySelective(pcmErpProductSupply);
+                        } else {
+                            throw new BleException(
+                                    ComErrorCodeConstants.ErrorCode.PCMSHOPPEPRODUCTSUPPLY_RELATION_EXISTENCE.getErrorCode(),
+                                    "联营大码商品有两条供应商关系数据！");
+                        }
                     } else {
-                        throw new BleException(
-                                ComErrorCodeConstants.ErrorCode.PCMSHOPPEPRODUCTSUPPLY_RELATION_EXISTENCE.getErrorCode(),
-                                "存在两条大码商品与供应商关系的重复数据！");
+                        if (list.isEmpty()) {
+                            flag = erpProductSupplyMapper.insertSelective(erpProductSupply);
+                        } else if (list.size() == 1) {//如果数据已经存在，只修改状态即可。
+                            PcmErpProductSupply pcmErpProductSupply = list.get(0);
+                            pcmErpProductSupply.setStatus(Constants.PUBLIC_0);
+                            flag = erpProductSupplyMapper.updateByPrimaryKeySelective(pcmErpProductSupply);
+                        } else {
+                            throw new BleException(
+                                    ComErrorCodeConstants.ErrorCode.PCMSHOPPEPRODUCTSUPPLY_RELATION_EXISTENCE.getErrorCode(),
+                                    "存在两条大码商品与供应商关系的重复数据！");
+                        }
                     }
                 } else if (ACTION_CODE.trim().toUpperCase().equals(Constants.D)) {
                     if (list.size() == 1) {
