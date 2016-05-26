@@ -492,7 +492,12 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		}
 		// 插入专柜商品编码 //8位流水
 		if("2".equals(String.valueOf(createShoppePro.getFlag()))){//如果传入电商商品，则专柜商品编码为原系统商品编码，shoppe_pro_sid = field4
-			psp.setShoppeProSid(createShoppePro.getField4());
+			if(StringUtils.isNotBlank(createShoppePro.getField4())){
+				psp.setShoppeProSid(createShoppePro.getField4());
+			}else{
+				String sapsidStr =Constants.SAPPRO_CODE + String.format("%011d", psp.getSid());
+				psp.setShoppeProSid(sapsidStr);
+			}
 		}else{
 			Long code = Constants.PRO_CODE + psp.getSid();
 			psp.setShoppeProSid(String.valueOf(code));

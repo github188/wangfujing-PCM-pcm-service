@@ -12,6 +12,7 @@ import com.wangfj.product.maindata.domain.vo.PcmProPhotoTwoDto;
 import com.wangfj.product.maindata.domain.vo.PcmProRetPhotoDto;
 import com.wangfj.product.maindata.domain.vo.PcmProSearchDto;
 import com.wangfj.product.maindata.domain.vo.PcmPublishSapErpDto;
+import com.wangfj.product.maindata.domain.vo.PcmSapInfoToSapSourcePis;
 import com.wangfj.product.maindata.domain.vo.PcmSearchOnlineProDto;
 import com.wangfj.product.maindata.domain.vo.ProPadDto;
 import com.wangfj.product.maindata.domain.vo.ProductPageDto;
@@ -45,6 +46,12 @@ public interface PcmShoppeProductMapper extends BaseMapper<PcmShoppeProduct> {
 
 	List<PcmPublishSapErpDto> pcmPublishSapErpMap(Map<String, Object> paramMap);
 
+	List<PcmSapInfoToSapSourcePis>  pcmPublishSapErpSourcePis(Map<String,Object> paraMap);
+	
+	List<Map<String,Object>> getGyCateToSapInfo(Map<String,Object> paraMap);
+	
+	List<Map<String,Object>> getTjCateToSapInfo(Map<String,Object> paraMap);
+	
 	ProPadDto proInfoToPad(Map<String, Object> paramMap);
 
 	List<ProductPageDto> getProInfoToFj(Map<String, Object> paramMap);

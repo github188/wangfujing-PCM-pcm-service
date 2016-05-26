@@ -119,6 +119,12 @@
       <if test="field10 != null" >
         field10,
       </if>
+      <if test="field11 != null" >
+        field11,
+      </if>
+      <if test="field12 != null" >
+        field12,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="sid != null" >
@@ -177,6 +183,12 @@
       </if>
       <if test="field10 != null" >
         #{field10,jdbcType=VARCHAR},
+      </if>
+      <if test="field11 != null" >
+        #{field11,jdbcType=VARCHAR},
+      </if>
+      <if test="field12 != null" >
+        #{field12,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

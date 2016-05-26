@@ -39,7 +39,28 @@ public class PcmShoppeProductExtend {
 
     private String field10;
 
-    public Long getSid() {
+    private String field11;
+    
+    private String field12;
+    
+    
+    public String getField11() {
+		return field11;
+	}
+
+	public void setField11(String field11) {
+		this.field11 = field11;
+	}
+
+	public String getField12() {
+		return field12;
+	}
+
+	public void setField12(String field12) {
+		this.field12 = field12;
+	}
+
+	public Long getSid() {
         return sid;
     }
 
