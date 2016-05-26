@@ -5543,4 +5543,200 @@
 			</if>
 		</where>
 	</select>
+	
+	<select id="pcmPublishSapErpSourcePis" parameterType="HashMap"
+	resultType="com.wangfj.product.maindata.domain.vo.PcmSapInfoToSapSourcePis">
+		SELECT
+		ext.field4 AS MTART,
+		pro.field4 AS MATNR,
+		spu.short_des AS MAKTX,
+		spu.sid AS MATKL, <!-- 工业分类字段保存spu的sid,后面用spusid单独查询工业分类 -->
+		pro.category_sid AS GLJG,
+		spu.brand_sid AS ZBRAND_ID,
+		spu.product_sku AS
+		ZZSTYLENO,
+		sku.article_num AS ZZDKNO,
+		pbar.barcode AS ZZE_EAN,
+		pro.supply_product_code AS BISMT,
+		ext.base_unit_code AS MEINS,
+		sku.pro_color_sid AS ZZCOLORID,
+		ext.zcolor AS ZCOLOR,
+		ext.zsize AS ZSIZE,
+		pro.input_tax AS MWSKZ,
+		pro.output_tax AS
+		TAXKM1,
+		pro.sales_tax AS TAXKM2,
+		pro.purchase_price AS ZZGJ_TAX,
+		ppr.promotion_price AS ZZP01_TAX,
+		ppr.original_price AS ZZPRICE,
+		ext.origin_country AS WHERL,
+		ext.field8 AS WHERR,
+		spu.year_to_market AS
+		ZZSSDATE,
+		spu.season_code AS EXTWG,
+		spu.sex_sid AS ZZGENDER,
+		pro.is_cod AS
+		ZZCOD,
+		ext.is_origin_package AS ZZYCPACK,
+		ext.field5 AS MHDHB,
+		ext.field6
+		AS MHDRZ,
+		pro.tms_param AS MAGRV,
+		org.organization_code AS STORECODE,
+		sku.product_detail_sid AS PCM_SKU,
+		pro.supply_product_code AS
+		SUPPLIERPRODUCTCODE,
+		pro.shoppe_pro_sid AS PRODUCTCODE,
+		pro.field4 AS
+		ERPCODE,
+		supply.supply_code AS LIFNR,
+		shoppe.shoppe_code AS ZGID,
+		shoppe.industry_condition_sid AS BUSINESSTYPELIB,
+		supply.business_pattern AS BUSINESSPRACTICELIB,
+		pro.stock_mode AS
+		STOCKTYPELIB,
+		spu.product_sid AS BASEPRODUCTCODE,
+		pro.is_gift AS ISGIFT
+		FROM
+		(
+		SELECT
+		sid,
+		sale_status,
+		supply_sid,
+		shoppe_sid,
+		product_detail_sid,
+		field4,
+		category_sid,
+		input_tax,
+		output_tax,
+		sales_tax,
+		purchase_price,
+		is_cod,
+		tms_param,
+		supply_product_code,
+		shoppe_pro_sid,
+		stock_mode,
+		is_gift
+		FROM
+		pcm_shoppe_product
+		WHERE
+		1 = 1
+		<if test="sidList != null">
+			   and  sid in
+				<foreach collection="sidList" item="itemSid" index="index"
+					open="(" close=")" separator=",">
+					#{itemSid,jdbcType=VARCHAR}
+				</foreach>
+	    </if>
+		<if test="num != null">
+			limit #{num}
+		</if>
+		) pro
+		JOIN pcm_pro_detail AS sku ON sku.sid = pro.product_detail_sid
+		AND pro.sale_status = 0
+		JOIN pcm_product AS spu ON spu.sid = sku.product_sid
+		JOIN pcm_shoppe AS shoppe ON shoppe.sid = pro.shoppe_sid
+		AND shoppe.shoppe_status = 1
+		JOIN pcm_organization AS org ON org.sid = shoppe.shop_sid
+		AND org.organization_status = 0
+		<if test="storeCode != null">
+				and org.organization_code = #{storeCode,jdbcType=VARCHAR}
+		</if>
+		JOIN pcm_supply_info AS supply ON supply.sid = pro.supply_sid
+		AND supply.`status` = 'Y'
+		LEFT JOIN (
+		SELECT
+		sid,
+		shoppe_pro_sid,
+		base_unit_code,
+		origin_country,
+		is_origin_package,
+		field4,
+		field5,
+		field6,
+		field7,
+		field8,
+		zcolor,
+		zsize
+		FROM
+		pcm_shoppe_product_extend
+		WHERE
+		1 = 1
+		<if test="sidList != null">
+			   and shoppe_pro_sid IN
+				<foreach collection="sidList" item="itemSid" index="index"
+					open="(" close=")" separator=",">
+					#{itemSid,jdbcType=VARCHAR}
+				</foreach>
+	    </if>
+		<if test="num != null">
+			limit #{num}
+		</if>
+		) ext ON pro.sid = ext.shoppe_pro_sid
+		LEFT JOIN pcm_price ppr ON ppr.shoppe_pro_sid = pro.shoppe_pro_sid
+		AND NOW() BETWEEN ppr.promotion_begin_time
+		AND ppr.promotion_end_time
+		AND ppr.ifdel = 0
+		AND ppr.channel_sid = 0
+		LEFT JOIN pcm_barcode pbar ON pbar.shoppe_pro_sid = pro.shoppe_pro_sid
+    </select>
+	<select id="getGyCateToSapInfo" parameterType="HashMap" resultType="HashMap">
+		SELECT
+		gycate1.category_code AS cateCode,
+		ppc.product_sid AS spuSid
+		FROM
+		(
+		SELECT
+		gycate.category_code,
+		gycate.sid
+		FROM
+		pcm_category gycate
+		WHERE
+		gycate.category_type = 0
+		AND gycate. STATUS = 0
+		AND gycate.is_display = 1
+		) gycate1
+		left JOIN pcm_product_category ppc ON ppc.category_sid = gycate1.sid
+		LEFT JOIN pcm_product spu ON ppc.product_sid = spu.sid
+		where  1=1
+		<if test="spuSidList != null">
+			   and ppc.product_sid IN
+				<foreach collection="spuSidList" item="itemSid" index="index"
+					open="(" close=")" separator=",">
+					#{itemSid,jdbcType=VARCHAR}
+				</foreach>
+	    </if>
+		<if test="num != null">
+			limit #{num}
+		</if>
+    </select>
+    <select id="getTjCateToSapInfo" parameterType="HashMap" resultType="HashMap">
+		SELECT
+		tjcate1.category_code AS cateCode,
+		ppc.product_sid AS proCode
+		FROM
+		(
+		SELECT
+		tjcate.category_code,
+		tjcate.sid
+		FROM
+		pcm_category tjcate
+		WHERE
+		tjcate.category_type = 2
+		AND tjcate. STATUS = 0
+		AND tjcate.is_display = 1
+		) tjcate1
+		left JOIN pcm_product_category ppc ON ppc.category_sid = tjcate1.sid
+		where  1=1
+		<if test="proCodeList != null">
+			   and ppc.product_sid IN
+				<foreach collection="proCodeList" item="itemSid" index="index"
+					open="(" close=")" separator=",">
+					#{itemSid,jdbcType=VARCHAR}
+				</foreach>
+	    </if>
+		<if test="num != null">
+			limit #{num}
+		</if>
+    </select>
 </mapper>

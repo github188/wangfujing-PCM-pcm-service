@@ -1289,6 +1289,7 @@ public interface Constants {
 	public static final Long PRO_CODE = 20000000l;
 	public static final Long SKU_CODE = 1000000000000l;
 	public static final Long SPU_CODE = 100000000l;
+	public static final String SAPPRO_CODE = "000000001";
 
 	/**
 	 * 下发类型 *

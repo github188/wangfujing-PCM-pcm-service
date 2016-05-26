@@ -98,7 +98,25 @@ public class PullDataDto {
 	private String isCod;//是否COD Y：是，N：否
 	private String purStatus;//采购状态
 	private String salesStatus;//销售状态
+	private String zcolor;//特性色码
+	private String zsize;//特性尺码
 	
+	
+	public String getZcolor() {
+		return zcolor;
+	}
+
+	public void setZcolor(String zcolor) {
+		this.zcolor = zcolor;
+	}
+
+	public String getZsize() {
+		return zsize;
+	}
+
+	public void setZsize(String zsize) {
+		this.zsize = zsize;
+	}
 	
 	public String getIsOriginPackage() {
 		return isOriginPackage;

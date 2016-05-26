@@ -37,6 +37,7 @@ import com.wangfj.product.maindata.domain.vo.OmsResProInfoDto;
 import com.wangfj.product.maindata.domain.vo.PcmProByOrgCodeDto;
 import com.wangfj.product.maindata.domain.vo.PcmProSearchDto;
 import com.wangfj.product.maindata.domain.vo.PcmPublishSapErpDto;
+import com.wangfj.product.maindata.domain.vo.PcmSapInfoToSapSourcePis;
 import com.wangfj.product.maindata.domain.vo.ProPadDto;
 import com.wangfj.product.maindata.domain.vo.ProPageDto;
 import com.wangfj.product.maindata.domain.vo.ProductPageDto;
@@ -1020,7 +1021,46 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 		List<PcmPublishSapErpDto> sapInfo = shoppeProMapper.pcmPublishSapErpMap(paramMap);
 		return sapInfo;
 	}
-
+    /**
+     * 导入终端上传电商商品下发电商
+     * @Methods Name pcmPublishSapErpSourcePis
+     * @Create In 2016年5月24日 By wangc
+     * @param paraMap
+     * @return List<PcmPublishSapErpDto>
+     */
+	public List<PcmSapInfoToSapSourcePis> pcmPublishSapErpSourcePis(Map<String,Object> paraMap){
+		List<PcmSapInfoToSapSourcePis> sapInfo = shoppeProMapper.pcmPublishSapErpSourcePis(paraMap);
+		List<String> spuSidList = new ArrayList<String>();//spusid列表,查询工业分类用
+		List<String> proCodeList = new ArrayList<String>();//专柜商品编码列表,查询统计分类用
+		List<Map<String,Object>> gyCateResult = new ArrayList<Map<String,Object>>();//工业分类结果列表
+		List<Map<String,Object>> tjCateResult = new ArrayList<Map<String,Object>>();//统计分类结果列表
+		for(PcmSapInfoToSapSourcePis pis : sapInfo){
+			spuSidList.add(pis.getMATKL());
+			proCodeList.add(pis.getPRODUCTCODE());
+		}
+		Map<String,Object> paraMap1 = new HashMap<String, Object>();
+		Map<String,Object> paraMap2 = new HashMap<String, Object>();
+		paraMap1.put("spuSidList", spuSidList);
+		paraMap2.put("proCodeList", proCodeList);
+		gyCateResult = shoppeProMapper.getGyCateToSapInfo(paraMap1);
+		tjCateResult = shoppeProMapper.getTjCateToSapInfo(paraMap2);
+		for(PcmSapInfoToSapSourcePis pis1 : sapInfo){
+			String spuSid = pis1.getMATKL();
+			String proCode = pis1.getPRODUCTCODE();
+			for(Map<String,Object> m : gyCateResult){
+				if(spuSid.equals(m.get("spuSid"))){
+					pis1.setMATKL(m.get("cateCode").toString());
+				}
+			}
+			for(Map<String,Object> m : tjCateResult){
+				if(proCode.equals(m.get("proCode"))){
+					pis1.setZZTJFL(m.get("cateCode").toString());
+				}
+			}
+		}
+		return sapInfo;
+	}
+	
 	/**
 	 * 查询单个专柜商品信息(含条码)
 	 *

@@ -12,6 +12,7 @@ import com.wangfj.product.maindata.domain.vo.OmsResProInfoDto;
 import com.wangfj.product.maindata.domain.vo.PcmProByOrgCodeDto;
 import com.wangfj.product.maindata.domain.vo.PcmProSearchDto;
 import com.wangfj.product.maindata.domain.vo.PcmPublishSapErpDto;
+import com.wangfj.product.maindata.domain.vo.PcmSapInfoToSapSourcePis;
 import com.wangfj.product.maindata.domain.vo.ProPadDto;
 import com.wangfj.product.maindata.domain.vo.ProPageDto;
 import com.wangfj.product.maindata.domain.vo.ProductPageDto;
@@ -29,6 +30,15 @@ import com.wangfj.util.mq.PublishDTO;
  * @Create In 2015年7月10日
  */
 public interface IPcmShoppeProductService {
+	/**
+	 * 导入终端上传电商商品下发电商
+	 * @Methods Name pcmPublishSapErpSourcePis
+	 * @Create In 2016年5月24日 By wangc
+	 * @param paraMap
+	 * @return List<PcmPublishSapErpDto>
+	 */
+	public List<PcmSapInfoToSapSourcePis> pcmPublishSapErpSourcePis(Map<String,Object> paraMap);
+	
 	public Integer searchSpCountByStore(Map<String, Object> paramMap);
 
 	public List<PcmProByOrgCodeDto> searchSpByStore(Map<String, Object> paramMap);
