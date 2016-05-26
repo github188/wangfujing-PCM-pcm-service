@@ -11,6 +11,8 @@ import com.wangfj.core.framework.base.page.Page;
 import com.wangfj.product.price.domain.entity.PcmChangePriceRecord;
 import com.wangfj.product.price.domain.entity.PcmPrice;
 import com.wangfj.product.price.domain.vo.*;
+import com.wangfj.util.BasePage;
+import com.wangfj.util.mq.PublishDTO;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -85,7 +87,7 @@ public interface IPcmPriceService {
 	 * @Create In 2015年8月10日 By kongqf
 	 * @return List<PcmPrice>
 	 */
-	public List<PcmPrice> queryExpirePriceInfoList();
+	public List<PcmPrice> queryExpirePriceInfoList(BasePage basePage);
 
 	/**
 	 * 保存无效价格信息到价格历史表
@@ -172,16 +174,16 @@ public interface IPcmPriceService {
 	public Page<SelectProductPriceInfoDto> queryProductPriceInfo(
 			QueryProductPriceInfoDto queryProductPriceInfoDto);
 
-    /**
-     * 商品价格信息查询(优化)
-     *
-     * @param queryProductPriceInfoDto
-     * @return Page<QueryProductPriceInfoDto>
-     * @Methods Name queryProductPriceInfoOptimization
-     * @Create In 2015年9月7日 By kongqf
-     */
-    public Page<SelectProductPriceInfoDto> queryProductPriceInfoOptimization(
-            QueryProductPriceInfoDto queryProductPriceInfoDto);
+	/**
+	 * 商品价格信息查询(优化)
+	 *
+	 * @param queryProductPriceInfoDto
+	 * @return Page<QueryProductPriceInfoDto>
+	 * @Methods Name queryProductPriceInfoOptimization
+	 * @Create In 2015年9月7日 By kongqf
+	 */
+	public Page<SelectProductPriceInfoDto> queryProductPriceInfoOptimization(
+			QueryProductPriceInfoDto queryProductPriceInfoDto);
 
 	/**
 	 * 根据一组专柜商品编码查询价格
@@ -191,7 +193,8 @@ public interface IPcmPriceService {
 	 * @Methods Name findPriceInfoByParaForShoppeProduct
 	 * @Create In 2016年4月12日 By wangxuan
 	 */
-	List<SelectProductPriceInfoDto> findPriceInfoByParaForShoppeProduct(QueryProductPriceInfoDto dto);
+	List<SelectProductPriceInfoDto> findPriceInfoByParaForShoppeProduct(
+			QueryProductPriceInfoDto dto);
 
 	/**
 	 * 根据专柜商品查询价格信息
@@ -213,6 +216,16 @@ public interface IPcmPriceService {
 	 * @return Integer
 	 */
 	public Integer queryCurrPriceInfoPages(PcmPricePISDto pcmPricePISDto);
+
+	/**
+	 * 查询当天生效的价格码
+	 * 
+	 * @Methods Name queryErpProCurrActivePriceInfoList
+	 * @Create In 2016年5月26日 By kongqf
+	 * @param basePage
+	 * @return Map<String,Object>
+	 */
+	public List<PublishDTO> queryErpProCurrActivePriceInfoList(BasePage basePage);
 
 	/**
 	 * 查询当前价格信息（分页）
@@ -254,17 +267,18 @@ public interface IPcmPriceService {
 	 */
 	public List<PcmChangePriceRecord> UpdateERPProPrice(List<PcmChangePriceRecord> priceRecords);
 
-    /**
-     * 专柜商品价格信息查询导出Excel 查总数
-     *
-     * @param queryProductStockInfoDto
-     * @return List<SelectProductStockInfoDto>
-     * @Methods Name queryProductPriceInfoExcelCount
-     * @Create In 2016年04月05日 By wangxuan
-     */
-    public Page<SelectProductPriceInfoDto> queryProductPriceInfoExcelCount(QueryProductPriceInfoDto queryProductPriceInfoDto);
+	/**
+	 * 专柜商品价格信息查询导出Excel 查总数
+	 *
+	 * @param queryProductStockInfoDto
+	 * @return List<SelectProductStockInfoDto>
+	 * @Methods Name queryProductPriceInfoExcelCount
+	 * @Create In 2016年04月05日 By wangxuan
+	 */
+	public Page<SelectProductPriceInfoDto> queryProductPriceInfoExcelCount(
+			QueryProductPriceInfoDto queryProductPriceInfoDto);
 
-    /**
+	/**
 	 * 专柜商品价格信息查询导出Excel
 	 * 
 	 * @Methods Name queryProductStockInfoExcel

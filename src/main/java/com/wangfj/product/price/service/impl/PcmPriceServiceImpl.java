@@ -62,7 +62,9 @@ import com.wangfj.product.price.persistence.PcmChangePriceRecordMapper;
 import com.wangfj.product.price.persistence.PcmPriceHisMapper;
 import com.wangfj.product.price.persistence.PcmPriceMapper;
 import com.wangfj.product.price.service.intf.IPcmPriceService;
+import com.wangfj.util.BasePage;
 import com.wangfj.util.Constants;
+import com.wangfj.util.mq.PublishDTO;
 
 /**
  * 价格信息管理
@@ -2235,10 +2237,10 @@ public class PcmPriceServiceImpl implements IPcmPriceService {
 	 * @Create In 2015年8月10日 By kongqf
 	 */
 	@Override
-	public List<PcmPrice> queryExpirePriceInfoList() {
+	public List<PcmPrice> queryExpirePriceInfoList(BasePage basePage) {
 		logger.info("start queryExpirePriceInfoList()");
 		List<PcmPrice> pcmPriceList = new ArrayList<PcmPrice>();
-		pcmPriceList = pcmPriceMapper.queryExpirePriceInfoList();
+		pcmPriceList = pcmPriceMapper.queryExpirePriceInfoList(basePage);
 		logger.info("start queryExpirePriceInfoList(),result:" + pcmPriceList.toString());
 		return pcmPriceList;
 	}
@@ -2628,6 +2630,19 @@ public class PcmPriceServiceImpl implements IPcmPriceService {
 			mapList = pcmPriceMapper.selectProSidListByShopProCode(map);
 		}
 		return mapList;
+	}
+
+	/**
+	 * 查询当天生效的价格码
+	 * 
+	 * @Methods Name queryErpProCurrActivePriceInfoList
+	 * @Create In 2016年5月26日 By kongqf
+	 * @param basePage
+	 * @return Map<String,Object>
+	 */
+	@Override
+	public List<PublishDTO> queryErpProCurrActivePriceInfoList(BasePage basePage) {
+		return pcmPriceMapper.queryErpProCurrActivePriceInfoList(basePage);
 	}
 
 }

@@ -561,11 +561,40 @@
 		</where>
 	</select>
 	<!-- 查询无效价格信息 -->
-	<select id="queryExpirePriceInfoList" resultMap="BaseResultMap">
+	<select id="queryExpirePriceInfoList" resultMap="BaseResultMap"
+		parameterType="com.wangfj.util.BasePage">
 		select
 		<include refid="Base_Column_List" />
 		from pcm_price
 		where ifdel=1 or NOW()>promotion_end_time
+		<if test="limit != null">
+			limit #{start}, #{limit}
+		</if>
+	</select>
+	<!-- 查询当天生效的价格码 -->
+	<select id="queryErpProCurrActivePriceInfoList" resultType="com.wangfj.util.mq.PublishDTO"
+		parameterType="com.wangfj.util.BasePage">
+		SELECT
+		pep.sid,
+		1 as type
+		FROM
+		(
+		SELECT
+		store_code,
+		matnr
+		FROM
+		pcm_change_price_record
+		WHERE
+		attribute5 = '1'
+		AND DATE_FORMAT(bdate,
+		'%Y-%m-%d') =DATE_FORMAT(NOW(),'%Y-%m-%d')
+		<if test="limit != null">
+			limit #{start}, #{limit}
+		</if>
+		) record
+		INNER JOIN pcm_erp_product pep ON record.matnr =
+		pep.product_code
+		AND record.store_code = pep.store_code
 	</select>
 	<!--根据管理分类、供应商、专柜查询专柜商品数量 -->
 	<select id="SelectShoppeProSidCountByPara" parameterType="com.wangfj.product.price.domain.vo.PcmPricePISDto"
