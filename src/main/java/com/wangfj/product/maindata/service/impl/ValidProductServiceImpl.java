@@ -2582,6 +2582,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 		dsPro.setField4(dataDto.getShoppeProType());
 		dsPro.setField5(dataDto.getShelfLife());
 		dsPro.setField6(dataDto.getRemainShelLife());
+		dsPro.setField8(dataDto.getSupplyOriginLand());//货源地
 		
 		PcmShoppeProduct shoppePro = null;
 		// 3.专柜pro验证
