@@ -50,9 +50,9 @@
 		parameterType="list">
 		select
 			<include refid="Base_Column_List" />
-		from 
+		from
 			pcm_barcode
-		where 
+		where
 			shoppe_pro_sid in
 		<foreach collection="list" item="item" open="(" separator=","
 			close=")">
@@ -60,7 +60,7 @@
 		</foreach>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from pcm_barcode
     where sid = #{sid,jdbcType=BIGINT}
@@ -68,14 +68,14 @@
 	<select id="selectBarcodeByErp" resultType="java.lang.String"
 		parameterType="hashMap">
 		select
-			barcode from pcm_barcode b1 
-		where 
+			barcode from pcm_barcode b1
+		where
 			store_code=#{storeCode,jdbcType=VARCHAR}
 		<if test="shoppeProSid != null">
-			and b1.shoppe_pro_sid=#{shoppeProSid,jdbcType=VARCHAR} 
+			and b1.shoppe_pro_sid=#{shoppeProSid,jdbcType=VARCHAR}
 		</if>
 		<if test="productCode != null">
-			and b1.product_code=#{productCode,jdbcType=VARCHAR} 
+			and b1.product_code=#{productCode,jdbcType=VARCHAR}
 		</if>
 	</select>
 	<select id="selectBarcodeByList" resultMap="barcodeRes"
@@ -83,9 +83,9 @@
 		select
 			shoppe_pro_sid,
 			barcode
-		from 
+		from
 			pcm_barcode
-		where 
+		where
 			shoppe_pro_sid in
 		<foreach collection="list" item="item" open="(" separator=","
 			close=")">
@@ -262,7 +262,7 @@
     where sid = #{sid,jdbcType=BIGINT}
   </update>
   <select id="selectListByParam" resultMap="BaseResultMap" parameterType="java.util.Map" >
-    select 
+    select
     	<include refid="Base_Column_List" />
     from pcm_barcode
     <where>
@@ -311,7 +311,7 @@
     </where>
   </select>
   <select id="selectPageListByParam" resultMap="BaseResultMap" parameterType="java.util.Map" >
-    select 
+    select
     	<include refid="Base_Column_List" />
     from pcm_barcode
     <where>
@@ -364,7 +364,7 @@
 			#{start}, #{limit}
   </select>
   <select id="getCountByParam" resultType="java.lang.Integer" parameterType="java.util.Map" >
-    select 
+    select
     	count(*)
     from pcm_barcode
     <where>
@@ -412,4 +412,28 @@
       </if>
     </where>
   </select>
+
+  <!-- 下发条码查询-->
+  <select id="pushBarcode" resultMap="BaseResultMap" parameterType="java.util.Map">
+    SELECT
+        <include refid="Base_Column_List"/>
+    FROM
+        pcm_barcode bar
+    WHERE
+        bar.shoppe_pro_sid = (
+            SELECT
+                psp.shoppe_pro_sid
+            FROM
+                pcm_shoppe_product psp
+            <where>
+              <if test="sid != null">
+                AND psp.sid = #{sid}
+              </if>
+              <if test="sid == null">
+                AND psp.sid = 0
+              </if>
+            </where>
+        )
+  </select>
+
 </mapper>
