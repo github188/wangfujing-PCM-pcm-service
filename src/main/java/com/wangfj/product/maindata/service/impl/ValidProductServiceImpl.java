@@ -4132,5 +4132,6 @@ public class ValidProductServiceImpl implements IValidProductService {
 		}
 		logger.info("end validPullDataDtoIsExists()");
 		return true;
+		
 	}
 }

@@ -10,20 +10,27 @@ import com.wangfj.product.maindata.domain.vo.PcmBarodeListDto;
 import com.wangfj.product.maindata.domain.vo.ProductPageDto;
 
 public interface PcmBarcodeMapper extends BaseMapper<PcmBarcode> {
-	int deleteByPrimaryKey(Long sid);
+    int deleteByPrimaryKey(Long sid);
 
-	int insertSelective(PcmBarcode record);
+    int insertSelective(PcmBarcode record);
 
-	PcmBarcode selectByPrimaryKey(Long sid);
+    PcmBarcode selectByPrimaryKey(Long sid);
 
-	int updateByPrimaryKeySelective(PcmBarcode record);
+    int updateByPrimaryKeySelective(PcmBarcode record);
 
-	int updateByPrimaryKey(PcmBarcode record);
+    int updateByPrimaryKey(PcmBarcode record);
 
-	List<String> selectBarcodeByErp(Map<String, Object> map);
+    List<String> selectBarcodeByErp(Map<String, Object> map);
 
-	List<BarcodeListDto> selectBarcodeByList(List<ProductPageDto> list);
+    List<BarcodeListDto> selectBarcodeByList(List<ProductPageDto> list);
 
-	List<PcmBarodeListDto> getBarcodeByList(List<ProductPageDto> list);
+    List<PcmBarodeListDto> getBarcodeByList(List<ProductPageDto> list);
+
+    /**
+     * 下发条码查询
+     *
+     * @return
+     */
+    List<PcmBarcode> pushBarcode(Map<String, Object> paramMap);
 
 }
