@@ -49,6 +49,7 @@ public class PcmBarcodeServiceImpl implements IPcmBarcodeService {
 	 * @Create In 2015年7月13日 By yedong
 	 */
 	@Override
+	@Transactional
 	public void importSupplierBarCodeFromEfuture(SupplierBarCodeFromEfutureDto pushSupplierDto)
 			throws BleException {
 		logger.info("start importSupplierBarCodeFromEfuture(),param:" + pushSupplierDto.toString());
