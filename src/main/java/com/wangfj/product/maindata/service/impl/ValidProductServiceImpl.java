@@ -2576,6 +2576,13 @@ public class ValidProductServiceImpl implements IValidProductService {
 			dsPro.setField1("1");
 		}
 		dsPro.setField2(cProDto.getOriginalPrice().toString());// 扩展表原价
+		
+		dsPro.setZcolor(dataDto.getZzColorCode());
+		dsPro.setZsize(dataDto.getZzSizeCode());
+		dsPro.setField4(dataDto.getShoppeProType());
+		dsPro.setField5(dataDto.getShelfLife());
+		dsPro.setField6(dataDto.getRemainShelLife());
+		
 		PcmShoppeProduct shoppePro = null;
 		// 3.专柜pro验证
 		ValidShoppeProDto validShoppeProdto = new ValidShoppeProDto();
