@@ -1037,7 +1037,7 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 		if(sapInfo != null && sapInfo.size() != 0){
 			for(PcmSapInfoToSapSourcePis pis : sapInfo){
 				spuSidList.add(pis.getMATKL());
-				proCodeList.add(pis.getPRODUCTCODE());
+				proCodeList.add(pis.getSid());
 			}
 			Map<String,Object> paraMap1 = new HashMap<String, Object>();
 			Map<String,Object> paraMap2 = new HashMap<String, Object>();
@@ -1047,17 +1047,21 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 			tjCateResult = shoppeProMapper.getTjCateToSapInfo(paraMap2);
 			for(PcmSapInfoToSapSourcePis pis1 : sapInfo){
 				String spuSid = pis1.getMATKL();
-				String proCode = pis1.getPRODUCTCODE();
+				String proCode = pis1.getSid();
+				String gyCate = null;
+				String glCate = null;
 				for(Map<String,Object> m : gyCateResult){
-					if(spuSid.equals(m.get("spuSid"))){
-						pis1.setMATKL(m.get("cateCode").toString());
+					if(spuSid.equals(m.get("spuSid").toString())){
+						gyCate = m.get("cateCode").toString();
 					}
 				}
+				pis1.setMATKL(gyCate);
 				for(Map<String,Object> m : tjCateResult){
-					if(proCode.equals(m.get("proCode"))){
-						pis1.setZZTJFL(m.get("cateCode").toString());
+					if(proCode.equals(m.get("proCode").toString())){
+						glCate = m.get("cateCode").toString();	
 					}
 				}
+				pis1.setZZTJFL(glCate);
 			}
 		}
 		return sapInfo;

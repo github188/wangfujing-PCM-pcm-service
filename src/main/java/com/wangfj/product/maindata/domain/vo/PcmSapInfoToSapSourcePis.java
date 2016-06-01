@@ -13,6 +13,7 @@ package com.wangfj.product.maindata.domain.vo;
  * @Create In 2016年5月24日
  */
 public class PcmSapInfoToSapSourcePis {
+	private String sid;
 	private String STORECODE;  //门店编码
 	private String PRODUCTCODE;  //专柜商品编码
 	private String ZGID; //专柜编码
@@ -57,6 +58,14 @@ public class PcmSapInfoToSapSourcePis {
 	private String MHDHB;//总货架寿命
 	private String MHDRZ;//剩余货架寿命
 	private String MAGRV;//包装组(物流类型)
+	
+	
+	public String getSid() {
+		return sid;
+	}
+	public void setSid(String sid) {
+		this.sid = sid;
+	}
 	public String getSTORECODE() {
 		return STORECODE;
 	}

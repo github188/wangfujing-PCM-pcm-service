@@ -89,6 +89,7 @@ public class PullDataDto {
 	private String shelfLife;//总货架寿命
 	private String remainShelLife;//剩余货架寿命
 	private String sapProType;//电商商品类型
+	
 	private String zzColorCode;//电商商品颜色码
 	private String zzSizeCode;//电商商品尺寸码
 	private String supplyOriginLand;//货源地
