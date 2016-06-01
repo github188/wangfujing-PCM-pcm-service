@@ -992,6 +992,21 @@ public class PcmShoppeServiceImpl implements IPcmShoppeService {
     public List<PcmShoppeResultDto> findListShoppeForAddShoppeProduct(SelectPcmShoppeDto dto) {
 
         logger.info("start findListShoppeForAddShoppeProduct(),param:" + dto.toString());
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("sid", dto.getSupplySid());
+        List<PcmSupplyInfo> supplyInfoList = supplyInfoMapper.selectListByParam(paramMap);
+        //电商拆弹标识：否，时查询电商自库专柜
+        if (supplyInfoList.size() == 1) {
+            PcmSupplyInfo supplyInfo = supplyInfoList.get(0);
+            Integer apartOrder = supplyInfo.getApartOrder();
+            if (apartOrder == 0) {//自库专柜
+                paramMap.clear();
+                paramMap.put("supplyCode", "1");
+                List<PcmSupplyInfo> wfjSupplyList = supplyInfoMapper.selectListByParam(paramMap);
+                Long supplySid = wfjSupplyList.get(0).getSid();
+                dto.setSupplySid(supplySid + "");
+            }
+        }
         List<PcmShoppeResultDto> list = pcmShoppeMapper.findListShoppeForAddShoppeProduct(dto);
         logger.info("end findListShoppeForAddShoppeProduct(),return:" + list.toString());
         return list;
