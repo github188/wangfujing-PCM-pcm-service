@@ -1531,9 +1531,6 @@
 			AND peps.shop_sid = erp.store_code AND peps.`status` = 0
 			JOIN pcm_supply_info supply ON peps.supply_sid = supply.supply_code
 		</if>
-		<if test="supplyCode == null">
-			JOIN pcm_supply_info supply ON erp.supply_code = supply.supply_code
-		</if>
 		<where>
 			<if test="cateList != null" >
 				and erp.manage_category IN 
