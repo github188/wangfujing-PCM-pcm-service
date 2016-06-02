@@ -16,6 +16,9 @@ import com.wangfj.core.constants.ComErrorCodeConstants.ErrorCode;
 import com.wangfj.core.framework.base.page.Page;
 import com.wangfj.core.framework.exception.BleException;
 import com.wangfj.core.utils.JsonUtil;
+import com.wangfj.core.utils.StringUtils;
+import com.wangfj.product.category.domain.entity.PcmCategory;
+import com.wangfj.product.category.persistence.PcmCategoryMapper;
 import com.wangfj.product.common.domain.vo.PcmExceptionLogDto;
 import com.wangfj.product.common.service.intf.IPcmExceptionLogService;
 import com.wangfj.product.constants.StatusCodeConstants.StatusCode;
@@ -60,8 +63,8 @@ public class PcmContractLogServiceImpl implements IPcmContractLogService {
 	@Autowired
 	PcmErpProductMapper erpMapper;
 
-	// @Autowired
-	// private PcmCategoryMapper categoryMapper;//分类
+	@Autowired
+	private PcmCategoryMapper categoryMapper;//分类
 
 	/**
 	 * 门店erp上传要约信息到合同表
@@ -92,18 +95,19 @@ public class PcmContractLogServiceImpl implements IPcmContractLogService {
 						ErrorCode.SUPPLYINFO_NULL.getMemo());
 			}
 			// 验证管理分类是否存在
-			/*
-			 * if(StringUtils.isNotBlank(contractLogDto.getCol1())){//
-			 * 管理分类不为空的时候验证有效性 parasMap.clear(); parasMap.put("categoryCode",
-			 * contractLogDto.getCol1());// 管理分类编码 parasMap.put("categoryType",
-			 * Constants.MANAGECATEGORY);// 分类类型为 1 管理分类 parasMap.put("isLeaf",
-			 * Constants.Y);// 是否为叶子节点 parasMap.put("status", Constants.Y);//
-			 * 是否启用 List<PcmCategory> managecateList =
-			 * categoryMapper.selectListByParam(parasMap); if (managecateList ==
-			 * null || managecateList.size() != 1) { logger.info("管理分类不存在");
-			 * throw new BleException(ErrorCode.CATEGORY_GL_NULL.getErrorCode(),
-			 * ErrorCode.CATEGORY_GL_NULL.getMemo()); } }
-			 */
+			if (StringUtils.isNotBlank(contractLogDto.getCol1())) {// 管理分类不为空的时候验证有效性
+				parasMap.clear();
+				parasMap.put("categoryCode", contractLogDto.getCol1());// 管理分类编码
+				parasMap.put("categoryType", Constants.MANAGECATEGORY);// 分类类型为1管理分类
+				parasMap.put("isLeaf", Constants.Y);// 是否为叶子节点
+				parasMap.put("status", Constants.Y);// 是否启用
+				List<PcmCategory> managecateList = categoryMapper.selectListByParam(parasMap);
+				if (managecateList == null || managecateList.size() != 1) {
+					logger.info("管理分类不存在");
+					throw new BleException(ErrorCode.CATEGORY_GL_NULL.getErrorCode(),
+							ErrorCode.CATEGORY_GL_NULL.getMemo());
+				}
+			}
 			if (contractLogDto.getFlag().equals(0)) {
 				PcmContractLog valid = new PcmContractLog();
 				valid.setContractCode(contractLog.getContractCode());

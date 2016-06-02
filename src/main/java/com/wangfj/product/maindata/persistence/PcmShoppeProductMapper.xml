@@ -5547,6 +5547,7 @@
 	<select id="pcmPublishSapErpSourcePis" parameterType="HashMap"
 	resultType="com.wangfj.product.maindata.domain.vo.PcmSapInfoToSapSourcePis">
 		SELECT
+		pro.sid AS sid,
 		ext.field4 AS MTART,
 		pro.field4 AS MATNR,
 		spu.short_des AS MAKTX,
@@ -5555,8 +5556,8 @@
 		spu.brand_sid AS ZBRAND_ID,
 		spu.product_sku AS
 		ZZSTYLENO,
-		sku.article_num AS ZZDKNO,
-		pbar.barcode AS ZZE_EAN,
+		pro.field3 AS ZZDKNO,
+		<!-- pbar.barcode AS ZZE_EAN, -->
 		pro.supply_product_code AS BISMT,
 		ext.base_unit_code AS MEINS,
 		sku.pro_color_sid AS ZZCOLORID,
@@ -5596,7 +5597,15 @@
 		pro.stock_mode AS
 		STOCKTYPELIB,
 		spu.product_sid AS BASEPRODUCTCODE,
-		pro.is_gift AS ISGIFT
+		pro.is_gift AS ISGIFT,
+		(
+		SELECT
+		barcode
+		FROM
+		pcm_barcode pbr
+		WHERE
+		pbr.shoppe_pro_sid = pro.shoppe_pro_sid
+		LIMIT 1) as ZZE_EAN
 		FROM
 		(
 		SELECT
@@ -5605,6 +5614,7 @@
 		supply_sid,
 		shoppe_sid,
 		product_detail_sid,
+		field3,
 		field4,
 		category_sid,
 		input_tax,
@@ -5678,7 +5688,7 @@
 		AND ppr.promotion_end_time
 		AND ppr.ifdel = 0
 		AND ppr.channel_sid = 0
-		LEFT JOIN pcm_barcode pbar ON pbar.shoppe_pro_sid = pro.shoppe_pro_sid
+		<!-- LEFT JOIN pcm_barcode pbar ON pbar.shoppe_pro_sid = pro.shoppe_pro_sid -->
     </select>
 	<select id="getGyCateToSapInfo" parameterType="HashMap" resultType="HashMap">
 		SELECT
@@ -5727,15 +5737,15 @@
 		AND tjcate.is_display = 1
 		) tjcate1
 		left JOIN pcm_product_category ppc ON ppc.category_sid = tjcate1.sid
-		where  1=1
-		<if test="proCodeList != null">
-			   and ppc.product_sid IN
+		where 1=1 
+          <if test="proCodeList != null">
+                and ppc.product_sid IN 
 				<foreach collection="proCodeList" item="itemSid" index="index"
 					open="(" close=")" separator=",">
 					#{itemSid,jdbcType=VARCHAR}
 				</foreach>
 	    </if>
-		<if test="num != null">
+	    <if test="num != null">
 			limit #{num}
 		</if>
     </select>

@@ -2582,7 +2582,6 @@ public class ValidProductServiceImpl implements IValidProductService {
 		dsPro.setField4(dataDto.getShoppeProType());
 		dsPro.setField5(dataDto.getShelfLife());
 		dsPro.setField6(dataDto.getRemainShelLife());
-		dsPro.setField8(dataDto.getSupplyOriginLand());//货源地
 		
 		PcmShoppeProduct shoppePro = null;
 		// 3.专柜pro验证
@@ -3370,7 +3369,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 	public PcmShoppeProduct savePullProductFromSupllier(PullDataDto dataDto) throws BleException {
 		logger.info("start savePullProductFromSupllier(),param:" + dataDto.toString());
 		// 非空与格式参数校验
-		if(dataDto.getType().equals(String.valueOf(Constants.PUBLIC_2))){//电商商品
+		if("2".equals(dataDto.getType())){//电商商品
 			validPullDataDtoIsExistsSupShoPro(dataDto, true);
 		}else{//非电商商品
 			validPullDataDtoIsExistsSupShoPro(dataDto, false);
@@ -3659,7 +3658,17 @@ public class ValidProductServiceImpl implements IValidProductService {
 			dsPro.setField1("1");
 		}
 		dsPro.setField2(cProDto.getOriginalPrice().toString());// 扩展表原价
-
+		if("2".equals(dataDto.getType())){
+			dsPro.setField4(dataDto.getSapProType());//扩展表 电商商品类型
+			dsPro.setField5(dataDto.getShelfLife());//总货架寿命
+			dsPro.setField6(dataDto.getRemainShelLife());//剩余货架寿命
+			dsPro.setField7(dataDto.getField());//统比销
+			dsPro.setField8(dataDto.getSupplyOriginLand());//货源地
+			dsPro.setField11(dataDto.getPurStatus());//采购状态
+			dsPro.setField12(dataDto.getSalesStatus());//销售状态
+			dsPro.setZcolor(dataDto.getZcolor());//特性色码
+			dsPro.setZsize(dataDto.getZsize());//特性尺码
+		}
 		PcmShoppeProduct shoppePro = null;
 		// 1.spu验证:
 		// 判断超市或百货
@@ -4123,5 +4132,6 @@ public class ValidProductServiceImpl implements IValidProductService {
 		}
 		logger.info("end validPullDataDtoIsExists()");
 		return true;
+		
 	}
 }
