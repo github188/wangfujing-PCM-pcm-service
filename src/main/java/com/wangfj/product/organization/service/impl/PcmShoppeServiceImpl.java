@@ -998,8 +998,9 @@ public class PcmShoppeServiceImpl implements IPcmShoppeService {
         //电商拆弹标识：否，时查询电商自库专柜
         if (supplyInfoList.size() == 1) {
             PcmSupplyInfo supplyInfo = supplyInfoList.get(0);
+            String shopSid = supplyInfo.getShopSid();
             Integer apartOrder = supplyInfo.getApartOrder();
-            if (apartOrder == 0) {//自库专柜
+            if ("D001".equals(shopSid) && apartOrder == 0) {//电商自库专柜
                 paramMap.clear();
                 paramMap.put("supplyCode", "1");
                 List<PcmSupplyInfo> wfjSupplyList = supplyInfoMapper.selectListByParam(paramMap);
