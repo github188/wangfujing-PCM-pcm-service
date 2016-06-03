@@ -93,7 +93,7 @@
 		<result column="sales_unit" property="salesUnit" jdbcType="VARCHAR" />
 		<result column="supplier_barcode" property="supplierBarcode"
 			jdbcType="VARCHAR" />
-		<result column="sales_price" property="salesPrice" jdbcType="DECIMAL" />
+		<result column="salesPrice" property="salesPrice" jdbcType="DECIMAL" />
 		<result column="input_tax" property="inputTax" jdbcType="DECIMAL" />
 		<result column="output_tax" property="outputTax" jdbcType="DECIMAL" />
 		<result column="sales_tax" property="salesTax" jdbcType="DECIMAL" />
@@ -1171,7 +1171,7 @@
 		product_type,product_category,
 		stan_name, article_num,
 		sales_unit,
-		supplier_barcode, sales_price,
+		supplier_barcode, pp.promotion_price as salesPrice,
 		input_tax,
 		output_tax, sales_tax, pro_status, is_promotion,
 		is_adjust_price, manage_category,
@@ -1190,6 +1190,11 @@
 		br.brand_sid = erp.brand_code
 		left join pcm_brand brg on
 		brg.sid=br.parent_sid
+		LEFT JOIN pcm_price pp ON pp.attribute2 = erp.store_code
+		AND pp.shoppe_pro_sid = erp.product_code
+		AND pp.ifdel = '0'
+		AND NOW() BETWEEN pp.promotion_begin_time
+		AND pp.promotion_end_time
 		<where>
 			1=1
 			<if test="sidList != null">
