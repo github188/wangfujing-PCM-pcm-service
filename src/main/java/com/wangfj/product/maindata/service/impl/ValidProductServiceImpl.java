@@ -2014,6 +2014,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 			throw new BleException(ErrorCode.SHOPPE_STATUS_ERROR.getErrorCode(),
 					ErrorCode.SHOPPE_STATUS_ERROR.getMemo());
 		}
+		dataDto.setCounterCode(shoppeList.get(0).getShoppeCode());
 		// 门店信息
 		map.clear();
 		map.put("sid", dataDto.getShopCode());
@@ -2377,6 +2378,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 			throw new BleException(ErrorCode.SHOPPE_STATUS_ERROR.getErrorCode(),
 					ErrorCode.SHOPPE_STATUS_ERROR.getMemo());
 		}
+		dataDto.setCounterCode(shoppeList.get(0).getShoppeCode());
 		// 门店信息
 		map.clear();
 		map.put("sid", dataDto.getShopCode());

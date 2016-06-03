@@ -1005,6 +1005,9 @@
 		erp.commission_rate
 		from pcm_erp_product erp
 		left join pcm_price pp on pp.attribute2 = erp.store_code AND pp.shoppe_pro_sid = erp.product_code 
+		AND pp.ifdel = '0'
+		AND NOW() BETWEEN pp.promotion_begin_time
+		AND pp.promotion_end_time
 		<where>
 			<if test="sidList != null">
 				and erp.sid in
@@ -1377,6 +1380,9 @@
 		LEFT JOIN pcm_organization org ON sp.shop_sid = org.sid
 		LEFT JOIN pcm_brand brg ON brg.brand_sid = erp.brand_code AND org.store_type = brg.shop_type
 		LEFT JOIN pcm_price pp ON pp.attribute2 = erp.store_code AND pp.shoppe_pro_sid = erp.product_code
+		AND pp.ifdel = '0'
+		AND NOW() BETWEEN pp.promotion_begin_time
+		AND pp.promotion_end_time
 		<if test="supplyCode != null">
 			JOIN pcm_erp_product_supply peps ON peps.erp_product_sid = erp.product_code
 			AND peps.shop_sid = erp.store_code AND peps.`status` = 0
@@ -1530,9 +1536,6 @@
 			JOIN pcm_erp_product_supply peps ON peps.erp_product_sid = erp.product_code
 			AND peps.shop_sid = erp.store_code AND peps.`status` = 0
 			JOIN pcm_supply_info supply ON peps.supply_sid = supply.supply_code
-		</if>
-		<if test="supplyCode == null">
-			JOIN pcm_supply_info supply ON erp.supply_code = supply.supply_code
 		</if>
 		<where>
 			<if test="cateList != null" >
