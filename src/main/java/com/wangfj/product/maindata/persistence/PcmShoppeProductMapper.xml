@@ -5549,11 +5549,11 @@
 		SELECT
 		pro.sid AS sid,
 		ext.field4 AS MTART,
-		pro.field4 AS MATNR,
-		spu.short_des AS MAKTX,
+		pro.shoppe_pro_sid AS MATNR,
+		pro.shoppe_pro_name AS MAKTX,
 		spu.sid AS MATKL, <!-- 工业分类字段保存spu的sid,后面用spusid单独查询工业分类 -->
 		pro.category_sid AS GLJG,
-		spu.brand_sid AS ZBRAND_ID,
+		pbr1.brand_sid AS ZBRAND_ID,
 		spu.product_sku AS
 		ZZSTYLENO,
 		pro.field3 AS ZZDKNO,
@@ -5587,7 +5587,7 @@
 		sku.product_detail_sid AS PCM_SKU,
 		pro.supply_product_code AS
 		SUPPLIERPRODUCTCODE,
-		pro.shoppe_pro_sid AS PRODUCTCODE,
+		<!-- pro.shoppe_pro_sid AS PRODUCTCODE, -->
 		pro.field4 AS
 		ERPCODE,
 		supply.supply_code AS LIFNR,
@@ -5616,6 +5616,8 @@
 		product_detail_sid,
 		field3,
 		field4,
+		shoppe_pro_name,
+		brand_sid,
 		category_sid,
 		input_tax,
 		output_tax,
@@ -5645,6 +5647,7 @@
 		JOIN pcm_pro_detail AS sku ON sku.sid = pro.product_detail_sid
 		AND pro.sale_status = 0
 		JOIN pcm_product AS spu ON spu.sid = sku.product_sid
+		LEFT JOIN (SELECT * FROM pcm_brand pbr WHERE pbr.brand_type = 1) pbr1 ON pbr1.sid = pro.brand_sid
 		JOIN pcm_shoppe AS shoppe ON shoppe.sid = pro.shoppe_sid
 		AND shoppe.shoppe_status = 1
 		JOIN pcm_organization AS org ON org.sid = shoppe.shop_sid
@@ -5688,7 +5691,6 @@
 		AND ppr.promotion_end_time
 		AND ppr.ifdel = 0
 		AND ppr.channel_sid = 0
-		<!-- LEFT JOIN pcm_barcode pbar ON pbar.shoppe_pro_sid = pro.shoppe_pro_sid -->
     </select>
 	<select id="getGyCateToSapInfo" parameterType="HashMap" resultType="HashMap">
 		SELECT
