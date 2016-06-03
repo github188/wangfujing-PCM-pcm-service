@@ -922,6 +922,7 @@
 		spu.product_sid AS product_sid,
 		spu.product_name AS
 		product_name,
+		sku.pro_color_name AS colorMa,
 		color.sid AS colorCode,
 		color.color_name AS colorName,
 		spu.product_sku
