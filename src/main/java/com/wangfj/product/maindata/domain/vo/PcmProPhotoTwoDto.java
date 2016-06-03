@@ -7,6 +7,14 @@ public class PcmProPhotoTwoDto {
 	private String shortDesc;// 短描述
 	private String longDesc;// 长描述
 	private String sellingStatus;// 上架状态:0 未上架，1 已上架，2 已下架
+	private String colorMa;//色码
+	
+	public String getColorMa() {
+		return colorMa;
+	}
+	public void setColorMa(String colorMa) {
+		this.colorMa = colorMa;
+	}
 
 	/**
 	 * 产品编码
