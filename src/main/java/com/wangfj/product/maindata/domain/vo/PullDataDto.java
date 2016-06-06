@@ -93,9 +93,7 @@ public class PullDataDto {
 	private String zzColorCode;//电商商品颜色码
 	private String zzSizeCode;//电商商品尺寸码
 	private String supplyOriginLand;//货源地
-	private String salesPrice;//售价
 	private String isOriginPackage;//是否原厂包装
-	private String isCod;//是否COD Y：是，N：否
 	private String purStatus;//采购状态
 	private String salesStatus;//销售状态
 	private String zcolor;//特性色码
@@ -126,14 +124,6 @@ public class PullDataDto {
 		this.isOriginPackage = isOriginPackage;
 	}
 
-	public String getIsCod() {
-		return isCod;
-	}
-
-	public void setIsCod(String isCod) {
-		this.isCod = isCod;
-	}
-
 	public String getPurStatus() {
 		return purStatus;
 	}
@@ -158,19 +148,6 @@ public class PullDataDto {
 		this.supplyOriginLand = supplyOriginLand;
 	}
 
-	/**
-	 * @Return the String salesPrice
-	 */
-	public String getSalesPrice() {
-		return salesPrice;
-	}
-
-	/**
-	 * @Param String salesPrice to set
-	 */
-	public void setSalesPrice(String salesPrice) {
-		this.salesPrice = salesPrice;
-	}
 
 	/**
 	 * @Return the String zzColorCode

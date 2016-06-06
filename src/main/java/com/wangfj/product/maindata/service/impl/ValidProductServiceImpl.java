@@ -1,11 +1,13 @@
 package com.wangfj.product.maindata.service.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,8 +67,11 @@ import com.wangfj.product.maindata.service.intf.IValidProDrtailService;
 import com.wangfj.product.maindata.service.intf.IValidProductService;
 import com.wangfj.product.organization.domain.entity.PcmOrganization;
 import com.wangfj.product.organization.domain.entity.PcmShoppe;
+import com.wangfj.product.organization.domain.vo.PcmShoppeResultDto;
+import com.wangfj.product.organization.domain.vo.SelectPcmShoppeDto;
 import com.wangfj.product.organization.persistence.PcmOrganizationMapper;
 import com.wangfj.product.organization.persistence.PcmShoppeMapper;
+import com.wangfj.product.organization.service.intf.IPcmShoppeService;
 import com.wangfj.product.price.persistence.PcmOriginalPriceLogMapper;
 import com.wangfj.product.price.persistence.PcmOriginalPriceMapper;
 import com.wangfj.product.price.persistence.PcmPriceMapper;
@@ -98,6 +103,8 @@ public class ValidProductServiceImpl implements IValidProductService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ValidProductServiceImpl.class);
 
+	@Autowired
+	private IPcmShoppeService pcmShoppeService;
 	@Autowired
 	private IPcmCreateProductService createService;
 	@Autowired
@@ -2839,7 +2846,8 @@ public class ValidProductServiceImpl implements IValidProductService {
 		map.clear();
 		map.put("categoryCode", dataDto.getManageCateGory());
 		map.put("categoryType", Constants.MANAGECATEGORY);// 分类类型为 1 管理分类
-		map.put("isLeaf", Constants.Y);// 是否为叶子节点
+		//map.put("isLeaf", Constants.Y);// 是否为叶子节点
+		map.put("isDisplay", "1");//是否展示
 		map.put("status", Constants.Y);// 是否启用
 		List<PcmCategory> managecateList = categoryMapper.selectListByParam(map);
 		if (managecateList == null || managecateList.size() != 1) {
@@ -3371,31 +3379,57 @@ public class ValidProductServiceImpl implements IValidProductService {
 	public PcmShoppeProduct savePullProductFromSupllier(PullDataDto dataDto) throws BleException {
 		logger.info("start savePullProductFromSupllier(),param:" + dataDto.toString());
 		// 非空与格式参数校验
-		if("2".equals(dataDto.getType())){//电商商品
+		if(dataDto.getType().equals(String.valueOf(Constants.PCMBRAND_SHOP_TYPE_EBUSINESS))){//电商商品
 			validPullDataDtoIsExistsSupShoPro(dataDto, true);
 		}else{//非电商商品
-			validPullDataDtoIsExistsSupShoPro(dataDto, false);
+			validPullDataDtoIsExists2(dataDto, false);
 		}
 		// 特殊字段校验
 		validPullDataDtoIsExists(dataDto);
 		String source = "SUP";
 		Map<String, Object> map = new HashMap<String, Object>();
-		// 专柜数据校验
-		map.clear();
-		map.put("shoppeCode", dataDto.getCounterCode());
-		// map.put("shoppeType", "01"); // 查找单品专柜
-		List<PcmShoppe> shoppeList = pcmShoppeMapper.selectListByParam(map);
-		if (shoppeList == null || shoppeList.size() != 1) {
-			throw new BleException(ErrorCode.SHOPPE_NULL.getErrorCode(),
-					ErrorCode.SHOPPE_NULL.getMemo());
-		}
-		// 判断专柜状态
-		if (shoppeList.get(0).getShoppeStatus() == null
-				|| shoppeList.get(0).getShoppeStatus() != Constants.PUBLIC_1
-				|| shoppeList.get(0).getIndustryConditionSid() != Integer.parseInt(dataDto
-						.getType())) {
-			throw new BleException(ErrorCode.SHOPPE_STATUS_ERROR.getErrorCode(),
-					ErrorCode.SHOPPE_STATUS_ERROR.getMemo());
+		List<PcmShoppe> shoppeList = new ArrayList<PcmShoppe>();
+		if(dataDto.getType().equals(String.valueOf(Constants.PCMBRAND_SHOP_TYPE_EBUSINESS))){
+			//获取专柜 电商商品不传专柜编码,需要用供应商编码和门店编码获取对应专柜
+			PcmShoppe pshoppe = new PcmShoppe();
+			SelectPcmShoppeDto shoDto = new SelectPcmShoppeDto();
+			shoDto.setShopCode(dataDto.getShopCode());//门店编码
+			shoDto.setSupplyCode(dataDto.getSupplierCode());//供应商编码
+			PcmShoppeResultDto shopResult = pcmShoppeService.findShoppeForSAPERPImport(shoDto);
+			if(shopResult == null){
+				throw new BleException(ErrorCode.SAPERP_PCM_ERROR_SHOPERROR.getErrorCode(),
+						ErrorCode.SAPERP_PCM_ERROR_SHOPERROR.getMemo());
+			}
+			try {
+				BeanUtils.copyProperties(pshoppe, shopResult);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			shoppeList.add(pshoppe);
+			//电商商品不传要约, 如果要约为空,则对应专柜商品状态为不可售
+			if(StringUtils.isBlank(dataDto.getOfferNumber())){
+				dataDto.setIsSale(String.valueOf(Constants.PCMSHOPPEPRODECT_SALE_STATUS_NO));
+			}
+		}else{
+			// 专柜数据校验
+			map.clear();
+			map.put("shoppeCode", dataDto.getCounterCode());
+			// map.put("shoppeType", "01"); // 查找单品专柜
+			shoppeList = pcmShoppeMapper.selectListByParam(map);
+			if (shoppeList == null || shoppeList.size() != 1) {
+				throw new BleException(ErrorCode.SHOPPE_NULL.getErrorCode(),
+						ErrorCode.SHOPPE_NULL.getMemo());
+			}
+			// 判断专柜状态
+			if (shoppeList.get(0).getShoppeStatus() == null
+					|| shoppeList.get(0).getShoppeStatus() != Constants.PUBLIC_1
+					|| shoppeList.get(0).getIndustryConditionSid() != Integer.parseInt(dataDto
+							.getType())) {
+				throw new BleException(ErrorCode.SHOPPE_STATUS_ERROR.getErrorCode(),
+						ErrorCode.SHOPPE_STATUS_ERROR.getMemo());
+			}
 		}
 		// 获取门店信息
 		PcmOrganization org = organizationMapper.get(shoppeList.get(0).getShopSid());
@@ -3425,12 +3459,9 @@ public class ValidProductServiceImpl implements IValidProductService {
 			throw new BleException(ErrorCode.SUPPLYINFO_STATUS_ERROR.getErrorCode(),
 					ErrorCode.SUPPLYINFO_STATUS_ERROR.getMemo());
 		}
-		// 判断供应商经营方式
-		if (supplyInfoList.get(0).getBusinessPattern() == null
-				|| !String.valueOf(supplyInfoList.get(0).getBusinessPattern()).equals(
-						dataDto.getOperateMode())) {
-			throw new BleException(ErrorCode.SUPPLYINFO_BUSSINESS_ERROR.getErrorCode(),
-					ErrorCode.SUPPLYINFO_BUSSINESS_ERROR.getMemo());
+		//电商不传经营方式, 所传经营方式与对应供应商一致
+		if(StringUtils.isBlank(dataDto.getOperateMode())){
+			dataDto.setOperateMode(supplyInfoList.get(0).getBusinessPattern().toString());
 		}
 		// 品牌数据校验
 		map.clear();
@@ -3542,10 +3573,24 @@ public class ValidProductServiceImpl implements IValidProductService {
 			}
 		}
 		// 条码校验 同一门店下条码不能重复
-		if (StringUtils.isNotBlank(dataDto.getStandardBarCode())) {
+		/*if (StringUtils.isNotBlank(dataDto.getStandardBarCode())) {
 			validBarcode(org.getOrganizationCode(), dataDto.getStandardBarCode());
+		}*/
+		// 条码校验 同一门店下条码不能重复
+		if (StringUtils.isNotBlank(dataDto.getStandardBarCode())) {
+			if ("2".equals(dataDto.getType())) {// 电商条码校验
+				validBarcodeSap(org.getOrganizationCode(), dataDto.getStandardBarCode());
+			} else {// 非电商条码校验
+				validBarcode(org.getOrganizationCode(), dataDto.getStandardBarCode());
+			}
+		} else if (dataDto.getStandardBarCodes() != null
+				&& dataDto.getStandardBarCodes().size() != 0) {
+			if ("2".equals(dataDto.getType())) {// 电商条码校验
+				validBarcodeSap(dataDto.getStandardBarCodes(), org.getOrganizationCode());
+			} else {// 非电商条码校验
+				validBarcode(dataDto.getStandardBarCodes(), org.getOrganizationCode());
+			}
 		}
-
 		// 创建专柜商品DTO
 		CreateShoppePro cProDto = new CreateShoppePro();
 		// 品牌表SID
@@ -3634,8 +3679,10 @@ public class ValidProductServiceImpl implements IValidProductService {
 			cProDto.setIsPromotion(Constants.PUBLIC_1);// 是否允许ERP促销
 		}
 		cProDto.setField3(dataDto.getModelNum());// 货号
+		cProDto.setIsCod(Integer.parseInt(dataDto.getIsCOD()));// 是否支持货到付款
 		cProDto.setCategoryTJSid(tjcateList.get(0).getSid());// 统计分类SID
-
+		cProDto.setSaleStatus(Integer.parseInt(dataDto.getIsSale()));// 商品可售状态
+		
 		CreateSkuDto cSkuDto = new CreateSkuDto();
 		// cSkuDto.setArticleNum(dataDto.getModelNum());// 货号
 		cSkuDto.setBrandGroupCode(brandList.get(0).getBrandSid());// 集团品牌编码
@@ -3667,7 +3714,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 			dsPro.setField7(dataDto.getField());//统比销
 			dsPro.setField8(dataDto.getSupplyOriginLand());//货源地
 			dsPro.setField11(dataDto.getPurStatus());//采购状态
-			dsPro.setField12(dataDto.getSalesStatus());//销售状态
+			//dsPro.setField12(dataDto.getSalesStatus());//销售状态
 			dsPro.setZcolor(dataDto.getZcolor());//特性色码
 			dsPro.setZsize(dataDto.getZsize());//特性尺码
 		}
@@ -3911,67 +3958,61 @@ public class ValidProductServiceImpl implements IValidProductService {
 		 * sapErp = true 电商商品
 		 * sapErp = false 非电商商品
 		 */
-		//电商商品类型
+		//电商商品类型1
 		if(StringUtils.isBlank(dataDto.getSapProType())){
-			logger.info("电商商品类型不能为空");
+			logger.info("商品类型不能为空");
 			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_SAPPROTYPE.getErrorCode(),
 					ErrorCode.SAPERP_PCM_ERROR_SAPPROTYPE.getMemo());
 		}
-		//电商商品描述
-		if(StringUtils.isBlank(dataDto.getProductDesc())){
-			logger.info("电商商品描述不能为空");
+		//电商商品名称1
+		if(StringUtils.isBlank(dataDto.getProductName())){
+			logger.info("商品名称不能为空");
 			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_SAPPRODESC.getErrorCode(),
 					ErrorCode.SAPERP_PCM_ERROR_SAPPRODESC.getMemo());
 		}
-		// 条码/国标码
+		// 条码/国标码1
 		if(StringUtils.isBlank(dataDto.getStandardBarCode())){
 			logger.info("供应商条码/国标码不能为空");
-			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_KUANCODE1.getErrorCode(),
-					ErrorCode.SAPERP_PCM_ERROR_KUANCODE1.getMemo());
+			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_SAPSTANDARDBARCODE.getErrorCode(),
+					ErrorCode.SAPERP_PCM_ERROR_SAPSTANDARDBARCODE.getMemo());
 		}
-		// 供应商编码-非空
+		// 供应商编码-非空1
 		if (!StringUtils.isNotBlank(dataDto.getSupplierCode())) {
 			logger.info("供应商编码参数不能为空");
 			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_SUPPLIERCODE.getErrorCode(),
 					ErrorCode.SAPERP_PCM_ERROR_SUPPLIERCODE.getMemo());
 		}
-		// 供应商编码-规则
+		// 供应商编码-规则1
 		if (!dataDto.getSupplierCode().matches("\\w+")) {
 			logger.info("供应商编码只能包含大小写字母、数字及下划线");
 			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_SUPPLIERCODE1.getErrorCode(),
 					ErrorCode.SAPERP_PCM_ERROR_SUPPLIERCODE1.getMemo());
 		}
-		// 验证电商货号
-		if (StringUtils.isBlank(dataDto.getModelNum())) {
-			logger.info("电商联营货号不能为空");
-			throw new BleException(ErrorCode.PRO_MODELNUM_NULL.getErrorCode(),
-					ErrorCode.PRO_MODELNUM_NULL.getMemo());
-		}
-		// 品牌编码-非空
+		// 品牌编码-非空1
 		if (!StringUtils.isNotBlank(dataDto.getBrandCode())) {
 			logger.info("品牌编码参数不能为空");
 			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_BRANDCODE1.getErrorCode(),
 					ErrorCode.SAPERP_PCM_ERROR_BRANDCODE1.getMemo());
 		}
-		// 品牌编码-规则
+		// 品牌编码-规则1
 		if (!dataDto.getBrandCode().matches("\\d+")) {
 			logger.info("品牌编码参数只能为数字");
 			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_BRANDCODE.getErrorCode(),
 					ErrorCode.SAPERP_PCM_ERROR_BRANDCODE.getMemo());
 		}
-		// 基本计量单位
+		// 基本计量单位1
 		if(StringUtils.isBlank(dataDto.getBaseUnitCode())){
 			logger.info("基本计量单位不能为空");
 			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_BASEUNITCODE.getErrorCode(),
 					ErrorCode.SAPERP_PCM_ERROR_BASEUNITCODE.getMemo());
 		}
-		// 尺码
+		// 尺码1
 		if (!StringUtils.isNotBlank(dataDto.getSizeCode())) {
 			logger.info("规格/尺码参数不能为空");
 			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_SIZECODE.getErrorCode(),
 					ErrorCode.SAPERP_PCM_ERROR_SIZECODE.getMemo());
 		}
-		//颜色码
+		/*//颜色码
 		if(StringUtils.isBlank(dataDto.getZzColorCode())){
 			logger.info("颜色码不能为空");
 			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_ZZCOLORCODE.getErrorCode(),
@@ -3982,7 +4023,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 			logger.info("尺寸码不能为空");
 			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_ZZSIZECODE.getErrorCode(),
 					ErrorCode.SAPERP_PCM_ERROR_ZZSIZECODE.getMemo());
-		}
+		}*/
 		// 品牌专柜(管理分类编码)-非空
 		if (!StringUtils.isNotBlank(dataDto.getManageCateGory())) {
 			logger.info("品牌专柜(管理分类)编码参数不能为空");
@@ -3997,7 +4038,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 						ErrorCode.SAPERP_PCM_ERROR_MANAGECATEGORY1.getMemo());
 			}
 		}
-		// 扣率/进价
+		// 扣率/进价1
 		if (StringUtils.isNotBlank(dataDto.getRate_price())) {
 			String temp = dataDto.getRate_price();
 			if (temp.indexOf("%") != -1) {
@@ -4012,7 +4053,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 						ErrorCode.SAPERP_PCM_ERROR_RATEPRICE.getMemo());
 			}
 		}
-		// 扣率/含税进价
+		// 扣率/含税进价1
 		if (StringUtils.isNotBlank(dataDto.getPurchasePrice_taxRebate())) {
 			String temp = dataDto.getPurchasePrice_taxRebate();
 			if (temp.indexOf("%") != -1) {
@@ -4027,7 +4068,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 						ErrorCode.SAPERP_PCM_ERROR_RATEPRICE.getMemo());
 			}
 		}
-		// 消费税
+		// 消费税1
 		if (StringUtils.isNotBlank(dataDto.getConsumptionTax())) {
 			String temp = dataDto.getConsumptionTax();
 			if (temp.indexOf("%") != -1) {
@@ -4042,7 +4083,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 						ErrorCode.SAPERP_PCM_ERROR_SALESTAX.getMemo());
 			}
 		}
-		// 进项税
+		// 进项税1
 		if (StringUtils.isNotBlank(dataDto.getInputTax())) {
 			String temp = dataDto.getInputTax();
 			if (temp.indexOf("%") != -1) {
@@ -4057,7 +4098,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 						ErrorCode.SAPERP_PCM_ERROR_INPUTTAX.getMemo());
 			}
 		}
-		// 销项税
+		// 销项税1
 		if (StringUtils.isNotBlank(dataDto.getOutputTax())) {
 			String temp = dataDto.getOutputTax();
 			if (temp.indexOf("%") != -1) {
@@ -4072,49 +4113,49 @@ public class ValidProductServiceImpl implements IValidProductService {
 						ErrorCode.SAPERP_PCM_ERROR_OUTPUTTAX.getMemo());
 			}
 		}
-		// 末级工业分类代码-非空
+		// 末级工业分类代码-非空1
 		if (!StringUtils.isNotBlank(dataDto.getProdCategoryCode())) {
 			logger.info("末级工业分类代码参数不能为空");
 			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_PRODCATEGORYCODE.getErrorCode(),
 					ErrorCode.SAPERP_PCM_ERROR_PRODCATEGORYCODE.getMemo());
 		}
-		// 末级工业分类编码-规则
+		// 末级工业分类编码-规则1
 		if (!dataDto.getProdCategoryCode().matches("\\d+")) {
 			logger.info("末级工业分类编码只能为数字");
 			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_PRODCATEGORYCODE1.getErrorCode(),
 					ErrorCode.SAPERP_PCM_ERROR_PRODCATEGORYCODE1.getMemo());
 		}
-		// 末级统计分类代码-非空
+		// 末级统计分类代码-非空1
 		if (!StringUtils.isNotBlank(dataDto.getFinalClassiFicationCode())) {
 			logger.info("末级统计分类代码参数不能为空");
 			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_STATCATEGORYCODE.getErrorCode(),
 					ErrorCode.SAPERP_PCM_ERROR_STATCATEGORYCODE.getMemo());
 		}
-		// 末级统计分类编码-规则
+		// 末级统计分类编码-规则1
 		if (!dataDto.getFinalClassiFicationCode().matches("\\d+")) {
 			logger.info("末级统计分类编码只能为数字");
 			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_STATCATEGORYCODE1.getErrorCode(),
 					ErrorCode.SAPERP_PCM_ERROR_STATCATEGORYCODE1.getMemo());
 		}
-		// 吊牌价-非空
+		// 吊牌价-非空1
 		if (!StringUtils.isNotBlank(dataDto.getMarketPrice())) {
 			logger.info("市场价参数不能为空");
 			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_MARKETPRICE.getErrorCode(),
 					ErrorCode.SAPERP_PCM_ERROR_MARKETPRICE.getMemo());
 		}
-		// 吊牌价-规则
+		// 吊牌价-规则1
 		if (!dataDto.getMarketPrice().matches("\\d+.{0,1}\\d*")) {
 			logger.info("市场价参数只能为整数数字或小数数字");
 			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_MARKETPRICE1.getErrorCode(),
 					ErrorCode.SAPERP_PCM_ERROR_MARKETPRICE1.getMemo());
 		}
-		//售价 -非空
+		//售价 -非空1
 		if(StringUtils.isBlank(dataDto.getSalePrice())){
 			logger.info("售价不能为空");
 			throw new BleException(ErrorCode.SUPPLIER_PCM_SALEPRICE_ISNULL.getErrorCode(),
 					ErrorCode.SUPPLIER_PCM_SALEPRICE_ISNULL.getMemo());
 		}
-		//售价-规则
+		//售价-规则1
 		if (!dataDto.getSalePrice().matches("\\d+.{0,1}\\d*")) {
 			logger.info("售价参数只能为整数数字或小数数字");
 			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_SALESPRICE.getErrorCode(),
@@ -4132,8 +4173,153 @@ public class ValidProductServiceImpl implements IValidProductService {
 			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_TYPE1.getErrorCode(),
 					ErrorCode.SAPERP_PCM_ERROR_TYPE1.getMemo());
 		}
+		//原产国1
+		if(StringUtils.isBlank(dataDto.getOriginCountry())){
+			logger.info("原产国不能为空");
+			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_ORIGINCOUNTRY.getErrorCode(),
+					ErrorCode.SAPERP_PCM_ERROR_ORIGINCOUNTRY.getMemo());
+		}
+		//产地1
+		if (!StringUtils.isNotBlank(dataDto.getPlaceOfOrigin())) {
+				logger.info("产地参数不能为空");
+				throw new BleException(ErrorCode.SAPERP_PCM_ERROR_ORIGIN.getErrorCode(),
+						ErrorCode.SAPERP_PCM_ERROR_ORIGIN.getMemo());
+		}
+		/*// 经营方式-非空 电商不验证
+		if (!StringUtils.isNotBlank(dataDto.getOperateMode()) && !sapErp) {
+			logger.info("经营方式参数不能为空");
+			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_OPERATEMODE.getErrorCode(),
+					ErrorCode.SAPERP_PCM_ERROR_OPERATEMODE.getMemo());
+		}
+		// 经营方式-规则 电商不验证
+		if (!dataDto.getOperateMode().matches(Constants.SUPPLIER_OPERATEMODE_TYPE) && !sapErp) {
+			logger.info("经营方式应为0-4的数字(0经销1代销2联营3平台服务4租赁)");
+			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_OPERATEMODE1.getErrorCode(),
+					ErrorCode.SAPERP_PCM_ERROR_OPERATEMODE1.getMemo());
+		}*/
+		// 品牌专柜(管理分类编码)-非空1
+		if (!StringUtils.isNotBlank(dataDto.getManageCateGory())) {
+			logger.info("品牌专柜(管理分类)编码参数不能为空");
+			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_MANAGECATEGORY.getErrorCode(),
+					ErrorCode.SAPERP_PCM_ERROR_MANAGECATEGORY.getMemo());
+		}
+		// 品牌专柜（管理分类编码）-规则1
+		if (StringUtils.isNotBlank(dataDto.getManageCateGory())) {
+			if (!dataDto.getManageCateGory().matches("\\d+")) {
+				logger.info("品牌专柜(管理分类)编码参数只能为数字");
+				throw new BleException(ErrorCode.SAPERP_PCM_ERROR_MANAGECATEGORY1.getErrorCode(),
+						ErrorCode.SAPERP_PCM_ERROR_MANAGECATEGORY1.getMemo());
+			}
+		}
+		//统比销 - 电商
+		if(StringUtils.isBlank(dataDto.getField())){
+				logger.info("统比销不能为空");
+				throw new BleException(ErrorCode.SAPERP_PCM_ERROR_FIELD.getErrorCode(),
+						ErrorCode.SAPERP_PCM_ERROR_FIELD.getMemo());
+		}
+		//COD - 电商
+		if(StringUtils.isBlank(dataDto.getIsCOD())){
+				logger.info("电商COD字段不能为空");
+				throw new BleException(ErrorCode.SAPERP_PCM_ERROR_ISCOD.getErrorCode(),
+						ErrorCode.SAPERP_PCM_ERROR_ISCOD.getMemo());
+		}
+		//原厂包装 -电商
+		if(StringUtils.isBlank(dataDto.getIsOriginPackage())){
+			logger.info("是否原厂包装字段不能为空");
+			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_ISORIGINPACKAGE.getErrorCode(),
+					ErrorCode.SAPERP_PCM_ERROR_ISORIGINPACKAGE.getMemo());
+		}
+		/*// 要约号 电商不验证
+		if (!StringUtils.isNotBlank(dataDto.getOfferNumber()) && !sapErp) {
+			logger.info("要约号参数不能为空");
+			throw new BleException(ErrorCode.SAPERP_PCM_ERROR_OFFERNUMBER.getErrorCode(),
+					ErrorCode.SAPERP_PCM_ERROR_OFFERNUMBER.getMemo());
+		}
+		// 折扣底限 电商不验证
+		if (!StringUtils.isNotBlank(dataDto.getDiscountLimit())) {
+			if (!sapErp) {
+				logger.info("折扣底限参数不能为空");
+				throw new BleException(ErrorCode.SAPERP_PCM_ERROR_DISCOUNTLIMIT.getErrorCode(),
+						ErrorCode.SAPERP_PCM_ERROR_DISCOUNTLIMIT.getMemo());
+			}
+		}*/
+		/*//期初库存 电商不验证
+		if (StringUtils.isNotBlank(dataDto.getInventory())
+				&& !dataDto.getInventory().matches("\\d*")) {
+			if (!sapErp) {
+				logger.info("期初库存参数不符合规则");
+				throw new BleException(ErrorCode.SAPERP_PCM_ERROR_INVENTORY1.getErrorCode(),
+						ErrorCode.SAPERP_PCM_ERROR_INVENTORY1.getMemo());
+			}
+		}
+		//采购人员编码 电商不验证
+		if (StringUtils.isBlank(dataDto.getProcurementPersonnelNumber())) {
+			if (!sapErp) {
+				logger.info("采购人员编号不能为空");
+				throw new BleException(ErrorCode.SAPERP_PCM_ERROR_PROCUREMEN.getErrorCode(),
+						ErrorCode.SAPERP_PCM_ERROR_PROCUREMEN.getMemo());
+			}
+		}
+		//录入人员编号,电商不验证
+		if (StringUtils.isBlank(dataDto.getEntryNumber())) {
+			if (!sapErp) {
+				logger.info("录入人员编号不能为空");
+				throw new BleException(ErrorCode.SAPERP_PCM_ERROR_ENTRY.getErrorCode(),
+						ErrorCode.SAPERP_PCM_ERROR_ENTRY.getMemo());
+			}
+		}*/
 		logger.info("end validPullDataDtoIsExists()");
 		return true;
 		
+	}
+ 
+	/**
+	 * 电商条码验证，不验证格式，只判重
+	 * 
+	 * @Methods Name validBarcodeSap
+	 * @Create In 2016-3-1 By wangc
+	 * @param barcodes
+	 * @param storeCode
+	 *            void
+	 */
+	void validBarcodeSap(List<Map<String, Object>> barcodes, String storeCode) {
+		PcmBarcode barcodeEntity = new PcmBarcode();
+		barcodeEntity.setStoreCode(storeCode);// 门店编码
+		for (Map<String, Object> barcode : barcodes) {
+			barcodeEntity.setBarcode(barcode.get("barcode").toString());// 条码
+			List<PcmBarcode> barcodeList = barcodeMapper.selectListByParam(barcodeEntity);
+			if (barcodeList != null && barcodeList.size() > 0) {
+				throw new BleException(ErrorCode.BARCODE_IS_EXIST.getErrorCode(),
+						ErrorCode.BARCODE_IS_EXIST.getMemo() + ":" + barcodeEntity.getBarcode());
+			}
+		}
+	}
+	/**
+	 * 条码校验 同一门店下条码不能重复
+	 * 
+	 * @Methods Name validBarcode
+	 * @Create In 2016-3-1 By wangc
+	 * @param barcodes
+	 * @param storeCode
+	 *            void
+	 */
+	void validBarcode(List<Map<String, Object>> barcodes, String storeCode) {
+		for (Map<String, Object> barcode : barcodes) {
+			if (!barcode.get("barcode").toString().matches("\\d+")) {
+				logger.error("条码格式错误");
+				throw new BleException(ErrorCode.PARA_NORULE_ERROR.getErrorCode(),
+						ErrorCode.PARA_NORULE_ERROR.getMemo());
+			}
+		}
+		PcmBarcode barcodeEntity = new PcmBarcode();
+		barcodeEntity.setStoreCode(storeCode);// 门店编码
+		for (Map<String, Object> barcode : barcodes) {
+			barcodeEntity.setBarcode(barcode.get("barcode").toString());// 条码
+			List<PcmBarcode> barcodeList = barcodeMapper.selectListByParam(barcodeEntity);
+			if (barcodeList != null && barcodeList.size() > 0) {
+				throw new BleException(ErrorCode.BARCODE_IS_EXIST.getErrorCode(),
+						ErrorCode.BARCODE_IS_EXIST.getMemo() + ":" + barcodeEntity.getBarcode());
+			}
+		}
 	}
 }

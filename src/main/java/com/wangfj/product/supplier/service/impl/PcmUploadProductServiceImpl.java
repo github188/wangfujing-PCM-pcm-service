@@ -141,7 +141,7 @@ public class PcmUploadProductServiceImpl implements IPcmUploadProductService {
 	private PcmContractLogMapper contractLogMapper;
 
 	/**
-	 * 供应商商品上传
+	 * 供应商商品上传  -- 暂时没用,供应商走的import里validProduct
 	 */
 	@Override
 	@Transactional
