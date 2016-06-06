@@ -497,6 +497,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 			}else{
 				String sapsidStr =Constants.SAPPRO_CODE + String.format("%011d", psp.getSid());
 				psp.setShoppeProSid(sapsidStr);
+				psp.setField4(sapsidStr);// 电商商品 field4与专柜商品编码要一致
 			}
 		}else{
 			Long code = Constants.PRO_CODE + psp.getSid();
