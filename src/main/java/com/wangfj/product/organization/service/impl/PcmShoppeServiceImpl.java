@@ -634,8 +634,7 @@ public class PcmShoppeServiceImpl implements IPcmShoppeService {
                         paramMap.put("shopCode", shopList.get(0).getOrganizationCode());
                         shoppeCode = generateEBusinessShoppeCode(paramMap);
                     } else {
-                        throw new BleException(ErrorCode.SHOPPE_EXIST.getErrorCode(),
-                                ErrorCode.SHOPPE_EXIST.getMemo());
+                        throw new BleException(ErrorCode.SHOPPE_EXIST.getErrorCode(), "非拆单的供应商不许创建专柜！");
                     }
                 }
             } else {
