@@ -1243,33 +1243,33 @@
             resultType="com.wangfj.product.organization.domain.vo.PcmShoppeResultDto"
             parameterType="com.wangfj.product.organization.domain.vo.SelectPcmShoppeDto">
         SELECT
-        ps.sid AS sid,
-        ps.group_sid AS groupSid,
-        ps.shop_sid AS shopSid,
-        po.organization_name AS shopName,
-        po.organization_code AS shopCode,
-        ps.industry_condition_sid AS industryConditionSid,
-        ps.shoppe_code AS shoppeCode,
-        ps.shoppe_name AS shoppeName,
-        ps.shoppe_status AS shoppeStatus,
-        ps.shoppe_type AS goodsManageType,
-        psi.business_pattern AS businessTypeSid,
-        ps.shoppe_group AS shoppeGroup,
-        ps.shoppe_type AS shoppeType,
-        ps.shoppe_shipping_point AS shoppeShippingPoint,
-        ps.ref_counter AS refCounter,
-        ps.negative_stock AS negativeStock,
-        ps.is_shipping_point AS isShippingPoint,
-        pssr.supply_sid AS supplySid
+            ps.sid AS sid,
+            ps.group_sid AS groupSid,
+            ps.shop_sid AS shopSid,
+            po.organization_name AS shopName,
+            po.organization_code AS shopCode,
+            ps.industry_condition_sid AS industryConditionSid,
+            ps.shoppe_code AS shoppeCode,
+            ps.shoppe_name AS shoppeName,
+            ps.shoppe_status AS shoppeStatus,
+            ps.shoppe_type AS goodsManageType,
+            psi.business_pattern AS businessTypeSid,
+            ps.shoppe_group AS shoppeGroup,
+            ps.shoppe_type AS shoppeType,
+            ps.shoppe_shipping_point AS shoppeShippingPoint,
+            ps.ref_counter AS refCounter,
+            ps.negative_stock AS negativeStock,
+            ps.is_shipping_point AS isShippingPoint,
+            pssr.supply_sid AS supplySid
         FROM
-        pcm_shoppe ps
+            pcm_shoppe ps
         INNER JOIN pcm_organization po ON ps.shop_sid = po.sid
         AND po.organization_type = 3
         AND po.organization_status = 0
         INNER JOIN pcm_supply_shoppe_relation pssr ON ps.sid = pssr.shoppe_sid
         INNER JOIN pcm_supply_info psi ON pssr.supply_sid = psi.sid
         WHERE
-        ps.shoppe_status = 1
+            ps.shoppe_status = 1
         AND pssr.status = 0
         <if test="shopSid != null">
             AND ps.shop_sid = #{shopSid}
@@ -1282,6 +1282,44 @@
         </if>
         ORDER BY
         CONVERT(ps.shoppe_name USING gbk)
+    </select>
+
+    <select id="findShoppeForSAPERPImport" resultType="com.wangfj.product.organization.domain.vo.PcmShoppeResultDto"
+            parameterType="com.wangfj.product.organization.domain.vo.SelectPcmShoppeDto">
+        SELECT
+            ps.sid AS sid,
+            ps.group_sid AS groupSid,
+            ps.shop_sid AS shopSid,
+            po.organization_name AS shopName,
+            po.organization_code AS shopCode,
+            ps.industry_condition_sid AS industryConditionSid,
+            ps.shoppe_code AS shoppeCode,
+            ps.shoppe_name AS shoppeName,
+            ps.shoppe_status AS shoppeStatus,
+            psi.business_pattern AS businessTypeSid,
+            ps.shoppe_group AS shoppeGroup,
+            ps.shoppe_type AS shoppeType,
+            ps.shoppe_shipping_point AS shoppeShippingPoint,
+            ps.ref_counter AS refCounter,
+            ps.negative_stock AS negativeStock,
+            ps.is_shipping_point AS isShippingPoint,
+            pssr.supply_sid AS supplySid
+        FROM
+            pcm_shoppe ps
+        INNER JOIN pcm_organization po ON ps.shop_sid = po.sid
+        AND po.organization_type = 3
+        AND po.organization_status = 0
+        INNER JOIN pcm_supply_shoppe_relation pssr ON ps.sid = pssr.shoppe_sid
+        INNER JOIN pcm_supply_info psi ON pssr.supply_sid = psi.sid
+        WHERE
+            ps.shoppe_status = 1
+        AND pssr.status = 0
+        <if test="shopCode != null">
+            AND po.organization_code = #{shopCode}
+        </if>
+        <if test="supplyCode != null">
+            AND psi.supply_code = #{supplyCode}
+        </if>
     </select>
 
     <!-- 专柜导入终端,由主数据获取专柜信息 niuzhifan -->

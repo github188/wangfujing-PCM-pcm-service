@@ -1011,4 +1011,36 @@ public class PcmShoppeServiceImpl implements IPcmShoppeService {
         logger.info("end findListShoppeForAddShoppeProduct(),return:" + list.toString());
         return list;
     }
+
+    /**
+     * 根据门店和供应商查询专柜（SAPERP导入商品时查询）
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+    public PcmShoppeResultDto findShoppeForSAPERPImport(SelectPcmShoppeDto dto) {
+        logger.debug("start findShoppeForSAPERPImport(),param:" + dto.toString());
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("shopSid", dto.getShopCode());
+        paramMap.put("supplyCode", dto.getSupplyCode());
+        List<PcmSupplyInfo> supplyInfoList = supplyInfoMapper.selectListByParam(paramMap);
+        //电商拆弹标识：否，时查询电商自库专柜
+        if (supplyInfoList.size() == 1) {
+            PcmSupplyInfo supplyInfo = supplyInfoList.get(0);
+            String shopSid = supplyInfo.getShopSid();
+            Integer apartOrder = supplyInfo.getApartOrder();
+            if ("D001".equals(shopSid) && apartOrder == 0) {//电商自库专柜
+                dto.setSupplyCode("1");
+            }
+        }
+        List<PcmShoppeResultDto> resultDtoList = pcmShoppeMapper.findShoppeForSAPERPImport(dto);
+        PcmShoppeResultDto resultDto = null;
+        if (resultDtoList.size() > 0) {
+            resultDto = resultDtoList.get(0);
+        }
+        logger.debug("end findShoppeForSAPERPImport(),return:" + resultDto);
+        return resultDto;
+    }
+
 }
