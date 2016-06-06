@@ -343,4 +343,6 @@ public interface ICategoryService {
 	 * @return List<Map<String,Object>>
 	 */
 	List<Map<String, String>> getChildNodeCode(Map<String, Object> paraMap);
+
+	String uploadeManagerCategoryDS(PcmAddCategoryDto cateDto);
 }
