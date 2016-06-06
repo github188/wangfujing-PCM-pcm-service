@@ -1703,7 +1703,7 @@ public class CategoryServiceImpl implements ICategoryService {
 			pcmcate.setName(cateDto.getName().trim());
 			pcmcate.setIsMarket(cateDto.getIsMarket());
 			pcmcate.setCategorySid(cateDto.getCategorySid());
-			pcmcate.setParentSid(cate1.getParentSid());
+			pcmcate.setParentSid(cate1.getSid()+"");
 			if (StringUtils.isNotBlank(cateDto.getCategoryCode())) {
 				pcmcate.setCategoryCode(cateDto.getCategoryCode());// 手工录入编码
 			}
