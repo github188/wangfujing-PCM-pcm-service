@@ -289,8 +289,8 @@ public class PcmContractLogServiceImpl implements IPcmContractLogService {
 				parasMap.clear();
 				parasMap.put("categoryCode", contractLogDto.getCol1());// 管理分类编码
 				parasMap.put("categoryType", Constants.MANAGECATEGORY);// 分类类型为1管理分类
-				parasMap.put("isLeaf", Constants.Y);// 是否为叶子节点
 				parasMap.put("status", Constants.Y);// 是否启用
+				parasMap.put("isDisplay","1");
 				List<PcmCategory> managecateList = categoryMapper.selectListByParam(parasMap);
 				if (managecateList == null || managecateList.size() != 1) {
 					logger.info("管理分类不存在");
