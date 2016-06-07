@@ -5752,4 +5752,23 @@
 			limit #{num}
 		</if>
     </select>
+
+    <select id="findIndustryCategoryByParaForOms" parameterType="com.wangfj.product.maindata.domain.vo.OmsShoppeProductDto"
+            resultType="com.wangfj.product.maindata.domain.vo.OmsShoppeProductResultDto">
+        SELECT
+            psp.shoppe_pro_sid AS shoppeProSid,
+            pc.category_code AS industryCategoryCode,
+            pc.level AS industryCategoryLevel,
+            pc.parent_sid AS categoryParentSid
+        FROM
+            pcm_shoppe_product psp
+        INNER JOIN pcm_pro_detail ppd ON psp.product_detail_sid = ppd.sid
+        INNER JOIN pcm_product pp ON ppd.product_sid = pp.sid
+        INNER JOIN pcm_product_category ppc ON ppc.product_sid = pp.sid
+        INNER JOIN pcm_category pc ON pc.sid = ppc.category_sid
+        AND pc.category_type = 0
+        WHERE
+            psp.shoppe_pro_sid = #{shoppeProSid}
+    </select>
+
 </mapper>
