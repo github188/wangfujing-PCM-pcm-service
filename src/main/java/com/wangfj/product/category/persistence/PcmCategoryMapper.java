@@ -332,4 +332,12 @@ public interface PcmCategoryMapper extends BaseMapper<PcmCategory> {
 	 * @return List<Map<String,Object>>
 	 */
 	List<Map<String, String>> getChildNodeCodeByParentCode(Map<String, Object> paraMap);
+	/**
+	 * 拍照系统根据专柜商品编码获取展示分类及展示分类属性值
+	 * @Methods Name getPropNameAndValueByShoprosid
+	 * @Create In 2016年6月7日 By wangc
+	 * @param paraMap
+	 * @return List<Map<String,String>>
+	 */
+	List<Map<String,String>> getPropNameAndValueByShoprosid(Map<String,Object> paraMap);
 }
