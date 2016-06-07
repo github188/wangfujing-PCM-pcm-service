@@ -1582,54 +1582,61 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
      * @return
      */
     @Override
-    public OmsShoppeProductResultDto findIndustryCategoryByParaForOms(OmsShoppeProductDto dto) {
+    public OmsShoppeProductReturnDto findIndustryCategoryByParaForOms(OmsShoppeProductDto dto) {
         logger.debug("findIndustryCategoryByParaForOms(),param:" + dto.toString());
         String shoppeProSid = dto.getShoppeProSid();
         if (com.wangfj.core.utils.StringUtils.isEmpty(shoppeProSid)) {
             throw new BleException(ErrorCode.PRODUCT_NULL.getErrorCode(), "Oms查询没有传专柜商品编码!");
         }
 
-        String industryCategoryLevel = dto.getIndustryCategoryLevel();
-        if (com.wangfj.core.utils.StringUtils.isEmpty(industryCategoryLevel)) {
-            industryCategoryLevel = "2";
-        } else {
-            if (Integer.parseInt(industryCategoryLevel) < 1) {
-                throw new BleException(ErrorCode.PRODUCT_NULL.getErrorCode(), "Oms查询传入的工业分类的级别不合法!");
-            }
-        }
-
+        OmsShoppeProductReturnDto returnDto = new OmsShoppeProductReturnDto();//返回参数
         OmsShoppeProductResultDto resultDto = shoppeProMapper.findIndustryCategoryByParaForOms(dto);
+        returnDto.setShoppeProSid(resultDto.getShoppeProSid());
 
         String resultDtoIndustryCategoryLevel = resultDto.getIndustryCategoryLevel();//专柜商品对应的SPU上工业分类级数
-        if (!industryCategoryLevel.equals(resultDtoIndustryCategoryLevel)) {
-            Map<String, Object> paramMap = new HashMap<String, Object>();
-            paramMap.put("sid", resultDto.getCategoryParentSid());
-            List<PcmCategory> categoryList = null;
-            categoryList = categoryMapper.selectListByParam(paramMap);
-            PcmCategory category = null;
-            Integer level = null;
-            if (categoryList.size() > 0) {
-                category = categoryList.get(0);
-                level = category.getLevel();
-                boolean queryFlag = industryCategoryLevel.equals(level.toString());
-                while (!queryFlag) {
-                    paramMap.clear();
-                    paramMap.put("sid", category.getParentSid());
-                    categoryList = categoryMapper.selectListByParam(paramMap);
-                    if (categoryList.size() > 0) {
-                        category = categoryList.get(0);
-                        level = category.getLevel();
-                        queryFlag = industryCategoryLevel.equals(level.toString());
-                    } else {
-                        queryFlag = true;
+        List<OmsCategoryDto> omsCategoryDtoList = new ArrayList<OmsCategoryDto>();
+        if ("1".equals(resultDtoIndustryCategoryLevel) || "2".equals(resultDtoIndustryCategoryLevel)) {
+            OmsCategoryDto omsCategoryDto = new OmsCategoryDto();
+            omsCategoryDto.setCategoryCode(resultDto.getIndustryCategoryCode());
+            omsCategoryDto.setLevel(resultDto.getIndustryCategoryLevel());
+            omsCategoryDto.setName(resultDto.getIndustryCategoryName());
+            omsCategoryDtoList.add(omsCategoryDto);
+        }
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("sid", resultDto.getCategoryParentSid());
+        List<PcmCategory> categoryList = null;
+        categoryList = categoryMapper.selectListByParam(paramMap);
+        PcmCategory category = null;
+        Integer level = null;
+        if (categoryList.size() > 0) {
+            category = categoryList.get(0);
+            level = category.getLevel();
+            boolean queryFlag = "1".equals(level.toString());
+            while (!queryFlag) {
+                paramMap.clear();
+                paramMap.put("sid", category.getParentSid());
+                categoryList = categoryMapper.selectListByParam(paramMap);
+                if (categoryList.size() > 0) {
+                    category = categoryList.get(0);
+                    level = category.getLevel();
+                    queryFlag = "1".equals(level.toString());
+
+                    //封装返回结果
+                    if ("1".equals(level.toString()) || "2".equals(level.toString())) {
+                        OmsCategoryDto omsCategoryDto = new OmsCategoryDto();
+                        omsCategoryDto.setCategoryCode(category.getCategoryCode());
+                        omsCategoryDto.setLevel(level.toString());
+                        omsCategoryDto.setName(category.getName());
+                        omsCategoryDtoList.add(omsCategoryDto);
                     }
+                } else {
+                    queryFlag = true;
                 }
-                resultDto.setIndustryCategoryCode(category.getCategoryCode());
-                resultDto.setIndustryCategoryLevel(level.toString());
             }
         }
+        returnDto.setCategoryDtoList(omsCategoryDtoList);
 
-        logger.debug("end findIndustryCategoryByParaForOms(),return:" + resultDto.toString());
-        return resultDto;
+        logger.debug("end findIndustryCategoryByParaForOms(),return:" + returnDto.toString());
+        return returnDto;
     }
 }
