@@ -657,69 +657,6 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
             pushDto.setBaseProductCode(resDto.getSpuCode());
             pushDto.setProductName(resDto.getProductName());
 
-<<<<<<< HEAD
-			pushDto.setSupplierCode(resDto.getSupplierCode());
-			pushDto.setCounterCode(resDto.getCounterCode());
-			pushDto.setErpProductCode(resDto.getDiscountCode());
-			pushDto.setStoreCode(resDto.getStoreCode());
-			if (resDto.getManageCategory() == null || resDto.getManageCategory() == "") {
-				pushDto.setManageCategory("");
-			} else {
-				pushDto.setManageCategory(resDto.getManageCategory());
-			}
-			// if (resDto.getOperateMode().equals("0")) {
-			// pushDto.setOperateMode("Z001");
-			// } else if (resDto.getOperateMode().equals("1")) {
-			// pushDto.setOperateMode("Z002");
-			// } else if (resDto.getOperateMode().equals("2")) {
-			// pushDto.setOperateMode("Z003");
-			// } else if (resDto.getOperateMode().equals("3")) {
-			// pushDto.setOperateMode("Z004");
-			// } else if (resDto.getOperateMode().equals("4")) {
-			// pushDto.setOperateMode("Z005");
-			// }
-			pushDto.setOperateMode(resDto.getOperateMode());
-			pushDto.setIsDiscountable(resDto.getIsDiscountable());
-			pushDto.setMaxDiscountRate(resDto.getMaxDiscountRate());
-			if (resDto.getIsSale().equals("Y")) {
-				pushDto.setProductStatus("0");
-			} else {
-				pushDto.setProductStatus("1");
-			}
-			pushDto.setSizeCode(resDto.getStanCode());
-			pushDto.setStyleCode(resDto.getColorCode());
-			pushDto.setUnitCode(resDto.getUnitCode());
-			pushDto.setMarketPrice(resDto.getMarketPrice());
-			pushDto.setSalesPrice(resDto.getPromotionPrice());
-			pushDto.setSupplierIntBarCode(resDto.getSupplyProCode());
-			pushDto.setIsGift(resDto.getIsGift());
-			pushDto.setCommissionRate(resDto.getCommissionRate());
-			pushDto.setOriginSalesUnit(resDto.getOriginSalesUnit());
-			pushDto.setIsCOD(resDto.getIsCOD());
-			pushDto.setStockTypeLib("BG");
-			pushDto.setErpSkuType(resDto.getErpSkuType() + "");
-			pushDto.setModelNumber(resDto.getModelCode());
-			pushDto.setMaterialNum(resDto.getArticleNum());
-			pushDto.setRate("");
-			if (resDto.getPrimaryAttr() == null || resDto.getPrimaryAttr() == "") {
-				pushDto.setProductAbbr("");
-			} else {
-				pushDto.setProductAbbr(resDto.getProductAbbr());
-			}
-			pushDto.setOriginSalesUnit("");
-			pushDto.setCommissionRate("");
-			pushDto.setIsSelllPurchase("");
-			pushDto.setManageType(resDto.getManageType());
-			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd.HHmmssZ");
-			String str = sdf.format(date);
-			pushDto.setActionDate(str);
-			pushDto.setActionPersin("PCM");
-			pushList.add(pushDto);
-		}
-		return pushList;
-	}
-=======
             pushDto.setSupplierCode(resDto.getSupplierCode());
             pushDto.setCounterCode(resDto.getCounterCode());
             pushDto.setErpProductCode(resDto.getDiscountCode());
@@ -778,7 +715,6 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
         }
         return pushList;
     }
->>>>>>> branch 'dev' of ssh://git@10.6.3.213/PCM/pcm-service.git
 
     /**
      * 按条件 分页 查询专柜商品基础信息
@@ -833,61 +769,62 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
         return page;
     }
 
-	/**
-	 * 专柜商品导出Excel 查询总数量
-	 *
-	 * @param pageDto
-	 * @return Page<ProductPageDto>
-	 * @throws Exception
-	 * @Methods Name getShoppeProductToExcelCount
-	 * @Create In 2016年04月05日 By wangxuan
-	 */
-	@Override
-	public Page<ProductPageDto> getShoppeProductToExcelCount(ProductPageDto pageDto)
-			throws BleException {
-		logger.info("start getShoppeProductToExcelCount(),param:" + pageDto.toString());
-		Page<ProductPageDto> page = new Page<ProductPageDto>();
-		// 查询总数量
-		Integer count = shoppeProMapper.findProductCountByPara(pageDto);
-		if (count != 0) {
-			page.setCount(count);
-		} else {
-			page.setCount(0);
-		}
-		logger.info("end getShoppeProductToExcelCount(),return:" + count.toString());
-		return page;
-	}
+    /**
+     * 专柜商品导出Excel 查询总数量
+     *
+     * @param pageDto
+     * @return Page<ProductPageDto>
+     * @throws Exception
+     * @Methods Name getShoppeProductToExcelCount
+     * @Create In 2016年04月05日 By wangxuan
+     */
+    @Override
+    public Page<ProductPageDto> getShoppeProductToExcelCount(ProductPageDto pageDto)
+            throws BleException {
+        logger.info("start getShoppeProductToExcelCount(),param:" + pageDto.toString());
+        Page<ProductPageDto> page = new Page<ProductPageDto>();
+        // 查询总数量
+        Integer count = shoppeProMapper.findProductCountByPara(pageDto);
+        if (count != 0) {
+            page.setCount(count);
+        } else {
+            page.setCount(0);
+        }
+        logger.info("end getShoppeProductToExcelCount(),return:" + count.toString());
+        return page;
+    }
 
-	/**
-	 * 专柜商品导出Excel 查询
-	 *
-	 * @param pageDto
-	 * @return Page<ProductPageDto>
-	 * @throws Exception
-	 * @Methods Name getShoppeProductToExcel
-	 * @Create In 2016年04月05日 By wangxuan
-	 */
-	@Override
-	public Page<ProductPageDto> getShoppeProductToExcel(ProductPageDto pageDto) throws BleException {
-		logger.info("start getShoppeProductToExcel(),param:" + pageDto.toString());
-		Page<ProductPageDto> page = new Page<ProductPageDto>();
-		pageDto.setStart(null);
-		pageDto.setLimit(null);
-		List<Map<String, Object>> list = shoppeProMapper.findProductPageByPara(pageDto);
-		if (!list.isEmpty()) {
-			List<ProductPageDto> finalList = new ArrayList<ProductPageDto>();
-			for (Map<String, Object> map : list) {
-				// 结果处理
-				ProductPageDto dto = resultProcess(map);
-				finalList.add(dto);
-			}
-			page.setList(finalList);
-		} else {
-			page.setList(null);
-		}
-		logger.info("end getShoppeProductToExcel(),return:" + list.toString());
-		return page;
-	}
+    /**
+     * 专柜商品导出Excel 查询
+     *
+     * @param pageDto
+     * @return Page<ProductPageDto>
+     * @throws Exception
+     * @Methods Name getShoppeProductToExcel
+     * @Create In 2016年04月05日 By wangxuan
+     */
+    @Override
+    public Page<ProductPageDto> getShoppeProductToExcel(ProductPageDto pageDto)
+            throws BleException {
+        logger.info("start getShoppeProductToExcel(),param:" + pageDto.toString());
+        Page<ProductPageDto> page = new Page<ProductPageDto>();
+        pageDto.setStart(null);
+        pageDto.setLimit(null);
+        List<Map<String, Object>> list = shoppeProMapper.findProductPageByPara(pageDto);
+        if (!list.isEmpty()) {
+            List<ProductPageDto> finalList = new ArrayList<ProductPageDto>();
+            for (Map<String, Object> map : list) {
+                // 结果处理
+                ProductPageDto dto = resultProcess(map);
+                finalList.add(dto);
+            }
+            page.setList(finalList);
+        } else {
+            page.setList(null);
+        }
+        logger.info("end getShoppeProductToExcel(),return:" + list.toString());
+        return page;
+    }
 
     /**
      * 按条件 分页 查询专柜商品基础信息(优化)
@@ -987,25 +924,6 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
         return finalList;
     }
 
-<<<<<<< HEAD
-	/**
-	 * 按条件查询专柜商品基本信息及统计分类
-	 *
-	 * @param pageDto
-	 * @return List<ProductPageDto>
-	 * @throws Exception
-	 * @Methods Name findShoppeProductAndCategoryByPara
-	 * @Create In 2016年04月14日 By yedong
-	 */
-	@Override
-	public List<ProductPageDto> findShoppeProductAndCategoryByPara(ProductPageDto pageDto) {
-		logger.info("start findShoppeProductAndCategoryByPara(),param:" + pageDto.toString());
-		List<ProductPageDto> pageDtoList = shoppeProMapper
-				.findShoppeProductAndCategoryByPara(pageDto);
-		logger.info("end findShoppeProductAndCategoryByPara(),return:" + pageDtoList.toString());
-		return pageDtoList;
-	}
-=======
     /**
      * 按条件查询专柜商品基本信息及统计分类
      *
@@ -1022,7 +940,6 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
         logger.info("end findShoppeProductAndCategoryByPara(),return:" + pageDtoList.toString());
         return pageDtoList;
     }
->>>>>>> branch 'dev' of ssh://git@10.6.3.213/PCM/pcm-service.git
 
     /**
      * 按条件查询单个专柜商品信息(含条码)-优化
@@ -1088,91 +1005,6 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
         }
     }
 
-<<<<<<< HEAD
-	@Override
-	public List<PcmPublishSapErpDto> pcmPublishSapErpMap(Map<String, Object> paramMap) {
-		List<PcmPublishSapErpDto> sapInfo = shoppeProMapper.pcmPublishSapErpMap(paramMap);
-		return sapInfo;
-	}
-
-	/**
-	 * 导入终端上传电商商品下发电商
-	 * 
-	 * @Methods Name pcmPublishSapErpSourcePis
-	 * @Create In 2016年5月24日 By wangc
-	 * @param paraMap
-	 * @return List<PcmPublishSapErpDto>
-	 */
-	public List<PcmSapInfoToSapSourcePis> pcmPublishSapErpSourcePis(Map<String, Object> paraMap) {
-		List<PcmSapInfoToSapSourcePis> sapInfo = shoppeProMapper.pcmPublishSapErpSourcePis(paraMap);
-		List<String> spuSidList = new ArrayList<String>();// spusid列表,查询工业分类用
-		List<String> proCodeList = new ArrayList<String>();// 专柜商品编码列表,查询统计分类用
-		List<Map<String, Object>> gyCateResult = new ArrayList<Map<String, Object>>();// 工业分类结果列表
-		List<Map<String, Object>> tjCateResult = new ArrayList<Map<String, Object>>();// 统计分类结果列表
-		if (sapInfo != null && sapInfo.size() != 0) {
-			for (PcmSapInfoToSapSourcePis pis : sapInfo) {
-				spuSidList.add(pis.getMATKL());
-				proCodeList.add(pis.getSid());
-			}
-			Map<String, Object> paraMap1 = new HashMap<String, Object>();
-			Map<String, Object> paraMap2 = new HashMap<String, Object>();
-			paraMap1.put("spuSidList", spuSidList);
-			paraMap2.put("proCodeList", proCodeList);
-			gyCateResult = shoppeProMapper.getGyCateToSapInfo(paraMap1);
-			tjCateResult = shoppeProMapper.getTjCateToSapInfo(paraMap2);
-			for (PcmSapInfoToSapSourcePis pis1 : sapInfo) {
-				String spuSid = pis1.getMATKL();
-				String proCode = pis1.getSid();
-				String gyCate = null;
-				String glCate = null;
-				for (Map<String, Object> m : gyCateResult) {
-					if (spuSid.equals(m.get("spuSid").toString())) {
-						gyCate = m.get("cateCode").toString();
-					}
-				}
-				pis1.setMATKL(gyCate);
-				for (Map<String, Object> m : tjCateResult) {
-					if (proCode.equals(m.get("proCode").toString())) {
-						glCate = m.get("cateCode").toString();
-					}
-				}
-				pis1.setZZTJFL(glCate);
-			}
-		}
-		return sapInfo;
-	}
-
-	/**
-	 * 查询单个专柜商品信息(含条码)
-	 *
-	 * @param pageDto
-	 * @return Page<ProductPageDto>
-	 * @throws Exception
-	 * @Methods Name selectProductPageByPara
-	 * @Create In 2015年7月15日 By zhangxy
-	 */
-	@Override
-	public OmsResProInfoDto getProductPageByPara(String productCode, ProductPageDto pageDto)
-			throws BleException {
-		logger.info("start getProductPageByPara() 按条件分页下发专柜商品信息");
-		String omsResProInfoDto = redisUtil.get(DomainName.getShoppeInfo + productCode, "0000");
-		if (!"0000".equals(omsResProInfoDto)) {
-			OmsResProInfoDto dto = JsonUtil.getDTO(omsResProInfoDto, OmsResProInfoDto.class);
-			logger.info("end getProductPageByPara(),result:" + dto);
-			return dto;
-		} else {
-			Map<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("proCode", pageDto.getProductCode());
-			OmsResProInfoDto omsGetResProInfo = shoppeProMapper.omsGetResProInfo(paramMap);
-			logger.info("end getProductPageByPara(),result:" + omsGetResProInfo);
-			if (omsGetResProInfo != null) {
-				redisUtil.set(DomainName.getShoppeInfo + productCode,
-						JsonUtil.getJSONString(omsGetResProInfo));
-			}
-			return omsGetResProInfo;
-		}
-	}
-=======
     @Override
     public List<PcmPublishSapErpDto> pcmPublishSapErpMap(Map<String, Object> paramMap) {
         List<PcmPublishSapErpDto> sapInfo = shoppeProMapper.pcmPublishSapErpMap(paramMap);
@@ -1225,7 +1057,6 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
         }
         return sapInfo;
     }
->>>>>>> branch 'dev' of ssh://git@10.6.3.213/PCM/pcm-service.git
 
     /**
      * 查询单个专柜商品信息(含条码)
@@ -1434,39 +1265,6 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
         cacheDelete(record.getShoppeProSid());// 删除缓存
     }
 
-<<<<<<< HEAD
-	/**
-	 * 专柜商品启用状态修改
-	 *
-	 * @param list
-	 * @return
-	 * @Methods Name updateProductStatusInfo
-	 * @Create In 2015年12月8日 By zhangdl
-	 */
-	@Transactional
-	public List<PublishDTO> updateProductStatusInfo(List<UpdateProductInfoDto> list) {
-		List<PublishDTO> pushDto = new ArrayList<PublishDTO>();
-		for (UpdateProductInfoDto dto : list) {
-			PcmShoppeProduct record = new PcmShoppeProduct();
-			record.setShoppeProSid(dto.getProductCode());
-			record.setSaleStatus(dto.getStatus());
-			int i = shoppeProMapper.updateByCodeSelective(record);
-			if (i == 0) {
-				throw new BleException(ErrorCode.PRO_INFO_NO_EXIST.getErrorCode(),
-						ErrorCode.PRO_INFO_NO_EXIST.getMemo());
-			}
-			Map<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("proCode", dto.getProductCode());
-			List<Map<String, Object>> storeCodeByProCode = shoppeProMapper
-					.getStoreCodeByProCode(paramMap);
-			PublishDTO pbDto = new PublishDTO();
-			pbDto.setSid((Long) storeCodeByProCode.get(0).get("proSid"));
-			pbDto.setType(1);
-			pushDto.add(pbDto);
-		}
-		return pushDto;
-	}
-=======
     /**
      * 查询专柜商品信息By专柜商品
      *
@@ -1479,7 +1277,6 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
         List<PcmShoppeProduct> proList = shoppeProMapper.selectListByParam(proDto);
         return proList;
     }
->>>>>>> branch 'dev' of ssh://git@10.6.3.213/PCM/pcm-service.git
 
     /**
      * 专柜商品启用状态修改
