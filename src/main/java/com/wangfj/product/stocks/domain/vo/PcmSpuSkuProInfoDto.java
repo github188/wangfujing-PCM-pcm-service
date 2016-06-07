@@ -1,30 +1,20 @@
 package com.wangfj.product.stocks.domain.vo;
 
 public class PcmSpuSkuProInfoDto {
-	private String spuCode;// spu编码
-	private String colorSid;// 色系编码
+	private String proCode;// spu编码
 	private String height;// 高
 	private String width;// 宽
-	private Integer urlNum;// 数量
-
-	public String getSpuCode() {
-		return spuCode;
-	}
-
-	public void setSpuCode(String spuCode) {
-		this.spuCode = spuCode;
-	}
-
-	public String getColorSid() {
-		return colorSid;
-	}
-
-	public void setColorSid(String colorSid) {
-		this.colorSid = colorSid;
-	}
 
 	public String getHeight() {
 		return height;
+	}
+
+	public String getProCode() {
+		return proCode;
+	}
+
+	public void setProCode(String proCode) {
+		this.proCode = proCode;
 	}
 
 	public void setHeight(String height) {
@@ -39,18 +29,10 @@ public class PcmSpuSkuProInfoDto {
 		this.width = width;
 	}
 
-	public Integer getUrlNum() {
-		return urlNum;
-	}
-
-	public void setUrlNum(Integer urlNum) {
-		this.urlNum = urlNum;
-	}
-
 	@Override
 	public String toString() {
-		return "PcmSpuSkuProInfoPara [spuCode=" + spuCode + ", colorSid=" + colorSid + ", height="
-				+ height + ", width=" + width + ", urlNum=" + urlNum + "]";
+		return "PcmSpuSkuProInfoPara [proCode=" + proCode + ", height=" + height + ", width="
+				+ width + "]";
 	}
 
 }

@@ -41,7 +41,7 @@ public class PcmContractLogDto {
 
 	private Date optTime;
 
-	private String col1;//管理分类（9位）
+	private String col1;// 管理分类（9位）
 
 	private String col2;
 
