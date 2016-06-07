@@ -345,4 +345,12 @@ public interface ICategoryService {
 	List<Map<String, String>> getChildNodeCode(Map<String, Object> paraMap);
 
 	String uploadeManagerCategoryDS(PcmAddCategoryDto cateDto);
+	/**
+	 * 根据专柜商品编码获取对应的展示分类属性属性值
+	 * @Methods Name getPropNameAndValueByShoprosid
+	 * @Create In 2016年6月7日 By wangc
+	 * @param paraMap
+	 * @return List<Map<String,String>>
+	 */
+	List<Map<String ,String>> getPropNameAndValueByShoprosid(Map<String,Object> paraMap);
 }

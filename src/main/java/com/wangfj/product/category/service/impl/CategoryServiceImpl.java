@@ -2575,4 +2575,17 @@ public class CategoryServiceImpl implements ICategoryService {
 		List<Map<String,String>> resultList = cateMapper.getChildNodeCodeByParentCode(paraMap);
 		return resultList;
 	}
+	/**
+	 * 根据专柜商品编码获取对应的展示分类属性属性值
+	 * @Methods Name getPropNameAndValueByShoprosid
+	 * @Create In 2016年6月7日 By wangc
+	 * @param paraMap
+	 * @return List<Map<String,String>>
+	 */
+	@Override
+	public List<Map<String, String>> getPropNameAndValueByShoprosid(Map<String, Object> paraMap) {
+		List<Map<String,String>> resultList = new ArrayList<Map<String,String>>();
+		resultList = cateMapper.getPropNameAndValueByShoprosid(paraMap);
+		return resultList;
+	}
 }

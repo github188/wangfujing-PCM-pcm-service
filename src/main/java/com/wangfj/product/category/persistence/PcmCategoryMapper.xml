@@ -1780,4 +1780,34 @@
 		)
     </select>
 
+    <!-- 拍照根据专柜商品编码获取展示分类属性及属性值 -->
+    <select id="getPropNameAndValueByShoprosid" parameterType="HashMap" resultType="HashMap">
+	SELECT
+	pc.sid AS sid,
+	pc.category_code AS CODE,
+	pc. NAME AS NAME,
+	pc.parent_sid catalogCode,
+	pc.channel_sid AS channelSid,
+	ppp.prop_name AS
+	propName,
+	ppp.value_name AS valueName
+	FROM
+	pcm_product_parameters ppp
+	INNER JOIN pcm_category pc ON ppp.category_sid = pc.sid
+	AND pc.category_type = 3
+	AND pc.is_display = 1
+	AND pc.`status` = 0
+	AND pc.is_leaf = 'Y'
+	WHERE
+	ppp.product_sid = (
+	SELECT
+	spu.sid
+	FROM
+	pcm_shoppe_product psp
+	INNER JOIN pcm_pro_detail sku ON sku.sid = psp.product_detail_sid
+	INNER JOIN pcm_product spu ON sku.product_sid = spu.sid
+	WHERE
+	psp.shoppe_pro_sid = #{shoProCode,jdbcType=VARCHAR}
+	)
+    </select>
 </mapper>
