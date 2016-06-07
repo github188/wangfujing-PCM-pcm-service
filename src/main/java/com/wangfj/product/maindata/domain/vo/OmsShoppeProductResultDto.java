@@ -1,11 +1,15 @@
 package com.wangfj.product.maindata.domain.vo;
 
+import java.util.List;
+
 /**
  * Created by wangxuan on 2016-06-06 0006.
  */
 public class OmsShoppeProductResultDto {
 
     private String shoppeProSid;//专柜商品编码
+
+    private String industryCategoryName;//工业分类的名称
 
     private String industryCategoryCode;//工业分类编码
 
@@ -45,13 +49,14 @@ public class OmsShoppeProductResultDto {
         this.categoryParentSid = categoryParentSid;
     }
 
-    @Override
-    public String toString() {
-        return "OmsShoppeProductResultDto{" +
-                "shoppeProSid='" + shoppeProSid + '\'' +
-                ", industryCategoryCode='" + industryCategoryCode + '\'' +
-                ", industryCategoryLevel='" + industryCategoryLevel + '\'' +
-                ", categoryParentSid='" + categoryParentSid + '\'' +
-                '}';
+
+    public String getIndustryCategoryName() {
+        return industryCategoryName;
     }
+
+    public void setIndustryCategoryName(String industryCategoryName) {
+        this.industryCategoryName = industryCategoryName;
+    }
+
+
 }

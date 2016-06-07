@@ -262,5 +262,5 @@ public interface IPcmShoppeProductService {
      * @param dto
      * @return
      */
-    OmsShoppeProductResultDto findIndustryCategoryByParaForOms(OmsShoppeProductDto dto);
+    OmsShoppeProductReturnDto findIndustryCategoryByParaForOms(OmsShoppeProductDto dto);
 }
