@@ -1591,6 +1591,9 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 
         OmsShoppeProductReturnDto returnDto = new OmsShoppeProductReturnDto();//返回参数
         OmsShoppeProductResultDto resultDto = shoppeProMapper.findIndustryCategoryByParaForOms(dto);
+        if (resultDto == null) {
+            throw new BleException(ErrorCode.PRODUCT_NULL.getErrorCode(), "Oms查询专柜商品不存在!");
+        }
         returnDto.setShoppeProSid(resultDto.getShoppeProSid());
 
         String resultDtoIndustryCategoryLevel = resultDto.getIndustryCategoryLevel();//专柜商品对应的SPU上工业分类级数
