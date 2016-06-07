@@ -1779,6 +1779,7 @@
 		</where>
 		)
     </select>
+    
     <!-- 拍照根据专柜商品编码获取展示分类属性及属性值 -->
     <select id="getPropNameAndValueByShoprosid" parameterType="HashMap" resultType="HashMap">
 	SELECT

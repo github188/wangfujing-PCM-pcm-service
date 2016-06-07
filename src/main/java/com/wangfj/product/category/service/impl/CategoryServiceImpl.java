@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.parser.deserializer.ArrayListTypeDeserializer;
 import com.wangfj.core.constants.ComErrorCodeConstants;
 import com.wangfj.core.framework.base.page.Page;
 import com.wangfj.core.framework.exception.BleException;
@@ -2576,7 +2575,6 @@ public class CategoryServiceImpl implements ICategoryService {
 		List<Map<String,String>> resultList = cateMapper.getChildNodeCodeByParentCode(paraMap);
 		return resultList;
 	}
-
 	/**
 	 * 根据专柜商品编码获取对应的展示分类属性属性值
 	 * @Methods Name getPropNameAndValueByShoprosid
