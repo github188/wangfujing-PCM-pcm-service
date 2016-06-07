@@ -1,5 +1,6 @@
 package com.wangfj.product.maindata.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -1953,6 +1954,9 @@ public class PcmProductServiceImpl implements IPcmProductService {
 	public List<PushPromotionDto> getPushPromotionDtoBySid(Map<String, Object> paramMap) {
 		List<SpuPageDto> list = productMapper.supPublishFj(paramMap);
 		List<PushPromotionDto> resList = new ArrayList<PushPromotionDto>();
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd.HHmmssZ");
+		String str = sdf.format(date);
 		for (int i = 0; i < list.size(); i++) {
 			PushPromotionDto res = new PushPromotionDto();
 			res.setBaseNumber("");
@@ -1970,6 +1974,7 @@ public class PcmProductServiceImpl implements IPcmProductService {
 			res.setShortDes(list.get(i).getShortDes());
 			res.setSpecialDes(list.get(i).getSpecialDes());
 			res.setActionCode("A");
+			res.setActionDate(str);
 			resList.add(res);
 		}
 		return resList;

@@ -45,13 +45,20 @@
 	<select id="getUrlBySpuCodeAndColor" resultType="com.wangfj.product.maindata.domain.vo.PcmSapResUrlDto"
 		parameterType="com.wangfj.product.stocks.domain.vo.PcmSpuSkuProInfoDto">
 		SELECT
-		url.picture_url as picUrl
+			url.picture_url AS picUrl
 		FROM
-		pcm_picture_url AS url
-		JOIN pcm_picture_stan AS stan ON url.stan_sid = stan.sid AND url.if_delete = 0
+			pcm_shoppe_product AS pro
+		JOIN pcm_pro_detail AS sku ON pro.product_detail_sid = sku.sid
+		JOIN pcm_product AS spu ON spu.sid = sku.product_sid
+		JOIN pcm_picture_url AS url ON url.sku_sid = spu.product_sid
+		AND url.color_code = sku.pro_color_sid
+		JOIN pcm_picture_stan AS stan ON url.stan_sid = stan.sid
+		AND url.if_delete = 0
+		AND is_primary = 0
 		<where>
-			<if test="spuCode != null">
-				AND url.sku_sid = #{spuCode}
+			1=1
+			<if test="proCode != null">
+				AND pro.shoppe_pro_sid = #{proCode}
 			</if>
 			<if test="height != null">
 				AND stan.picture_height = #{height}
@@ -59,14 +66,8 @@
 			<if test="width != null">
 				AND	stan.picture_width = #{width}
 			</if>
-			<if test="colorSid != null">
-				AND url.color_code = #{colorSid}
-			</if>
-			and is_primary=0
 		</where>
-		<if test="urlNum != null">
-			LIMIT 0, #{urlNum}
-		</if>
+		LIMIT 1
 	</select>
 
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">

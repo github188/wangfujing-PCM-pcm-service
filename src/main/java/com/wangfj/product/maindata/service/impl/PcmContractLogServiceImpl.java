@@ -24,6 +24,8 @@ import com.wangfj.product.common.service.intf.IPcmExceptionLogService;
 import com.wangfj.product.constants.StatusCodeConstants.StatusCode;
 import com.wangfj.product.maindata.domain.entity.PcmContractLog;
 import com.wangfj.product.maindata.domain.entity.PcmErpProduct;
+import com.wangfj.product.maindata.domain.entity.PcmProInput;
+import com.wangfj.product.maindata.domain.entity.PcmShoppeProduct;
 import com.wangfj.product.maindata.domain.vo.ContractERPDto;
 import com.wangfj.product.maindata.domain.vo.ContractInfoDto;
 import com.wangfj.product.maindata.domain.vo.ContractLogFromPcmToSupDto;
@@ -32,10 +34,15 @@ import com.wangfj.product.maindata.domain.vo.GetContractLogResultForSupDto;
 import com.wangfj.product.maindata.domain.vo.PcmContractLogDto;
 import com.wangfj.product.maindata.domain.vo.PcmContractLogPartDto;
 import com.wangfj.product.maindata.domain.vo.PcmContractLogQueryDto;
+import com.wangfj.product.maindata.domain.vo.SapProListDto;
 import com.wangfj.product.maindata.domain.vo.ShoppeErpDto;
+import com.wangfj.product.maindata.domain.vo.UpdateProductInfoDto;
 import com.wangfj.product.maindata.persistence.PcmContractLogMapper;
 import com.wangfj.product.maindata.persistence.PcmErpProductMapper;
+import com.wangfj.product.maindata.persistence.PcmProInputMapper;
+import com.wangfj.product.maindata.persistence.PcmShoppeProductMapper;
 import com.wangfj.product.maindata.service.intf.IPcmContractLogService;
+import com.wangfj.product.maindata.service.intf.IPcmShoppeProductService;
 import com.wangfj.product.organization.persistence.PcmShoppeMapper;
 import com.wangfj.product.supplier.domain.entity.PcmSupplyInfo;
 import com.wangfj.product.supplier.persistence.PcmSupplyInfoMapper;
@@ -62,9 +69,192 @@ public class PcmContractLogServiceImpl implements IPcmContractLogService {
 	private IPcmExceptionLogService exceptionLogService;
 	@Autowired
 	PcmErpProductMapper erpMapper;
+	@Autowired
+	PcmShoppeProductMapper proMapper;
 
 	@Autowired
-	private PcmCategoryMapper categoryMapper;//分类
+	private PcmCategoryMapper categoryMapper;// 分类
+	@Autowired
+	PcmProInputMapper ppiMapper;
+	@Autowired
+	private IPcmShoppeProductService proService;
+
+	/**
+	 * 电商上传合同及商品
+	 * 
+	 * @Methods Name proAndContractLogInfoManager
+	 * @Create In 2016年6月6日 By yedong
+	 * @param proList
+	 * @param contractDto
+	 * @return List<Map<String,Object>>
+	 */
+	public List<Map<String, Object>> proAndContractLogInfoManager(List<SapProListDto> sapProList,
+			PcmContractLogDto contractDto) {
+		List<Map<String, Object>> excepList = new ArrayList<Map<String, Object>>();
+		for (SapProListDto sapProDto : sapProList) {
+			// 查询商品是否存在
+			PcmShoppeProduct entity = new PcmShoppeProduct();
+			entity.setShoppeProSid(sapProDto.getPROCODE());
+			List<PcmShoppeProduct> proList = proMapper.selectListByParam(entity);
+			if (proList != null && proList.size() > 0) {// 商品存在
+				// 判断关系的操作类型
+				if (sapProDto.getACTIONCODE().equals("A")) {
+					PcmProInput ppi = new PcmProInput();
+					ppi.setContractCode(contractDto.getContractCode());
+					ppi.setShoppeProSid(proList.get(0).getSid());
+					ppi.setCol1("0");// 有效的
+					List<PcmProInput> ppiList = ppiMapper.selectListByParam(ppi);
+					if (ppiList != null && ppiList.size() > 0) {
+						// 关系已存在，无需操作
+					} else {
+						ppi.setInputUserCode("sap");
+						ppi.setProcurementUserCode("sap");
+						int i = ppiMapper.insertSelective(ppi);
+						if (i != 1) {
+							throw new BleException(ErrorCode.DATA_OPER_ERROR.getErrorCode(),
+									ErrorCode.DATA_OPER_ERROR.getMemo());
+						}
+						ppi.setOrderNo("Z"
+								+ StringUtils.leftPad(String.valueOf(ppi.getSid()), 8, "0"));
+						i = ppiMapper.updateByPrimaryKeySelective(ppi);
+						if (i != 1) {
+							throw new BleException(ErrorCode.DATA_OPER_ERROR.getErrorCode(),
+									ErrorCode.DATA_OPER_ERROR.getMemo());
+						}
+						// 修改为可售
+						List<UpdateProductInfoDto> upStatusList = new ArrayList<UpdateProductInfoDto>();
+						UpdateProductInfoDto upStatus = new UpdateProductInfoDto();
+						upStatus.setProductCode(proList.get(0).getShoppeProSid());
+						upStatus.setStatus(0);
+						proService.updateProductStatusInfo(upStatusList);
+						// 修改售罄状态
+					}
+				} else if (sapProDto.getACTIONCODE().equals("D")) {
+					PcmProInput ppi = new PcmProInput();
+					ppi.setContractCode(contractDto.getContractCode());
+					ppi.setShoppeProSid(proList.get(0).getSid());
+					ppi.setCol1("0");// 有效的
+					List<PcmProInput> ppiList = ppiMapper.selectListByParam(ppi);
+					if (ppiList != null && ppiList.size() > 0) {
+						PcmProInput ppi1 = new PcmProInput();
+						ppi1.setSid(ppiList.get(0).getSid());
+						ppi1.setCol1("1");
+						int u = ppiMapper.updateByPrimaryKeySelective(ppi1);
+						if (u == 0) {
+							throw new BleException(ErrorCode.DATA_OPER_ERROR.getErrorCode(),
+									ErrorCode.DATA_OPER_ERROR.getMemo());
+						}
+						// 判断该商品是否存在其他合同
+						ppi.setContractCode(null);
+						List<PcmProInput> ppiList2 = ppiMapper.selectListByParam(ppi);
+						if (ppiList2 != null && ppiList2.size() > 0) {
+							// 存在其他合同，无需修改商品状态及售罄状态
+						} else {
+							// 不存在其他合同，修改商品可售状态及售罄状态
+							// 修改为不可售
+							List<UpdateProductInfoDto> upStatusList = new ArrayList<UpdateProductInfoDto>();
+							UpdateProductInfoDto upStatus = new UpdateProductInfoDto();
+							upStatus.setProductCode(proList.get(0).getShoppeProSid());
+							upStatus.setStatus(1);
+							proService.updateProductStatusInfo(upStatusList);
+							// 修改为售罄
+						}
+					} else {
+						// 关系不存在或无效，无需操作
+					}
+				}
+			} else {
+				Map<String, Object> resMap = new HashMap<String, Object>();
+				resMap.put("KEY_FIELD", contractDto.getContractCode());
+				resMap.put("FLAG", 6);
+				resMap.put("MESSAGE", "商品：" + entity.getShoppeProSid() + "不存在");
+				excepList.add(resMap);
+			}
+		}
+		return excepList;
+	}
+
+	/**
+	 * 电商erp上传要约信息到合同表
+	 * 
+	 * @Methods Name uploadContractLogSapBatch
+	 * @Create In 2016年6月6日 By yedong
+	 * @param contracts
+	 *            void
+	 */
+	@Override
+	public void uploadContractLogSapBatch(List<PcmContractLogDto> contracts) {
+
+		int falg = 0;// 合同是否存在，0不存在 1，已存在
+		for (PcmContractLogDto contractLogDto : contracts) {
+			PcmContractLog contractLog = new PcmContractLog();
+			BeanUtils.copyProperties(contractLogDto, contractLog);
+			// 验证供应商经营方式和合同经营方式是否一致
+			Map<String, Object> parasMap = new HashMap<String, Object>();
+			parasMap.put("supplyCode", contractLogDto.getSupplyCode());
+			List<PcmSupplyInfo> sups = supMapper.selectListByParam(parasMap);
+			if (sups != null && sups.size() != 0) {
+				if (!sups.get(0).getBusinessPattern().equals(contractLogDto.getManageType())) {
+					logger.info("要约信息上传失败-供应商经营方式与合同经营方式不一致:" + JsonUtil.getJSONString(contractLog));
+					throw new BleException(ErrorCode.CONTRACT_MANGERTYPE_ERROR.getErrorCode(),
+							ErrorCode.CONTRACT_MANGERTYPE_ERROR.getMemo());
+				}
+			} else {
+				logger.info("要约信息上传失败-供应商不存在:" + JsonUtil.getJSONString(contractLog));
+				throw new BleException(ErrorCode.SUPPLYINFO_NULL.getErrorCode(),
+						ErrorCode.SUPPLYINFO_NULL.getMemo());
+			}
+			// 验证管理分类是否存在
+			if (StringUtils.isNotBlank(contractLogDto.getCol1())) {// 管理分类不为空的时候验证有效性
+				parasMap.clear();
+				parasMap.put("categoryCode", contractLogDto.getCol1());// 管理分类编码
+				parasMap.put("categoryType", Constants.MANAGECATEGORY);// 分类类型为1管理分类
+				parasMap.put("isLeaf", Constants.Y);// 是否为叶子节点
+				parasMap.put("status", Constants.Y);// 是否启用
+				List<PcmCategory> managecateList = categoryMapper.selectListByParam(parasMap);
+				if (managecateList == null || managecateList.size() != 1) {
+					logger.info("管理分类不存在");
+					throw new BleException(ErrorCode.CATEGORY_GL_NULL.getErrorCode(),
+							ErrorCode.CATEGORY_GL_NULL.getMemo());
+				}
+			}
+			if (contractLogDto.getFlag().equals(0)) {
+				PcmContractLog valid = new PcmContractLog();
+				valid.setContractCode(contractLog.getContractCode());
+				List<PcmContractLog> list = contractLogMapper.selectListByParam(valid);
+				if (list != null && list.size() != 0) {
+					falg = 1;
+				}
+			}
+			try {
+				// 执行添加操作
+				if (contractLogDto.getFlag().equals(0) && falg == 0) {
+					contractLogMapper.insertSelective(contractLog);
+				}
+				// 执行修改操作
+				if (contractLogDto.getFlag().equals(1)) {
+					contractLogMapper.updateByParam(contractLog);
+				}
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+				logger.info("要约信息上传失败：" + JsonUtil.getJSONString(contractLog));
+				PcmExceptionLogDto exceptionLogdto = new PcmExceptionLogDto();
+				exceptionLogdto.setInterfaceName("uploadContractLog");
+				exceptionLogdto.setErrorCode(ComErrorCodeConstants.ErrorCode.CONTRACT_UPLOAD_ERROR
+						.getErrorCode());
+				exceptionLogdto.setExceptionType(StatusCode.EXCEPTION_CONTRACT.getStatus());
+				exceptionLogdto
+						.setErrorMessage(ComErrorCodeConstants.ErrorCode.CONTRACT_UPLOAD_ERROR
+								.getMemo() + "." + JsonUtil.getJSONString(contractLogDto));
+				exceptionLogService.saveExceptionLogInfo(exceptionLogdto);
+				logger.info(ErrorCode.DATA_OPER_ERROR.getErrorCode()
+						+ ErrorCode.DATA_OPER_ERROR.getMemo() + ":"
+						+ JsonUtil.getJSONString(contractLog));
+				throw new BleException(ErrorCode.DATA_OPER_ERROR.getErrorCode(),
+						ErrorCode.DATA_OPER_ERROR.getMemo());
+			}
+		}
+	}
 
 	/**
 	 * 门店erp上传要约信息到合同表

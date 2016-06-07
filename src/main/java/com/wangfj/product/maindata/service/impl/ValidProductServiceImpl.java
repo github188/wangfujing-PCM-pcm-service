@@ -3663,6 +3663,17 @@ public class ValidProductServiceImpl implements IValidProductService {
 			barcodeDto.setOriginLand(dataDto.getPlaceOfOrigin());
 			barcodeList.add(barcodeDto);
 			cProDto.setBarcode(barcodeList);
+		} else if (dataDto.getStandardBarCodes() != null
+				&& dataDto.getStandardBarCodes().size() != 0) {
+			List<BarcodeDto> barcodeList = new ArrayList<BarcodeDto>();
+			for (Map<String, Object> ba : dataDto.getStandardBarCodes()) {
+				BarcodeDto barcodeDto = new BarcodeDto();
+				barcodeDto.setBarcode(ba.get("barcode").toString());// 条码
+				barcodeDto.setType(Integer.valueOf(ba.get("barCodeType").toString()));// 条码类型
+				barcodeDto.setOriginLand(ba.get("originLand").toString());// 产地
+				barcodeList.add(barcodeDto);
+			}
+			cProDto.setBarcode(barcodeList);
 		}
 		cProDto.setSupplyCode(dataDto.getSupplierCode());// 供应商编码
 		cProDto.setSupplyProductCode(dataDto.getStandardBarCode());// 供应商商品编码??????????

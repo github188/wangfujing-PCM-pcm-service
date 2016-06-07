@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.wangfj.product.organization.domain.entity.PcmShoppe;
+import com.wangfj.product.organization.persistence.PcmShoppeMapper;
+import com.wangfj.product.supplier.domain.entity.PcmSupplyShoppeRelation;
+import com.wangfj.product.supplier.persistence.PcmSupplyShoppeRelationMapper;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +54,12 @@ public class PcmSupplyInfoServiceImpl implements IPcmSupplyInfoService {
     @Autowired
     private PcmOrganizationMapper organizationMapper;
 
+    @Autowired
+    private PcmSupplyShoppeRelationMapper supplyShoppeRelationMapper;
+
+    @Autowired
+    private PcmShoppeMapper shoppeMapper;
+
     /**
      * 电商上传供应商
      *
@@ -80,6 +90,20 @@ public class PcmSupplyInfoServiceImpl implements IPcmSupplyInfoService {
             if (supplyInfoList != null) {
                 if (supplyInfoList.size() == 0) {
                     result = supplyInfoMapper.insertSelective(supplyInfo);
+                    //电商非拆单的供应商，添加供应商与电商自库专柜（D00100001）的关系
+                    if ("D001".equals(supplyInfo.getShopSid()) && supplyInfo.getApartOrder() == 0) {
+                        PcmSupplyShoppeRelation supplyShoppeRelation = new PcmSupplyShoppeRelation();
+                        supplyShoppeRelation.setSupplySid(supplyInfo.getSid() + "");
+                        paramMap.clear();
+                        paramMap.put("shoppeCode", Constants.PCMSHOPPE_E_CODE);
+                        List<PcmShoppe> shoppeList = shoppeMapper.selectListByParam(paramMap);
+                        if (shoppeList.size() == 1) {
+                            supplyShoppeRelation.setShoppeSid(shoppeList.get(0).getSid() + "");
+                        } else {
+                            throw new BleException(ComErrorCodeConstants.ErrorCode.SUPPLYINFO_NOT_EXISTENCE.getErrorCode(), "电商上传非拆单供应商时，PCM中没有查询到电商自库专柜（D00100001）！");
+                        }
+                        supplyShoppeRelationMapper.insertSelective(supplyShoppeRelation);
+                    }
                     resultMap.put("actionCode", Constants.A);
                 }
 
@@ -686,29 +710,30 @@ public class PcmSupplyInfoServiceImpl implements IPcmSupplyInfoService {
 
     }
 
-	/**
-	 * 根据门店编码及管理分类编码列表获取供应商信息
-	 */
-	@Override
-	public List<GetSupCodeResultDto> getSupInfoFromPcmByShopCodesAndManagerCodes(
-			Map<String,Object> para) {
-		List<GetSupCodeResultDto> resultList = new ArrayList<GetSupCodeResultDto>();
-		resultList = supplyInfoMapper.getSupCodeFromPcmByShopCode(para);
-		return resultList;
-	}
+    /**
+     * 根据门店编码及管理分类编码列表获取供应商信息
+     */
+    @Override
+    public List<GetSupCodeResultDto> getSupInfoFromPcmByShopCodesAndManagerCodes(
+            Map<String, Object> para) {
+        List<GetSupCodeResultDto> resultList = new ArrayList<GetSupCodeResultDto>();
+        resultList = supplyInfoMapper.getSupCodeFromPcmByShopCode(para);
+        return resultList;
+    }
 
-	/**
-	 * 根据营业执照号及税号获取供应商信息
-	 * @Methods Name getSupInfoByLicenseNoAndTaxNo
-	 * @Create In 2016-4-13 By wangc
-	 * @param para
-	 * @return List<PcmSupInfoForSupResultDto>
-	 */
-	@Override
-	public List<PcmSupInfoForSupResultDto> getSupInfoByLicenseNoAndTaxNo(Map<String, String> para) {
-		List<PcmSupInfoForSupResultDto> resultList = supplyInfoMapper.getSupInfoFromPcmByLicenseNoAndTaxNo(para);
-		return resultList;
-	}
+    /**
+     * 根据营业执照号及税号获取供应商信息
+     *
+     * @param para
+     * @return List<PcmSupInfoForSupResultDto>
+     * @Methods Name getSupInfoByLicenseNoAndTaxNo
+     * @Create In 2016-4-13 By wangc
+     */
+    @Override
+    public List<PcmSupInfoForSupResultDto> getSupInfoByLicenseNoAndTaxNo(Map<String, String> para) {
+        List<PcmSupInfoForSupResultDto> resultList = supplyInfoMapper.getSupInfoFromPcmByLicenseNoAndTaxNo(para);
+        return resultList;
+    }
 
-    
+
 }
