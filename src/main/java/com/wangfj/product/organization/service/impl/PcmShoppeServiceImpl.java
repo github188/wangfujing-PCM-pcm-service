@@ -107,6 +107,12 @@ public class PcmShoppeServiceImpl implements IPcmShoppeService {
                         map.put("BUSINESSTYPE", Constants.PCMSHOPPE_SHOPPE_BUSINESSTYPE_2);
                     }
                 }
+
+                //电商自库专柜供应商编码做特殊处理
+                String code = map.get("code") + "";
+                if (Constants.PCMSHOPPE_E_CODE.equals(code)) {
+                    map.put("supplierCode", "1");//WFJ供应商的编码
+                }
             }
         }
 
