@@ -109,9 +109,9 @@ public class PcmShoppeServiceImpl implements IPcmShoppeService {
                 }
 
                 //电商自库专柜供应商编码做特殊处理
-                String code = map.get("code") + "";
+                String code = map.get("ZGID") + "";
                 if (Constants.PCMSHOPPE_E_CODE.equals(code)) {
-                    map.put("supplierCode", "1");//WFJ供应商的编码
+                    map.put("LIFNR", "1");//WFJ供应商的编码
                 }
             }
         }
@@ -180,6 +180,12 @@ public class PcmShoppeServiceImpl implements IPcmShoppeService {
 
                 // 字段类型转换
                 map.put("counterStatus", map.get("counterStatus") + "");
+
+                //电商自库专柜供应商编码做特殊处理
+                String code = map.get("code") + "";
+                if (Constants.PCMSHOPPE_E_CODE.equals(code)) {
+                    map.put("supplierCode", "1");//WFJ供应商的编码
+                }
 
             }
         }
