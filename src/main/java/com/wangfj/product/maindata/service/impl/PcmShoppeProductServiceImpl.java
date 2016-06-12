@@ -51,6 +51,7 @@ import com.wangfj.product.maindata.domain.vo.ProductPageProCodesDto;
 import com.wangfj.product.maindata.domain.vo.PublishShoppeProductFromPcmDto;
 import com.wangfj.product.maindata.domain.vo.PushShoppeProFromPcmDto;
 import com.wangfj.product.maindata.domain.vo.PushToPcmEfutureERPFromPcmDto;
+import com.wangfj.product.maindata.domain.vo.SapProListDto;
 import com.wangfj.product.maindata.domain.vo.ShoProInfoFormPcmToPisDto;
 import com.wangfj.product.maindata.domain.vo.ShoppeProductDto;
 import com.wangfj.product.maindata.domain.vo.UpdateProductInfoDto;
@@ -114,6 +115,12 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 	@Override
 	public List<PcmProSearchDto> getProInfoPulishSearch(Map<String, Object> paramMap) {
 		return shoppeProMapper.getProInfoPulishSearch(paramMap);
+	}
+
+	public List<Long> getSidListBySapProCode(List<SapProListDto> dtoList) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("proList", dtoList);
+		return shoppeProMapper.getSidListBySapProCode(paramMap);
 	}
 
 	/**
@@ -732,7 +739,7 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd.HHmmssZ");
 			String str = sdf.format(date);
 			pushDto.setActionDate(str);
-			pushDto.setActionPersin("");
+			pushDto.setActionPersin("PCM");
 			pushList.add(pushDto);
 		}
 		return pushList;

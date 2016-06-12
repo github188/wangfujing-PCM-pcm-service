@@ -1828,6 +1828,20 @@
 		= #{field5,jdbcType=VARCHAR}
 		where sid = #{sid,jdbcType=BIGINT}
 	</update>
+	<select id="getSidListBySapProCode" resultType="Map"
+		parameterType="java.util.Map">
+		select
+			sid
+		from pcm_shoppe_product
+		<where>
+			<if test="proList != null">
+				and shoppe_pro_sid in
+				<foreach collection="proList" index="index" item="pro" open="(" close=")" separator=",">
+					#{pro.PROCODE,jdbcType=VARCHAR}
+				</foreach>
+			</if>
+		</where>
+	</select>
 	<select id="selectListByParam" resultMap="BaseResultMap"
 		parameterType="java.util.Map">
 		select

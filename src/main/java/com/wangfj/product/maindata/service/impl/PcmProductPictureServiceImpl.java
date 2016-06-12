@@ -587,7 +587,6 @@ public class PcmProductPictureServiceImpl implements IPcmProductPictureService {
 	public void redisSpuCMSSHopperInfo(String spuCode) {
 		List<String> skuList = spuMapper.selectSkuCodeBySpuCode(spuCode);
 		for (String skuCode : skuList) {
-			System.out.println(DomainName.getCMSSHopperInfo + skuCode);
 			// RedisVo vo = new RedisVo();
 			// vo.setKey(DomainName.getCMSSHopperInfo + skuCode);
 			// // vo.setField(DomainName.getCMSSHopperInfo);

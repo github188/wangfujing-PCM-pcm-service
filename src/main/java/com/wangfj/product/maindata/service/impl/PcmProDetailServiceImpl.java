@@ -1013,6 +1013,7 @@ public class PcmProDetailServiceImpl implements IPcmProDetailService {
 		String str = sdf.format(date);
 		for (int i = 0; i < dto.size(); i++) {
 			dto.get(i).setActionCode("A");
+			dto.get(i).setActionPerson("PCM");
 			dto.get(i).setActionDate(str);
 			if (dto.get(i).getPackDesE() != null) {
 				dto.get(i).setPackDes(new String(dto.get(i).getPackDesE()));

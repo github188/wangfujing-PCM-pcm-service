@@ -1,6 +1,7 @@
 package com.wangfj.product.maindata.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,12 +16,18 @@ import com.wangfj.core.constants.ComErrorCodeConstants;
 import com.wangfj.core.constants.ComErrorCodeConstants.ErrorCode;
 import com.wangfj.core.framework.base.page.Page;
 import com.wangfj.core.framework.exception.BleException;
+import com.wangfj.core.utils.HttpUtil;
 import com.wangfj.core.utils.JsonUtil;
+import com.wangfj.core.utils.PropertyUtil;
+import com.wangfj.core.utils.RedisUtil;
 import com.wangfj.core.utils.StringUtils;
 import com.wangfj.product.category.domain.entity.PcmCategory;
 import com.wangfj.product.category.persistence.PcmCategoryMapper;
+import com.wangfj.product.common.domain.entity.PcmRedis;
 import com.wangfj.product.common.domain.vo.PcmExceptionLogDto;
 import com.wangfj.product.common.service.intf.IPcmExceptionLogService;
+import com.wangfj.product.common.service.intf.IPcmRedisService;
+import com.wangfj.product.constants.DomainName;
 import com.wangfj.product.constants.StatusCodeConstants.StatusCode;
 import com.wangfj.product.maindata.domain.entity.PcmContractLog;
 import com.wangfj.product.maindata.domain.entity.PcmErpProduct;
@@ -31,9 +38,11 @@ import com.wangfj.product.maindata.domain.vo.ContractInfoDto;
 import com.wangfj.product.maindata.domain.vo.ContractLogFromPcmToSupDto;
 import com.wangfj.product.maindata.domain.vo.GetContractLogForSupDto;
 import com.wangfj.product.maindata.domain.vo.GetContractLogResultForSupDto;
+import com.wangfj.product.maindata.domain.vo.OmsResProInfoDto;
 import com.wangfj.product.maindata.domain.vo.PcmContractLogDto;
 import com.wangfj.product.maindata.domain.vo.PcmContractLogPartDto;
 import com.wangfj.product.maindata.domain.vo.PcmContractLogQueryDto;
+import com.wangfj.product.maindata.domain.vo.ProductPageDto;
 import com.wangfj.product.maindata.domain.vo.SapProListDto;
 import com.wangfj.product.maindata.domain.vo.ShoppeErpDto;
 import com.wangfj.product.maindata.domain.vo.UpdateProductInfoDto;
@@ -78,6 +87,41 @@ public class PcmContractLogServiceImpl implements IPcmContractLogService {
 	PcmProInputMapper ppiMapper;
 	@Autowired
 	private IPcmShoppeProductService proService;
+	@Autowired
+	private RedisUtil redisUtil;
+	@Autowired
+	private IPcmRedisService redisService;
+
+	public void redisOmsCms(String proCode, Long skuSid) {
+		Long skuCode = skuSid + Constants.SKU_CODE;
+		boolean del = redisUtil.del(DomainName.getCMSSHopperInfo + skuCode.toString());
+		if (!del) {// 如果删除失败
+			PcmRedis redis = new PcmRedis();
+			String proYeUrl = PropertyUtil.getSystemUrl("pcm-outer-sdc")
+					+ "product/getProYeInfoBySpuCode.htm";
+			String proYeJson = HttpUtil.doPost(proYeUrl, "{\"spuCode\":\"" + skuCode.toString()
+					+ "\"}");
+			redis.setCreatetime(new Date());
+			redis.setValue(proYeJson);
+			redis.setRedisffield(DomainName.getCMSSHopperInfo);
+			redis.setKeyname(skuCode.toString());
+			redisService.savePcmRedis(redis);
+		}
+		boolean del1 = redisUtil.del(DomainName.getShoppeInfo + proCode);
+		if (!del1) {
+			ProductPageDto pageDto = new ProductPageDto();
+			pageDto.setProductCode(proCode);
+			OmsResProInfoDto page = proService.getProductPageByPara(proCode, pageDto);
+			String pageJson = JsonUtil.getJSONString(page);
+			PcmRedis redis = new PcmRedis();
+			redis.setCreatetime(new Date());
+			redis.setValue(pageJson);
+			redis.setRedisffield(DomainName.getCMSSHopperInfo);
+			redis.setKeyname(proCode);
+			redisService.savePcmRedis(redis);
+		}
+
+	}
 
 	/**
 	 * 电商上传合同及商品
@@ -127,7 +171,9 @@ public class PcmContractLogServiceImpl implements IPcmContractLogService {
 						upStatus.setProductCode(proList.get(0).getShoppeProSid());
 						upStatus.setStatus(0);
 						proService.updateProductStatusInfo(upStatusList);
-						// 修改售罄状态
+						// 删除单品页及OMS缓存
+						redisOmsCms(proList.get(0).getShoppeProSid(), proList.get(0)
+								.getProductDetailSid());
 					}
 				} else if (sapProDto.getACTIONCODE().equals("D")) {
 					PcmProInput ppi = new PcmProInput();
@@ -157,7 +203,9 @@ public class PcmContractLogServiceImpl implements IPcmContractLogService {
 							upStatus.setProductCode(proList.get(0).getShoppeProSid());
 							upStatus.setStatus(1);
 							proService.updateProductStatusInfo(upStatusList);
-							// 修改为售罄
+							// 删除单品页及OMS缓存
+							redisOmsCms(proList.get(0).getShoppeProSid(), proList.get(0)
+									.getProductDetailSid());
 						}
 					} else {
 						// 关系不存在或无效，无需操作
@@ -290,7 +338,7 @@ public class PcmContractLogServiceImpl implements IPcmContractLogService {
 				parasMap.put("categoryCode", contractLogDto.getCol1());// 管理分类编码
 				parasMap.put("categoryType", Constants.MANAGECATEGORY);// 分类类型为1管理分类
 				parasMap.put("status", Constants.Y);// 是否启用
-				parasMap.put("isDisplay","1");
+				parasMap.put("isDisplay", "1");
 				List<PcmCategory> managecateList = categoryMapper.selectListByParam(parasMap);
 				if (managecateList == null || managecateList.size() != 1) {
 					logger.info("管理分类不存在");
