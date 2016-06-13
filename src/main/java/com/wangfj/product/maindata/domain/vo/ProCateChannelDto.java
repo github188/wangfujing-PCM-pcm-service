@@ -1,11 +1,29 @@
 package com.wangfj.product.maindata.domain.vo;
 
 public class ProCateChannelDto {
+	private String cateSid;
 	private String spuCode;
 	private String cateName;
 	private String channelName;
 	private String propName;
 	private String valueName;
+	private String breadUrl;
+
+	public String getBreadUrl() {
+		return breadUrl;
+	}
+
+	public void setBreadUrl(String breadUrl) {
+		this.breadUrl = breadUrl;
+	}
+
+	public String getCateSid() {
+		return cateSid;
+	}
+
+	public void setCateSid(String cateSid) {
+		this.cateSid = cateSid;
+	}
 
 	public String getPropName() {
 		return propName;
