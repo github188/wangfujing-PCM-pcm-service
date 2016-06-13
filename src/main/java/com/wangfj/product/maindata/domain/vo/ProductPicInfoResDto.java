@@ -16,6 +16,33 @@ public class ProductPicInfoResDto {
 	private String categoryName;// 工业分类名称
 	private String sellingStatus;// 上架状态
 	List<PicInfoResDto> picList = new ArrayList<PicInfoResDto>();// 图片List
+	private String colorMa;// 色码
+	private String sapShoProCode;// SAP商品编码/照片编码
+	private String proCode;// 专柜商品编码
+
+	public String getProCode() {
+		return proCode;
+	}
+
+	public void setProCode(String proCode) {
+		this.proCode = proCode;
+	}
+
+	public String getColorMa() {
+		return colorMa;
+	}
+
+	public void setColorMa(String colorMa) {
+		this.colorMa = colorMa;
+	}
+
+	public String getSapShoProCode() {
+		return sapShoProCode;
+	}
+
+	public void setSapShoProCode(String sapShoProCode) {
+		this.sapShoProCode = sapShoProCode;
+	}
 
 	public String getSellingStatus() {
 		return sellingStatus;

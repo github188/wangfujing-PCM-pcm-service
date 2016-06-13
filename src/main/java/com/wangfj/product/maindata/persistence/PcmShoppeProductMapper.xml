@@ -203,6 +203,9 @@
 		<result column="categoryCode" property="categoryCode" />
 		<result column="categoryName" property="categoryName" />
 		<result column="sellingStatus" property="sellingStatus" />
+		<result column="colorMa" property="colorMa" />
+		<result column="proCode" property="proCode" />
+		<result column="sapShoProCode" property="sapShoProCode" />
 		<collection property="picList"
 			ofType="com.wangfj.product.maindata.domain.vo.PicInfoResDto">
 			<result column="imgURL" property="imgURL" />
@@ -409,6 +412,9 @@
 		url.picture_url AS imgURL,
 		url.is_primary AS isMain,
 		url.sid AS picSid,
+		sku.pro_color_name AS colorMa,
+		pro.field4 AS sapShoProCode,
+		pro.shoppe_pro_sid AS proCode,
 		sku.selling_status AS sellingStatus
 		FROM
 		pcm_pro_detail AS sku
@@ -417,6 +423,7 @@
 		spu ON
 		sku.product_sid =
 		spu.sid
+		JOIN pcm_shoppe_product AS pro ON sku.sid = pro.product_detail_sid
 		JOIN pcm_color_dict AS
 		color ON
 		sku.pro_color_sid = color.sid
