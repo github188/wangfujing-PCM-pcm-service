@@ -6,6 +6,7 @@ import com.wangfj.product.price.domain.entity.PcmChangePriceRecord;
 import com.wangfj.product.price.domain.vo.PcmPriceERPDto;
 import com.wangfj.product.price.domain.vo.PcmPricePISDto;
 import com.wangfj.product.price.domain.vo.SelectChangePriceRecordDto;
+import com.wangfj.util.BasePage;
 
 public interface PcmChangePriceRecordMapper {
 	int deleteByPrimaryKey(Long sid);
@@ -58,4 +59,12 @@ public interface PcmChangePriceRecordMapper {
 	 * @return List<PcmChangePriceRecord>
 	 */
 	List<PcmChangePriceRecord> queryCurChangePriceRecordByPara(SelectChangePriceRecordDto record);
+	
+	/**
+	 * 查询过期变价信息
+	 * @param basePage
+	 * @Create In 2016年6月13日 By zhangdl
+	 * @return
+	 */
+	List<PcmChangePriceRecord> queryExpireChangePriceInfoList(BasePage basePage);
 }
