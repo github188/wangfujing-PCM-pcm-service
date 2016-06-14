@@ -22,6 +22,8 @@ import com.wangfj.core.utils.JsonUtil;
 import com.wangfj.core.utils.NumberUtils;
 import com.wangfj.core.utils.PropertyUtil;
 import com.wangfj.core.utils.RedisUtil;
+import com.wangfj.product.category.domain.entity.PcmCategory;
+import com.wangfj.product.category.service.intf.ICategoryPropValuesService;
 import com.wangfj.product.common.domain.entity.PcmRedis;
 import com.wangfj.product.common.service.intf.IPcmRedisService;
 import com.wangfj.product.constants.DomainName;
@@ -79,6 +81,8 @@ public class PcmProductPictureServiceImpl implements IPcmProductPictureService {
 	private PcmProductPictureMapper picMapper;
 	@Autowired
 	private IPcmShoppeProductService proService;
+	@Autowired
+	private ICategoryPropValuesService cateService;
 
 	public List<Map<String, Object>> picOldToNew(Map<String, Object> paramMap) {
 		List<Map<String, Object>> picOldToNew = spMapper.picOldToNew(paramMap);
@@ -110,6 +114,19 @@ public class PcmProductPictureServiceImpl implements IPcmProductPictureService {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("spuCode", para.getProductCode());
 		List<ProCateChannelDto> catePropBySpuCode = spuMapper.getCatePropBySpuCode(paramMap);
+		for (ProCateChannelDto dto : catePropBySpuCode) {
+			cateService.clearSubList();
+			List<PcmCategory> list = cateService.selectAllSupNodeByCateSid(dto.getCateSid());
+			StringBuffer url = new StringBuffer();
+			for (int i = list.size() - 1; i >= 0; i--) {
+				if (i == 0) {
+					url.append(list.get(i).getName());
+				} else {
+					url.append(list.get(i).getName() + " > ");
+				}
+			}
+			dto.setBreadUrl(url.toString());
+		}
 		return catePropBySpuCode;
 	}
 
@@ -587,7 +604,6 @@ public class PcmProductPictureServiceImpl implements IPcmProductPictureService {
 	public void redisSpuCMSSHopperInfo(String spuCode) {
 		List<String> skuList = spuMapper.selectSkuCodeBySpuCode(spuCode);
 		for (String skuCode : skuList) {
-			System.out.println(DomainName.getCMSSHopperInfo + skuCode);
 			// RedisVo vo = new RedisVo();
 			// vo.setKey(DomainName.getCMSSHopperInfo + skuCode);
 			// // vo.setField(DomainName.getCMSSHopperInfo);

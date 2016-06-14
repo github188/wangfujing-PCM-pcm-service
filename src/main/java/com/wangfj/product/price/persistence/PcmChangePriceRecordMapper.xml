@@ -567,4 +567,19 @@
 		AND
 		pcpr.change_code=pcpr2.change_code
 	</select>
+
+	<select id="queryExpireChangePriceInfoList" resultMap="BaseResultMap"
+		parameterType="com.wangfj.util.BasePage">
+		select
+		<include refid="Base_Column_List" />
+		from pcm_change_price_record
+		WHERE
+		datediff(
+			date_format(now(), '%Y-%c-%d %h:%i:%s'),
+			date_format(bdate, '%Y-%c-%d %h:%i:%s')
+		) >= 15
+		<if test="limit != null">
+			limit #{start}, #{limit}
+		</if>
+	</select>
 </mapper>

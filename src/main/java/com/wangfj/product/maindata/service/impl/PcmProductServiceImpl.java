@@ -1975,6 +1975,7 @@ public class PcmProductServiceImpl implements IPcmProductService {
 			res.setSpecialDes(list.get(i).getSpecialDes());
 			res.setActionCode("A");
 			res.setActionDate(str);
+			res.setActionPerson("PCM");
 			resList.add(res);
 		}
 		return resList;

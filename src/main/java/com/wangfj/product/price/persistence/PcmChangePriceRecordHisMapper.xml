@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.price.persistence.PcmChangePriceRecordHisMapper" >
+  <resultMap id="BaseResultMap" type="com.wangfj.product.price.domain.entity.PcmChangePriceRecordHis" >
+    <id column="sid" property="sid" jdbcType="BIGINT" />
+    <result column="store_code" property="storeCode" jdbcType="VARCHAR" />
+    <result column="matnr" property="matnr" jdbcType="VARCHAR" />
+    <result column="supplier_prod_code" property="supplierProdCode" jdbcType="VARCHAR" />
+    <result column="zsprice" property="zsprice" jdbcType="VARCHAR" />
+    <result column="site_code" property="siteCode" jdbcType="VARCHAR" />
+    <result column="waers" property="waers" jdbcType="VARCHAR" />
+    <result column="bdate" property="bdate" jdbcType="VARCHAR" />
+    <result column="edate" property="edate" jdbcType="VARCHAR" />
+    <result column="change_code" property="changeCode" jdbcType="VARCHAR" />
+    <result column="channelSid" property="channelsid" jdbcType="VARCHAR" />
+    <result column="price_type" property="priceType" jdbcType="VARCHAR" />
+    <result column="action_code" property="actionCode" jdbcType="VARCHAR" />
+    <result column="action_date" property="actionDate" jdbcType="VARCHAR" />
+    <result column="action_persion" property="actionPersion" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="attribute1" property="attribute1" jdbcType="VARCHAR" />
+    <result column="attribute2" property="attribute2" jdbcType="VARCHAR" />
+    <result column="attribute3" property="attribute3" jdbcType="VARCHAR" />
+    <result column="attribute4" property="attribute4" jdbcType="VARCHAR" />
+    <result column="attribute5" property="attribute5" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sid, store_code, matnr, supplier_prod_code, zsprice, site_code, waers, bdate, edate, 
+    change_code, channelSid, price_type, action_code, action_date, action_persion, create_time, 
+    attribute1, attribute2, attribute3, attribute4, attribute5
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from pcm_change_price_record_his
+    where sid = #{sid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from pcm_change_price_record_his
+    where sid = #{sid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.wangfj.product.price.domain.entity.PcmChangePriceRecordHis" >
+    insert into pcm_change_price_record_his (sid, store_code, matnr, 
+      supplier_prod_code, zsprice, site_code, 
+      waers, bdate, edate, 
+      change_code, channelSid, price_type, 
+      action_code, action_date, action_persion, 
+      create_time, attribute1, attribute2, 
+      attribute3, attribute4, attribute5
+      )
+    values (#{sid,jdbcType=BIGINT}, #{storeCode,jdbcType=VARCHAR}, #{matnr,jdbcType=VARCHAR}, 
+      #{supplierProdCode,jdbcType=VARCHAR}, #{zsprice,jdbcType=VARCHAR}, #{siteCode,jdbcType=VARCHAR}, 
+      #{waers,jdbcType=VARCHAR}, #{bdate,jdbcType=VARCHAR}, #{edate,jdbcType=VARCHAR}, 
+      #{changeCode,jdbcType=VARCHAR}, #{channelsid,jdbcType=VARCHAR}, #{priceType,jdbcType=VARCHAR}, 
+      #{actionCode,jdbcType=VARCHAR}, #{actionDate,jdbcType=VARCHAR}, #{actionPersion,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{attribute1,jdbcType=VARCHAR}, #{attribute2,jdbcType=VARCHAR}, 
+      #{attribute3,jdbcType=VARCHAR}, #{attribute4,jdbcType=VARCHAR}, #{attribute5,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wangfj.product.price.domain.entity.PcmChangePriceRecord" >
+    insert into pcm_change_price_record_his
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="storeCode != null" >
+        store_code,
+      </if>
+      <if test="matnr != null" >
+        matnr,
+      </if>
+      <if test="supplierProdCode != null" >
+        supplier_prod_code,
+      </if>
+      <if test="zsprice != null" >
+        zsprice,
+      </if>
+      <if test="siteCode != null" >
+        site_code,
+      </if>
+      <if test="waers != null" >
+        waers,
+      </if>
+      <if test="bdate != null" >
+        bdate,
+      </if>
+      <if test="edate != null" >
+        edate,
+      </if>
+      <if test="changeCode != null" >
+        change_code,
+      </if>
+      <if test="channelsid != null" >
+        channelSid,
+      </if>
+      <if test="priceType != null" >
+        price_type,
+      </if>
+      <if test="actionCode != null" >
+        action_code,
+      </if>
+      <if test="actionDate != null" >
+        action_date,
+      </if>
+      <if test="actionPersion != null" >
+        action_persion,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="attribute1 != null" >
+        attribute1,
+      </if>
+      <if test="attribute2 != null" >
+        attribute2,
+      </if>
+      <if test="attribute3 != null" >
+        attribute3,
+      </if>
+      <if test="attribute4 != null" >
+        attribute4,
+      </if>
+      <if test="attribute5 != null" >
+        attribute5,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        #{sid,jdbcType=BIGINT},
+      </if>
+      <if test="storeCode != null" >
+        #{storeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="matnr != null" >
+        #{matnr,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierProdCode != null" >
+        #{supplierProdCode,jdbcType=VARCHAR},
+      </if>
+      <if test="zsprice != null" >
+        #{zsprice,jdbcType=VARCHAR},
+      </if>
+      <if test="siteCode != null" >
+        #{siteCode,jdbcType=VARCHAR},
+      </if>
+      <if test="waers != null" >
+        #{waers,jdbcType=VARCHAR},
+      </if>
+      <if test="bdate != null" >
+        #{bdate,jdbcType=VARCHAR},
+      </if>
+      <if test="edate != null" >
+        #{edate,jdbcType=VARCHAR},
+      </if>
+      <if test="changeCode != null" >
+        #{changeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelsid != null" >
+        #{channelsid,jdbcType=VARCHAR},
+      </if>
+      <if test="priceType != null" >
+        #{priceType,jdbcType=VARCHAR},
+      </if>
+      <if test="actionCode != null" >
+        #{actionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="actionDate != null" >
+        #{actionDate,jdbcType=VARCHAR},
+      </if>
+      <if test="actionPersion != null" >
+        #{actionPersion,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="attribute1 != null" >
+        #{attribute1,jdbcType=VARCHAR},
+      </if>
+      <if test="attribute2 != null" >
+        #{attribute2,jdbcType=VARCHAR},
+      </if>
+      <if test="attribute3 != null" >
+        #{attribute3,jdbcType=VARCHAR},
+      </if>
+      <if test="attribute4 != null" >
+        #{attribute4,jdbcType=VARCHAR},
+      </if>
+      <if test="attribute5 != null" >
+        #{attribute5,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.price.domain.entity.PcmChangePriceRecordHis" >
+    update pcm_change_price_record_his
+    <set >
+      <if test="storeCode != null" >
+        store_code = #{storeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="matnr != null" >
+        matnr = #{matnr,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierProdCode != null" >
+        supplier_prod_code = #{supplierProdCode,jdbcType=VARCHAR},
+      </if>
+      <if test="zsprice != null" >
+        zsprice = #{zsprice,jdbcType=VARCHAR},
+      </if>
+      <if test="siteCode != null" >
+        site_code = #{siteCode,jdbcType=VARCHAR},
+      </if>
+      <if test="waers != null" >
+        waers = #{waers,jdbcType=VARCHAR},
+      </if>
+      <if test="bdate != null" >
+        bdate = #{bdate,jdbcType=VARCHAR},
+      </if>
+      <if test="edate != null" >
+        edate = #{edate,jdbcType=VARCHAR},
+      </if>
+      <if test="changeCode != null" >
+        change_code = #{changeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelsid != null" >
+        channelSid = #{channelsid,jdbcType=VARCHAR},
+      </if>
+      <if test="priceType != null" >
+        price_type = #{priceType,jdbcType=VARCHAR},
+      </if>
+      <if test="actionCode != null" >
+        action_code = #{actionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="actionDate != null" >
+        action_date = #{actionDate,jdbcType=VARCHAR},
+      </if>
+      <if test="actionPersion != null" >
+        action_persion = #{actionPersion,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="attribute1 != null" >
+        attribute1 = #{attribute1,jdbcType=VARCHAR},
+      </if>
+      <if test="attribute2 != null" >
+        attribute2 = #{attribute2,jdbcType=VARCHAR},
+      </if>
+      <if test="attribute3 != null" >
+        attribute3 = #{attribute3,jdbcType=VARCHAR},
+      </if>
+      <if test="attribute4 != null" >
+        attribute4 = #{attribute4,jdbcType=VARCHAR},
+      </if>
+      <if test="attribute5 != null" >
+        attribute5 = #{attribute5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wangfj.product.price.domain.entity.PcmChangePriceRecordHis" >
+    update pcm_change_price_record_his
+    set store_code = #{storeCode,jdbcType=VARCHAR},
+      matnr = #{matnr,jdbcType=VARCHAR},
+      supplier_prod_code = #{supplierProdCode,jdbcType=VARCHAR},
+      zsprice = #{zsprice,jdbcType=VARCHAR},
+      site_code = #{siteCode,jdbcType=VARCHAR},
+      waers = #{waers,jdbcType=VARCHAR},
+      bdate = #{bdate,jdbcType=VARCHAR},
+      edate = #{edate,jdbcType=VARCHAR},
+      change_code = #{changeCode,jdbcType=VARCHAR},
+      channelSid = #{channelsid,jdbcType=VARCHAR},
+      price_type = #{priceType,jdbcType=VARCHAR},
+      action_code = #{actionCode,jdbcType=VARCHAR},
+      action_date = #{actionDate,jdbcType=VARCHAR},
+      action_persion = #{actionPersion,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      attribute1 = #{attribute1,jdbcType=VARCHAR},
+      attribute2 = #{attribute2,jdbcType=VARCHAR},
+      attribute3 = #{attribute3,jdbcType=VARCHAR},
+      attribute4 = #{attribute4,jdbcType=VARCHAR},
+      attribute5 = #{attribute5,jdbcType=VARCHAR}
+    where sid = #{sid,jdbcType=BIGINT}
+  </update>
+</mapper>

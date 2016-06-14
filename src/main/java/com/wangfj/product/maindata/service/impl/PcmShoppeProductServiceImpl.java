@@ -51,6 +51,7 @@ import com.wangfj.product.maindata.domain.vo.ProductPageProCodesDto;
 import com.wangfj.product.maindata.domain.vo.PublishShoppeProductFromPcmDto;
 import com.wangfj.product.maindata.domain.vo.PushShoppeProFromPcmDto;
 import com.wangfj.product.maindata.domain.vo.PushToPcmEfutureERPFromPcmDto;
+import com.wangfj.product.maindata.domain.vo.SapProListDto;
 import com.wangfj.product.maindata.domain.vo.ShoProInfoFormPcmToPisDto;
 import com.wangfj.product.maindata.domain.vo.ShoppeProductDto;
 import com.wangfj.product.maindata.domain.vo.UpdateProductInfoDto;
@@ -114,6 +115,12 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 	@Override
 	public List<PcmProSearchDto> getProInfoPulishSearch(Map<String, Object> paramMap) {
 		return shoppeProMapper.getProInfoPulishSearch(paramMap);
+	}
+
+	public List<Long> getSidListBySapProCode(List<SapProListDto> dtoList) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("proList", dtoList);
+		return shoppeProMapper.getSidListBySapProCode(paramMap);
 	}
 
 	/**
@@ -732,7 +739,7 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd.HHmmssZ");
 			String str = sdf.format(date);
 			pushDto.setActionDate(str);
-			pushDto.setActionPersin("");
+			pushDto.setActionPersin("PCM");
 			pushList.add(pushDto);
 		}
 		return pushList;
@@ -1613,9 +1620,6 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 
 		OmsShoppeProductReturnDto returnDto = new OmsShoppeProductReturnDto();// 返回参数
 		OmsShoppeProductResultDto resultDto = shoppeProMapper.findIndustryCategoryByParaForOms(dto);
-        if (resultDto == null) {
-            throw new BleException(ErrorCode.PRODUCT_NULL.getErrorCode(), "Oms查询专柜商品不存在!");
-        }
 		returnDto.setShoppeProSid(resultDto.getShoppeProSid());
 
 		String resultDtoIndustryCategoryLevel = resultDto.getIndustryCategoryLevel();// 专柜商品对应的SPU上工业分类级数
