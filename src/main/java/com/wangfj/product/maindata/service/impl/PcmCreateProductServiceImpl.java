@@ -532,7 +532,18 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		pp.setPriceType(Constants.PRICE_TYPE_1);// 永久变价
 		pp.setAttribute1(Constants.DEFAULT_CHANGE_CODE);// 变价号
 		pp.setChannelSid(Constants.DEFAULT_CHANNEL_SID); // 渠道
-		if (createShoppePro.getSalePrice() != null) {
+		BigDecimal salePrice = createShoppePro.getSalePrice();//售价
+		//createShoppePro.getSalePrice().compareTo(BigDecimal.ZERO) == 0
+		if(salePrice == null || salePrice.compareTo(BigDecimal.ZERO) == 0){
+			pp.setCurrentPrice(createShoppePro.getOriginalPrice());// 现价
+			pp.setPromotionPrice(createShoppePro.getOriginalPrice());// 促销价格=原价
+			pp.setOriginalPrice(createShoppePro.getOriginalPrice());// 原价
+		}else{
+			pp.setCurrentPrice(createShoppePro.getSalePrice());// 现价
+			pp.setPromotionPrice(createShoppePro.getSalePrice());// 促销价格
+			pp.setOriginalPrice(createShoppePro.getOriginalPrice());// 原价
+		}
+		/*if (createShoppePro.getSalePrice() != null) {
 			pp.setCurrentPrice(createShoppePro.getSalePrice());// 现价
 			pp.setPromotionPrice(createShoppePro.getSalePrice());// 促销价格
 			pp.setOriginalPrice(createShoppePro.getOriginalPrice());// 原价
@@ -540,7 +551,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 			pp.setCurrentPrice(createShoppePro.getOriginalPrice());// 现价
 			pp.setPromotionPrice(createShoppePro.getOriginalPrice());// 促销价格
 			pp.setOriginalPrice(createShoppePro.getOriginalPrice());// 原价
-		}
+		}*/
 		pp.setOffValue(new BigDecimal(1));// 折扣值，后台程序计算
 		pp.setUnit("RMB");// 货币单位
 		i = priceService.initProductPriceInfo(pp);
