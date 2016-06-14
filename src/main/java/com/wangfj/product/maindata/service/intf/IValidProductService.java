@@ -4,6 +4,7 @@ import com.wangfj.core.framework.exception.BleException;
 import com.wangfj.product.maindata.domain.entity.PcmProDetail;
 import com.wangfj.product.maindata.domain.entity.PcmShoppeProduct;
 import com.wangfj.product.maindata.domain.entity.PcmShoppeProductExtend;
+import com.wangfj.product.maindata.domain.vo.PcmAllSysPullDataDto;
 import com.wangfj.product.maindata.domain.vo.PullDataDto;
 import com.wangfj.product.maindata.domain.vo.SaveShoppeProductDto;
 import com.wangfj.product.maindata.domain.vo.SaveShoppeProductDtoDs;
