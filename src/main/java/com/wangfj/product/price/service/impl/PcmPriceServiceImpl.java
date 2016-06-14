@@ -1828,11 +1828,27 @@ public class PcmPriceServiceImpl implements IPcmPriceService {
 		} else {
 			pcmPrice.setChannelSid(Constants.DEFAULT_CHANNEL_SID);
 		}
-		pcmPrice.setPromotionBeginTime(DateUtil.formatDate(pcmPricePISDto.getBdate(), "yyyyMMdd"));// 促销开始时间
-		pcmPrice.setPromotionEndTime(DateUtil.formatDate(pcmPricePISDto.getEdate(), "yyyyMMdd"));// 促销结束时间
+		// 促销开始时间
+		if (DateUtil.isValidDate(pcmPricePISDto.getBdate(), Constants.yyyyMMddHHmmss)) {
+			pcmPrice.setPromotionBeginTime(
+					DateUtil.formatDate(pcmPricePISDto.getBdate(), Constants.yyyyMMddHHmmss));
+		} else if (DateUtil.isValidDate(pcmPricePISDto.getBdate(), Constants.yyyyMMdd)) {
+			pcmPrice.setPromotionBeginTime(
+					DateUtil.formatDate(pcmPricePISDto.getBdate(), Constants.yyyyMMdd));
+		}
+		// 促销结束时间
+		if (DateUtil.isValidDate(pcmPricePISDto.getEdate(), Constants.yyyyMMddHHmmss)) {
+			pcmPrice.setPromotionEndTime(
+					DateUtil.formatDate(pcmPricePISDto.getEdate(), Constants.yyyyMMddHHmmss));
+		} else if (DateUtil.isValidDate(pcmPricePISDto.getEdate(), Constants.yyyyMMdd)) {
+			pcmPrice.setPromotionEndTime(
+					addDate((DateUtil.formatDate(pcmPricePISDto.getEdate(), Constants.yyyyMMdd)),
+							Calendar.HOUR, 24, Calendar.SECOND, -1));
+		}
 		pcmPrice.setAttribute1(pcmPricePISDto.getChangecode());// 变价编号
 		pcmPrice.setPriceType(Constants.PRICE_TYPE_2);
-		if (Constants.PRICE_RETAIL_DATE.equals(pcmPricePISDto.getEdate())) {
+		if (Constants.PRICE_RETAIL_DATETIME.equals(pcmPricePISDto.getEdate())
+				|| Constants.PRICE_RETAIL_DATE.equals(pcmPricePISDto.getEdate())) {
 			pcmPrice.setPriceType(Constants.PRICE_TYPE_1);
 		}
 		pcmPrice.setAttribute2(pcmPricePISDto.getStorecode());
