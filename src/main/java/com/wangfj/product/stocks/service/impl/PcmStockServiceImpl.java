@@ -2166,7 +2166,7 @@ public class PcmStockServiceImpl implements IPcmStockService {
 		// 查询可售库存数
 		Integer stockCount = findStockCountFromPcm(saleRecord);
 		String key = DomainName.getStock + shoppeProSid + channelSid;
-		redisUtil.set(key, stockCount.toString());
+		boolean flag = redisUtil.set(key, stockCount.toString());
 		if (!CacheUtils.cacheFlag) {
 			PcmRedis pcmRedisDto = new PcmRedis();
 			pcmRedisDto.setRedisffield(DomainName.getStock);
