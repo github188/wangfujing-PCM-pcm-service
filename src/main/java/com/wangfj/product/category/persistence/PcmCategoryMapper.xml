@@ -1799,7 +1799,7 @@
 	AND pc.`status` = 0
 	AND pc.is_leaf = 'Y'
 	WHERE
-	ppp.product_sid = (
+	ppp.product_sid = (	
 	SELECT
 	spu.sid
 	FROM
