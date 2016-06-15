@@ -245,13 +245,13 @@ public class PcmShoppeProductSupplyServiceImpl implements IPcmShoppeProductSuppl
                             PcmErpProductSupply pcmErpProductSupply = listU.get(0);
                             pcmErpProductSupply.setSupplySid(erpProductSupply.getSupplySid());
                             pcmErpProductSupply.setStatus(Constants.PUBLIC_0);
-                           flag = erpProductSupplyMapper.updateByPrimaryKeySelective(pcmErpProductSupply);
+                            flag = erpProductSupplyMapper.updateByPrimaryKeySelective(pcmErpProductSupply);
                         } else {
                             throw new BleException(
                                     ComErrorCodeConstants.ErrorCode.PCMSHOPPEPRODUCTSUPPLY_RELATION_EXISTENCE.getErrorCode(),
                                     "联营大码商品有两条供应商关系数据！");
                         }
-                    } else {
+                    } else {//非联营大码
                         if (list.isEmpty()) {
                             flag = erpProductSupplyMapper.insertSelective(erpProductSupply);
                         } else if (list.size() == 1) {//如果数据已经存在，只修改状态即可。
