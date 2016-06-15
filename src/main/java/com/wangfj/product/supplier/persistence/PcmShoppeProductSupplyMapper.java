@@ -5,26 +5,35 @@ import java.util.Map;
 
 import com.wangfj.core.framework.base.persistence.BaseMapper;
 import com.wangfj.product.supplier.domain.entity.PcmShoppeProductSupply;
+import com.wangfj.product.supplier.domain.vo.PcmShoppeProSupplyUploadDto;
 
 public interface PcmShoppeProductSupplyMapper extends BaseMapper<PcmShoppeProductSupply> {
-	int deleteByPrimaryKey(Long sid);
+    int deleteByPrimaryKey(Long sid);
 
-	int insertSelective(PcmShoppeProductSupply record);
+    int insertSelective(PcmShoppeProductSupply record);
 
-	PcmShoppeProductSupply selectByPrimaryKey(Long sid);
+    PcmShoppeProductSupply selectByPrimaryKey(Long sid);
 
-	int updateByPrimaryKeySelective(PcmShoppeProductSupply record);
+    int updateByPrimaryKeySelective(PcmShoppeProductSupply record);
 
-	int updateByPrimaryKey(PcmShoppeProductSupply record);
+    int updateByPrimaryKey(PcmShoppeProductSupply record);
 
-	/**
-	 * 多条件查询
-	 * 
-	 * @Methods Name getListByParam
-	 * @Create In 2015-9-17 By wangxuan
-	 * @param paramMap
-	 * @return List<PcmShoppeProductSupply>
-	 */
-	List<PcmShoppeProductSupply> getListByParam(Map<String, Object> paramMap);
+    /**
+     * 多条件查询
+     *
+     * @param paramMap
+     * @return List<PcmShoppeProductSupply>
+     * @Methods Name getListByParam
+     * @Create In 2015-9-17 By wangxuan
+     */
+    List<PcmShoppeProductSupply> getListByParam(Map<String, Object> paramMap);
+
+    /**
+     * 专柜商品一品多商下发查询
+     *
+     * @param paramMap
+     * @return
+     */
+    List<PcmShoppeProSupplyUploadDto> pushShoppeProSupply(Map<String, Object> paramMap);
 
 }

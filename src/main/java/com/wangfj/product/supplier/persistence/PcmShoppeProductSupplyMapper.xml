@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper
-	namespace="com.wangfj.product.supplier.persistence.PcmShoppeProductSupplyMapper">
-	<resultMap id="BaseResultMap"
-		type="com.wangfj.product.supplier.domain.entity.PcmShoppeProductSupply">
-		<id column="sid" property="sid" jdbcType="BIGINT" />
-		<result column="supply_sid" property="supplySid" jdbcType="BIGINT" />
-		<result column="shoppe_product_sid" property="shoppeProductSid"
-			jdbcType="BIGINT" />
-		<result column="shop_sid" property="shopSid" jdbcType="VARCHAR" />
-		<result column="product_sid" property="productSid" jdbcType="VARCHAR" />
-		<result column="status" property="status" jdbcType="INTEGER" />
-	</resultMap>
-	<sql id="Base_Column_List">
+        namespace="com.wangfj.product.supplier.persistence.PcmShoppeProductSupplyMapper">
+    <resultMap id="BaseResultMap"
+               type="com.wangfj.product.supplier.domain.entity.PcmShoppeProductSupply">
+        <id column="sid" property="sid" jdbcType="BIGINT"/>
+        <result column="supply_sid" property="supplySid" jdbcType="BIGINT"/>
+        <result column="shoppe_product_sid" property="shoppeProductSid"
+                jdbcType="BIGINT"/>
+        <result column="shop_sid" property="shopSid" jdbcType="VARCHAR"/>
+        <result column="product_sid" property="productSid" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
 		sid, supply_sid,
 		shoppe_product_sid,shop_sid,product_sid,status
 	</sql>
-	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
-		parameterType="java.lang.Long">
-		select
-		<include refid="Base_Column_List" />
-		from pcm_shoppe_product_supply
-		where sid = #{sid,jdbcType=BIGINT}
-	</select>
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_shoppe_product_supply
+        where sid = #{sid,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
 		delete from
 		pcm_shoppe_product_supply
 		where sid = #{sid,jdbcType=BIGINT}
 	</delete>
-	<insert id="insert"
-		parameterType="com.wangfj.product.supplier.domain.entity.PcmShoppeProductSupply">
+    <insert id="insert"
+            parameterType="com.wangfj.product.supplier.domain.entity.PcmShoppeProductSupply">
 		insert into pcm_shoppe_product_supply (sid, supply_sid,
 		shoppe_product_sid,shop_sid,product_sid,status
 		)
@@ -39,76 +39,76 @@
 		#{productSid,jdbcType=VARCHAR},#{status,jdbcType=INTEGER}
 		)
 	</insert>
-	<insert id="insertSelective"
-		parameterType="com.wangfj.product.supplier.domain.entity.PcmShoppeProductSupply">
-		insert into pcm_shoppe_product_supply
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="sid != null">
-				sid,
-			</if>
-			<if test="supplySid != null">
-				supply_sid,
-			</if>
-			<if test="shoppeProductSid != null">
-				shoppe_product_sid,
-			</if>
-			<if test="shopSid != null">
-				shop_sid,
-			</if>
-			<if test="productSid != null">
-				product_sid,
-			</if>
-			<if test="status != null">
-				status,
-			</if>
-		</trim>
-		<trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="sid != null">
-				#{sid,jdbcType=BIGINT},
-			</if>
-			<if test="supplySid != null">
-				#{supplySid,jdbcType=BIGINT},
-			</if>
-			<if test="shoppeProductSid != null">
-				#{shoppeProductSid,jdbcType=BIGINT},
-			</if>
-			<if test="shopSid != null">
-				#{shopSid,jdbcType=VARCHAR},
-			</if>
-			<if test="productSid != null">
-				#{productSid,jdbcType=VARCHAR},
-			</if>
-			<if test="status != null">
-				#{status,jdbcType=INTEGER},
-			</if>
-		</trim>
-	</insert>
-	<update id="updateByPrimaryKeySelective"
-		parameterType="com.wangfj.product.supplier.domain.entity.PcmShoppeProductSupply">
-		update pcm_shoppe_product_supply
-		<set>
-			<if test="supplySid != null">
-				supply_sid = #{supplySid,jdbcType=BIGINT},
-			</if>
-			<if test="shoppeProductSid != null">
-				shoppe_product_sid =
-				#{shoppeProductSid,jdbcType=BIGINT},
-			</if>
-			<if test="shopSid != null">
-				shop_sid = #{shopSid,jdbcType=VARCHAR},
-			</if>
-			<if test="productSid != null">
-				product_sid = #{productSid,jdbcType=VARCHAR},
-			</if>
-			<if test="status != null">
-				status = #{status,jdbcType=INTEGER},
-			</if>
-		</set>
-		where sid = #{sid,jdbcType=BIGINT}
-	</update>
-	<!-- 下面的不知道谁在用 -->
-	<update id="updateByPrimaryKey"
-		parameterType="com.wangfj.product.supplier.domain.entity.PcmShoppeProductSupply">
+    <insert id="insertSelective"
+            parameterType="com.wangfj.product.supplier.domain.entity.PcmShoppeProductSupply">
+        insert into pcm_shoppe_product_supply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                sid,
+            </if>
+            <if test="supplySid != null">
+                supply_sid,
+            </if>
+            <if test="shoppeProductSid != null">
+                shoppe_product_sid,
+            </if>
+            <if test="shopSid != null">
+                shop_sid,
+            </if>
+            <if test="productSid != null">
+                product_sid,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                #{sid,jdbcType=BIGINT},
+            </if>
+            <if test="supplySid != null">
+                #{supplySid,jdbcType=BIGINT},
+            </if>
+            <if test="shoppeProductSid != null">
+                #{shoppeProductSid,jdbcType=BIGINT},
+            </if>
+            <if test="shopSid != null">
+                #{shopSid,jdbcType=VARCHAR},
+            </if>
+            <if test="productSid != null">
+                #{productSid,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.wangfj.product.supplier.domain.entity.PcmShoppeProductSupply">
+        update pcm_shoppe_product_supply
+        <set>
+            <if test="supplySid != null">
+                supply_sid = #{supplySid,jdbcType=BIGINT},
+            </if>
+            <if test="shoppeProductSid != null">
+                shoppe_product_sid =
+                #{shoppeProductSid,jdbcType=BIGINT},
+            </if>
+            <if test="shopSid != null">
+                shop_sid = #{shopSid,jdbcType=VARCHAR},
+            </if>
+            <if test="productSid != null">
+                product_sid = #{productSid,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+        </set>
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+    <!-- 下面的不知道谁在用 -->
+    <update id="updateByPrimaryKey"
+            parameterType="com.wangfj.product.supplier.domain.entity.PcmShoppeProductSupply">
 		update pcm_shoppe_product_supply
 		set supply_sid =
 		#{supplySid,jdbcType=BIGINT},
@@ -116,61 +116,82 @@
 		#{shoppeProductSid,jdbcType=BIGINT}
 		where sid = #{sid,jdbcType=BIGINT}
 	</update>
-	<select id="selectListByParam" resultMap="BaseResultMap"
-		parameterType="com.wangfj.product.supplier.domain.entity.PcmShoppeProductSupply">
-		select
-		<include refid="Base_Column_List" />
-		from pcm_shoppe_product_supply
-		<where>
-			<if test="sid != null">
-				and sid = #{sid,jdbcType=BIGINT}
-			</if>
-			<if test="supplySid != null">
-				and supply_sid = #{supplySid,jdbcType=BIGINT}
-			</if>
-			<if test="shoppeProductSid != null">
-				and shoppe_product_sid =
-				#{shoppeProductSid,jdbcType=BIGINT}
-			</if>
-			<if test="shopSid != null">
-				and shop_sid = #{shopSid,jdbcType=VARCHAR}
-			</if>
-			<if test="productSid != null">
-				and product_sid = #{productSid,jdbcType=VARCHAR}
-			</if>
-			<if test="status != null">
-				and status = #{status,jdbcType=INTEGER}
-			</if>
-		</where>
-	</select>
+    <select id="selectListByParam" resultMap="BaseResultMap"
+            parameterType="com.wangfj.product.supplier.domain.entity.PcmShoppeProductSupply">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_shoppe_product_supply
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="supplySid != null">
+                and supply_sid = #{supplySid,jdbcType=BIGINT}
+            </if>
+            <if test="shoppeProductSid != null">
+                and shoppe_product_sid =
+                #{shoppeProductSid,jdbcType=BIGINT}
+            </if>
+            <if test="shopSid != null">
+                and shop_sid = #{shopSid,jdbcType=VARCHAR}
+            </if>
+            <if test="productSid != null">
+                and product_sid = #{productSid,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
 
-	<!-- getListByParam多条件查询 wangxuan -->
-	<select id="getListByParam" resultMap="BaseResultMap"
-		parameterType="java.util.Map">
-		select
-		<include refid="Base_Column_List" />
-		from pcm_shoppe_product_supply
-		<where>
-			<if test="sid != null">
-				and sid = #{sid,jdbcType=BIGINT}
-			</if>
-			<if test="supplySid != null">
-				and supply_sid = #{supplySid,jdbcType=BIGINT}
-			</if>
-			<if test="shoppeProductSid != null">
-				and shoppe_product_sid =
-				#{shoppeProductSid,jdbcType=BIGINT}
-			</if>
-			<if test="shopSid != null">
-				and shop_sid = #{shopSid,jdbcType=VARCHAR}
-			</if>
-			<if test="productSid != null">
-				and product_sid = #{productSid,jdbcType=VARCHAR}
-			</if>
-			<if test="status != null">
-				and status = #{status,jdbcType=INTEGER}
-			</if>
-		</where>
-	</select>
+    <!-- getListByParam多条件查询 wangxuan -->
+    <select id="getListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_shoppe_product_supply
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="supplySid != null">
+                and supply_sid = #{supplySid,jdbcType=BIGINT}
+            </if>
+            <if test="shoppeProductSid != null">
+                and shoppe_product_sid =
+                #{shoppeProductSid,jdbcType=BIGINT}
+            </if>
+            <if test="shopSid != null">
+                and shop_sid = #{shopSid,jdbcType=VARCHAR}
+            </if>
+            <if test="productSid != null">
+                and product_sid = #{productSid,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <select id="pushShoppeProSupply" resultType="com.wangfj.product.supplier.domain.vo.PcmShoppeProSupplyUploadDto"
+            parameterType="java.util.Map">
+        SELECT
+            psi.shop_sid AS storeCode,
+            psp.shoppe_pro_sid AS productCode,
+            psp.shoppe_pro_sid AS supplierProductCode,
+            psi.supply_code AS supplierCode
+        FROM
+            pcm_shoppe_product_supply psps
+        INNER JOIN pcm_supply_info psi ON psps.supply_sid = psi.sid
+        INNER JOIN pcm_shoppe_product psp ON psps.shoppe_product_sid = psp.sid
+        <where>
+            <if test="sid != null">
+                AND psps.sid = #{sid}
+            </if>
+            <if test="status != null">
+                AND psps.status = #{status}
+            </if>
+        </where>
+    </select>
 
 </mapper>
