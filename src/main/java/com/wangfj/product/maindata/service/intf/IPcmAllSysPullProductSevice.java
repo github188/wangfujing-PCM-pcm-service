@@ -9,6 +9,7 @@ package com.wangfj.product.maindata.service.intf;
 
 import com.wangfj.core.framework.exception.BleException;
 import com.wangfj.product.maindata.domain.entity.PcmShoppeProduct;
+import com.wangfj.product.maindata.domain.entity.PcmShoppeProductExtend;
 import com.wangfj.product.maindata.domain.vo.PcmAllSysPullDataDto;
 
 /**
@@ -26,5 +27,5 @@ public interface IPcmAllSysPullProductSevice {
 	 * @return
 	 * @throws BleException PcmShoppeProduct
 	 */
-	public PcmShoppeProduct allSysSaveProduct (PcmAllSysPullDataDto dataDto) throws BleException;
+	public PcmShoppeProduct allSysSaveProduct (PcmAllSysPullDataDto dataDto,PcmShoppeProductExtend extendDto) throws BleException;
 }

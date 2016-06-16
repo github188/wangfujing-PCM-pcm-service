@@ -8,6 +8,7 @@
 package com.wangfj.product.maindata.service.impl;
 
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,8 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.spel.ast.RealLiteral;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wangfj.core.constants.ComErrorCodeConstants.ErrorCode;
@@ -32,10 +35,21 @@ import com.wangfj.product.category.persistence.PcmProductCategoryMapper;
 import com.wangfj.product.category.persistence.PcmProductParametersMapper;
 import com.wangfj.product.maindata.domain.entity.PcmBarcode;
 import com.wangfj.product.maindata.domain.entity.PcmColorDict;
+import com.wangfj.product.maindata.domain.entity.PcmContractLog;
 import com.wangfj.product.maindata.domain.entity.PcmErpProduct;
+import com.wangfj.product.maindata.domain.entity.PcmProDetail;
+import com.wangfj.product.maindata.domain.entity.PcmProduct;
 import com.wangfj.product.maindata.domain.entity.PcmSeasonDict;
 import com.wangfj.product.maindata.domain.entity.PcmShoppeProduct;
+import com.wangfj.product.maindata.domain.entity.PcmShoppeProductExtend;
+import com.wangfj.product.maindata.domain.vo.BarcodeDto;
+import com.wangfj.product.maindata.domain.vo.CreateShoppePro;
+import com.wangfj.product.maindata.domain.vo.CreateSkuDto;
+import com.wangfj.product.maindata.domain.vo.CreateSpuDto;
 import com.wangfj.product.maindata.domain.vo.PcmAllSysPullDataDto;
+import com.wangfj.product.maindata.domain.vo.PcmRelateInfoDto;
+import com.wangfj.product.maindata.domain.vo.ValidProDetailDto;
+import com.wangfj.product.maindata.domain.vo.ValidShoppeProDto;
 import com.wangfj.product.maindata.persistence.PcmBarcodeMapper;
 import com.wangfj.product.maindata.persistence.PcmColorDictMapper;
 import com.wangfj.product.maindata.persistence.PcmContractLogMapper;
@@ -62,10 +76,16 @@ import com.wangfj.product.price.persistence.PcmOriginalPriceLogMapper;
 import com.wangfj.product.price.persistence.PcmOriginalPriceMapper;
 import com.wangfj.product.price.persistence.PcmPriceMapper;
 import com.wangfj.product.price.service.intf.IPcmPriceService;
+import com.wangfj.product.stocks.domain.entity.PcmStock;
+import com.wangfj.product.stocks.domain.vo.PcmProductStockInfoDto;
+import com.wangfj.product.stocks.domain.vo.PcmStockDto;
 import com.wangfj.product.stocks.persistence.PcmStockMapper;
 import com.wangfj.product.stocks.service.intf.IPcmStockChangeRecordService;
 import com.wangfj.product.stocks.service.intf.IPcmStockService;
+import com.wangfj.product.supplier.domain.entity.PcmShoppeProductSupply;
 import com.wangfj.product.supplier.domain.entity.PcmSupplyInfo;
+import com.wangfj.product.supplier.domain.vo.PcmShoppeSupplierQueryDto;
+import com.wangfj.product.supplier.domain.vo.PcmShoppeSupplierResultDto;
 import com.wangfj.product.supplier.persistence.PcmShoppeProductSupplyMapper;
 import com.wangfj.product.supplier.persistence.PcmSupplyInfoMapper;
 import com.wangfj.product.supplier.persistence.PcmSupplyShoppeRelationMapper;
@@ -76,6 +96,7 @@ import com.wangfj.util.Constants;
  * @Author wangc
  * @Create In 2016年6月14日
  */
+@Service
 public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 
 	private static final Logger logger = LoggerFactory.getLogger(ValidProductServiceImpl.class);
@@ -173,7 +194,8 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 	 */
 	@Override
 	@Transactional
-	public PcmShoppeProduct allSysSaveProduct(PcmAllSysPullDataDto dataDto) throws BleException {
+	public PcmShoppeProduct allSysSaveProduct(PcmAllSysPullDataDto dataDto,PcmShoppeProductExtend extendDto) throws BleException {
+		logger.info("start allSysSaveProduct()");
 		validAllSysPullData(dataDto);//多系统商品上传公共字段非空校验
 		if("PIS".equals(dataDto.getSource())){//导入终端上传
 			validPISData(dataDto);
@@ -182,9 +204,540 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 		}if("SUP".equals(dataDto.getSource())){
 			validPISData(dataDto);
 		}
-		relateValidate(dataDto);//数据关联校验
+		PcmRelateInfoDto relateValidate = relateValidate(dataDto);//数据关联校验
+		CreateShoppePro cProDto = createShoPro(dataDto,relateValidate);//创建专柜商品DTo
+		CreateSkuDto cSkuDto = createSkuDto(dataDto, relateValidate);//创建skuDto
+		PcmShoppeProductExtend dsPro = null;
+		if(!"SAP".equals(dataDto.getSource())){//非SAP商品 创建扩展表DTO
+			dsPro = createExtendDto(dataDto, cProDto);//创建扩展表DTO
+		}else{//电商商品controller已创建扩展表DTO
+			dsPro = extendDto;
+		}
+		PcmShoppeProduct shoppePro = null;//专柜商品添加返回结果封装
+		ValidProDetailDto validSpuDto = createValidSpuDto(dataDto,relateValidate);//封装SPU判重实体
+		PcmProduct pro = validService.validSpuBh(validSpuDto);//SPU判重
+		Long spuFlag = 0l;
+		Long skuFlag = 0l;
+		if(pro !=null){//SPU存在
+			validSpuDto.setProductSid(String.valueOf(pro.getSid()));// 产品表SID
+			List<PcmProDetail> proDList = validService.validSku(validSpuDto);//SKU判重
+			if (proDList != null && proDList.size() == 1){//SKU存在
+				PcmProDetail proD = proDList.get(0);
+				ValidShoppeProDto validShoppeProdto = createValidShoPro(dataDto, relateValidate, proDList);//封装专柜商品判重实体
+				if (dataDto.getOperateMode().equals(
+						String.valueOf(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3))){//联营时专柜商品判重
+					PcmShoppeProduct shopp = validService.validShoppeProBh(validShoppeProdto);
+					if (shopp != null) {// 专柜商品存在
+						throw new BleException(ErrorCode.SHOPP_IS_EXIST.getErrorCode(),
+								ErrorCode.SHOPP_IS_EXIST.getMemo());
+					}else{//专柜商品不存在,创建专柜商品
+						cProDto.setProductDetailSid(String.valueOf(proD.getSid()));// sku表SID
+						if (!StringUtils.isNotBlank(cProDto.getShoppeProName())) {// 专柜商品名为空时
+							if("SAP".equals(dataDto.getSource())){//----------------------------------------电商SAP上传专柜商品名为空时
+								PcmBrand brand = relateValidate.getBrand();//品牌信息
+								String shoppeProName = brand.getBrandName() + dataDto.getProductDesc()
+								+ dataDto.getColorCode() + dataDto.getSizeCode();
+								cProDto.setShoppeProName(shoppeProName);// 专柜商品名称
+								cProDto.setShoppeProAlias(proD.getProDetailName());
+							}else{
+								cProDto.setShoppeProName(proD.getProDetailName());
+							}
+						}
+						shoppePro = insertShoPro(cProDto, relateValidate, dataDto, dsPro);//创建专柜商品
+					}
+				}else{
+					//非联营专柜商品判重
+					PcmShoppeProduct shopp = validService.validShoppePro(validShoppeProdto);
+					if(shopp != null){//专柜商品存在  判断是否存在一品多商关系
+						List<PcmSupplyInfo> supplyInfoList = relateValidate.getSupplyInfoList();//供应商信息
+						PcmOrganization org = relateValidate.getOrg();//门店信息
+						PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
+						psps.setShoppeProductSid((shopp.getSid()));// 专柜商品SID
+						psps.setSupplySid((supplyInfoList.get(0).getSid()));// 供应商SID
+						psps.setStatus(0);
+						List<PcmShoppeProductSupply> pspsList = pspsMapper.selectListByParam(psps);
+						if (pspsList != null && pspsList.size() > 0) {
+							// 一品多供应商关系已存在
+							throw new BleException(ErrorCode.SHOPP_IS_EXIST.getErrorCode(),
+									ErrorCode.SHOPP_IS_EXIST.getMemo());
+						} else {
+							// 一品多供应商关系不存在--添加关系
+							psps.setShopSid(org.getOrganizationCode());//一品多商加门店编码
+							int res = pspsMapper.insertSelective(psps);
+							if (res != 1) {
+								throw new BleException(
+										ErrorCode.SHOPPEPRODUCT_SUPPLY_RELATION_ERROR
+												.getErrorCode(),
+										ErrorCode.SHOPPEPRODUCT_SUPPLY_RELATION_ERROR.getMemo());
+							}
+						}
+						shoppePro = shopp;
+					}else{//专柜商品不存在  创建专柜商品
+						cProDto.setProductDetailSid(String.valueOf(proD.getSid()));// sku表SID
+						if (!StringUtils.isNotBlank(cProDto.getShoppeProName())) {// 专柜商品名为空时
+							if("SAP".equals(dataDto.getSource())){//----------------------------------------电商SAP上传专柜商品名为空时
+								PcmBrand brand = relateValidate.getBrand();//品牌信息
+								String shoppeProName = brand.getBrandName() + dataDto.getProductDesc()
+								+ dataDto.getColorCode() + dataDto.getSizeCode();
+								cProDto.setShoppeProName(shoppeProName);// 专柜商品名称
+								cProDto.setShoppeProAlias(proD.getProDetailName());//简称=SKU标准品名
+							}else{
+								cProDto.setShoppeProName(proD.getProDetailName());
+							}
+						}
+						shoppePro = insertShoPro(cProDto, relateValidate, dataDto, dsPro);//创建专柜商品
+					}
+				}
+			}else if (proDList != null && proDList.size() == 0){//SKU不存在 创建SKU-专柜商品
+				cSkuDto.setProductSid(String.valueOf(pro.getSid()));// 产品表SID SPU
+				cSkuDto.setProductName(pro.getProductName());
+				PcmProDetail sku = createService.insertSKU(cSkuDto);//创建SKU
+				skuFlag = sku.getSid();
+				cProDto.setProductDetailSid(String.valueOf(sku.getSid()));
+				if (!StringUtils.isNotBlank(cProDto.getShoppeProName())) {// 专柜商品名为空
+					if("SAP".equals(dataDto.getSource())){//----------------------------------------电商SAP上传专柜商品名为空时
+						PcmBrand brand = relateValidate.getBrand();//品牌信息
+						String shoppeProName = brand.getBrandName() + dataDto.getProductDesc()
+						+ dataDto.getColorCode() + dataDto.getSizeCode();
+						cProDto.setShoppeProName(shoppeProName);// 专柜商品名称
+						//cProDto.setShoppeProAlias(sku.getProDetailName());
+					}else{
+						cProDto.setShoppeProName(sku.getProDetailName());
+					}
+				}
+				shoppePro = insertShoPro(cProDto, relateValidate, dataDto, dsPro);//创建专柜商品
+				if("SAP".equals(dataDto.getSource())){//电商SAP新加SKU和专柜商品时, 初始化库存,  在SKU基础上加专柜上时不添加库存 ?????
+					if (StringUtils.isNotBlank(dataDto.getInventory())) {
+						saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(), dataDto.getSource(),
+								dataDto.getEntryNumber());
+					} else {
+						saveInventory(shoppePro.getShoppeProSid(), "0", dataDto.getSource(),
+								dataDto.getEntryNumber());
+					}
+				}
+			}else {
+				throw new BleException(ErrorCode.SKU_IS_EXIST1.getErrorCode(),
+						ErrorCode.SKU_IS_EXIST1.getMemo());
+			}
+		}else{//SPU不存在 创建SPU-SKu-专柜商品
+			CreateSpuDto cSpuDto = createSpuDto(dataDto, relateValidate);//创建SPU实体
+			PcmProduct spu = createService.insertSPU(cSpuDto);//插入SPU
+			spuFlag = spu.getSid();
+			cSkuDto.setProductSid(String.valueOf(spu.getSid()));
+			cSkuDto.setProductName(spu.getProductName());
+			PcmProDetail sku = createService.insertSKU(cSkuDto);//插入SKU
+			skuFlag = sku.getSid();
+			cProDto.setProductDetailSid(String.valueOf(sku.getSid()));
+			if (!StringUtils.isNotBlank(cProDto.getShoppeProName())) {// 专柜商品名为空
+				if("SAP".equals(dataDto.getSource())){
+					PcmBrand brand = relateValidate.getBrand();//品牌信息
+					String shoppeProName = brand.getBrandName() + dataDto.getProductDesc()
+					+ dataDto.getColorCode() + dataDto.getSizeCode();
+					cProDto.setShoppeProName(shoppeProName);// 专柜商品名称
+				}
+				cProDto.setShoppeProName(sku.getProDetailName());
+			}
+			shoppePro = insertShoPro(cProDto, relateValidate, dataDto, dsPro);//创建专柜商品
+			if("SAP".equals(dataDto.getSource())){//电商SAP新加SKU和专柜商品时, 初始化库存,  在SKU基础上加专柜上时不添加库存 ?????
+				if (StringUtils.isNotBlank(dataDto.getInventory())) {
+					saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(), dataDto.getSource(),
+							dataDto.getEntryNumber());
+				} else {
+					saveInventory(shoppePro.getShoppeProSid(), "0", dataDto.getSource(),
+							dataDto.getEntryNumber());
+				}
+			}
+		}
+		logger.info("end allSysSaveProduct()");
+		if (shoppePro != null) {
+			shoppePro.setPackUnitDictSid(spuFlag);
+			shoppePro.setMeasureUnitDictSid(skuFlag);
+		}
+		return shoppePro;
+	}
+	/**
+	 * 创建SPU实体
+	 * @Methods Name createSpuDto
+	 * @Create In 2016年6月15日 By wangc
+	 * @param dataDto
+	 * @param relateInfo
+	 * @return CreateSpuDto
+	 */
+	private CreateSpuDto createSpuDto(PcmAllSysPullDataDto dataDto,PcmRelateInfoDto relateInfo){
+		List<PcmBrand> brandList = relateInfo.getBrandList();//集团品牌信息
+		List<PcmCategory> cateList = relateInfo.getCateList();//工业分类信息
+		List<PcmSeasonDict> seasonList = relateInfo.getSeasonList();//季节信息
+		CreateSpuDto cSpuDto = new CreateSpuDto();
+		cSpuDto.setBrandName(brandList.get(0).getBrandName());// 集团品牌名称
+		cSpuDto.setBrandRootSid(String.valueOf(brandList.get(0).getSid()));// 集团品牌表SID
+		cSpuDto.setBrandSid(brandList.get(0).getBrandSid());// 集团品牌编码
+		cSpuDto.setCategoryGYSid(cateList.get(0).getSid());// 工业分类SID
+		cSpuDto.setFlag(Integer.parseInt(dataDto.getType()));// 超市百货标识_0百货_1超市
+		if("SAP".equals(dataDto.getSource())){
+			cSpuDto.setShortDes(dataDto.getProductDesc());// 商品描述
+		}else{
+			cSpuDto.setPrimaryAttr(dataDto.getMainAttribute());// 主属性
+		}
+		cSpuDto.setProductSku(dataDto.getProductNum());// 款号
+		if (seasonList != null) {
+			cSpuDto.setSeasonCode(String.valueOf(seasonList.get(0).getSid()));// 季节表SID
+		}
+		if ("男".equals(dataDto.getCrowdUser())) {
+			cSpuDto.setSexSid(0);// 适合人群
+		}
+		if ("女".equals(dataDto.getCrowdUser())) {
+			cSpuDto.setSexSid(1);// 适合人群
+		}
+		if ("中性".equals(dataDto.getCrowdUser())) {
+			cSpuDto.setSexSid(2);// 适合人群
+		}
+		if ("儿童".equals(dataDto.getCrowdUser())) {
+			cSpuDto.setSexSid(3);// 适合人群
+		}
+		cSpuDto.setYearToMarket(dataDto.getYearToMarket());// 上市年份
+		return cSpuDto;
+	}
+	/**
+	 * 创建专柜商品
+	 * @Methods Name insertShoPro
+	 * @Create In 2016年6月15日 By wangc
+	 * @param cProDto
+	 * @param relateInfo
+	 * @param dataDto
+	 * @param dsPro
+	 * @return PcmShoppeProduct
+	 */
+	private PcmShoppeProduct insertShoPro(CreateShoppePro cProDto,PcmRelateInfoDto relateInfo,PcmAllSysPullDataDto dataDto,PcmShoppeProductExtend dsPro){
+		PcmShoppeProduct shoppePro = new PcmShoppeProduct();
+		shoppePro = createService.insertShoppePro(cProDto);
+		List<PcmSupplyInfo> supplyInfoList = relateInfo.getSupplyInfoList();//供应商信息
+		PcmOrganization org = relateInfo.getOrg();//门店信息
+		String source = dataDto.getSource();
+		if(!"SAP".equals(source)){//电商SAP上传没有期初库存
+			// 写入库存
+			if (StringUtils.isNotBlank(dataDto.getInventory())) {
+				saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(),
+						source, dataDto.getEntryNumber());
+			} else {
+				saveInventory(shoppePro.getShoppeProSid(), "0", source,
+						dataDto.getEntryNumber());
+			}
+		}
+		// 写入临时表
+		if (StringUtils.isNotBlank(dataDto.getEntryNumber())
+				&& StringUtils.isNotBlank(dataDto.getProcurementPersonnelNumber())
+				&& StringUtils.isNotBlank(dataDto.getOfferNumber())) {
+			createService.insertProductInput(shoppePro.getSid(),
+					dataDto.getOfferNumber(), dataDto.getEntryNumber(),
+					dataDto.getProcurementPersonnelNumber(), dsPro);
+		}
+		// 写入一品多供应商关系表
+		PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
+		psps.setShoppeProductSid((shoppePro.getSid()));// 专柜商品SID
+		psps.setSupplySid((supplyInfoList.get(0).getSid()));// 供应商SID
+		psps.setShopSid(org.getOrganizationCode());//一品多商加门店编码
+		insertShoppeProductSupply(psps);
+		return shoppePro;
+	}
+	/**
+	 * 封装专柜商品判重实体
+	 * @Methods Name createValidShoPro
+	 * @Create In 2016年6月15日 By wangc
+	 * @param dataDto
+	 * @param relateInfo
+	 * @param proDList
+	 * @return ValidShoppeProDto
+	 */
+	private ValidShoppeProDto createValidShoPro(PcmAllSysPullDataDto dataDto,PcmRelateInfoDto relateInfo,List<PcmProDetail> proDList){
+		ValidShoppeProDto validShoppeProdto = new ValidShoppeProDto();
+		List<PcmShoppe> shoppeList = relateInfo.getShoppeList();//专柜信息
+		List<PcmSupplyInfo> supplyInfoList = relateInfo.getSupplyInfoList();//供应商信息
+		PcmOrganization org = relateInfo.getOrg();//门店信息
+		PcmProDetail proD = proDList.get(0);
+		validShoppeProdto.setProductDetailSid(String.valueOf(proD.getSid()));// sku表SID
+		validShoppeProdto.setShoppeSid(String.valueOf(shoppeList.get(0).getSid()));// 专柜表SID
+		validShoppeProdto.setSupplySid(String.valueOf(supplyInfoList.get(0).getSid()));// 供应商表SID
+		if (StringUtils.isNotBlank(dataDto.getStandardBarCode())) {
+			validShoppeProdto.setBarcode(dataDto.getStandardBarCode());// 条码
+			validShoppeProdto.setStoreCode(org.getOrganizationCode());// 门店编码
+		}
+		// 判断百货或超市 超市判重加入销售单位
+		if (dataDto.getType().equals(String.valueOf(Constants.PUBLIC_1))) {
+			validShoppeProdto.setSaleUnitCode(dataDto.getUnitCode());// 销售单位
+		}
+		return validShoppeProdto;
+	}
+	/**
+	 * 封装SPU判重实体
+	 * @Methods Name createValidSpuDto
+	 * @Create In 2016年6月15日 By wangc
+	 * @param dataDto
+	 * @param relateInfo
+	 * @return ValidProDetailDto
+	 */
+	private ValidProDetailDto createValidSpuDto(PcmAllSysPullDataDto dataDto,PcmRelateInfoDto relateInfo){
+		// 1.spu验证:
+		// 判断超市或百货
+		ValidProDetailDto validSpuDto = new ValidProDetailDto();
+		List<PcmBrand> brandList = relateInfo.getBrandList();//集团品牌信息
+		List<PcmColorDict> colorList = relateInfo.getColorList();//色系信息
 		
-		return null;
+		validSpuDto.setBrandSid(String.valueOf(brandList.get(0).getBrandSid()));// 集团品牌SID
+		validSpuDto.setProStanSid(dataDto.getSizeCode());// 规格/尺码
+		if (!dataDto.getType().equals(String.valueOf(Constants.PUBLIC_1))) {// 百货 电商商品
+			validSpuDto.setProductSku(dataDto.getProductNum());// 款号
+			validSpuDto.setProColorName(dataDto.getColorCode());// 色码
+			validSpuDto.setProColorSid(colorList.get(0).getSid().toString());// 色系SID
+		} else {// 超市字段
+			validSpuDto.setPrimaryAttr(dataDto.getMainAttribute());// 主属性
+			validSpuDto.setFeatures(dataDto.getFeatures());// 特性
+		}
+		return validSpuDto;
+	}
+	/**
+	 * 创建扩展表DTO
+	 * 
+	 * @Methods Name createExtendDto
+	 * @Create In 2016年6月15日 By wangc
+	 * @param dataDto
+	 * @param cProDto
+	 * @return
+	 * @throws BleException PcmShoppeProductExtend
+	 */
+	private PcmShoppeProductExtend createExtendDto(PcmAllSysPullDataDto dataDto,CreateShoppePro cProDto)  throws BleException{
+		PcmShoppeProductExtend dsPro = new PcmShoppeProductExtend();
+		if (cProDto.getBusinessType() == Constants.PUBLIC_1) {// 联营时，扩展表商品类别为8联营单品
+			dsPro.setField1("8");
+		}
+		if (cProDto.getBusinessType() == Constants.PUBLIC_0) {// 自营时，扩展表商品类别为1自营单品
+			dsPro.setField1("1");
+		}
+		dsPro.setField2(cProDto.getOriginalPrice().toString());// 扩展表原价
+		if("2".equals(dataDto.getType())){
+			dsPro.setField4(dataDto.getSapProType());//扩展表 电商商品类型
+			dsPro.setField5(dataDto.getShelfLife());//总货架寿命
+			dsPro.setField6(dataDto.getRemainShelLife());//剩余货架寿命
+			dsPro.setField7(dataDto.getField());//统比销
+			dsPro.setField8(dataDto.getSupplyOriginLand());//货源地
+			dsPro.setField11(dataDto.getPurStatus());//采购状态
+			dsPro.setField12(dataDto.getSalesStatus());//销售状态
+			dsPro.setZcolor(dataDto.getZcolor());//特性色码
+			dsPro.setZsize(dataDto.getZsize());//特性尺码
+		}
+		return dsPro;
+	}
+	/**
+	 * 创建skuDto
+	 * @Methods Name createSkuDto
+	 * @Create In 2016年6月15日 By wangc
+	 * @param dataDto
+	 * @param relateInfo
+	 * @return
+	 * @throws BleException CreateSkuDto
+	 */
+	private CreateSkuDto createSkuDto(PcmAllSysPullDataDto dataDto,PcmRelateInfoDto relateInfo) throws BleException{
+		CreateSkuDto cSkuDto = new CreateSkuDto();
+		List<PcmCategory> cateList = relateInfo.getCateList();//工业分类信息
+		List<PcmBrand> brandList = relateInfo.getBrandList();//集团品牌信息
+		List<PcmColorDict> colorList = relateInfo.getColorList();//色系信息
+		PcmBrand brand = relateInfo.getBrand();//门店品牌信息
+		if(!"SAP".equals(dataDto.getSource())){//非SAP上传商品
+			cSkuDto.setCategoryGYSid(cateList.get(0).getSid());// 工业分类编码
+			cSkuDto.setFeatures(dataDto.getFeatures());// 特性
+		}
+		cSkuDto.setBrandGroupCode(brandList.get(0).getBrandSid());// 集团品牌编码
+		cSkuDto.setBrandShopCode(brand.getBrandSid());// 门店品牌编码
+		cSkuDto.setFlag(Integer.parseInt(dataDto.getType()));// 超市百货标记_0百货_1超市
+		cSkuDto.setProColorAlias(dataDto.getColorName());// 色码名称
+		cSkuDto.setProColorName(dataDto.getColorCode());// 色码
+		if (colorList != null) {
+			cSkuDto.setProColorSid(colorList.get(0).getSid());// 色系表SID
+		}
+		cSkuDto.setProStanName(dataDto.getSizeCode());// 规格/尺码名称
+		cSkuDto.setProStanSid(dataDto.getSizeCode());// 规格/尺码
+		cSkuDto.setProType(1);
+		return cSkuDto;
+	}
+	/**
+	 * 创建专柜商品Dto
+	 * @Methods Name createShoPro
+	 * @Create In 2016年6月15日 By wangc
+	 * @param dataDto
+	 * @return
+	 * @throws BleException CreateShoppePro
+	 */
+	private CreateShoppePro createShoPro(PcmAllSysPullDataDto dataDto,PcmRelateInfoDto relateInfo) throws BleException{
+		CreateShoppePro cProDto = new CreateShoppePro();
+		List<PcmErpProduct> erpList =  relateInfo.getErpList();//扣率码信息
+		List<PcmSupplyInfo> supplyInfoList = relateInfo.getSupplyInfoList();//供应商信息
+		PcmOrganization org = relateInfo.getOrg();//门店信息
+		List<PcmShoppe> shoppeList = relateInfo.getShoppeList();//专柜信息
+		List<PcmCategory> tjcateList = relateInfo.getCateList();//统计分类信息
+		PcmBrand brand = relateInfo.getBrand();//门店品牌信息
+		if(!"SAP".equals(dataDto.getSource())){//非电商SAP上传商品
+			cProDto.setBrandSid(String.valueOf(brand.getSid()));
+			// 判断是否联营
+			if (dataDto.getOperateMode()
+					.equals(String.valueOf(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3))) {// 联营
+				cProDto.setBusinessType(Constants.PUBLIC_1);// 自定义标记自营0,联营1
+				cProDto.setOrderType(Constants.PUBLIC_4);// 订货类型
+				cProDto.setRateCode(dataDto.getErpProductCode());// 扣率码
+				cProDto.setStockMode(Constants.PUBLIC_2);// 库存方式//修改 联营为 2XK虚库
+				// 供应商SID
+				if (dataDto.getType().equals(String.valueOf(Constants.PUBLIC_1))) {// 业态（0百货，1超市）
+					cProDto.setInputTax(new BigDecimal(dataDto.getInputTax()));// 进项税
+					cProDto.setOutputTax(new BigDecimal(dataDto.getOutputTax()));// 销项税
+					cProDto.setPurchasePrice(new BigDecimal(dataDto.getRate_price()));// 扣率/进价
+					cProDto.setBuyingPrice(new BigDecimal(dataDto.getPurchasePrice_taxRebate()));// 扣率/含税进价
+				} else {
+					cProDto.setOutputTax(erpList.get(0).getOutputTax());// 销项税
+					cProDto.setSalesTax(erpList.get(0).getSalesTax());// 消费税
+					cProDto.setInputTax(erpList.get(0).getInputTax());// 进项税
+				}
+			} else {// 其他
+				cProDto.setBusinessType(Constants.PUBLIC_0);// 自定义标记自营0,联营1
+				cProDto.setOrderType(Constants.PUBLIC_5);// 订货类型
+				cProDto.setStockMode(Constants.PUBLIC_1);// 库存方式??????1.ZK自库
+				cProDto.setInputTax(new BigDecimal(dataDto.getInputTax()));// 进项税
+				cProDto.setOutputTax(new BigDecimal(dataDto.getOutputTax()));// 销项税
+				cProDto.setPurchasePrice(new BigDecimal(dataDto.getRate_price()));// 扣率/进价
+				cProDto.setBuyingPrice(new BigDecimal(dataDto.getPurchasePrice_taxRebate()));// 扣率/含税进价
+				cProDto.setField2("WFJ");
+			}
+			cProDto.setSupplySid(String.valueOf(supplyInfoList.get(0).getSid()));// 供应商SID
+			cProDto.setIsStock(Constants.PUBLIC_0);// 是否管库库存 0是
+			cProDto.setCategorySid(dataDto.getManageCateGory());// 品牌专柜（管理分类编码）
+			cProDto.setDiscountLimit(dataDto.getDiscountLimit());// 折扣底限
+			cProDto.setErpproductcode(dataDto.getErpProductCode());// 大码
+			cProDto.setFlag(Integer.parseInt(dataDto.getType()));// 百货超市标记,0百货,1超市
+			cProDto.setOfferNo(dataDto.getOfferNumber());// 要约号
+			cProDto.setOriginalPrice(new BigDecimal(dataDto.getMarketPrice()));// 吊牌价
+			cProDto.setOriginLand(dataDto.getPlaceOfOrigin());// 产地
+			cProDto.setOriginLand2(dataDto.getCountryOfOrigin());// 原产地
+			if (StringUtils.isNotBlank(dataDto.getProcessingType())) {
+				cProDto.setProcessType(Integer.parseInt(dataDto.getProcessingType()));// 加工类型
+			}
+			if (dataDto.getConsumptionTax() != null && dataDto.getConsumptionTax() != ""
+					&& dataDto.getConsumptionTax() != "null") {
+				cProDto.setSalesTax(new BigDecimal(dataDto.getConsumptionTax()));// 消费税
+			}
+			cProDto.setSaleUnitCode(dataDto.getUnitCode());// 销售单位
+			cProDto.setShopCode(org.getOrganizationCode());// 门店编码
+			cProDto.setShoppeCode(dataDto.getCounterCode());// 专柜编码
+			cProDto.setShoppeProAlias(dataDto.getProductAbbr());// 商品简称
+			if (dataDto.getType().equals(String.valueOf(Constants.PUBLIC_0))) {// 百货
+				cProDto.setShoppeProName(dataDto.getProductName());// 专柜商品名称
+			} else {// 超市
+				cProDto.setShoppeProName(dataDto.getRegisteredTradeName());// 专柜商品名称
+			}
+			cProDto.setShoppeSid(String.valueOf(shoppeList.get(0).getSid()));// 专柜SID
+			// 条码
+			if (StringUtils.isNotBlank(dataDto.getStandardBarCode())) {
+				List<BarcodeDto> barcodeList = new ArrayList<BarcodeDto>();
+				BarcodeDto barcodeDto = new BarcodeDto();
+				barcodeDto.setBarcode(dataDto.getStandardBarCode());
+				barcodeDto.setType(0);// 标准条码
+				barcodeDto.setOriginLand(dataDto.getPlaceOfOrigin());
+				barcodeList.add(barcodeDto);
+				cProDto.setBarcode(barcodeList);
+			} else if (dataDto.getStandardBarCodes() != null
+					&& dataDto.getStandardBarCodes().size() != 0) {
+				List<BarcodeDto> barcodeList = new ArrayList<BarcodeDto>();
+				for (Map<String, Object> ba : dataDto.getStandardBarCodes()) {
+					BarcodeDto barcodeDto = new BarcodeDto();
+					barcodeDto.setBarcode(ba.get("barcode").toString());// 条码
+					barcodeDto.setType(Integer.valueOf(ba.get("barCodeType").toString()));// 条码类型
+					barcodeDto.setOriginLand(ba.get("originLand").toString());// 产地
+					barcodeList.add(barcodeDto);
+				}
+				cProDto.setBarcode(barcodeList);
+			}
+			cProDto.setSupplyCode(dataDto.getSupplierCode());// 供应商编码
+			cProDto.setSupplyProductCode(dataDto.getStandardBarCode());// 供应商商品编码??????????
+			cProDto.setRemarks(dataDto.getRemarks());// 备注
+			if (dataDto.getIsAdjustPrice() != null && dataDto.getIsAdjustPrice().equals(Constants.Y)) {
+				cProDto.setIsAdjustPrice(Constants.PUBLIC_0);// 是否允许ERP调价
+			} else if (dataDto.getIsAdjustPrice() != null
+					&& dataDto.getIsAdjustPrice().equals(Constants.N)) {
+				cProDto.setIsAdjustPrice(Constants.PUBLIC_1);// 是否允许ERP调价
+			}
+			if (dataDto.getIsPromotion() != null && dataDto.getIsPromotion().equals(Constants.Y)) {
+				cProDto.setIsPromotion(Constants.PUBLIC_0);// 是否允许ERP促销
+			} else if (dataDto.getIsPromotion() != null && dataDto.getIsPromotion().equals(Constants.N)) {
+				cProDto.setIsPromotion(Constants.PUBLIC_1);// 是否允许ERP促销
+			}
+			cProDto.setField3(dataDto.getModelNum());// 货号
+			cProDto.setCategoryTJSid(tjcateList.get(0).getSid());// 统计分类SID
+			if("2".equals(dataDto.getType())){
+				cProDto.setIsCod(Integer.parseInt(dataDto.getIsCOD()));// 是否支持货到付款
+				cProDto.setSaleStatus(Integer.parseInt(dataDto.getIsSale()));// 商品可售状态
+			}
+		}else{//电商SAP上传商品
+			// 品牌表SID
+			cProDto.setBrandSid(String.valueOf(brand.getSid()));
+			cProDto.setStockMode(Integer.parseInt(dataDto.getStockMode()));// 库存方式
+			// 判断是否联营
+			if (dataDto.getOperateMode()
+					.equals(String.valueOf(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3))) {// 联营
+				cProDto.setBusinessType(Constants.PUBLIC_1);// 自定义标记自营0,联营1
+				cProDto.setOrderType(Constants.PUBLIC_4);// 订货类型
+			} else {// 其他
+				cProDto.setBusinessType(Constants.PUBLIC_0);// 自定义标记自营0,联营1
+				cProDto.setOrderType(Constants.PUBLIC_5);// 订货类型
+				cProDto.setField2("WFJ");
+			}
+			if (StringUtils.isNotBlank(dataDto.getInputTax())) {
+				cProDto.setInputTax(new BigDecimal(dataDto.getInputTax()));// 进项税
+			}
+			if (StringUtils.isNotBlank(dataDto.getOutputTax())) {
+				cProDto.setOutputTax(new BigDecimal(dataDto.getOutputTax()));// 销项税
+			}
+			cProDto.setSupplySid(String.valueOf(supplyInfoList.get(0).getSid()));// 供应商SID
+			cProDto.setIsStock(Constants.PUBLIC_0);// 是否管库库存 0是
+			cProDto.setCategoryTJSid(tjcateList.get(0).getSid());// 统计分类SID
+		    cProDto.setCategorySid(dataDto.getManageCateGory());// 品牌专柜（管理分类编码）
+			cProDto.setFlag(Integer.parseInt(dataDto.getType()));// 百货超市标记,0百货,1超市,2电商
+			cProDto.setOfferNo(dataDto.getOfferNumber());// 要约号
+			cProDto.setSalePrice(new BigDecimal(dataDto.getSalePrice()));// 售价
+			cProDto.setOriginalPrice(new BigDecimal(dataDto.getMarketPrice()));// 吊牌价
+			cProDto.setOriginLand2(dataDto.getCountryOfOrigin());// 原产地
+			if (StringUtils.isNotBlank(dataDto.getProcessingType())) {
+				cProDto.setProcessType(Integer.parseInt(dataDto.getProcessingType()));// 加工类型
+			}
+			if (dataDto.getConsumptionTax() != null && dataDto.getConsumptionTax() != ""
+					&& dataDto.getConsumptionTax() != "null") {
+				cProDto.setSalesTax(new BigDecimal(dataDto.getConsumptionTax()));// 消费税
+			}
+			cProDto.setSaleUnitCode(dataDto.getUnitCode());// 销售单位
+			cProDto.setShopCode(org.getOrganizationCode());// 门店编码
+			cProDto.setShoppeCode(dataDto.getCounterCode());// 专柜编码
+			cProDto.setShoppeProAlias(dataDto.getProductAbbr());// 商品简称
+			cProDto.setShoppeSid(String.valueOf(shoppeList.get(0).getSid()));// 专柜SID
+			// 条码
+			if (StringUtils.isNotBlank(dataDto.getStandardBarCode())) {
+				List<BarcodeDto> barcodeList = new ArrayList<BarcodeDto>();
+				BarcodeDto barcodeDto = new BarcodeDto();
+				barcodeDto.setBarcode(dataDto.getStandardBarCode());
+				barcodeDto.setType(0);// 标准条码
+				barcodeDto.setOriginLand(dataDto.getPlaceOfOrigin());
+				barcodeList.add(barcodeDto);
+				cProDto.setBarcode(barcodeList);
+			}
+			cProDto.setSupplyCode(dataDto.getSupplierCode());// 供应商编码
+			cProDto.setSupplyProductCode(dataDto.getSupplyInnerCode());// 供应商商品编码
+			if (StringUtils.isNotBlank(dataDto.getRate_price())) {
+				cProDto.setBuyingPrice(new BigDecimal(dataDto.getRate_price()));// 扣率/进价
+			}
+			cProDto.setField3(dataDto.getModelNum());// 货号
+			cProDto.setIsCod(Integer.parseInt(dataDto.getIsCOD()));// 是否支持货到付款
+			cProDto.setSaleStatus(Integer.parseInt(dataDto.getIsSale()));// 商品可售状态
+			if (StringUtils.isNotBlank(dataDto.getTmsParam()))
+				cProDto.setTmsParam(Integer.parseInt(dataDto.getTmsParam()));// 物流属性
+			if (StringUtils.isNotBlank(dataDto.getIsPacking()))
+				cProDto.setIsPacking(Integer.parseInt(dataDto.getIsPacking()));// 是否可包装
+			cProDto.setField4(dataDto.getProductCode());// 原系统商品编码
+		}
+		return cProDto;
 	}
 	/**
 	 * 数据关联校验
@@ -193,11 +746,12 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 	 * @param dataDto
 	 * @throws BleException void
 	 */
-	private void relateValidate(PcmAllSysPullDataDto dataDto) throws BleException{
+	private PcmRelateInfoDto relateValidate(PcmAllSysPullDataDto dataDto) throws BleException{
+		PcmRelateInfoDto resultDto = new PcmRelateInfoDto(); //校验返回结果
 		String source = dataDto.getSource();//数据源系统
 		String type = dataDto.getType();//商品类型 0百货 1超市 2电商
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<PcmShoppe> shoppeList = new ArrayList<PcmShoppe>();
+		List<PcmShoppe> shoppeList = new ArrayList<PcmShoppe>();//专柜列表
 		if("2".equals(type) && !"SAP".equals(source)){
 			//获取专柜                                   导入终端+供应商平台上传 电商商品不传专柜编码,需要用供应商编码和门店编码获取对应专柜
 			PcmShoppe pshoppe = new PcmShoppe();
@@ -240,19 +794,14 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 						ErrorCode.SHOPPE_STATUS_ERROR.getMemo());
 			}
 		}
+		resultDto.setShoppeList(shoppeList);//专柜列表
 		// 获取门店信息
 		PcmOrganization org = organizationMapper.get(shoppeList.get(0).getShopSid());
 		if (org == null) {
 			throw new BleException(ErrorCode.SHOPPE_STATUS_ERROR.getErrorCode(),
 					ErrorCode.SHOPPE_STATUS_ERROR.getMemo());
 		}
-		List<PcmErpProduct> erpList = null;
-		if (StringUtils.isNotBlank(dataDto.getErpProductCode())) {
-			PcmErpProduct erpEntity = new PcmErpProduct();
-			erpEntity.setProductCode(dataDto.getErpProductCode());
-			erpEntity.setStoreCode(org.getOrganizationCode());
-			erpList = erpProductMapper.selectListByParam(erpEntity);
-		}
+		resultDto.setOrg(org);//门店信息
 		// 品牌数据校验
 		map.clear();
 		map.put("brandSid", dataDto.getBrandCode());
@@ -273,6 +822,7 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 			map.put("brandType", 0); // 品牌类型（集团）
 			map.put("status", 0); // 状态为有效
 			brandList = brandMapper.selectListByParam(map);
+			resultDto.setBrandList(brandList);//集团品牌信息
 			if (brandList == null || brandList.size() != 1) {
 				throw new BleException(ErrorCode.BRANDGROUP_NULL.getErrorCode(),
 						ErrorCode.BRANDGROUP_NULL.getMemo());
@@ -287,6 +837,19 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 						ErrorCode.BRAND_SHOP_RELATION_IS_NULL.getMemo());
 			}
 		}
+		resultDto.setBrand(brand);//门店品牌信息
+		//供应商平台与导入终端上传的电商商品可能无要约,如果要约不为空,则验证要约有效性
+		if(StringUtils.isNotBlank(dataDto.getOfferNumber())){
+			// 验证要约
+			map.clear();
+			map.put("contractCode", dataDto.getOfferNumber());
+			List<PcmContractLog> PcmContractLogs = contractLogMapper.selectListByParam(map);
+			if (PcmContractLogs == null || PcmContractLogs.size() != 1) {
+				throw new BleException(ErrorCode.CONTRACT_IS_NULL.getErrorCode(),
+						ErrorCode.CONTRACT_IS_NULL.getMemo());
+			}
+		}
+		
 		// 供应商数据校验
 		map.clear();
 		map.put("shopSid", org.getOrganizationCode());
@@ -302,12 +865,13 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 			throw new BleException(ErrorCode.SUPPLYINFO_STATUS_ERROR.getErrorCode(),
 					ErrorCode.SUPPLYINFO_STATUS_ERROR.getMemo());
 		}
-		
-		if("2".equals(dataDto.getType())){
+		//供应商平台上传的电商商品不传经营方式, 非电商SAP来源的电商商品,经营方式与供应商一致
+		if("2".equals(dataDto.getType()) && !"SAP".equals(source)){
 			//电商不传经营方式, 所传经营方式与对应供应商一致
 			if(StringUtils.isBlank(dataDto.getOperateMode())){
 				dataDto.setOperateMode(supplyInfoList.get(0).getBusinessPattern().toString());
 			}
+			
 		}else{
 			// 判断供应商经营方式
 			if (supplyInfoList.get(0).getBusinessPattern() == null
@@ -317,6 +881,33 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 						ErrorCode.SUPPLYINFO_BUSSINESS_ERROR.getMemo());
 			}
 		}
+		//数据源是SAP的电商商品,根据拆单标识和虚库标识判断是否判断供应商与专柜关系
+		if("2".equals(type) && "SAP".equals(source)){
+			if ("1".equals(supplyInfoList.get(0).getApartOrder())) {// 判断拆单标识
+				PcmShoppeSupplierQueryDto dto = new PcmShoppeSupplierQueryDto();
+				dto.setShoppeSid(String.valueOf(shoppeList.get(0).getSid()));// 专柜表SID
+				dto.setSupplySid(String.valueOf(supplyInfoList.get(0).getSid()));// 供应商表SID
+				List<PcmShoppeSupplierResultDto> ResultDtos = supplyShoppeMapper
+						.findShoppeSupplierInfoByParam(dto);
+				if (ResultDtos == null || ResultDtos.size() != Constants.PUBLIC_1) {
+					throw new BleException(ErrorCode.ADD_PRODUCT_SUPPLY_SHOPPE_ERROR.getErrorCode(),
+							ErrorCode.ADD_PRODUCT_SUPPLY_SHOPPE_ERROR.getMemo());
+				}
+			}
+			// 电商-虚库时判断供应商专柜关系
+			if (Constants.PUBLIC_2.equals(dataDto.getStockMode())) {// 虚库
+				PcmShoppeSupplierQueryDto dto = new PcmShoppeSupplierQueryDto();
+				dto.setShoppeSid(String.valueOf(shoppeList.get(0).getSid()));// 专柜表SID
+				dto.setSupplySid(String.valueOf(supplyInfoList.get(0).getSid()));// 供应商表SID
+				List<PcmShoppeSupplierResultDto> ResultDtos = supplyShoppeMapper
+						.findShoppeSupplierInfoByParam(dto);
+				if (ResultDtos == null || ResultDtos.size() != Constants.PUBLIC_1) {
+					throw new BleException(ErrorCode.ADD_PRODUCT_SUPPLY_SHOPPE_ERROR.getErrorCode(),
+							ErrorCode.ADD_PRODUCT_SUPPLY_SHOPPE_ERROR.getMemo());
+				}
+			}
+		}
+		resultDto.setSupplyInfoList(supplyInfoList);//供应商信息
 		// 统计分类字典校验
 		map.clear();
 		map.put("categoryCode", dataDto.getFinalClassiFicationCode());
@@ -328,6 +919,7 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 			throw new BleException(ErrorCode.CATEGORY_TJ_NULL.getErrorCode(),
 					ErrorCode.CATEGORY_TJ_NULL.getMemo());
 		}
+		resultDto.setTjcateList(tjcateList);//统计分类信息
 		// 工业分类字典校验
 		map.clear();
 		map.put("categorySid", dataDto.getProdCategoryCode());
@@ -339,6 +931,7 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 			throw new BleException(ErrorCode.CATEGORY_GY_NULL.getErrorCode(),
 					ErrorCode.CATEGORY_GY_NULL.getMemo());
 		}
+		resultDto.setCateList(cateList);//工业分类信息
 		// 管理分类字典校验
 		map.clear();
 		map.put("categorySid", dataDto.getManageCateGory());
@@ -350,10 +943,19 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 			throw new BleException(ErrorCode.CATEGORY_GL_NULL.getErrorCode(),
 					ErrorCode.CATEGORY_GL_NULL.getMemo());
 		}
+		resultDto.setGlcateList(glcateList);//管理分类信息
 		// 联营百货扣率码数据校验
+		List<PcmErpProduct> erpList = null;
+		if (StringUtils.isNotBlank(dataDto.getErpProductCode())) {
+			PcmErpProduct erpEntity = new PcmErpProduct();
+			erpEntity.setProductCode(dataDto.getErpProductCode());
+			erpEntity.setStoreCode(org.getOrganizationCode());
+			erpList = erpProductMapper.selectListByParam(erpEntity);
+		}
 		if (dataDto.getType().equals(String.valueOf(Constants.PUBLIC_0))
 				&& dataDto.getOperateMode().equals(
 						String.valueOf(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3))) {
+			
 			if (erpList == null || erpList.size() != 1) {
 				throw new BleException(ErrorCode.DISCOUNTCODE_NULL.getErrorCode(),
 						ErrorCode.DISCOUNTCODE_NULL.getMemo());
@@ -368,6 +970,7 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 						ErrorCode.DISCOUNTCODE_INFO_ERROR_SUPPLIER.getMemo());
 			}
 		}
+		resultDto.setErpList(erpList);//扣率码信息
 		// 季节字典数据缺失
 		List<PcmSeasonDict> seasonList = null;
 		if (dataDto.getType().equals(String.valueOf(Constants.PUBLIC_0))) {
@@ -380,6 +983,7 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 			}
 
 		}
+		resultDto.setSeasonList(seasonList);//季节信息;
 		// 色系
 		List<PcmColorDict> colorList = null;
 		if (dataDto.getType().equals(String.valueOf(Constants.PUBLIC_0))) {
@@ -392,10 +996,22 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 						ErrorCode.COLOR_NULL.getMemo());
 			}
 		}
-		// 条码校验 同一门店下条码不能重复
+		resultDto.setColorList(colorList);//色系信息
 		if (StringUtils.isNotBlank(dataDto.getStandardBarCode())) {
-			validBarcode(org.getOrganizationCode(), dataDto.getStandardBarCode());
+			if ("2".equals(dataDto.getType())) {// 电商条码校验
+				validBarcodeSap(org.getOrganizationCode(), dataDto.getStandardBarCode());
+			} else {// 非电商条码校验
+				validBarcode(org.getOrganizationCode(), dataDto.getStandardBarCode());
+			}
+		} else if (dataDto.getStandardBarCodes() != null
+				&& dataDto.getStandardBarCodes().size() != 0) {
+			if ("2".equals(dataDto.getType())) {// 电商条码校验
+				validBarcodeSap(dataDto.getStandardBarCodes(), org.getOrganizationCode());
+			} else {// 非电商条码校验
+				validBarcode(dataDto.getStandardBarCodes(), org.getOrganizationCode());
+			}
 		}
+		return resultDto;
 	}
 	/**
 	 * 电商SAP商品字段非空校验
@@ -1052,5 +1668,111 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 					ErrorCode.BARCODE_IS_EXIST.getMemo());
 		}
 	}
-
+     /*
+	 * 电商条码验证，不验证格式，只判重
+	 * 
+	 * @Methods Name validBarcodeSap
+	 * @Create In 2016-3-1 By wangc
+	 * @param barcodes
+	 * @param storeCode
+	 *            void
+	 */
+	void validBarcodeSap(List<Map<String, Object>> barcodes, String storeCode) {
+		PcmBarcode barcodeEntity = new PcmBarcode();
+		barcodeEntity.setStoreCode(storeCode);// 门店编码
+		for (Map<String, Object> barcode : barcodes) {
+			barcodeEntity.setBarcode(barcode.get("barcode").toString());// 条码
+			List<PcmBarcode> barcodeList = barcodeMapper.selectListByParam(barcodeEntity);
+			if (barcodeList != null && barcodeList.size() > 0) {
+				throw new BleException(ErrorCode.BARCODE_IS_EXIST.getErrorCode(),
+						ErrorCode.BARCODE_IS_EXIST.getMemo() + ":" + barcodeEntity.getBarcode());
+			}
+		}
+	}
+	/**
+	 * 条码校验 同一门店下条码不能重复
+	 * 
+	 * @Methods Name validBarcode
+	 * @Create In 2016-3-1 By wangc
+	 * @param barcodes
+	 * @param storeCode
+	 *            void
+	 */
+	void validBarcode(List<Map<String, Object>> barcodes, String storeCode) {
+		for (Map<String, Object> barcode : barcodes) {
+			if (!barcode.get("barcode").toString().matches("\\d+")) {
+				logger.error("条码格式错误");
+				throw new BleException(ErrorCode.PARA_NORULE_ERROR.getErrorCode(),
+						ErrorCode.PARA_NORULE_ERROR.getMemo());
+			}
+		}
+		PcmBarcode barcodeEntity = new PcmBarcode();
+		barcodeEntity.setStoreCode(storeCode);// 门店编码
+		for (Map<String, Object> barcode : barcodes) {
+			barcodeEntity.setBarcode(barcode.get("barcode").toString());// 条码
+			List<PcmBarcode> barcodeList = barcodeMapper.selectListByParam(barcodeEntity);
+			if (barcodeList != null && barcodeList.size() > 0) {
+				throw new BleException(ErrorCode.BARCODE_IS_EXIST.getErrorCode(),
+						ErrorCode.BARCODE_IS_EXIST.getMemo() + ":" + barcodeEntity.getBarcode());
+			}
+		}
+	}
+	/**
+	 * 写入库存
+	 * @Methods Name saveInventory
+	 * @Create In 2016年6月15日 By wangc
+	 * @param code
+	 * @param inventory
+	 * @param source
+	 * @param operator void
+	 */
+	private void saveInventory(String code, String inventory, String source, String operator) {
+		PcmStock record = new PcmStock();
+		record.setShoppeProSid(code);
+		record.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
+		record.setProSum(Long.parseLong(inventory));
+		int i = stockMapper.insertSelective(record);
+		if (i != 1) {
+			throw new BleException(ErrorCode.STOCK_INPUT_ERROR.getErrorCode(),
+					ErrorCode.STOCK_INPUT_ERROR.getMemo());
+		}
+		if (!"0".equals(inventory)) {
+			PcmStockDto pcmStockDto = new PcmStockDto();
+			pcmStockDto.setProSum(Long.parseLong(inventory));
+			pcmStockDto.setSid(record.getSid());
+			pcmStockDto.setShoppeProSid(code);
+			pcmStockDto.setStockTypeSid(1001);
+			pcmStockDto.setSource(source);
+			pcmStockDto.setOperator(operator);
+			scrsService.changRecord(pcmStockDto, null, 0);
+			PcmProductStockInfoDto dto = new PcmProductStockInfoDto();
+			dto.setShoppeProSid(code);
+			stockService.SelectSkuStockSumBySku(dto);
+		}
+	}
+	/**
+	 * 写入一品多供应商关系表
+	 * 
+	 * @Methods Name insertShoppeProductSupply
+	 * @Create In 2015年9月16日 By zhangxy
+	 * @param proSid
+	 *            supplySid
+	 */
+	void insertShoppeProductSupply(PcmShoppeProductSupply psps) {
+		psps.setStatus(0);
+		List<PcmShoppeProductSupply> pspsList = pspsMapper.selectListByParam(psps);
+		if (pspsList != null && pspsList.size() > 0) {
+			// 一品多供应商关系已存在
+			throw new BleException(ErrorCode.SHOPP_IS_EXIST.getErrorCode(),
+					ErrorCode.SHOPP_IS_EXIST.getMemo());
+		} else {
+			// 一品多供应商关系不存在--添加关系
+			int res = pspsMapper.insertSelective(psps);
+			if (res != 1) {
+				throw new BleException(
+						ErrorCode.SHOPPEPRODUCT_SUPPLY_RELATION_ERROR.getErrorCode(),
+						ErrorCode.SHOPPEPRODUCT_SUPPLY_RELATION_ERROR.getMemo());
+			}
+		}
+	}
 }

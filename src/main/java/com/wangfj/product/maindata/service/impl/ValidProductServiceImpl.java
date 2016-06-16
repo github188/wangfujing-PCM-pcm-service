@@ -498,11 +498,8 @@ public class ValidProductServiceImpl implements IValidProductService {
 			cProDto.setField4(dataDto.getProductCode());
 		}*/
 		// 品牌表SID
-		if (brand != null) {
-			cProDto.setBrandSid(String.valueOf(brand.getSid()));
-		} else {
-			cProDto.setBrandSid(String.valueOf(brandList.get(0).getSid()));
-		}
+		
+		cProDto.setBrandSid(String.valueOf(brand.getSid()));
 		// 判断是否联营
 		if (dataDto.getOperateMode()
 				.equals(String.valueOf(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3))) {// 联营
@@ -2930,11 +2927,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 		// 创建专柜商品DTO
 		CreateShoppePro cProDto = new CreateShoppePro();
 		// 品牌表SID
-		if (brand != null) {
-			cProDto.setBrandSid(String.valueOf(brand.getSid()));
-		} else {
-			cProDto.setBrandSid(String.valueOf(brandList.get(0).getSid()));
-		}
+		cProDto.setBrandSid(String.valueOf(brand.getSid()));
 		cProDto.setStockMode(Integer.parseInt(dataDto.getStockMode()));// 库存方式
 		// 判断是否联营
 		if (dataDto.getOperateMode()
@@ -3636,12 +3629,8 @@ public class ValidProductServiceImpl implements IValidProductService {
 		}
 		// 创建专柜商品DTO
 		CreateShoppePro cProDto = new CreateShoppePro();
-		// 品牌表SID
-		if (brand != null) {
-			cProDto.setBrandSid(String.valueOf(brand.getSid()));
-		} else {
-			cProDto.setBrandSid(String.valueOf(brandList.get(0).getSid()));
-		}
+		//门店品牌SID
+		cProDto.setBrandSid(String.valueOf(brand.getSid()));
 		// 判断是否联营
 		if (dataDto.getOperateMode()
 				.equals(String.valueOf(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3))) {// 联营
@@ -3778,7 +3767,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 		ValidProDetailDto validSpuDto = new ValidProDetailDto();
 		validSpuDto.setBrandSid(String.valueOf(brandList.get(0).getBrandSid()));// 品牌SID
 		validSpuDto.setProStanSid(dataDto.getSizeCode());// 规格/尺码
-		if (dataDto.getType().equals(String.valueOf(Constants.PUBLIC_0))) {// 百货字段
+		if (!dataDto.getType().equals(String.valueOf(Constants.PUBLIC_1))) {// 百货+电商字段
 			validSpuDto.setProductSku(dataDto.getProductNum());// 款号
 			validSpuDto.setProColorName(dataDto.getColorCode());// 色码
 			validSpuDto.setProColorSid(colorList.get(0).getSid().toString());// 色系SID
@@ -3858,6 +3847,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 									ErrorCode.SHOPP_IS_EXIST.getMemo());
 						} else {
 							// 一品多供应商关系不存在--添加关系
+							psps.setShopSid(org.getOrganizationCode());//一品多商加门店编码
 							int res = pspsMapper.insertSelective(psps);
 							if (res != 1) {
 								throw new BleException(
