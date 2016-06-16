@@ -40,7 +40,7 @@ public class PcmBrand extends BaseEntity {
 
 	private Integer status = 0;// 有效标记：0有效，1无效（默认为0）
 
-	private Integer isDisplay = 0;// 是否展示（0：是，1：否，默认0）
+	private Integer isDisplay;// 是否展示（0：是，1：否，默认0）
 
 	private String pictureUrl;// 图片路径
 

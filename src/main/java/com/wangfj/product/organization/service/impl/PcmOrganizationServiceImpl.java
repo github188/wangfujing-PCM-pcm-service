@@ -368,7 +368,7 @@ public class PcmOrganizationServiceImpl implements IPcmOrganizationService {
             map.put("type", Constants.PUBLIC_3);
         }
         map.put("superCode", dto.getSuperCode());
-		/* 门店类型 */
+        /* 门店类型 */
         if (Constants.PCMORGANIZATION_STORE_TYPE_DS_STR.equals(dto.getStoreType())) {
             map.put("storeType", Constants.PCMORGANIZATION_STORE_TYPE_DS);
         } else if (Constants.PCMORGANIZATION_STORE_TYPE_BJ_STR.equals(dto.getStoreType())) {
@@ -651,11 +651,54 @@ public class PcmOrganizationServiceImpl implements IPcmOrganizationService {
 
     }
 
+    /**
+     * 查询所有的门店（无条件）(线下搜索)
+     *
+     * @return
+     */
     @Override
     public List<Map<String, Object>> findListShop() {
 
         List<Map<String, Object>> list = pcmOrganizationMapper.selectShopPageByPara();
         return list;
+    }
+
+    /**
+     * 搜索线上与线下查询门店合并service
+     *
+     * @param para
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> findShopListCommon(Map<String, Object> para) {
+        logger.debug("start findShopListCommon(),param:" + para.toString());
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("organizationType", 3);
+        paramMap.put("organizationStatus", 0);
+        List<PcmOrganization> organizationList = pcmOrganizationMapper.selectListByParam(paramMap);
+
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+        if (organizationList != null && organizationList.size() > 0) {
+            String flag = para.get("flag") + "";
+            if ("searchOnline".equals(flag)) {//线上搜索返回参数转换
+                for (PcmOrganization tempOrg : organizationList) {
+                    Map<String, Object> returnMap = new HashMap<String, Object>();
+                    returnMap.put("shopId", tempOrg.getOrganizationCode());
+                    returnMap.put("shopName", tempOrg.getOrganizationName());
+                    returnList.add(returnMap);
+                }
+            }
+
+            if ("searchOffline".equals(flag)) {//线下搜索返回参数转换
+                for (PcmOrganization tempOrg : organizationList) {
+                    Map<String, Object> returnMap = new HashMap<String, Object>();
+                    returnMap.put("storeCode", tempOrg.getOrganizationCode());
+                    returnList.add(returnMap);
+                }
+            }
+        }
+        logger.debug("end findShopListCommon(),return:" + returnList.toString());
+        return returnList;
     }
 
     /**
