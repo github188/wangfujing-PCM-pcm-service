@@ -317,7 +317,7 @@
 	<select id="selectStockChangeHisRecordbyStockTypeCount"
 		resultType="java.lang.Integer"
 		parameterType="com.wangfj.product.stocks.domain.vo.PcmStockChangeRecordHisDto">
-		SELECT count(*)
+		SELECT count(1)
 		FROM
 		pcm_stock_change_record pscr
 		INNER JOIN pcm_stock
@@ -332,7 +332,7 @@
 				#{shoppeProSid,jdbcType=VARCHAR}
 			</if>
 			<if test="changeTypeSid =='1001'">
-				AND change_type_sid IN ( '1001', '1022', '1023', '1012',
+				AND change_type_sid IN ( '1001','1021','1022', '1023', '1012',
 				'1013')
 			</if>
 			<if test="changeTypeSid !='1001'">
