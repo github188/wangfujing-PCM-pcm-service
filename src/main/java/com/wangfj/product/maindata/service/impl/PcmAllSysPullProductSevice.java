@@ -589,10 +589,20 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 					cProDto.setOutputTax(new BigDecimal(dataDto.getOutputTax()));// 销项税
 					cProDto.setPurchasePrice(new BigDecimal(dataDto.getRate_price()));// 扣率/进价
 					cProDto.setBuyingPrice(new BigDecimal(dataDto.getPurchasePrice_taxRebate()));// 扣率/含税进价
-				} else {
+				} else if("0".equals(dataDto.getType())) {
 					cProDto.setOutputTax(erpList.get(0).getOutputTax());// 销项税
 					cProDto.setSalesTax(erpList.get(0).getSalesTax());// 消费税
 					cProDto.setInputTax(erpList.get(0).getInputTax());// 进项税
+				} else {
+					if (StringUtils.isNotBlank(dataDto.getInputTax())) {
+						cProDto.setInputTax(new BigDecimal(dataDto.getInputTax()));// 进项税
+					}
+					if (StringUtils.isNotBlank(dataDto.getOutputTax())) {
+						cProDto.setOutputTax(new BigDecimal(dataDto.getOutputTax()));// 销项税
+					}
+					if (StringUtils.isNotBlank(dataDto.getSalesTax())){
+						cProDto.setSalesTax((new BigDecimal(dataDto.getSalesTax())));// 消费税
+					}
 				}
 			} else {// 其他
 				cProDto.setBusinessType(Constants.PUBLIC_0);// 自定义标记自营0,联营1
@@ -973,7 +983,7 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 		resultDto.setErpList(erpList);//扣率码信息
 		// 季节字典数据缺失
 		List<PcmSeasonDict> seasonList = null;
-		if (dataDto.getType().equals(String.valueOf(Constants.PUBLIC_0))) {
+		if (!dataDto.getType().equals(String.valueOf(Constants.PUBLIC_1))) {
 			map.clear();
 			map.put("seasonCode", dataDto.getSeasonCode());
 			seasonList = seasonDictMapper.selectListByParam(map);
@@ -986,7 +996,7 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 		resultDto.setSeasonList(seasonList);//季节信息;
 		// 色系
 		List<PcmColorDict> colorList = null;
-		if (dataDto.getType().equals(String.valueOf(Constants.PUBLIC_0))) {
+		if (!dataDto.getType().equals(String.valueOf(Constants.PUBLIC_1))) {
 			// 色系字典数据缺失
 			map.clear();
 			map.put("colorName", dataDto.getProColor());

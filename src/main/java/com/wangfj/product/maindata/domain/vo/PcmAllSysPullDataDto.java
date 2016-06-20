@@ -37,6 +37,7 @@ public class PcmAllSysPullDataDto {
 	private String prodCategoryCode;/* 末级分类代码（末级工业分类在中台工业分类字典的编码） */
 	private String finalClassiFicationCode;/* 末级统计分类代码 */
 	private String sizeCode;/* 尺码/规格 */
+	private String sizeName;
 	private String yearToMarket;/* 上市年份(yyyy) */
 	private String seasonCode;/* 季节（01 春；02夏；03秋；04冬；05春夏；06春秋；07秋冬；08四季）传编码（例如01） */
 	private String marketPrice;/* 吊牌价（原价） */
@@ -101,6 +102,15 @@ public class PcmAllSysPullDataDto {
 	private String zsize;//特性尺码
 	
 	
+	
+	public String getSizeName() {
+		return sizeName;
+	}
+
+	public void setSizeName(String sizeName) {
+		this.sizeName = sizeName;
+	}
+
 	public String getSource() {
 		return source;
 	}
