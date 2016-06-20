@@ -134,8 +134,7 @@ public class PcmRedisExceptionService implements IPcmRedisExceptionService {
             }
         }
 
-
-        logger.info("end redisExceptionHandler(),return:" + instanceList.toString());
+        logger.info("end redisExceptionHandler(),return:" + instanceList);
         return instanceList;
     }
 
