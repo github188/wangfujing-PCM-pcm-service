@@ -62,6 +62,7 @@ public class PcmRedisExceptionService implements IPcmRedisExceptionService {
         logger.info("start redisExceptionHandler(),param:");
         boolean redisFlag = redisUtil.setIsOK("Hello", "World");
 //        boolean redisFlag = redisUtil.set("Hello", "World");
+//        redisFlag = false;
         List<PcmInstance> instanceList = null;
         if (redisFlag) {
             // Redis服务器正常
