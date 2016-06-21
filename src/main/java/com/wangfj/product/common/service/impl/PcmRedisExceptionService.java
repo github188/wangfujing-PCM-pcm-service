@@ -48,6 +48,9 @@ public class PcmRedisExceptionService implements IPcmRedisExceptionService {
     @Autowired
     private ThreadPoolTaskExecutor taskExecutor;
 
+    @Autowired
+    private RedisUtil redisUtil;
+
     /**
      * Redis服务器挂了异常处理
      *
@@ -57,8 +60,9 @@ public class PcmRedisExceptionService implements IPcmRedisExceptionService {
     @Transactional
     public List<PcmInstance> redisExceptionHandler() {
         logger.info("start redisExceptionHandler(),param:");
-        RedisUtil redisUtil = new RedisUtil();
         boolean redisFlag = redisUtil.setIsOK("Hello", "World");
+//        boolean redisFlag = redisUtil.set("Hello", "World");
+//        redisFlag = false;
         List<PcmInstance> instanceList = null;
         if (redisFlag) {
             // Redis服务器正常
@@ -94,6 +98,7 @@ public class PcmRedisExceptionService implements IPcmRedisExceptionService {
                         PcmRedis redis = list.get(i);
                         if (!DomainName.getPrice.equals(redis.getRedisffield())) {
                             boolean setResult = redisUtil.setIsOK(redis.getKeyname(), redis.getValue());
+//                            boolean setResult = redisUtil.set(redis.getKeyname(), redis.getValue());
                             if (setResult) {
                                 PcmRedisUDto redisDto = new PcmRedisUDto();
                                 redisDto.setSid(redis.getSid());
@@ -129,8 +134,7 @@ public class PcmRedisExceptionService implements IPcmRedisExceptionService {
             }
         }
 
-
-        logger.info("end redisExceptionHandler(),return:" + instanceList.toString());
+        logger.info("end redisExceptionHandler(),return:" + instanceList);
         return instanceList;
     }
 

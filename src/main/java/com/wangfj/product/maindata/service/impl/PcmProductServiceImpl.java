@@ -1998,21 +1998,37 @@ public class PcmProductServiceImpl implements IPcmProductService {
 	 * @return
 	 */
 	@Override
-	public String updateProByParam(PcmProduct param) {
-		String message = "";
+	public Map<String, Object> updateProByParam(PcmProduct param) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("productSid", param.getProductSid());
-		List<PcmProduct> list = productMapper.selectListByParam(paramMap);
+		String message = "";
+		PcmProduct entity = new PcmProduct();
+		entity.setProductSid(param.getProductSid());
+		List<PcmProduct> list = productMapper.selectListByParam(entity);
+		List<PublishDTO> skuSidList = new ArrayList<PublishDTO>();
 		if (list != null && list.size() != 0) {
+			paramMap.put("spu", list.get(0));
 			PcmProduct pcm = new PcmProduct();
 			pcm.setSid(list.get(0).getSid());
 			pcm.setLongDesc(param.getLongDesc());
 			pcm.setShortDes(param.getShortDes());
 			int a = productMapper.updateByPrimaryKeySelective(pcm);
 			message = a <= 0 ? "修改失败" : "修改成功";
+			PcmProDetail sku = new PcmProDetail();
+			sku.setProductSid(list.get(0).getSid());
+			List<PcmProDetail> skuList = proDetailMapper.selectListByParam(sku);
+			for (PcmProDetail sku1 : skuList) {
+				PublishDTO dto = new PublishDTO();
+				dto.setSid(sku1.getSid());
+				dto.setType(1);
+				skuSidList.add(dto);
+			}
 		} else {
 			message = "修改失败";
 		}
-		return message;
+		if (skuSidList != null && skuSidList.size() > 0) {
+			paramMap.put("skuList", skuSidList);
+		}
+		paramMap.put("message", message);
+		return paramMap;
 	}
 }

@@ -40,7 +40,7 @@
 		)
 	</insert>
     <insert id="insertSelective"
-            parameterType="com.wangfj.product.supplier.domain.entity.PcmShoppeProductSupply">
+            parameterType="com.wangfj.product.supplier.domain.entity.PcmShoppeProductSupply" useGeneratedKeys="true" keyProperty="sid">
         insert into pcm_shoppe_product_supply
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="sid != null">

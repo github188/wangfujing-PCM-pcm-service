@@ -27,7 +27,7 @@
     values (#{sid,jdbcType=BIGINT}, #{supplySid,jdbcType=VARCHAR}, #{erpProductSid,jdbcType=VARCHAR}, 
       #{shopSid,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProductSupply" >
+  <insert id="insertSelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProductSupply" useGeneratedKeys="true" keyProperty="sid">
     insert into pcm_erp_product_supply
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="sid != null" >
