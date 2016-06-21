@@ -243,7 +243,7 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 								cProDto.setShoppeProName(proD.getProDetailName());
 							}
 						}
-						shoppePro = insertShoPro(cProDto, relateValidate, dataDto, dsPro);//创建专柜商品
+						shoppePro = insertShoPro(cProDto, relateValidate, dataDto, dsPro,false);//创建专柜商品
 					}
 				}else{
 					//非联营专柜商品判重
@@ -285,7 +285,7 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 								cProDto.setShoppeProName(proD.getProDetailName());
 							}
 						}
-						shoppePro = insertShoPro(cProDto, relateValidate, dataDto, dsPro);//创建专柜商品
+						shoppePro = insertShoPro(cProDto, relateValidate, dataDto, dsPro,false);//创建专柜商品
 					}
 				}
 			}else if (proDList != null && proDList.size() == 0){//SKU不存在 创建SKU-专柜商品
@@ -305,16 +305,7 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 						cProDto.setShoppeProName(sku.getProDetailName());
 					}
 				}
-				shoppePro = insertShoPro(cProDto, relateValidate, dataDto, dsPro);//创建专柜商品
-				if("SAP".equals(dataDto.getSource())){//电商SAP新加SKU和专柜商品时, 初始化库存,  在SKU基础上加专柜上时不添加库存 ?????
-					if (StringUtils.isNotBlank(dataDto.getInventory())) {
-						saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(), dataDto.getSource(),
-								dataDto.getEntryNumber());
-					} else {
-						saveInventory(shoppePro.getShoppeProSid(), "0", dataDto.getSource(),
-								dataDto.getEntryNumber());
-					}
-				}
+				shoppePro = insertShoPro(cProDto, relateValidate, dataDto, dsPro,true);//创建专柜商品
 			}else {
 				throw new BleException(ErrorCode.SKU_IS_EXIST1.getErrorCode(),
 						ErrorCode.SKU_IS_EXIST1.getMemo());
@@ -337,16 +328,7 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 				}
 				cProDto.setShoppeProName(sku.getProDetailName());
 			}
-			shoppePro = insertShoPro(cProDto, relateValidate, dataDto, dsPro);//创建专柜商品
-			if("SAP".equals(dataDto.getSource())){//电商SAP新加SKU和专柜商品时, 初始化库存,  在SKU基础上加专柜上时不添加库存 ?????
-				if (StringUtils.isNotBlank(dataDto.getInventory())) {
-					saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(), dataDto.getSource(),
-							dataDto.getEntryNumber());
-				} else {
-					saveInventory(shoppePro.getShoppeProSid(), "0", dataDto.getSource(),
-							dataDto.getEntryNumber());
-				}
-			}
+			shoppePro = insertShoPro(cProDto, relateValidate, dataDto, dsPro,true);//创建专柜商品
 		}
 		logger.info("end allSysSaveProduct()");
 		if (shoppePro != null) {
@@ -407,14 +389,16 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 	 * @param dsPro
 	 * @return PcmShoppeProduct
 	 */
-	private PcmShoppeProduct insertShoPro(CreateShoppePro cProDto,PcmRelateInfoDto relateInfo,PcmAllSysPullDataDto dataDto,PcmShoppeProductExtend dsPro){
+	private PcmShoppeProduct insertShoPro(CreateShoppePro cProDto,PcmRelateInfoDto relateInfo,PcmAllSysPullDataDto dataDto,PcmShoppeProductExtend dsPro,Boolean stockFlag){
 		PcmShoppeProduct shoppePro = new PcmShoppeProduct();
 		shoppePro = createService.insertShoppePro(cProDto);
 		List<PcmSupplyInfo> supplyInfoList = relateInfo.getSupplyInfoList();//供应商信息
 		PcmOrganization org = relateInfo.getOrg();//门店信息
 		String source = dataDto.getSource();
-		if(!"SAP".equals(source)){//电商SAP上传没有期初库存
-			// 写入库存
+        //电商SAP上传没有期初库存
+		// 写入库存
+		//电商SAP新加SKU和专柜商品时, 初始化库存,  在SKU基础上加专柜商品时不添加库存 ?????
+		if(!"SAP".equals(source) || stockFlag){
 			if (StringUtils.isNotBlank(dataDto.getInventory())) {
 				saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(),
 						source, dataDto.getEntryNumber());
@@ -545,10 +529,14 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 			cSkuDto.setCategoryGYSid(cateList.get(0).getSid());// 工业分类编码
 			cSkuDto.setFeatures(dataDto.getFeatures());// 特性
 		}
+		if("SAP".equals(dataDto.getSource())){//SAP上传商品
+			cSkuDto.setProColorAlias(dataDto.getColorCode());// 色码名称
+		}else{
+			cSkuDto.setProColorAlias(dataDto.getColorName());// 色码名称
+		}
 		cSkuDto.setBrandGroupCode(brandList.get(0).getBrandSid());// 集团品牌编码
 		cSkuDto.setBrandShopCode(brand.getBrandSid());// 门店品牌编码
 		cSkuDto.setFlag(Integer.parseInt(dataDto.getType()));// 超市百货标记_0百货_1超市
-		cSkuDto.setProColorAlias(dataDto.getColorName());// 色码名称
 		cSkuDto.setProColorName(dataDto.getColorCode());// 色码
 		if (colorList != null) {
 			cSkuDto.setProColorSid(colorList.get(0).getSid());// 色系表SID
@@ -932,7 +920,7 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 		resultDto.setTjcateList(tjcateList);//统计分类信息
 		// 工业分类字典校验
 		map.clear();
-		map.put("categorySid", dataDto.getProdCategoryCode());
+		map.put("categoryCode", dataDto.getProdCategoryCode());
 		map.put("categoryType", Constants.INDUSTRYTCATEGORY);// 分类类型为 0 工业分类
 		map.put("isLeaf", Constants.Y);// 是否为叶子节点
 		map.put("status", Constants.Y);// 是否启用
@@ -944,7 +932,7 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 		resultDto.setCateList(cateList);//工业分类信息
 		// 管理分类字典校验
 		map.clear();
-		map.put("categorySid", dataDto.getManageCateGory());
+		map.put("categoryCode", dataDto.getManageCateGory());
 		map.put("categoryType", Constants.MANAGECATEGORY);// 分类类型为 1管理分类
 		map.put("isLeaf", Constants.Y);// 是否为叶子节点
 		map.put("status", Constants.Y);// 是否启用
@@ -999,7 +987,7 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 		if (!dataDto.getType().equals(String.valueOf(Constants.PUBLIC_1))) {
 			// 色系字典数据缺失
 			map.clear();
-			map.put("colorName", dataDto.getProColor());
+			map.put("sid", dataDto.getProColor());
 			colorList = colorDictMapper.selectListByParam(map);
 			if (colorList == null || colorList.size() != 1) {
 				throw new BleException(ErrorCode.COLOR_NULL.getErrorCode(),
