@@ -355,7 +355,7 @@ public class PcmShoppeProductSupplyServiceImpl implements IPcmShoppeProductSuppl
      */
     @Override
     public List<PcmShoppeProSupplyUploadDto> pushErpProductSupply(Map<String, Object> para) {
-        logger.debug("start pushErpProductSupply(),param:");
+        logger.debug("start pushErpProductSupply(),param:" + para.toString());
         Map<String, Object> paramMap = new HashMap<String, Object>();
         String type = para.get("type") + "";
         if ("0".equals(type)) {

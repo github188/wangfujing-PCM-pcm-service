@@ -185,6 +185,6 @@ public interface IPcmProductService {
 
 	List<PcmProduct> getListProByParam(Map<String, Object> param);
 
-	String updateProByParam(PcmProduct param);
+	Map<String, Object> updateProByParam(PcmProduct param);
 
 }

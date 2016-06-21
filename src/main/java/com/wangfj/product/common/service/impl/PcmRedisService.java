@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sun.tools.internal.jxc.apt.Const;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,21 +45,23 @@ public class PcmRedisService implements IPcmRedisService {
 	public void savePcmRedis(PcmRedis entity) {
 		logger.info("start savePcmRedis(),param:" + entity.toString());
 		final PcmRedis dto = entity;
+        dto.setStatus(Constants.PUBLIC_0);
 		taskExecutor.execute(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					String redislLogUrl = PropertyUtil.getSystemUrl("pcm-redisLog");
-					String response = HttpUtil.doPost(redislLogUrl, JsonUtil.getJSONString(dto));
-					logger.info("respons savePcmRedis:" + response);
-				} catch (Exception e) {
-					logger.error("respons savePcmRedis:" + e.getMessage());
-				}
-			}
-		});
+            @Override
+            public void run() {
+                try {
+                    String redislLogUrl = PropertyUtil.getSystemUrl("pcm-redisLog");
+                    String response = HttpUtil.doPost(redislLogUrl, JsonUtil.getJSONString(dto));
+                    logger.info("respons savePcmRedis:" + response);
+                } catch (Exception e) {
+                    logger.error("respons savePcmRedis:" + e.getMessage());
+                }
+            }
+        });
 	}
 
 	@Override
+    @Transactional
 	public int insertPcmRedis(PcmRedis entity) {
 		logger.info("start savePcmRedis(),param:" + entity.toString());
 		entity.setCreatetime(new Date());
