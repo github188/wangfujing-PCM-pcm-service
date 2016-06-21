@@ -249,8 +249,8 @@ public class PcmContractLogServiceImpl implements IPcmContractLogService {
 				}
 			} else {
 				logger.info("要约信息上传失败-供应商不存在:" + JsonUtil.getJSONString(contractLog));
-				throw new BleException(ErrorCode.SUPPLYINFO_NULL.getErrorCode(),
-						ErrorCode.SUPPLYINFO_NULL.getMemo());
+				throw new BleException(ErrorCode.CONTRACT_SUPPLYINFO_NULL.getErrorCode(),
+						ErrorCode.CONTRACT_SUPPLYINFO_NULL.getMemo());
 			}
 			// 验证管理分类是否存在
 			if (StringUtils.isNotBlank(contractLogDto.getCol1())) {// 管理分类不为空的时候验证有效性
@@ -262,8 +262,8 @@ public class PcmContractLogServiceImpl implements IPcmContractLogService {
 				List<PcmCategory> managecateList = categoryMapper.selectListByParam(parasMap);
 				if (managecateList == null || managecateList.size() != 1) {
 					logger.info("管理分类不存在");
-					throw new BleException(ErrorCode.CATEGORY_GL_NULL.getErrorCode(),
-							ErrorCode.CATEGORY_GL_NULL.getMemo());
+					throw new BleException(ErrorCode.CONTRACT_CATEGORY_GL_NULL.getErrorCode(),
+							ErrorCode.CONTRACT_CATEGORY_GL_NULL.getMemo());
 				}
 			}
 			if (contractLogDto.getFlag().equals(0)) {
