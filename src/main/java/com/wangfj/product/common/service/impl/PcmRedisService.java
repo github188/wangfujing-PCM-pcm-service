@@ -1,18 +1,5 @@
 package com.wangfj.product.common.service.impl;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.sun.tools.internal.jxc.apt.Const;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.wangfj.core.framework.base.page.Page;
 import com.wangfj.core.utils.JsonUtil;
 import com.wangfj.core.utils.PropertyUtil;
@@ -23,6 +10,17 @@ import com.wangfj.product.common.persistence.PcmRedisMapper;
 import com.wangfj.product.common.service.intf.IPcmRedisService;
 import com.wangfj.util.Constants;
 import com.wangfj.util.HttpUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class PcmRedisService implements IPcmRedisService {

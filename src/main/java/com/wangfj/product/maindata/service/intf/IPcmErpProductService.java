@@ -31,7 +31,7 @@ public interface IPcmErpProductService {
 	 * @param entity
 	 * @return List<PcmSearchErpProductDto>
 	 */
-	public Integer getCountByStoreCodePage(PcmErpProduct entity);
+	public Integer getCountByStoreCodePage(Map<String, Object> entity);
 
 	/**
 	 * 搜索ERP信息下发
