@@ -1992,7 +1992,7 @@
 				open="(" separator=")OR(" close=")">
 				<if test="shopCode.shopCode != null">
 					clog.store_code = #{shopCode.shopCode,jdbcType=VARCHAR}
-				</if>
+				</if>			
 				<if test="shopCode.managerList != null">
 				    AND clog.col1 IN
 				    <foreach collection="shopCode.managerList" item="manager" index="index"
@@ -2001,6 +2001,7 @@
 					</foreach>
 				</if>
 			</foreach>
+			    
 		</if>
 	    </where>
 		) clog1

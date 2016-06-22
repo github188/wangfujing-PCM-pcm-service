@@ -97,6 +97,7 @@ import com.wangfj.util.Constants;
  * @Create In 2016年6月14日
  */
 @Service
+@Transactional
 public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 
 	private static final Logger logger = LoggerFactory.getLogger(ValidProductServiceImpl.class);
