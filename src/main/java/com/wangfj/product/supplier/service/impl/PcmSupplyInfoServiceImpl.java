@@ -466,9 +466,8 @@ public class PcmSupplyInfoServiceImpl implements IPcmSupplyInfoService {
         paramMap.put("limit", page.getLimit());
         List<PcmSupplyInfo> supplyInfoList = supplyInfoMapper.selectPageByPara(paramMap);
 
+        List<PcmSupplyInfoDto> supplyInfoDtoList = new ArrayList<PcmSupplyInfoDto>();
         if (supplyInfoList != null && !supplyInfoList.isEmpty()) {
-
-            List<PcmSupplyInfoDto> supplyInfoDtoList = new ArrayList<PcmSupplyInfoDto>();
             for (int i = 0; i < supplyInfoList.size(); i++) {
                 PcmSupplyInfoDto supplyInfoDto = new PcmSupplyInfoDto();
                 BeanUtils.copyProperties(supplyInfoDto, supplyInfoList.get(i));
@@ -481,12 +480,10 @@ public class PcmSupplyInfoServiceImpl implements IPcmSupplyInfoService {
 
                 supplyInfoDtoList.add(supplyInfoDto);
             }
-
-            page.setList(supplyInfoDtoList);
-
         }
+        page.setList(supplyInfoDtoList);
 
-        logger.info("end findPageSullyInfoFuzzy(),return:" + supplyInfoList.toString());
+        logger.info("end findPageSullyInfoFuzzy(),return:" + supplyInfoDtoList);
         return page;
     }
 
