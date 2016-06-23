@@ -2560,7 +2560,7 @@ public class CategoryServiceImpl implements ICategoryService {
 			}
 			PcmRedis redis = new PcmRedis();
 			redis.setRedisffield(DomainName.selectCateGory);
-			redis.setKeyname(DomainName.selectCateGory+cate.getSid());
+			redis.setKeyname(DomainName.selectCateGory+key);
 			redis.setValue(JsonUtil.getJSONString(list));
 //			redis.setStatus(0);
 			redisService.savePcmRedis(redis);
