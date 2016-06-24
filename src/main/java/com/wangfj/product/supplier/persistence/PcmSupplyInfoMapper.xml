@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wangfj.product.supplier.persistence.PcmSupplyInfoMapper">
+    <resultMap type="com.wangfj.product.supplier.domain.vo.PcmSupInfoForSupDto" id="supInfoForSup">
+        <id column="storeCode" property="storeCode" jdbcType="VARCHAR"/>
+        <result column="storeName" property="storeName" jdbcType="VARCHAR"/>
+        <collection property="supplyList" javaType="java.util.List" ofType="java.util.HashMap">
+           <id column="supplyCode" property="supplyCode" jdbcType="VARCHAR"/>
+           <result column="supplyName" property="supplyName" jdbcType="VARCHAR"/>
+           <result column="operaterMode" property="operaterMode" jdbcType="VARCHAR"/>
+           <result column="apartOrder" property="apartOrder" jdbcType="VARCHAR"/>
+           <result column="supplyStatus" property="supplyStatus" jdbcType="VARCHAR"/>
+           <result column="licenseNo" property="licenseNo" jdbcType="VARCHAR"/>
+           <result column="taxNo" property="taxNo" jdbcType="VARCHAR"/>
+           <result column="apartOrder" property="apartOrder" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
 	<resultMap id="BaseResultMap"
 		type="com.wangfj.product.supplier.domain.entity.PcmSupplyInfo">
 		<id column="sid" property="sid" jdbcType="BIGINT" />
@@ -2019,6 +2033,28 @@
 	sup.biz_certificate_no AS licenseNo,
 	sup.tax_numbe AS taxNo
 	FROM pcm_supply_info sup
+	<where>
+		<if test="licenseNo != null">
+			AND sup.biz_certificate_no = #{licenseNo,jdbcType=VARCHAR}
+		</if>
+		<if test="taxNo != null">
+			AND sup.tax_numbe = #{taxNo,jdbcType=VARCHAR}
+		</if>
+	</where>
+    </select>
+<!--     根据营业执照号及税号获取供应商信息 返回结果修改 -->
+    <select id="getSupInfoFromPcmByLicenseNoAndTaxNoT" parameterType="java.util.Map"
+	resultMap="supInfoForSup">
+	SELECT sup.supply_code AS supplyCode,
+	sup.supply_name AS supplyName,
+	sup.shop_sid AS storeCode,
+	org.organization_name AS storeName,
+	sup.business_pattern AS operaterMode,
+	sup.apart_order AS apartOrder,
+	sup.`status` AS supplyStatus,
+	sup.biz_certificate_no AS licenseNo,
+	sup.tax_numbe AS taxNo
+	FROM pcm_supply_info sup inner join pcm_organization org on org.organization_code = sup.shop_sid
 	<where>
 		<if test="licenseNo != null">
 			AND sup.biz_certificate_no = #{licenseNo,jdbcType=VARCHAR}

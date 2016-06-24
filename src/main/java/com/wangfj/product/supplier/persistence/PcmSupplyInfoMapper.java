@@ -7,6 +7,7 @@ import java.util.Map;
 import com.wangfj.core.framework.base.persistence.BaseMapper;
 import com.wangfj.product.supplier.domain.entity.PcmSupplyInfo;
 import com.wangfj.product.supplier.domain.vo.GetSupCodeResultDto;
+import com.wangfj.product.supplier.domain.vo.PcmSupInfoForSupDto;
 import com.wangfj.product.supplier.domain.vo.PcmSupInfoForSupResultDto;
 import com.wangfj.product.supplier.domain.vo.PcmSupplyDto;
 import com.wangfj.product.supplier.domain.vo.PcmSupplyInfoPartDto;
@@ -174,4 +175,12 @@ public interface PcmSupplyInfoMapper extends BaseMapper<PcmSupplyInfo> {
 	  * @return List<PcmSupInfoForSupResultDto>
 	  */
 	 List<PcmSupInfoForSupResultDto> getSupInfoFromPcmByLicenseNoAndTaxNo(Map<String,String> para);
+	 /**
+	  * 根据营业执照号及税号获取供应商信息返回结果修改
+	  * @Methods Name getSupInfoFromPcmByLicenseNoAndTaxNoT
+	  * @Create In 2016年6月24日 By wangc
+	  * @param para
+	  * @return List<PcmSupInfoForSupResultDto>
+	  */
+	 List<PcmSupInfoForSupDto> getSupInfoFromPcmByLicenseNoAndTaxNoT(Map<String,String> para);
 }

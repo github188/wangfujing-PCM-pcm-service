@@ -8,6 +8,7 @@ import com.wangfj.core.framework.base.page.Page;
 import com.wangfj.product.supplier.domain.entity.PcmSupplyInfo;
 import com.wangfj.product.supplier.domain.vo.GetSupCodeResultDto;
 import com.wangfj.product.supplier.domain.vo.PcmPushSupplyInfoDto;
+import com.wangfj.product.supplier.domain.vo.PcmSupInfoForSupDto;
 import com.wangfj.product.supplier.domain.vo.PcmSupInfoForSupResultDto;
 import com.wangfj.product.supplier.domain.vo.PcmSupplyInfoDto;
 import com.wangfj.product.supplier.domain.vo.PcmSupplyInfoPartDto;
@@ -210,4 +211,12 @@ public interface IPcmSupplyInfoService {
 	 * @return List<PcmSupInfoForSupResultDto>
 	 */
 	List<PcmSupInfoForSupResultDto> getSupInfoByLicenseNoAndTaxNo(Map<String,String> para);
+	/**
+	 * 根据营业执照号及税号获取供应商信息返回结果修改2016-06-24
+	 * @Methods Name getSupInfoByLicenseNoAndTaxNo2
+	 * @Create In 2016-4-13 By wangc
+	 * @param para
+	 * @return List<PcmSupInfoForSupResultDto>
+	 */
+	List<PcmSupInfoForSupDto> getSupInfoByLicenseNoAndTaxNoT(Map<String,String> para);
 }
