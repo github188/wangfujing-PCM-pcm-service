@@ -2000,6 +2000,9 @@
 					#{manager.manager,jdbcType=VARCHAR}
 					</foreach>
 				</if>
+				<if test="shopCode.manageType != null">
+				    AND clog.manage_type = #{shopCode.manageType,jdbcType=VARCHAR}
+				</if>
 			</foreach>
 		</if>
 	    </where>
