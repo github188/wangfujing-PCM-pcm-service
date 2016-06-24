@@ -3,7 +3,7 @@
 <mapper namespace="com.wangfj.product.maindata.persistence.PcmShoppeProductExtendMapper" >
   <resultMap id="BaseResultMap" type="com.wangfj.product.maindata.domain.entity.PcmShoppeProductExtend" >
     <id column="sid" property="sid" jdbcType="BIGINT" />
-    <result column="shoppe_pro_sid" property="shoppeProSid" jdbcType="VARCHAR" />
+    <result column="shoppe_pro_sid" property="shoppeProSid" jdbcType="BIGINT" />
     <result column="is_card" property="isCard" jdbcType="VARCHAR" />
     <result column="base_unit_code" property="baseUnitCode" jdbcType="VARCHAR" />
     <result column="origin_country" property="originCountry" jdbcType="VARCHAR" />
@@ -51,7 +51,7 @@
       field4, field5, field6, 
       field7, field8, field9, 
       field10)
-    values (#{sid,jdbcType=BIGINT}, #{shoppeProSid,jdbcType=VARCHAR}, #{isCard,jdbcType=VARCHAR}, 
+    values (#{sid,jdbcType=BIGINT}, #{shoppeProSid,jdbcType=BIGINT}, #{isCard,jdbcType=VARCHAR}, 
       #{baseUnitCode,jdbcType=VARCHAR}, #{originCountry,jdbcType=VARCHAR}, #{isOriginPackage,jdbcType=VARCHAR}, 
       #{xxhcFlag,jdbcType=VARCHAR}, #{zcolor,jdbcType=VARCHAR}, #{zsize,jdbcType=VARCHAR}, 
       #{field1,jdbcType=VARCHAR}, #{field2,jdbcType=VARCHAR}, #{field3,jdbcType=VARCHAR}, 
@@ -131,7 +131,7 @@
         #{sid,jdbcType=BIGINT},
       </if>
       <if test="shoppeProSid != null" >
-        #{shoppeProSid,jdbcType=VARCHAR},
+        #{shoppeProSid,jdbcType=BIGINT},
       </if>
       <if test="isCard != null" >
         #{isCard,jdbcType=VARCHAR},
@@ -196,7 +196,7 @@
     update pcm_shoppe_product_extend
     <set >
       <if test="shoppeProSid != null" >
-        shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR},
+        shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT},
       </if>
       <if test="isCard != null" >
         is_card = #{isCard,jdbcType=VARCHAR},
@@ -254,7 +254,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wangfj.product.maindata.domain.entity.PcmShoppeProductExtend" >
     update pcm_shoppe_product_extend
-    set shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR},
+    set shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT},
       is_card = #{isCard,jdbcType=VARCHAR},
       base_unit_code = #{baseUnitCode,jdbcType=VARCHAR},
       origin_country = #{originCountry,jdbcType=VARCHAR},
