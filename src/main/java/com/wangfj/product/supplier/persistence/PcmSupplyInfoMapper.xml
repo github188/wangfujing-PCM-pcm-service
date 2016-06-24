@@ -2053,7 +2053,7 @@
 	sup.shop_sid AS storeCode,
 	org.organization_name AS storeName,
 	sup.business_pattern AS operaterMode,
-	sup.apart_order AS apartOrder,
+	IFNULL(sup.apart_order,"") AS apartOrder,
 	sup.`status` AS supplyStatus,
 	sup.biz_certificate_no AS licenseNo,
 	sup.tax_numbe AS taxNo
