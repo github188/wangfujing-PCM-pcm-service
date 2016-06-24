@@ -40,8 +40,17 @@ public class PcmProSearchDto {
 	private String managerCategoryCode;// 管理分类编码
 	private String managerCategoryName;// 管理分类名称
 	private String field4;// 物料号 可空
+	private String xxhcflag;// 先销后采
 	List<PcmProChannelSearchDto> channel = new ArrayList<PcmProChannelSearchDto>();
 	List<PcmProSupplySerachDto> supplier = new ArrayList<PcmProSupplySerachDto>();
+
+	public String getXxhcflag() {
+		return xxhcflag;
+	}
+
+	public void setXxhcflag(String xxhcflag) {
+		this.xxhcflag = xxhcflag;
+	}
 
 	public String getField4() {
 		return field4;

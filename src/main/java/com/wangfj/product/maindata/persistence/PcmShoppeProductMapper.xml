@@ -4443,7 +4443,8 @@
 			mdbrand.brand_sid AS storeBrandCode,
 			mdbrand.brand_name AS storeBrandName,
 			manageCate.`name` AS managerCategoryName,
-			pro.field4 AS field4
+			pro.field4 AS field4,
+			exte.xxhc_flag AS xxhcFlag
 		FROM
 			pcm_shoppe_product AS pro
 		JOIN pcm_pro_detail AS sku ON sku.sid = pro.product_detail_sid
@@ -4461,6 +4462,7 @@
 		JOIN pcm_channel AS channel ON channel.channel_code = sale.channel_sid
 		JOIN pcm_brand AS brand ON brand.sid = spu.brand_root_sid
 		JOIN pcm_brand AS mdbrand ON mdbrand.sid = pro.brand_sid
+		JOIN pcm_shoppe_product_extend AS exte ON exte.shoppe_pro_sid = pro.sid
 		LEFT JOIN pcm_category AS manageCate ON pro.category_sid = manageCate.category_code
 		<where>
 			<if test="sidList != null">
