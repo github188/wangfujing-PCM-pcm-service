@@ -1328,4 +1328,16 @@ public interface Constants {
      **/
     public static final String FJERP = "FJERP";
     public static final String SAPERP = "SAPERP";
+    /**
+     * 供应商系统
+     */
+    public static final String SUPPLIERCENTER = "SUPPLIERCENTER";
+    /**
+     * 库存自库类型
+     */
+    public static final String STOCKTYPE_2 = "2";
+    /**
+     * 先销后采
+     */
+    public static final String XXHCFLAG_0 = "0";
 }

@@ -5795,5 +5795,19 @@
         WHERE
             psp.shoppe_pro_sid = #{shoppeProSid}
     </select>
+    
+    <select id="selectParamByShoppeProCode" parameterType="String"
+		resultType="java.util.Map">
+		SELECT
+			psp.stock_mode AS stockType,
+			pspe.xxhc_flag AS xxhcFlag,
+			psi.shop_sid AS shopCode,
+			psi.business_pattern AS businessMode
+		FROM
+			pcm_shoppe_product psp
+		JOIN pcm_shoppe_product_extend pspe ON psp.sid = pspe.shoppe_pro_sid
+		AND psp.shoppe_pro_sid = #{shoppeProCode}
+		JOIN pcm_supply_info psi ON psp.supply_sid = psi.sid
+	</select>
 
 </mapper>

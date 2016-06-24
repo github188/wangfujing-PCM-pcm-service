@@ -27,6 +27,7 @@ import com.wangfj.product.organization.persistence.PcmOrganizationMapper;
 import com.wangfj.product.supplier.domain.entity.PcmSupplyInfo;
 import com.wangfj.product.supplier.domain.vo.GetSupCodeResultDto;
 import com.wangfj.product.supplier.domain.vo.PcmPushSupplyInfoDto;
+import com.wangfj.product.supplier.domain.vo.PcmSupInfoForSupDto;
 import com.wangfj.product.supplier.domain.vo.PcmSupInfoForSupResultDto;
 import com.wangfj.product.supplier.domain.vo.PcmSupplyInfoDto;
 import com.wangfj.product.supplier.domain.vo.PcmSupplyInfoPartDto;
@@ -466,9 +467,8 @@ public class PcmSupplyInfoServiceImpl implements IPcmSupplyInfoService {
         paramMap.put("limit", page.getLimit());
         List<PcmSupplyInfo> supplyInfoList = supplyInfoMapper.selectPageByPara(paramMap);
 
+        List<PcmSupplyInfoDto> supplyInfoDtoList = new ArrayList<PcmSupplyInfoDto>();
         if (supplyInfoList != null && !supplyInfoList.isEmpty()) {
-
-            List<PcmSupplyInfoDto> supplyInfoDtoList = new ArrayList<PcmSupplyInfoDto>();
             for (int i = 0; i < supplyInfoList.size(); i++) {
                 PcmSupplyInfoDto supplyInfoDto = new PcmSupplyInfoDto();
                 BeanUtils.copyProperties(supplyInfoDto, supplyInfoList.get(i));
@@ -481,12 +481,10 @@ public class PcmSupplyInfoServiceImpl implements IPcmSupplyInfoService {
 
                 supplyInfoDtoList.add(supplyInfoDto);
             }
-
-            page.setList(supplyInfoDtoList);
-
         }
+        page.setList(supplyInfoDtoList);
 
-        logger.info("end findPageSullyInfoFuzzy(),return:" + supplyInfoList.toString());
+        logger.info("end findPageSullyInfoFuzzy(),return:" + supplyInfoDtoList);
         return page;
     }
 
@@ -734,6 +732,15 @@ public class PcmSupplyInfoServiceImpl implements IPcmSupplyInfoService {
         List<PcmSupInfoForSupResultDto> resultList = supplyInfoMapper.getSupInfoFromPcmByLicenseNoAndTaxNo(para);
         return resultList;
     }
+
+	/**
+	 * 根据营业执照及税号获取供应商信息  返回结构修改
+	 */
+	@Override
+	public List<PcmSupInfoForSupDto> getSupInfoByLicenseNoAndTaxNoT(Map<String, String> para) {
+		List<PcmSupInfoForSupDto> resultList = supplyInfoMapper.getSupInfoFromPcmByLicenseNoAndTaxNoT(para);
+        return resultList;
+	}
 
 
 }
