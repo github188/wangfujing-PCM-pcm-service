@@ -191,7 +191,12 @@ public class CategoryServiceImpl implements ICategoryService {
 				PcmCategory cateType = new PcmCategory();
 				// 根据当前传入的parent_sid 判断它的上级状态是不是可用
 				if (cateDto.getCategoryType() == 1) {
-					cateType = cateMapper.selectByGLCategorySid(cateDto);
+					PcmCategory glcateType = cateMapper.selectByCategorySid(cateDto.getParentSid());
+					if(glcateType != null && (Constants.PUBLIC_0+"").equals(glcateType.getCategoryCode())){
+						cateType = glcateType;
+					} else {
+						cateType = cateMapper.selectByGLCategorySid(cateDto);
+					}
 				} else {
 					cateType = cateMapper.selectByCategorySid(cateDto.getParentSid());
 				}
@@ -368,7 +373,12 @@ public class CategoryServiceImpl implements ICategoryService {
 					p.setShopSid(pcmcate.getShopSid());
 					PcmCategory uppcm = new PcmCategory();
 					if (cateDto.getCategoryType() == 1) {
-						uppcm = cateMapper.selectByGLCategorySid(cateDto);
+						PcmCategory glcateType = cateMapper.selectByCategorySid(cateDto.getParentSid());
+						if(glcateType != null && (Constants.PUBLIC_0+"").equals(glcateType.getCategoryCode())){
+							uppcm = glcateType;
+						} else {
+							uppcm = cateMapper.selectByGLCategorySid(cateDto);
+						}
 					} else {
 						uppcm = cateMapper.selectByCategorySid(cateDto.getParentSid());
 					}
@@ -835,7 +845,12 @@ public class CategoryServiceImpl implements ICategoryService {
 				PcmCategory cateType = new PcmCategory();
 				// 根据当前传入的parent_sid 判断它的上级状态是不是可用
 				if (cateDto.getCategoryType() == 1) {
-					cateType = cateMapper.selectByGLCategorySid(cateDto);
+					PcmCategory glcateType = cateMapper.selectByCategorySid(cateDto.getParentSid());
+					if(glcateType != null && (Constants.PUBLIC_0+"").equals(glcateType.getCategoryCode())){
+						cateType = glcateType;
+					} else {
+						cateType = cateMapper.selectByGLCategorySid(cateDto);
+					}
 				} else {
 					cateType = cateMapper.selectByCategorySid(cateDto.getParentSid());
 				}
@@ -999,7 +1014,12 @@ public class CategoryServiceImpl implements ICategoryService {
 					p.setShopSid(pcmcate.getShopSid());
 					PcmCategory uppcm = new PcmCategory();
 					if (cateDto.getCategoryType() == 1) {
-						uppcm = cateMapper.selectByGLCategorySid(cateDto);
+						PcmCategory glcateType = cateMapper.selectByCategorySid(cateDto.getParentSid());
+						if(glcateType != null && (Constants.PUBLIC_0+"").equals(glcateType.getCategoryCode())){
+							uppcm = glcateType;
+						} else {
+							uppcm = cateMapper.selectByGLCategorySid(cateDto);
+						}
 					} else {
 						uppcm = cateMapper.selectByCategorySid(cateDto.getParentSid());
 					}
@@ -1316,7 +1336,12 @@ public class CategoryServiceImpl implements ICategoryService {
 				PcmCategory cateType = new PcmCategory();
 				// 根据当前传入的parent_sid 判断它的上级状态是不是可用
 				if (cateDto.getCategoryType() == 1) {
-					cateType = cateMapper.selectByGLCategorySid(cateDto);
+					PcmCategory glcateType = cateMapper.selectByCategorySid(cateDto.getParentSid());
+					if(glcateType != null && (Constants.PUBLIC_0+"").equals(glcateType.getCategoryCode())){
+						cateType = glcateType;
+					} else {
+						cateType = cateMapper.selectByGLCategorySid(cateDto);
+					}
 				} else {
 					cateType = cateMapper.selectByCategorySid(cateDto.getParentSid());
 				}
@@ -1480,7 +1505,12 @@ public class CategoryServiceImpl implements ICategoryService {
 					p.setShopSid(pcmcate.getShopSid());
 					PcmCategory uppcm = new PcmCategory();
 					if (cateDto.getCategoryType() == 1) {
-						uppcm = cateMapper.selectByGLCategorySid(cateDto);
+						PcmCategory glcateType = cateMapper.selectByCategorySid(cateDto.getParentSid());
+						if(glcateType != null && (Constants.PUBLIC_0+"").equals(glcateType.getCategoryCode())){
+							uppcm = glcateType;
+						} else {
+							uppcm = cateMapper.selectByGLCategorySid(cateDto);
+						}
 					} else {
 						uppcm = cateMapper.selectByCategorySid(cateDto.getParentSid());
 					}
