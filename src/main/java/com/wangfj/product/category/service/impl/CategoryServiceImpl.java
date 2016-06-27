@@ -1849,8 +1849,8 @@ public class CategoryServiceImpl implements ICategoryService {
 		int i = this.cateMapper.insertSelective(record);
 		if (i == 1) {
 			record.setRootSid(record.getSid());
-			record.setCategorySid(record.getSid().toString());
-			record.setCategoryCode(record.getSid().toString());
+			record.setCategorySid(record.getCategoryCode());
+//			record.setCategoryCode(record.getSid().toString());
 			cateMapper.updateByPrimaryKeySelective(record);
 			return record;
 		}
