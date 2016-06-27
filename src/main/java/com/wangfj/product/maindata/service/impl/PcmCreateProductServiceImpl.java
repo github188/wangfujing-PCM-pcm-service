@@ -491,15 +491,16 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 					ErrorCode.ADD_PRODUCT_SHOPPRO_ERROR.getMemo());
 		}
 		// 插入专柜商品编码 //8位流水
-		if("2".equals(String.valueOf(createShoppePro.getFlag()))){//如果传入电商商品，则专柜商品编码为原系统商品编码，shoppe_pro_sid = field4
-			if(StringUtils.isNotBlank(createShoppePro.getField4())){
+		if ("2".equals(String.valueOf(createShoppePro.getFlag()))) {// 如果传入电商商品，则专柜商品编码为原系统商品编码，shoppe_pro_sid
+																	// = field4
+			if (StringUtils.isNotBlank(createShoppePro.getField4())) {
 				psp.setShoppeProSid(createShoppePro.getField4());
-			}else{
-				String sapsidStr =Constants.SAPPRO_CODE + String.format("%011d", psp.getSid());
+			} else {
+				String sapsidStr = Constants.SAPPRO_CODE + String.format("%011d", psp.getSid());
 				psp.setShoppeProSid(sapsidStr);
 				psp.setField4(sapsidStr);// 电商商品 field4与专柜商品编码要一致
 			}
-		}else{
+		} else {
 			Long code = Constants.PRO_CODE + psp.getSid();
 			psp.setShoppeProSid(String.valueOf(code));
 		}
@@ -523,7 +524,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		// 添加价格
 		PcmPrice pp = new PcmPrice();
 		pp.setShoppeProSid(psp.getShoppeProSid());// 专柜商品编码
-		pp.setAttribute2(createShoppePro.getShopCode());//门店编码
+		pp.setAttribute2(createShoppePro.getShopCode());// 门店编码
 		// pp.setProductSid(Long.valueOf(spuCode));// SPU编码
 		// 价格开始,结束时间
 		pp.setPromotionBeginTime(DateUtil.formatDate(DateUtil.formatToStr(new Date(), "yyyyMMdd"),
@@ -532,26 +533,26 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		pp.setPriceType(Constants.PRICE_TYPE_1);// 永久变价
 		pp.setAttribute1(Constants.DEFAULT_CHANGE_CODE);// 变价号
 		pp.setChannelSid(Constants.DEFAULT_CHANNEL_SID); // 渠道
-		BigDecimal salePrice = createShoppePro.getSalePrice();//售价
-		//createShoppePro.getSalePrice().compareTo(BigDecimal.ZERO) == 0
-		if(salePrice == null || salePrice.compareTo(BigDecimal.ZERO) == 0){
+		BigDecimal salePrice = createShoppePro.getSalePrice();// 售价
+		// createShoppePro.getSalePrice().compareTo(BigDecimal.ZERO) == 0
+		if (salePrice == null || salePrice.compareTo(BigDecimal.ZERO) == 0) {
 			pp.setCurrentPrice(createShoppePro.getOriginalPrice());// 现价
 			pp.setPromotionPrice(createShoppePro.getOriginalPrice());// 促销价格=原价
 			pp.setOriginalPrice(createShoppePro.getOriginalPrice());// 原价
-		}else{
+		} else {
 			pp.setCurrentPrice(createShoppePro.getSalePrice());// 现价
 			pp.setPromotionPrice(createShoppePro.getSalePrice());// 促销价格
 			pp.setOriginalPrice(createShoppePro.getOriginalPrice());// 原价
 		}
-		/*if (createShoppePro.getSalePrice() != null) {
-			pp.setCurrentPrice(createShoppePro.getSalePrice());// 现价
-			pp.setPromotionPrice(createShoppePro.getSalePrice());// 促销价格
-			pp.setOriginalPrice(createShoppePro.getOriginalPrice());// 原价
-		} else {
-			pp.setCurrentPrice(createShoppePro.getOriginalPrice());// 现价
-			pp.setPromotionPrice(createShoppePro.getOriginalPrice());// 促销价格
-			pp.setOriginalPrice(createShoppePro.getOriginalPrice());// 原价
-		}*/
+		/*
+		 * if (createShoppePro.getSalePrice() != null) {
+		 * pp.setCurrentPrice(createShoppePro.getSalePrice());// 现价
+		 * pp.setPromotionPrice(createShoppePro.getSalePrice());// 促销价格
+		 * pp.setOriginalPrice(createShoppePro.getOriginalPrice());// 原价 } else
+		 * { pp.setCurrentPrice(createShoppePro.getOriginalPrice());// 现价
+		 * pp.setPromotionPrice(createShoppePro.getOriginalPrice());// 促销价格
+		 * pp.setOriginalPrice(createShoppePro.getOriginalPrice());// 原价 }
+		 */
 		pp.setOffValue(new BigDecimal(1));// 折扣值，后台程序计算
 		pp.setUnit("RMB");// 货币单位
 		i = priceService.initProductPriceInfo(pp);
@@ -658,7 +659,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 					ErrorCode.PRO_INPUT_ERROR.getMemo());
 		}
 		if (dsPro != null) {
-			dsPro.setShoppeProSid(String.valueOf(spSid));
+			dsPro.setShoppeProSid(spSid);
 			Date date = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 			String newtime = sdf.format(date);
@@ -889,7 +890,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		pspe.setXxhcFlag(extendDto.getXxhcFlag());// 先销后采标签
 		pspe.setIsCard(extendDto.getIsCard());// 是否可贺卡
 		pspe.setOriginCountry(extendDto.getOriginCountry());// 原产国
-		pspe.setShoppeProSid(result.get(0).getSid().toString());// 专柜商品sid
+		pspe.setShoppeProSid(result.get(0).getSid());// 专柜商品sid
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		String newtime = sdf.format(date);

@@ -134,6 +134,7 @@
 		<result column="storeBrandName" property="storeBrandName" />
 		<result column="managerCategoryCode" property="managerCategoryCode" />
 		<result column="managerCategoryName" property="managerCategoryName" />
+		<result column="xxhcFlag" property="xxhcFlag"/>
 		<collection property="channel"
 			ofType="com.wangfj.product.maindata.domain.vo.PcmProChannelSearchDto">
 			<id column="channelSid" property="channelSid" />
