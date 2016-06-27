@@ -372,4 +372,6 @@ public interface PcmShoppeProductMapper extends BaseMapper<PcmShoppeProduct> {
 	 * @return
 	 */
 	OmsShoppeProductResultDto findIndustryCategoryByParaForOms(OmsShoppeProductDto dto);
+	
+	Map<String, Object> selectParamByShoppeProCode(String shoppeProCode);
 }

@@ -282,4 +282,6 @@ public interface IPcmShoppeProductService {
 	 * @return
 	 */
 	OmsShoppeProductReturnDto findIndustryCategoryByParaForOms(OmsShoppeProductDto dto);
+
+	Map<String, Object> selectParamByShoppeProCode(String shoppeProCode);
 }
