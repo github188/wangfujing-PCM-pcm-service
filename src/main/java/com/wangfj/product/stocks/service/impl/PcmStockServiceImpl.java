@@ -388,8 +388,8 @@ public class PcmStockServiceImpl implements IPcmStockService {
 				String stockType=String.valueOf(paramMap.get("stockType"));
 				String xxhcFlag=String.valueOf(paramMap.get("xxhcFlag"));
 				if(!Constants.STOCKTYPE_2.equals(stockType)){
-					throw new BleException(ErrorCode.NOT_ZK.getErrorCode(),
-							ErrorCode.NOT_ZK.getMemo());
+					throw new BleException(ErrorCode.NOT_XK.getErrorCode(),
+							ErrorCode.NOT_XK.getMemo());
 				}
 				if(!Constants.XXHCFLAG_0.equals(xxhcFlag)){
 					throw new BleException(ErrorCode.NOT_XXHC.getErrorCode(),

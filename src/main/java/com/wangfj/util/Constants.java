@@ -1333,7 +1333,7 @@ public interface Constants {
      */
     public static final String SUPPLIERCENTER = "SUPPLIERCENTER";
     /**
-     * 库存自库类型
+     * 库存虚库类型
      */
     public static final String STOCKTYPE_2 = "2";
     /**
