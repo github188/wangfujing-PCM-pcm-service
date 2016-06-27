@@ -874,6 +874,8 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		psp.setSaleStatus(Integer.valueOf(dataDto.getIsSale()));// 可售状态
 		if(StringUtils.isNotBlank(dataDto.getInputTax())){
 			psp.setInputTax(new BigDecimal(dataDto.getInputTax()));// 进项税
+		}else{
+			psp.setInputTax(BigDecimal.ZERO);// 进项税
 		}
 		if(StringUtils.isNotBlank(dataDto.getOutputTax())){
 			psp.setOutputTax(new BigDecimal(dataDto.getOutputTax()));// 销项税
