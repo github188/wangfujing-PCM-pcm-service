@@ -872,8 +872,12 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		psp.setIsCod(Integer.valueOf(dataDto.getIsCOD()));// 是否货到付款
 		psp.setIsPacking(Integer.valueOf(dataDto.getIsPacking())); // 是否可包装
 		psp.setSaleStatus(Integer.valueOf(dataDto.getIsSale()));// 可售状态
-		psp.setInputTax(new BigDecimal(dataDto.getInputTax()));// 进项税
-		psp.setOutputTax(new BigDecimal(dataDto.getOutputTax()));// 销项税
+		if(StringUtils.isNotBlank(dataDto.getInputTax())){
+			psp.setInputTax(new BigDecimal(dataDto.getInputTax()));// 进项税
+		}
+		if(StringUtils.isNotBlank(dataDto.getOutputTax())){
+			psp.setOutputTax(new BigDecimal(dataDto.getOutputTax()));// 销项税
+		}
 		psp.setOriginLand2(dataDto.getCountryOfOrigin());// 原产地
 		int impact = shoppeProMapper.updateByCodeSelective(psp);
 		if (impact != 1) {
