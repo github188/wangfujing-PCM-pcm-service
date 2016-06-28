@@ -5,6 +5,7 @@ import com.wangfj.product.stocks.domain.entity.PcmStock;
 import com.wangfj.product.stocks.domain.vo.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Class Name PcmStockMapper
@@ -220,5 +221,12 @@ public interface PcmStockMapper extends BaseMapper<PcmStock> {
      * @Create In 2016年3月26日 By wangxuan
      */
     List<SelectProductStockInfoDto> findProductStockInfoByPara(QueryProductStockInfoDto dto);
+    
+    /**
+     * 根据参数查询下发给wcs的库存数据信息
+     * @param param
+     * @return
+     */
+    List<PcmStockWCSDto> selectProStockPushByParam(Map<String, Object> param);
 
 }

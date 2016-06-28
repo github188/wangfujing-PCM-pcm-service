@@ -43,6 +43,7 @@ import com.wangfj.product.stocks.domain.vo.PcmProductStockInfoDto;
 import com.wangfj.product.stocks.domain.vo.PcmStockChangeDto;
 import com.wangfj.product.stocks.domain.vo.PcmStockDto;
 import com.wangfj.product.stocks.domain.vo.PcmStockInfoDto;
+import com.wangfj.product.stocks.domain.vo.PcmStockWCSDto;
 import com.wangfj.product.stocks.domain.vo.QueryProductStockInfoDto;
 import com.wangfj.product.stocks.domain.vo.SelectProductStockInfoDto;
 import com.wangfj.product.stocks.domain.vo.StockProCountDto;
@@ -388,8 +389,8 @@ public class PcmStockServiceImpl implements IPcmStockService {
 				String stockType=String.valueOf(paramMap.get("stockType"));
 				String xxhcFlag=String.valueOf(paramMap.get("xxhcFlag"));
 				if(!Constants.STOCKTYPE_2.equals(stockType)){
-					throw new BleException(ErrorCode.NOT_ZK.getErrorCode(),
-							ErrorCode.NOT_ZK.getMemo());
+					throw new BleException(ErrorCode.NOT_XK.getErrorCode(),
+							ErrorCode.NOT_XK.getMemo());
 				}
 				if(!Constants.XXHCFLAG_0.equals(xxhcFlag)){
 					throw new BleException(ErrorCode.NOT_XXHC.getErrorCode(),
@@ -2195,6 +2196,12 @@ public class PcmStockServiceImpl implements IPcmStockService {
 			pcmRedisDto.setValue(stockCount.toString());
 			redisService.savePcmRedis(pcmRedisDto);
 		}
+	}
+
+	@Override
+	public List<PcmStockWCSDto> selectProStockPushByParam(
+			Map<String, Object> param) {
+		return pcmStockMapper.selectProStockPushByParam(param);
 	}
 
 }

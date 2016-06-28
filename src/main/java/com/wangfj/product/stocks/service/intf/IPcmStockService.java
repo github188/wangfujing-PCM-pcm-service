@@ -243,4 +243,11 @@ public interface IPcmStockService {
      * @Create In 2016年3月10日 By kongqf
      */
     public void updateImportStockCache(String shoppeProSid, String channelSid);
+    
+    /**
+     * 根据参数查询下发给wcs的库存数据信息
+     * @param param
+     * @return
+     */
+    public List<PcmStockWCSDto> selectProStockPushByParam(Map<String, Object> param);
 }
