@@ -1991,6 +1991,7 @@
 		sup.supply_name AS supplierName,
 		sup.supply_type AS supplierType,
 		sup.business_pattern AS manageType,
+		sup.zly_flag AS zlyFlag,
 		clog1.col1 AS manageCategoryCode
 		FROM
 		(
@@ -2022,6 +2023,9 @@
 	    </where>
 		) clog1
 		INNER JOIN pcm_supply_info sup ON clog1.supply_code = sup.supply_code
+		<if test="zlyFlag != null">
+		  AND sup.zly_flag = #{zlyFlag,jdbcType=VARCHAR}
+		</if>
     </select>
     
     

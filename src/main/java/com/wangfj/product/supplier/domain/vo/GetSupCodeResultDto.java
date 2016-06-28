@@ -28,6 +28,17 @@ public class GetSupCodeResultDto {
 	
 	private String manageCategoryCode;//管理分类编码
 	
+	private String zlyFlag;//虚库标识（YN）
+	
+	
+	public String getZlyFlag() {
+		return zlyFlag;
+	}
+
+	public void setZlyFlag(String zlyFlag) {
+		this.zlyFlag = zlyFlag;
+	}
+
 	public String getManageCategoryCode() {
 		return manageCategoryCode;
 	}

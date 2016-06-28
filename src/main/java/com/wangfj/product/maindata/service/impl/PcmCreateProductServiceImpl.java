@@ -854,8 +854,8 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		}
 		PcmShoppeProduct psp = new PcmShoppeProduct();
 		psp.setShoppeProSid(shoppeProSid);// 专柜商品编码
-		String shoppeProName = brand.getBrandName() + dataDto.getProductDesc()
-				+ dataDto.getColorCode() + dataDto.getSizeCode();
+		//String shoppeProName = brand.getBrandName() + dataDto.getProductDesc()
+		//		+ dataDto.getColorCode() + dataDto.getSizeCode();
 		/*
 		 * List<String> paras = new ArrayList<String>();
 		 * paras.add(brand.getBrandName()); paras.add(dataDto.getProductDesc());
@@ -863,7 +863,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		 * String shoppeProName =
 		 * generateStandardName(paras,Constants.SEPARATOR);
 		 */
-		psp.setShoppeProName(shoppeProName);// 专柜商品名称
+		//psp.setShoppeProName(shoppeProName);// 专柜商品名称
 		psp.setShoppeSid(shoppeList.get(0).getSid()); // 专柜SID
 		// psp.setSupplySid(supplyInfoList.get(0).getSid().toString());//供应商sid
 		psp.setSupplyProductCode(dataDto.getSupplyInnerCode());// 供应商商品编码
