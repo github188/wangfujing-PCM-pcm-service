@@ -1669,4 +1669,10 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 		logger.debug("end findIndustryCategoryByParaForOms(),return:" + returnDto.toString());
 		return returnDto;
 	}
+	
+	@Override
+	public Map<String, Object> selectParamByShoppeProCode(String shoppeProCode) {
+		// TODO Auto-generated method stub
+		return shoppeProMapper.selectParamByShoppeProCode(shoppeProCode);
+	}
 }

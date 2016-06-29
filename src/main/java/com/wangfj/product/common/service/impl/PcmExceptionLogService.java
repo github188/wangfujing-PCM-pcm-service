@@ -64,7 +64,7 @@ public class PcmExceptionLogService implements IPcmExceptionLogService {
 				}
 			}
 			BaseController.sendException(
-					new BleException(errorCode, pcmExceptionLogdto.getErrorMessage()));
+					new BleException(errorCode, errorCode + pcmExceptionLogdto.getErrorMessage()));
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}

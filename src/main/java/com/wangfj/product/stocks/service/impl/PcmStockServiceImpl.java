@@ -43,6 +43,7 @@ import com.wangfj.product.stocks.domain.vo.PcmProductStockInfoDto;
 import com.wangfj.product.stocks.domain.vo.PcmStockChangeDto;
 import com.wangfj.product.stocks.domain.vo.PcmStockDto;
 import com.wangfj.product.stocks.domain.vo.PcmStockInfoDto;
+import com.wangfj.product.stocks.domain.vo.PcmStockWCSDto;
 import com.wangfj.product.stocks.domain.vo.QueryProductStockInfoDto;
 import com.wangfj.product.stocks.domain.vo.SelectProductStockInfoDto;
 import com.wangfj.product.stocks.domain.vo.StockProCountDto;
@@ -381,6 +382,27 @@ public class PcmStockServiceImpl implements IPcmStockService {
 		if (StringUtils.isBlank(pcmStockDto.getShoppeProSid())) {
 			throw new BleException(ErrorCode.STOCK_SHOPPEPROSID_IS_NULL.getErrorCode(),
 					ErrorCode.STOCK_SHOPPEPROSID_IS_NULL.getMemo());
+		}
+		if(Constants.SUPPLIERCENTER.equals(pcmStockDto.getSource().toUpperCase())){
+			Map<String, Object> paramMap = pcmShoppeProSid.selectParamByShoppeProCode(pcmStockDto.getShoppeProSid());
+			if(Constants.PCMORGANIZATION_E_STORE_CODE.equals(paramMap.get("shopCode"))){
+				String stockType=String.valueOf(paramMap.get("stockType"));
+				String xxhcFlag=String.valueOf(paramMap.get("xxhcFlag"));
+				if(!Constants.STOCKTYPE_2.equals(stockType)){
+					throw new BleException(ErrorCode.NOT_XK.getErrorCode(),
+							ErrorCode.NOT_XK.getMemo());
+				}
+				if(!Constants.XXHCFLAG_0.equals(xxhcFlag)){
+					throw new BleException(ErrorCode.NOT_XXHC.getErrorCode(),
+							ErrorCode.NOT_XXHC.getMemo());
+				}
+			} else {
+				String businessMode=String.valueOf(paramMap.get("businessMode"));
+				if(!(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3+"").equals(businessMode)){
+					throw new BleException(ErrorCode.NOT_ASSOCIATED.getErrorCode(),
+							ErrorCode.NOT_ASSOCIATED.getMemo());
+				}
+			}
 		}
 		if (StringUtils.isBlank(pcmStockDto.getOperator())) {
 			throw new BleException(ErrorCode.STOCK_IMPORTOPERATOR_IS_NULL.getErrorCode(),
@@ -2174,6 +2196,12 @@ public class PcmStockServiceImpl implements IPcmStockService {
 			pcmRedisDto.setValue(stockCount.toString());
 			redisService.savePcmRedis(pcmRedisDto);
 		}
+	}
+
+	@Override
+	public List<PcmStockWCSDto> selectProStockPushByParam(
+			Map<String, Object> param) {
+		return pcmStockMapper.selectProStockPushByParam(param);
 	}
 
 }

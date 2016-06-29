@@ -27,6 +27,7 @@ import com.wangfj.product.organization.persistence.PcmOrganizationMapper;
 import com.wangfj.product.supplier.domain.entity.PcmSupplyInfo;
 import com.wangfj.product.supplier.domain.vo.GetSupCodeResultDto;
 import com.wangfj.product.supplier.domain.vo.PcmPushSupplyInfoDto;
+import com.wangfj.product.supplier.domain.vo.PcmSupInfoForSupDto;
 import com.wangfj.product.supplier.domain.vo.PcmSupInfoForSupResultDto;
 import com.wangfj.product.supplier.domain.vo.PcmSupplyInfoDto;
 import com.wangfj.product.supplier.domain.vo.PcmSupplyInfoPartDto;
@@ -731,6 +732,15 @@ public class PcmSupplyInfoServiceImpl implements IPcmSupplyInfoService {
         List<PcmSupInfoForSupResultDto> resultList = supplyInfoMapper.getSupInfoFromPcmByLicenseNoAndTaxNo(para);
         return resultList;
     }
+
+	/**
+	 * 根据营业执照及税号获取供应商信息  返回结构修改
+	 */
+	@Override
+	public List<PcmSupInfoForSupDto> getSupInfoByLicenseNoAndTaxNoT(Map<String, String> para) {
+		List<PcmSupInfoForSupDto> resultList = supplyInfoMapper.getSupInfoFromPcmByLicenseNoAndTaxNoT(para);
+        return resultList;
+	}
 
 
 }

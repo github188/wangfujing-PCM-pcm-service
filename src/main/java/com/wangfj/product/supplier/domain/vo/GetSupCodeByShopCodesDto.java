@@ -20,6 +20,18 @@ public class GetSupCodeByShopCodesDto {
     private String shopCode;//门店编码
 	
 	private List<Map<String,String>> managerList;//管理分类编码列表
+	
+	private String manageType;//要约上的经营方式
+	
+	
+
+	public String getManageType() {
+		return manageType;
+	}
+
+	public void setManageType(String manageType) {
+		this.manageType = manageType;
+	}
 
 	public String getShopCode() {
 		return shopCode;

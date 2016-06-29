@@ -1587,5 +1587,21 @@
 		)ps3 INNER JOIN pcm_pro_detail ppd on
 		ps3.skuSid =ppd.sid
 	</select>
-
+	
+	<select id="selectProStockPushByParam"
+		parameterType="java.util.Map"
+		resultType="com.wangfj.product.stocks.domain.vo.PcmStockWCSDto">
+		SELECT
+			1 AS type,
+			ps.shoppe_pro_sid AS matnr,
+			ps.pro_sum AS num,
+			psp.stock_mode AS flag
+		FROM
+			pcm_stock ps
+		JOIN pcm_shoppe_product psp ON ps.shoppe_pro_sid = psp.shoppe_pro_sid
+		AND ps.stock_type_sid = 1001
+		<if test="page!=null">
+			LIMIT #{page}, 200
+		</if>
+	</select>
 </mapper>
