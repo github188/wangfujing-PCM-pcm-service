@@ -945,6 +945,9 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 								ErrorCode.SHOPPEPRODUCT_SUPPLY_RELATION_ERROR.getErrorCode(),
 								"联营大码换供应商时修改一品多商失败！");
 					}
+
+                    //下发联营大码一品多商参数封装
+                    proDto.setErpProductSupplySid(pcmErpProductSupply.getSid());
 				} else if (listU.isEmpty()) {
 					throw new BleException(
 							ErrorCode.SHOPPEPRODUCT_SUPPLY_RELATION_ERROR.getErrorCode(),
