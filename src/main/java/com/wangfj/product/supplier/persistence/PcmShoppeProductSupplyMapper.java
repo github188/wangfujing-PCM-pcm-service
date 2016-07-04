@@ -35,5 +35,12 @@ public interface PcmShoppeProductSupplyMapper extends BaseMapper<PcmShoppeProduc
      * @return
      */
     List<PcmShoppeProSupplyUploadDto> pushShoppeProSupply(Map<String, Object> paramMap);
-
+    /**
+     * 判断专柜商品是否有该供应商
+     * @Methods Name getPrrsInfo
+     * @Create In 2016年6月29日 By wangc
+     * @param paramMap
+     * @return List<PcmShoppeProductSupply>
+     */
+    List<PcmShoppeProductSupply> getPrrsInfo(Map<String,Object> paramMap);
 }
