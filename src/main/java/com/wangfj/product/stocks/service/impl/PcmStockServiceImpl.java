@@ -17,6 +17,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sun.tools.corba.se.idl.constExpr.And;
 import com.wangfj.core.cache.RedisVo;
 import com.wangfj.core.constants.ComErrorCodeConstants;
 import com.wangfj.core.constants.ComErrorCodeConstants.ErrorCode;
@@ -383,22 +384,22 @@ public class PcmStockServiceImpl implements IPcmStockService {
 			throw new BleException(ErrorCode.STOCK_SHOPPEPROSID_IS_NULL.getErrorCode(),
 					ErrorCode.STOCK_SHOPPEPROSID_IS_NULL.getMemo());
 		}
-		if(Constants.SUPPLIERCENTER.equals(pcmStockDto.getSource().toUpperCase())){
-			Map<String, Object> paramMap = pcmShoppeProSid.selectParamByShoppeProCode(pcmStockDto.getShoppeProSid());
-			if(Constants.PCMORGANIZATION_E_STORE_CODE.equals(paramMap.get("shopCode"))){
-				String stockType=String.valueOf(paramMap.get("stockType"));
-				String xxhcFlag=String.valueOf(paramMap.get("xxhcFlag"));
-				if(!Constants.STOCKTYPE_2.equals(stockType)){
-					throw new BleException(ErrorCode.NOT_XK.getErrorCode(),
-							ErrorCode.NOT_XK.getMemo());
+		if (Constants.SUPPLIERCENTER.equals(pcmStockDto.getSource().toUpperCase())) {
+			Map<String, Object> paramMap = pcmShoppeProSid
+					.selectParamByShoppeProCode(pcmStockDto.getShoppeProSid());
+			if (Constants.PCMORGANIZATION_E_STORE_CODE.equals(paramMap.get("shopCode"))) {
+				String stockType = String.valueOf(paramMap.get("stockType"));
+				String xxhcFlag = String.valueOf(paramMap.get("xxhcFlag"));
+
+				if (!Constants.STOCKTYPE_2.equals(stockType)
+						&& !Constants.XXHCFLAG_0.equals(xxhcFlag)) {
+					throw new BleException(ErrorCode.NOT_XKORXXHC.getErrorCode(),
+							ErrorCode.NOT_XKORXXHC.getMemo());
 				}
-				if(!Constants.XXHCFLAG_0.equals(xxhcFlag)){
-					throw new BleException(ErrorCode.NOT_XXHC.getErrorCode(),
-							ErrorCode.NOT_XXHC.getMemo());
-				}
+
 			} else {
-				String businessMode=String.valueOf(paramMap.get("businessMode"));
-				if(!(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3+"").equals(businessMode)){
+				String businessMode = String.valueOf(paramMap.get("businessMode"));
+				if (!(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3 + "").equals(businessMode)) {
 					throw new BleException(ErrorCode.NOT_ASSOCIATED.getErrorCode(),
 							ErrorCode.NOT_ASSOCIATED.getMemo());
 				}
@@ -2199,8 +2200,7 @@ public class PcmStockServiceImpl implements IPcmStockService {
 	}
 
 	@Override
-	public List<PcmStockWCSDto> selectProStockPushByParam(
-			Map<String, Object> param) {
+	public List<PcmStockWCSDto> selectProStockPushByParam(Map<String, Object> param) {
 		return pcmStockMapper.selectProStockPushByParam(param);
 	}
 
