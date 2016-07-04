@@ -81,4 +81,16 @@ public interface IPcmCreateProductService {
 	 */
 	public PcmShoppeProduct updateSProductBySProductCode(PullDataDto dataDto,
 			PcmShoppeProductExtend extendDto,String shoppeProSid);
+	/**
+	 * 中台商品编码字段不为空时 修改专柜商品信息
+	 * 去除修改专柜,只允许修改D00100001下的供应商
+	 * @Methods Name updateSProductBySProductCode2
+	 * @Create In 2016年6月29日 By wangc
+	 * @param dataDto
+	 * @param extendDto
+	 * @param shoppeProSid
+	 * @return PcmShoppeProduct
+	 */
+	public PcmShoppeProduct updateSProductBySProductCode2(PullDataDto dataDto,
+			PcmShoppeProductExtend extendDto,String shoppeProSid);
 }
