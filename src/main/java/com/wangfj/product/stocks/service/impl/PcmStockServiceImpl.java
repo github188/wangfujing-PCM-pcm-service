@@ -17,7 +17,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sun.tools.corba.se.idl.constExpr.And;
 import com.wangfj.core.cache.RedisVo;
 import com.wangfj.core.constants.ComErrorCodeConstants;
 import com.wangfj.core.constants.ComErrorCodeConstants.ErrorCode;
