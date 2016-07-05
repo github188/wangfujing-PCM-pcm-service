@@ -103,6 +103,7 @@ public class PcmSupplyInfoServiceImpl implements IPcmSupplyInfoService {
                         } else {
                             throw new BleException(ComErrorCodeConstants.ErrorCode.SUPPLYINFO_NOT_EXISTENCE.getErrorCode(), "电商上传非拆单供应商时，PCM中没有查询到电商自库专柜（D00100001）！");
                         }
+                        supplyShoppeRelation.setStatus(Constants.PUBLIC_0);
                         supplyShoppeRelationMapper.insertSelective(supplyShoppeRelation);
                     }
                     resultMap.put("actionCode", Constants.A);

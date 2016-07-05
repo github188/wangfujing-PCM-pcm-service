@@ -362,6 +362,8 @@ public class PcmShoppeProductSupplyServiceImpl implements IPcmShoppeProductSuppl
             paramMap.put("status", 0);
         } else if ("2".equals(type)) {
             paramMap.put("status", 1);
+        } else if ("1".equals(type)) {
+            paramMap.put("status", 0);
         }
         paramMap.put("sid", para.get("sid"));
         List<PcmErpProductSupply> erpProductSupplyList = erpProductSupplyMapper.selectListByParam(paramMap);
@@ -377,6 +379,8 @@ public class PcmShoppeProductSupplyServiceImpl implements IPcmShoppeProductSuppl
                     dto.setACTION_CODE(Constants.A);
                 } else if ("2".equals(type)) {
                     dto.setACTION_CODE(Constants.D);
+                } else if ("1".equals(type)) {
+                    dto.setACTION_CODE(Constants.U);
                 }
                 dto.setACTION_DATE(DateUtil.formatToStr(new Date(), "yyyyMMdd.HHmmssZ"));
                 dto.setACTION_PERSON("PCM");
