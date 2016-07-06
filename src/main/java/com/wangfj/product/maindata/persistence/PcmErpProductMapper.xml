@@ -1188,6 +1188,7 @@
 		pcm_organization org on sp.shop_sid=org.sid
 		left join pcm_brand br on
 		br.brand_sid = erp.brand_code
+		AND	br.shop_type != 2
 		left join pcm_brand brg on
 		brg.sid=br.parent_sid
 		LEFT JOIN pcm_price pp ON pp.attribute2 = erp.store_code
