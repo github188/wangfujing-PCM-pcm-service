@@ -1399,6 +1399,9 @@
 		</if>
 		<where>
 			1=1
+			<if test="sid != null">
+				and erp.sid  &lt; #{sid,jdbcType=BIGINT}
+			</if>
 			<if test="cateList != null" >
 				and erp.manage_category IN 
 				<foreach collection="cateList" item="cateCode" index="index"
@@ -1527,7 +1530,10 @@
 		erp.sid desc
 		<if test="limit != null">
 			limit
-			#{start}, #{limit}
+			<if test="sid == null">
+			#{start}, 
+			</if>
+			#{limit}
 		</if>
 	</select>
 
