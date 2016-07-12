@@ -1399,8 +1399,8 @@
 		</if>
 		<where>
 			1=1
-			<if test="sid != null">
-				and erp.sid  &lt; #{sid,jdbcType=BIGINT}
+			<if test="erpSid != null">
+				and erp.sid  &lt; #{erpSid,jdbcType=BIGINT}
 			</if>
 			<if test="cateList != null" >
 				and erp.manage_category IN 
@@ -1530,7 +1530,7 @@
 		erp.sid desc
 		<if test="limit != null">
 			limit
-			<if test="sid == null">
+			<if test="erpSid == null">
 			#{start}, 
 			</if>
 			#{limit}
