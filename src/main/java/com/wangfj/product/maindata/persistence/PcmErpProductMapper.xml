@@ -80,6 +80,7 @@
 		<result column="supply_code" property="supplyCode" jdbcType="VARCHAR" />
 		<result column="offer_no" property="offerNo" jdbcType="VARCHAR" />
 		<result column="brand_code" property="brandCode" jdbcType="VARCHAR" />
+		<result column="brand_name" property="brandName" jdbcType="VARCHAR" />
 		<result column="brand_rood_sid" property="groupBrandCode"
 			jdbcType="VARCHAR" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -1162,7 +1163,7 @@
 	<select id="selectErpPageByParam" parameterType="java.util.Map"
 		resultMap="resultMap2">
 		select
-		erp.sid, erp.store_code, erp.shop_name, erp.shoppe_code,
+		erp.sid, erp.store_code, erp.shop_name, erp.shoppe_code,br.brand_name,
 		erp.shoppe_name,
 		product_code,code_type, erp.big_code_price,
 		erp.supply_code, erp.offer_no,
@@ -1393,9 +1394,11 @@
 			JOIN pcm_erp_product_supply peps ON peps.erp_product_sid = erp.product_code
 			AND peps.shop_sid = erp.store_code AND peps.`status` = 0
 			JOIN pcm_supply_info supply ON peps.supply_sid = supply.supply_code
+			AND supply.shop_sid = erp.store_code
 		</if>
 		<if test="supplyCode == null">
 			JOIN pcm_supply_info supply ON erp.supply_code = supply.supply_code
+			AND supply.shop_sid = erp.store_code
 		</if>
 		<where>
 			1=1
