@@ -1161,7 +1161,7 @@
 	</select>
 	<!-- erp商品下发 -->
 	<select id="selectErpPageByParam" parameterType="java.util.Map"
-		resultMap="resultMap2">
+		resultMap="resultMap2"> 
 		select
 		erp.sid, erp.store_code, erp.shop_name, erp.shoppe_code,br.brand_name,
 		erp.shoppe_name,
