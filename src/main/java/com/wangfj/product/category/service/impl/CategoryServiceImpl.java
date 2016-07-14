@@ -3,7 +3,7 @@
  * @Path: com.wangfj.product.core.service.implCategoryService.java
  * @Create By duanzhaole
  * @Create In 2015年7月2日 下午2:40:35
- * TODO
+ *
  */
 package com.wangfj.product.category.service.impl;
 
@@ -2474,7 +2474,6 @@ public class CategoryServiceImpl implements ICategoryService {
 	 */
 	@Override
 	public List<PcmCategory> selectListOrParam(Map<String, Object> mapParams) {
-		// TODO Auto-generated method stub
 		return cateMapper.selectListOrParam(mapParams);
 	}
 

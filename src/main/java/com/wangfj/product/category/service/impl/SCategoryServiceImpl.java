@@ -906,7 +906,6 @@ public class SCategoryServiceImpl implements ISCategoryService {
 
 	@Override
 	public List<Map<String, Object>> getProductStanCategorys(Map map) {
-		// TODO Auto-generated method stub
 		return this.categoryMapper.getProductStanCategorys(map);
 	}
 
