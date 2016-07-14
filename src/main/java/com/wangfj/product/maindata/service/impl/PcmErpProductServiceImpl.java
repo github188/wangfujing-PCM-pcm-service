@@ -1305,15 +1305,15 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 			}
 		}
 
-		// 查询总数
-		Integer count = erpProductMapper.getCountByParam(paramMap);
-		page.setCount(count);
-		if (paramMap.get("currentPage") != null && paramMap.get("pageSize") != null) {
-			paramMap.put("start", page.getStart());
-			paramMap.put("limit", page.getLimit());
-		} else if (paramMap.get("start") == null) {
-			paramMap.put("start", 0);
-		}
+//		// 查询总数
+//		Integer count = erpProductMapper.getCountByParam(paramMap);
+//		page.setCount(count);
+//		if (paramMap.get("currentPage") != null && paramMap.get("pageSize") != null) {
+//			paramMap.put("start", page.getStart());
+//			paramMap.put("limit", page.getLimit());
+//		} else if (paramMap.get("start") == null) {
+//			paramMap.put("start", 0);
+//		}
 		List<PcmErpProduct> list = erpProductMapper.selectErpPageByParam(paramMap);
 		if (!list.isEmpty()) {
 			List<ErpProductDto> result = new ArrayList<ErpProductDto>();
