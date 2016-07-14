@@ -3,7 +3,6 @@
  * @Path: com.wangfj.product.supplier.domain.voGetSupCodeByShopCodesResultDto.java
  * @Create By wangc
  * @Create In 2016-4-12 下午3:42:53
- * TODO
  */
 package com.wangfj.product.supplier.domain.vo;
 

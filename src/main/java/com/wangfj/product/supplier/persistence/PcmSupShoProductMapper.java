@@ -3,7 +3,6 @@
  * @Path: com.wangfj.product.supplier.persistencePcmSupShoProductMapper.java
  * @Create By wangc
  * @Create In 2016-3-7 下午6:42:40
- * TODO
  */
 package com.wangfj.product.supplier.persistence;
 

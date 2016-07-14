@@ -1469,7 +1469,6 @@ public class PcmProDetailServiceImpl implements IPcmProDetailService {
 
 	@Override
 	public List<PcmProDetail> selectSkuListByParam(Map<String, Object> paramMap) {
-		// TODO Auto-generated method stub
 		return proDetailMapper.selectListByParam(paramMap);
 	}
 

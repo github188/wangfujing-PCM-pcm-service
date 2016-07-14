@@ -3,7 +3,6 @@
  * @Path: com.wangfj.product.constantsDomainName.java
  * @Create By kong
  * @Create In 2015年8月24日 下午4:40:49
- * TODO
  */
 package com.wangfj.product.constants;
 

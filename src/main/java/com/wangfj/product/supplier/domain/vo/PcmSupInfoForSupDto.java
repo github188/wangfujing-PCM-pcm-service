@@ -3,7 +3,6 @@
  * @Path: PcmSupInfoForSupResultDtoPcmSupInfoForSupDto.java
  * @Create By wangc
  * @Create In 2016年6月24日 上午10:56:37
- * TODO
  */
 package com.wangfj.product.supplier.domain.vo;
 

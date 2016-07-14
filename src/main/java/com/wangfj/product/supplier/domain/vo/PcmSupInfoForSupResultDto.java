@@ -3,7 +3,6 @@
  * @Path: com.wangfj.product.supplier.domain.voPcmSupInfoForLicenseNoAndTaxNoResultDto.java
  * @Create By wangc
  * @Create In 2016-4-13 下午6:51:55
- * TODO
  */
 package com.wangfj.product.supplier.domain.vo;
 

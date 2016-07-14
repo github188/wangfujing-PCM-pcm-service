@@ -3,7 +3,6 @@
  * @Path: com.wangfj.product.maindata.domain.voErpSupInfoDto.java
  * @Create By wangc
  * @Create In 2016-3-18 下午3:43:52
- * TODO
  */
 package com.wangfj.product.maindata.domain.vo;
 

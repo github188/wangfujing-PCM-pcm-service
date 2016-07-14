@@ -240,7 +240,6 @@ public class CategoryPropValuesServiceImpl implements ICategoryPropValuesService
 
 	@Override
 	public List<ValuesVO> getAllCategoryValuesVOs(Map map) {
-		// TODO Auto-generated method stub
 		return this.ssdCategoryPropValuesMapper.getAllCategoryValuesVOs(map);
 	}
 

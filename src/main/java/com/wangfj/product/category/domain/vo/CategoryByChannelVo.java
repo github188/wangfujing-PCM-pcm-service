@@ -3,7 +3,7 @@
  * @Path: com.wangfj.product.category.domain.voCategoryByChannelVo.java
  * @Create By duanzhaole
  * @Create In 2015年10月12日 下午4:27:17
- * TODO
+ *
  */
 package com.wangfj.product.category.domain.vo;
 

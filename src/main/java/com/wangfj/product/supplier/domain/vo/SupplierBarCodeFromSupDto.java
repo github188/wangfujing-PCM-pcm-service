@@ -3,7 +3,6 @@
  * @Path: com.wangfj.product.supplier.domain.voSupplierBarCodeFromSupDto.java
  * @Create By wangc
  * @Create In 2016-3-2 下午2:08:06
- * TODO
  */
 package com.wangfj.product.supplier.domain.vo;
 

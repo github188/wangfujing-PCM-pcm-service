@@ -3,7 +3,6 @@
  * @Path: com.wangfj.product.maindata.domain.entitySupAndErpInfo.java
  * @Create By wangc
  * @Create In 2016-3-18 下午4:52:51
- * TODO
  */
 package com.wangfj.product.maindata.domain.entity;
 
