@@ -3,7 +3,6 @@
  * @Path: com.wangfj.product.supplier.domain.voPcmShoppeProductForSup.java
  * @Create By wangc
  * @Create In 2016-3-9 下午5:21:08
- * TODO
  */
 package com.wangfj.product.supplier.domain.vo;
 
