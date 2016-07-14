@@ -3,7 +3,6 @@
  * @Path: com.wangfj.product.organization.persistencePcmGetShoppeDto.java
  * @Create By wuxiong
  * @Create In 2015年7月29日 下午8:00:55
- * TODO
  */
 package com.wangfj.product.organization.domain.vo;
 

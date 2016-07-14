@@ -3,7 +3,6 @@
  * @Path: com.wangfj.product.maindata.domain.voGetShoProInfoForSAPModifyDto.java
  * @Create By wangc
  * @Create In 2016年7月5日 上午10:11:39
- * TODO
  */
 package com.wangfj.product.maindata.domain.vo;
 

@@ -3,7 +3,6 @@
  * @Path: com.wangfj.product.maindata.domain.voShoProInfoFormPcmToPisDto.java
  * @Create By wangc
  * @Create In 2016-3-29 上午11:04:12
- * TODO
  */
 package com.wangfj.product.maindata.domain.vo;
 
