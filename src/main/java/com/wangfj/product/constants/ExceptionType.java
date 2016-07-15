@@ -3,7 +3,6 @@
  * @Path: com.wangfj.product.constantsExceptionType.java
  * @Create By kong
  * @Create In 2015年8月25日 下午4:26:12
- * TODO
  */
 package com.wangfj.product.constants;
 

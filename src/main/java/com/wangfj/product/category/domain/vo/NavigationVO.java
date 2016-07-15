@@ -5,7 +5,7 @@
  * @Path: com.wangfj.view.NavitationVO.java
  * @Create By chengsj
  * @Create In 2013-7-19 下午1:58:12
- * TODO
+ *
  */
 package com.wangfj.product.category.domain.vo;
 

@@ -39,6 +39,10 @@ public class ErpProductDto {
 	 */
 	private String offerNo;
 	/**
+	 * 门店品牌名称
+	 */
+	private String brandName;
+	/**
 	 * 门店品牌编码
 	 */
 	private String brandCode;
@@ -139,6 +143,15 @@ public class ErpProductDto {
 	// 备注
 	private String notes;
 	private Integer type;
+
+	
+	public String getBrandName() {
+		return brandName;
+	}
+
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
+	}
 
 	public Long getSid() {
 		return sid;

@@ -3,7 +3,6 @@
  * @Path: com.wangfj.product.maindata.domain.voPushToPcmEfutureERPFromPcmDto.java
  * @Create By wangc
  * @Create In 2016-3-28 下午3:10:15
- * TODO
  */
 package com.wangfj.product.maindata.domain.vo;
 

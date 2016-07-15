@@ -80,6 +80,7 @@
 		<result column="supply_code" property="supplyCode" jdbcType="VARCHAR" />
 		<result column="offer_no" property="offerNo" jdbcType="VARCHAR" />
 		<result column="brand_code" property="brandCode" jdbcType="VARCHAR" />
+		<result column="brand_name" property="brandName" jdbcType="VARCHAR" />
 		<result column="brand_rood_sid" property="groupBrandCode"
 			jdbcType="VARCHAR" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -1160,9 +1161,9 @@
 	</select>
 	<!-- erp商品下发 -->
 	<select id="selectErpPageByParam" parameterType="java.util.Map"
-		resultMap="resultMap2">
+		resultMap="resultMap2"> 
 		select
-		erp.sid, erp.store_code, erp.shop_name, erp.shoppe_code,
+		erp.sid, erp.store_code, erp.shop_name, erp.shoppe_code,br.brand_name,
 		erp.shoppe_name,
 		product_code,code_type, erp.big_code_price,
 		erp.supply_code, erp.offer_no,
@@ -1188,6 +1189,7 @@
 		pcm_organization org on sp.shop_sid=org.sid
 		left join pcm_brand br on
 		br.brand_sid = erp.brand_code
+		AND br.shop_type = org.store_type
 		left join pcm_brand brg on
 		brg.sid=br.parent_sid
 		LEFT JOIN pcm_price pp ON pp.attribute2 = erp.store_code
@@ -1392,12 +1394,17 @@
 			JOIN pcm_erp_product_supply peps ON peps.erp_product_sid = erp.product_code
 			AND peps.shop_sid = erp.store_code AND peps.`status` = 0
 			JOIN pcm_supply_info supply ON peps.supply_sid = supply.supply_code
+			AND supply.shop_sid = erp.store_code
 		</if>
 		<if test="supplyCode == null">
 			JOIN pcm_supply_info supply ON erp.supply_code = supply.supply_code
+			AND supply.shop_sid = erp.store_code
 		</if>
 		<where>
 			1=1
+			<if test="erpSid != null">
+				and erp.sid  &lt; #{erpSid,jdbcType=BIGINT}
+			</if>
 			<if test="cateList != null" >
 				and erp.manage_category IN 
 				<foreach collection="cateList" item="cateCode" index="index"
@@ -1526,7 +1533,10 @@
 		erp.sid desc
 		<if test="limit != null">
 			limit
-			#{start}, #{limit}
+			<if test="erpSid == null">
+			#{start}, 
+			</if>
+			#{limit}
 		</if>
 	</select>
 

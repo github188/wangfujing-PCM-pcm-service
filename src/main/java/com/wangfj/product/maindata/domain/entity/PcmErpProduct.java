@@ -55,6 +55,10 @@ public class PcmErpProduct extends BaseEntity {
 	 */
 	private String brandCode;
 	/**
+	 * 门店品牌名称
+	 */
+	private String brandName;
+	/**
 	 * 集团品牌编码
 	 */
 	private String groupBrandCode;
@@ -154,6 +158,14 @@ public class PcmErpProduct extends BaseEntity {
 	private String productAbbr;
 	// 备注
 	private String notes;
+
+	public String getBrandName() {
+		return brandName;
+	}
+
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
+	}
 
 	public Long getSid() {
 		return sid;

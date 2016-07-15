@@ -3,7 +3,7 @@
  * @Path: com.wangfj.product.category.domain.voPropCategoryDictVo.java
  * @Create By duanzhaole
  * @Create In 2015年8月25日 下午2:29:47
- * TODO
+ *
  */
 package com.wangfj.product.category.domain.vo;
 

@@ -209,7 +209,7 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 				} else if (ediProDto.getActionCode().equals(Constants.D)) {
 					PcmShoppeProductEdiRelation proEdi = new PcmShoppeProductEdiRelation();
 					proEdi.setChannelCode(ediProDto.getChannelCode());
-					// proEdi.setShoppeProSid(ediProDto.getShoppeProCode());
+					proEdi.setShoppeProSid(ediProDto.getShoppeProCode());
 					proEdi.setChannelProSid(ediProDto.getEDIProCode());
 					proEdi.setIfdel(Constants.PUBLIC_1);
 					List<PcmShoppeProductEdiRelation> proEdiList = proEdiMapper

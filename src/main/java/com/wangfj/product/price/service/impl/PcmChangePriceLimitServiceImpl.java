@@ -35,7 +35,6 @@ public class PcmChangePriceLimitServiceImpl implements IPcmChangePriceLimitServi
 	 */
 	@Override
 	public String saveOrUpdateChangePriceLimit(PublishPriceLimitDto dto) {
-		// TODO Auto-generated method stub
 
 		String message = "";
 
@@ -103,7 +102,6 @@ public class PcmChangePriceLimitServiceImpl implements IPcmChangePriceLimitServi
 	 */
 	@Override
 	public Page<PcmChangePriceLimitDto> selectPageList(Map<String, Object> map) {
-		// TODO Auto-generated method stub
 
 		SelectPcmPriceLimitDto dto = new SelectPcmPriceLimitDto();
 		dto.setCurrentPage(Integer.parseInt(map.get("currentPage") + ""));
@@ -143,7 +141,6 @@ public class PcmChangePriceLimitServiceImpl implements IPcmChangePriceLimitServi
 	 */
 	@Override
 	public String selectAllShopSidFromPriceLimit() {
-		// TODO Auto-generated method stub
 		StringBuffer s = new StringBuffer();
 		List<Long> shops = pcmChangePriceLimitMapper.selectAllShopSidFromPriceLimit();
 		for (Long shop : shops) {
@@ -157,7 +154,6 @@ public class PcmChangePriceLimitServiceImpl implements IPcmChangePriceLimitServi
 	 */
 	@Override
 	public PcmChangePriceLimitDto selectPriceLimitByShopCode(String shopCode) {
-		// TODO Auto-generated method stub
 		List<PcmChangePriceLimit> limits = pcmChangePriceLimitMapper
 				.selectPriceLimitByShopCode(shopCode);
 

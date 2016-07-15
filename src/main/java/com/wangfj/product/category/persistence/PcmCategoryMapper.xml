@@ -1810,4 +1810,25 @@
 	psp.shoppe_pro_sid = #{shoProCode,jdbcType=VARCHAR}
 	)
     </select>
+    
+    <select id="getGlCateInfoForSAPModify" resultMap="BaseResultMap"
+            parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_category 
+        <where>
+           <if test="categoryCode != null">
+              and category_code = #{categoryCode,jdbcType=VARCHAR}
+           </if>
+           <if test="isDisplay != null">
+              and is_display = #{isDisplay,jdbcType=VARCHAR}
+           </if>
+           <if test="status != null">
+              and status = #{status,jdbcType=VARCHAR}
+           </if>
+           <if test="shopSid != null">
+              and shop_sid = #{shopSid,jdbcType=VARCHAR}
+           </if>
+        </where>
+    </select>
 </mapper>

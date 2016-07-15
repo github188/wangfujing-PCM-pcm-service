@@ -3,7 +3,6 @@
  * @Path: com.wangfj.product.maindata.domain.voGetContractLogForSupDto.java
  * @Create By wangc
  * @Create In 2016-3-30 下午3:08:40
- * TODO
  */
 package com.wangfj.product.maindata.domain.vo;
 

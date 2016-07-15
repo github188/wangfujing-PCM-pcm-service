@@ -5809,5 +5809,22 @@
 		AND psp.shoppe_pro_sid = #{shoppeProCode}
 		JOIN pcm_supply_info psi ON psp.supply_sid = psi.sid
 	</select>
-
+	
+	<select id="getShoproInfoForSAPModify" resultType="com.wangfj.product.maindata.domain.vo.GetShoProInfoForSAPModifyDto"
+		parameterType="java.util.Map">
+		select
+		psp.sid AS sid,
+		psp.shoppe_pro_sid AS shoppeProSid,
+		psp.category_sid AS categorySid,
+		psp.supply_product_code AS supplyProductCode,
+		psi.supply_code AS supplyCode,
+		psp.field4 AS field4
+		from pcm_shoppe_product psp
+		inner join pcm_supply_info psi on psi.sid = psp.supply_sid
+		<where>
+			<if test="shoppeProSid != null">
+				and psp.shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
 </mapper>

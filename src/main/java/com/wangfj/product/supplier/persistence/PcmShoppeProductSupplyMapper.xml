@@ -193,5 +193,29 @@
             </if>
         </where>
     </select>
-
+    
+    <select id="getPrrsInfo" parameterType="java.util.Map" resultMap="BaseResultMap">
+	SELECT
+	<include refid="Base_Column_List"/>
+	FROM
+	pcm_shoppe_product_supply psps
+	WHERE
+	psps.shoppe_product_sid = (
+	SELECT
+	sid
+	FROM
+	pcm_shoppe_product psp
+	WHERE
+	psp.shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+	)
+	AND psps.supply_sid = (
+	SELECT
+	sid
+	FROM
+	pcm_supply_info psi
+	WHERE
+	psi.supply_code = #{supplyCode,jdbcType=VARCHAR}
+	)
+	AND psps.status = #{status}
+    </select>
 </mapper>

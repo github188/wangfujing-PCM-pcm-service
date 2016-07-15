@@ -3,7 +3,6 @@
  * @Path: com.wangfj.product.supplier.domain.voGetShoProductSupDto.java
  * @Create By wangc
  * @Create In 2016-3-3 下午4:39:03
- * TODO
  */
 package com.wangfj.product.supplier.domain.entity;
 

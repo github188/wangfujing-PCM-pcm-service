@@ -5,27 +5,41 @@ import java.util.List;
 import com.wangfj.product.maindata.domain.entity.PcmShoppeProduct;
 
 public class ModifyErpProductDto {
-	private List<PcmShoppeProduct> list;
-	private Long sid;
+    private List<PcmShoppeProduct> list;//专柜商品
+    private Long sid;//大码sid
 
-	public List<PcmShoppeProduct> getList() {
-		return list;
-	}
+    private Long erpProductSupplySid;//大码供应商关系 sid
 
-	public void setList(List<PcmShoppeProduct> list) {
-		this.list = list;
-	}
+    public List<PcmShoppeProduct> getList() {
+        return list;
+    }
 
-	public Long getSid() {
-		return sid;
-	}
+    public void setList(List<PcmShoppeProduct> list) {
+        this.list = list;
+    }
 
-	public void setSid(Long sid) {
-		this.sid = sid;
-	}
+    public Long getSid() {
+        return sid;
+    }
 
-	@Override
-	public String toString() {
-		return "ModifyErpProductDto{" + "list=" + list + ", sid=" + sid + '}';
-	}
+    public void setSid(Long sid) {
+        this.sid = sid;
+    }
+
+    public Long getErpProductSupplySid() {
+        return erpProductSupplySid;
+    }
+
+    public void setErpProductSupplySid(Long erpProductSupplySid) {
+        this.erpProductSupplySid = erpProductSupplySid;
+    }
+
+    @Override
+    public String toString() {
+        return "ModifyErpProductDto{" +
+                "list=" + list +
+                ", sid=" + sid +
+                ", erpProductSupplySid=" + erpProductSupplySid +
+                '}';
+    }
 }

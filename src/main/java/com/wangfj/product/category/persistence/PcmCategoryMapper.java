@@ -340,4 +340,12 @@ public interface PcmCategoryMapper extends BaseMapper<PcmCategory> {
 	 * @return List<Map<String,String>>
 	 */
 	List<Map<String,String>> getPropNameAndValueByShoprosid(Map<String,Object> paraMap);
+	/**
+	 * SAP修改专柜商品信息接口，验证管理分类有效性
+	 * @Methods Name getGlCateInfoForSAPModify
+	 * @Create In 2016年7月5日 By wangc
+	 * @param paraMap
+	 * @return List<PcmCategory>
+	 */
+	List<PcmCategory> getGlCateInfoForSAPModify(Map<String,Object> paraMap);
 }

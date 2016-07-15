@@ -3,7 +3,6 @@
  * @Path: com.wangfj.utilPropertiesUtil.java
  * @Create By kong
  * @Create In 2015年7月13日 下午4:23:57
- * TODO
  */
 package com.wangfj.util;
 

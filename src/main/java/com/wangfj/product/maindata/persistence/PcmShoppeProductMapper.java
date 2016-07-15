@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.wangfj.core.framework.base.persistence.BaseMapper;
 import com.wangfj.product.maindata.domain.entity.PcmShoppeProduct;
+import com.wangfj.product.maindata.domain.vo.GetShoProInfoForSAPModifyDto;
 import com.wangfj.product.maindata.domain.vo.OmsResProInfoDto;
 import com.wangfj.product.maindata.domain.vo.OmsShoppeProductDto;
 import com.wangfj.product.maindata.domain.vo.OmsShoppeProductResultDto;
@@ -374,4 +375,12 @@ public interface PcmShoppeProductMapper extends BaseMapper<PcmShoppeProduct> {
 	OmsShoppeProductResultDto findIndustryCategoryByParaForOms(OmsShoppeProductDto dto);
 	
 	Map<String, Object> selectParamByShoppeProCode(String shoppeProCode);
-}
+	/**
+	 * SAP修改商品信息接口，获取专柜商品信息
+	 * @Methods Name getShoproInfoForSAPModify
+	 * @Create In 2016年7月5日 By wangc
+	 * @param paraMap
+	 * @return List<GetShoProInfoForSAPModifyDto>
+	 */
+	List<GetShoProInfoForSAPModifyDto> getShoproInfoForSAPModify(Map<String,Object> paraMap);
+} 

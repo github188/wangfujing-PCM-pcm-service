@@ -157,7 +157,6 @@ public class PcmProductPictureServiceImpl implements IPcmProductPictureService {
 				result.put("content", "");
 			}
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return result;

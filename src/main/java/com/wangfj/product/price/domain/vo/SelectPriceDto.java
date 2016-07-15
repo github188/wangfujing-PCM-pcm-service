@@ -3,7 +3,6 @@
  * @Path: com.wangfj.product.price.domain.voSelectPriceDto.java
  * @Create By duanzhaole
  * @Create In 2015年7月24日 下午5:18:02
- * TODO
  */
 package com.wangfj.product.price.domain.vo;
 

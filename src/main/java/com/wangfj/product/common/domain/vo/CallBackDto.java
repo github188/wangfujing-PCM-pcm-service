@@ -3,7 +3,6 @@
  * @Path: com.wangfj.product.common.domain.voCallBackDto.java
  * @Create By kong
  * @Create In 2015年8月26日 下午3:51:44
- * TODO
  */
 package com.wangfj.product.common.domain.vo;
 

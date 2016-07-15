@@ -3,7 +3,6 @@
  * @Path: com.wangfj.product.supplier.service.intfIPcmBarcodeService.java
  * @Create By wangc
  * @Create In 2016-3-2 下午2:07:04
- * TODO
  */
 package com.wangfj.product.supplier.service.intf;
 

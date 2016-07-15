@@ -3,7 +3,7 @@
  * @Path: com.wangfj.product.category.domain.voCategoryParamDto.java
  * @Create By duanzhaole
  * @Create In 2015年7月24日 下午8:33:18
- * TODO
+ *
  */
 package com.wangfj.product.category.domain.vo;
 

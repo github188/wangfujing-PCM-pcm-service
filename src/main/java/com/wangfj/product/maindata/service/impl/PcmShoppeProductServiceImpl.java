@@ -1672,7 +1672,6 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 	
 	@Override
 	public Map<String, Object> selectParamByShoppeProCode(String shoppeProCode) {
-		// TODO Auto-generated method stub
 		return shoppeProMapper.selectParamByShoppeProCode(shoppeProCode);
 	}
 }

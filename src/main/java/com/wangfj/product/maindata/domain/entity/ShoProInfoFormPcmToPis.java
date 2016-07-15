@@ -3,7 +3,6 @@
  * @Path: com.wangfj.product.maindata.domain.entityShoProInfoFormPcmToPis.java
  * @Create By wangc
  * @Create In 2016-3-29 下午4:31:02
- * TODO
  */
 package com.wangfj.product.maindata.domain.entity;
 
