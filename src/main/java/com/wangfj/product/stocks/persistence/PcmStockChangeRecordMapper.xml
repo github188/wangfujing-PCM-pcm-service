@@ -305,7 +305,7 @@
 				and channel_sid = '0'
 			</if>
 		</where>
-		ORDER BY change_time
+		ORDER BY change_time, pscr.sid
 		<if test="start != null">
 			<if test="limit != null">
 				limit
