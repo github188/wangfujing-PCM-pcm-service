@@ -40,6 +40,18 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 	private PcmChannelSaleConfigMapper saleMapper;
 	@Autowired
 	private PcmExceptionLogService pcmExceptionLogService;
+	/**
+	 * edi查询信息基础service
+	 * 
+	 * @Methods Name selectListByParam
+	 * @Create In 2016年7月19日 By yedong
+	 * @param entity
+	 * @return List<PcmShoppeProductEdiRelation>
+	 */
+	public List<PcmShoppeProductEdiRelation> selectListByParam(PcmShoppeProductEdiRelation entity){
+		List<PcmShoppeProductEdiRelation> ediList = proEdiMapper.selectListByParam(entity);
+		return ediList;
+	}
 
 	@Override
 	public ResultDto addShoppeProFromEdi(List<EdiProDto> dtoList) {
