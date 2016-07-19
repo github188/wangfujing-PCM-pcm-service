@@ -1,88 +1,90 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wangfj.product.maindata.persistence.PcmErpProductSupplyMapper" >
-  <resultMap id="BaseResultMap" type="com.wangfj.product.maindata.domain.entity.PcmErpProductSupply" >
-    <id column="sid" property="sid" jdbcType="BIGINT" />
-    <result column="supply_sid" property="supplySid" jdbcType="VARCHAR" />
-    <result column="erp_product_sid" property="erpProductSid" jdbcType="VARCHAR" />
-    <result column="shop_sid" property="shopSid" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-  </resultMap>
-  <sql id="Base_Column_List" >
+<mapper namespace="com.wangfj.product.maindata.persistence.PcmErpProductSupplyMapper">
+    <resultMap id="BaseResultMap" type="com.wangfj.product.maindata.domain.entity.PcmErpProductSupply">
+        <id column="sid" property="sid" jdbcType="BIGINT"/>
+        <result column="supply_sid" property="supplySid" jdbcType="VARCHAR"/>
+        <result column="erp_product_sid" property="erpProductSid" jdbcType="VARCHAR"/>
+        <result column="shop_sid" property="shopSid" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     sid, supply_sid, erp_product_sid, shop_sid, status
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select
-    <include refid="Base_Column_List" />
-    from pcm_erp_product_supply
-    where sid = #{sid,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_erp_product_supply
+        where sid = #{sid,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from pcm_erp_product_supply
     where sid = #{sid,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProductSupply" >
+    <insert id="insert" parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProductSupply">
     insert into pcm_erp_product_supply (sid, supply_sid, erp_product_sid, 
       shop_sid, status)
     values (#{sid,jdbcType=BIGINT}, #{supplySid,jdbcType=VARCHAR}, #{erpProductSid,jdbcType=VARCHAR}, 
       #{shopSid,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProductSupply" useGeneratedKeys="true" keyProperty="sid">
-    insert into pcm_erp_product_supply
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="sid != null" >
-        sid,
-      </if>
-      <if test="supplySid != null" >
-        supply_sid,
-      </if>
-      <if test="erpProductSid != null" >
-        erp_product_sid,
-      </if>
-      <if test="shopSid != null" >
-        shop_sid,
-      </if>
-      <if test="status != null" >
-        status,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="sid != null" >
-        #{sid,jdbcType=BIGINT},
-      </if>
-      <if test="supplySid != null" >
-        #{supplySid,jdbcType=VARCHAR},
-      </if>
-      <if test="erpProductSid != null" >
-        #{erpProductSid,jdbcType=VARCHAR},
-      </if>
-      <if test="shopSid != null" >
-        #{shopSid,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProductSupply" >
-    update pcm_erp_product_supply
-    <set >
-      <if test="supplySid != null" >
-        supply_sid = #{supplySid,jdbcType=VARCHAR},
-      </if>
-      <if test="erpProductSid != null" >
-        erp_product_sid = #{erpProductSid,jdbcType=VARCHAR},
-      </if>
-      <if test="shopSid != null" >
-        shop_sid = #{shopSid,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=INTEGER},
-      </if>
-    </set>
-    where sid = #{sid,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProductSupply" >
+    <insert id="insertSelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProductSupply"
+            useGeneratedKeys="true" keyProperty="sid">
+        insert into pcm_erp_product_supply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                sid,
+            </if>
+            <if test="supplySid != null">
+                supply_sid,
+            </if>
+            <if test="erpProductSid != null">
+                erp_product_sid,
+            </if>
+            <if test="shopSid != null">
+                shop_sid,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                #{sid,jdbcType=BIGINT},
+            </if>
+            <if test="supplySid != null">
+                #{supplySid,jdbcType=VARCHAR},
+            </if>
+            <if test="erpProductSid != null">
+                #{erpProductSid,jdbcType=VARCHAR},
+            </if>
+            <if test="shopSid != null">
+                #{shopSid,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProductSupply">
+        update pcm_erp_product_supply
+        <set>
+            <if test="supplySid != null">
+                supply_sid = #{supplySid,jdbcType=VARCHAR},
+            </if>
+            <if test="erpProductSid != null">
+                erp_product_sid = #{erpProductSid,jdbcType=VARCHAR},
+            </if>
+            <if test="shopSid != null">
+                shop_sid = #{shopSid,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+        </set>
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProductSupply">
     update pcm_erp_product_supply
     set supply_sid = #{supplySid,jdbcType=VARCHAR},
       erp_product_sid = #{erpProductSid,jdbcType=VARCHAR},
@@ -91,34 +93,62 @@
     where sid = #{sid,jdbcType=BIGINT}
   </update>
 
-  <select id="selectListByParam" resultMap="BaseResultMap"
-          parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProductSupply">
-    select
-    <include refid="Base_Column_List" />
-    from pcm_erp_product_supply
-    <where>
-      <if test="sid != null">
-        and sid = #{sid,jdbcType=BIGINT}
-      </if>
-      <if test="supplySid != null">
-        and supply_sid = #{supplySid,jdbcType=VARCHAR}
-      </if>
-      <if test="erpProductSid != null">
-        and erp_product_sid = #{erpProductSid,jdbcType=VARCHAR}
-      </if>
-      <if test="shopSid != null">
-        and shop_sid = #{shopSid,jdbcType=VARCHAR}
-      </if>
-      <if test="status != null">
-        and status = #{status,jdbcType=INTEGER}
-      </if>
-    </where>
-  </select>
+    <select id="selectListByParam" resultMap="BaseResultMap"
+            parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProductSupply">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_erp_product_supply
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="supplySid != null">
+                and supply_sid = #{supplySid,jdbcType=VARCHAR}
+            </if>
+            <if test="erpProductSid != null">
+                and erp_product_sid = #{erpProductSid,jdbcType=VARCHAR}
+            </if>
+            <if test="shopSid != null">
+                and shop_sid = #{shopSid,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
 
-
-
-
-
+    <select id="pushListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_erp_product_supply
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="sidList != null">
+                AND sid IN
+                <foreach collection="sidList" open="(" item="sid" separator="," close=")">
+                    #{sid}
+                </foreach>
+            </if>
+            <if test="supplySid != null">
+                and supply_sid = #{supplySid,jdbcType=VARCHAR}
+            </if>
+            <if test="erpProductSid != null">
+                and erp_product_sid = #{erpProductSid,jdbcType=VARCHAR}
+            </if>
+            <if test="shopSid != null">
+                and shop_sid = #{shopSid,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+        </where>
+        <if test="start !=null and limit != null">
+            limit #{start} , #{limit}
+        </if>
+    </select>
 
 
 </mapper>

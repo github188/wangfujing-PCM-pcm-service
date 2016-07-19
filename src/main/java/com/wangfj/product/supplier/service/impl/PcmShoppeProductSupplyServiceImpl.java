@@ -366,7 +366,9 @@ public class PcmShoppeProductSupplyServiceImpl implements IPcmShoppeProductSuppl
             paramMap.put("status", 0);
         }
         paramMap.put("sid", para.get("sid"));
-        List<PcmErpProductSupply> erpProductSupplyList = erpProductSupplyMapper.selectListByParam(paramMap);
+        paramMap.put("start", para.get("start"));
+        paramMap.put("limit", para.get("limit"));
+        List<PcmErpProductSupply> erpProductSupplyList = erpProductSupplyMapper.pushListByParam(paramMap);
 
         List<PcmShoppeProSupplyUploadDto> dtoList = new ArrayList<PcmShoppeProSupplyUploadDto>();
         if (erpProductSupplyList != null && erpProductSupplyList.size() > 0) {
