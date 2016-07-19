@@ -1,5 +1,6 @@
 package com.wangfj.product.common.service.impl;
 
+import com.wangfj.core.constants.ComErrorCodeConstants;
 import com.wangfj.core.framework.base.page.Page;
 import com.wangfj.core.utils.CacheUtils;
 import com.wangfj.core.utils.PropertyUtil;
@@ -7,12 +8,15 @@ import com.wangfj.core.utils.RedisUtil;
 import com.wangfj.core.utils.StringUtils;
 import com.wangfj.product.common.domain.entity.PcmInstance;
 import com.wangfj.product.common.domain.entity.PcmRedis;
+import com.wangfj.product.common.domain.vo.PcmExceptionLogDto;
 import com.wangfj.product.common.domain.vo.PcmRedisQueryDto;
 import com.wangfj.product.common.domain.vo.PcmRedisUDto;
 import com.wangfj.product.common.persistence.PcmInstanceMapper;
+import com.wangfj.product.common.service.intf.IPcmExceptionLogService;
 import com.wangfj.product.common.service.intf.IPcmRedisExceptionService;
 import com.wangfj.product.common.service.intf.IPcmRedisService;
 import com.wangfj.product.constants.DomainName;
+import com.wangfj.product.constants.StatusCodeConstants;
 import com.wangfj.product.stocks.domain.entity.PcmLockAttribute;
 import com.wangfj.product.stocks.service.intf.IPcmLockAttributeService;
 import com.wangfj.util.Constants;
@@ -51,6 +55,9 @@ public class PcmRedisExceptionService implements IPcmRedisExceptionService {
     @Autowired
     private RedisUtil redisUtil;
 
+    @Autowired
+    private IPcmExceptionLogService exceptionLogService;
+
     /**
      * Redis服务器挂了异常处理
      *
@@ -60,7 +67,10 @@ public class PcmRedisExceptionService implements IPcmRedisExceptionService {
     @Transactional
     public List<PcmInstance> redisExceptionHandler() {
         logger.info("start redisExceptionHandler(),param:");
-        boolean redisFlag = redisUtil.setIsOK("Hello", "World");
+        boolean redisFlag = true;
+        for (int i = 0; i < 3; i++) {
+            redisFlag = redisUtil.setIsOK("Hello", "World");
+        }
 //        boolean redisFlag = redisUtil.set("Hello", "World");
 //        redisFlag = false;
         List<PcmInstance> instanceList = null;
@@ -132,6 +142,16 @@ public class PcmRedisExceptionService implements IPcmRedisExceptionService {
                 Map<String, Object> paramMap = new HashMap<String, Object>();
                 instanceList = instanceMapper.selectListByParam(paramMap);
             }
+
+            // 记录异常表
+            PcmExceptionLogDto exceptionLogdto = new PcmExceptionLogDto();
+            exceptionLogdto.setInterfaceName("redisExceptionHandler");
+            exceptionLogdto.setExceptionType(StatusCodeConstants.StatusCode.EXCEPTION_REDIS.getStatus());
+            exceptionLogdto.setDataContent("redis定时任务接口");
+            exceptionLogdto.setErrorCode(ComErrorCodeConstants.ErrorCode.REDIS_NOT_WORK.getErrorCode());
+            exceptionLogdto.setErrorMessage("Redis服务器连接不上，Redis已经宕机或者其他未知原因。");
+
+            exceptionLogService.saveExceptionLogInfo(exceptionLogdto);
         }
 
         logger.info("end redisExceptionHandler(),return:" + instanceList);
