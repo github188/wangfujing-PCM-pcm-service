@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wangfj.product.maindata.persistence.PcmErpProductMapper">
-    <!--查询供应商门店下扣率码要约-->
-    <resultMap type="com.wangfj.product.maindata.domain.vo.GetSupAndErpInfoDto" id="GetShopInfoResultMap">
-       <id column="supplierCode" property="supplierCode" jdbcType="VARCHAR"/>
-       <result column="supplierName" property="supplierName" jdbcType="VARCHAR"/>
-       <collection property="shoppeList" resultMap="shoppeList"></collection>
-    </resultMap>
-    <resultMap type="com.wangfj.product.maindata.domain.vo.ErpSupInfoListDto" id="shoppeList">
-      <id column="shoppeCode" property="shoppeCode" jdbcType="VARCHAR"/>
-      <collection property="erplist" resultMap="erplist"></collection>
-    </resultMap>
-    <resultMap id="erplist" type="com.wangfj.product.maindata.domain.vo.ErpSupInfoDto">
-           <id column="erpcode" property="erpcode" jdbcType="VARCHAR"/>
-           <result column="contractList" property="contractList" jdbcType="VARCHAR"/>
-           <result column="discountLimit" property="discountLimit" jdbcType="VARCHAR"/>
-           <result column="statCategory" property="statCategory" jdbcType="VARCHAR"/>
-           <result column="manageCategory" property="manageCategory" jdbcType="VARCHAR"/>
-    </resultMap>
+	<!--查询供应商门店下扣率码要约 -->
+	<resultMap type="com.wangfj.product.maindata.domain.vo.GetSupAndErpInfoDto"
+		id="GetShopInfoResultMap">
+		<id column="supplierCode" property="supplierCode" jdbcType="VARCHAR" />
+		<result column="supplierName" property="supplierName" jdbcType="VARCHAR" />
+		<collection property="shoppeList" resultMap="shoppeList"></collection>
+	</resultMap>
+	<resultMap type="com.wangfj.product.maindata.domain.vo.ErpSupInfoListDto"
+		id="shoppeList">
+		<id column="shoppeCode" property="shoppeCode" jdbcType="VARCHAR" />
+		<collection property="erplist" resultMap="erplist"></collection>
+	</resultMap>
+	<resultMap id="erplist"
+		type="com.wangfj.product.maindata.domain.vo.ErpSupInfoDto">
+		<id column="erpcode" property="erpcode" jdbcType="VARCHAR" />
+		<result column="contractList" property="contractList" jdbcType="VARCHAR" />
+		<result column="discountLimit" property="discountLimit"
+			jdbcType="VARCHAR" />
+		<result column="statCategory" property="statCategory" jdbcType="VARCHAR" />
+		<result column="manageCategory" property="manageCategory"
+			jdbcType="VARCHAR" />
+	</resultMap>
 	<resultMap id="BaseResultMap"
 		type="com.wangfj.product.maindata.domain.entity.PcmErpProduct">
 		<id column="sid" property="sid" jdbcType="BIGINT" />
@@ -138,17 +143,20 @@
 		from pcm_erp_product
 		where sid = #{sid,jdbcType=BIGINT}
 	</select>
-	<select id="getBrandShopInfo" resultType="Map"
-		parameterType="Map">
+	<select id="getBrandShopInfo" resultType="Map" parameterType="Map">
 		SELECT
-			*
+		*
 		FROM
-			pcm_organization AS shop
-		JOIN pcm_shop_brand_relation AS psbr ON shop.sid = psbr.shop_sid
-		JOIN pcm_brand AS brand ON brand.sid = psbr.brand_sid
+		pcm_organization AS shop
+		JOIN pcm_shop_brand_relation AS
+		psbr ON shop.sid =
+		psbr.shop_sid
+		JOIN pcm_brand AS brand ON brand.sid =
+		psbr.brand_sid
 		WHERE
-			shop.organization_code = #{shopCode}
-		AND brand.brand_sid = #{brandCode}
+		shop.organization_code = #{shopCode}
+		AND
+		brand.brand_sid = #{brandCode}
 	</select>
 	<select id="selectByProCode" resultMap="BaseResultMap"
 		parameterType="java.lang.String">
@@ -741,7 +749,7 @@
 		where sid =
 		#{sid,jdbcType=BIGINT}
 	</update>
-	
+
 	<select id="selectRateCodeByParam" resultMap="BaseResultMap"
 		parameterType="java.util.Map">
 		select
@@ -767,7 +775,7 @@
 				and product_code = #{productCode,jdbcType=VARCHAR}
 			</if>
 			<if test="codeType != null">
-				and code_type = 4 
+				and code_type = 4
 			</if>
 			<if test="bigCodePrice != null">
 				and big_code_price = #{bigCodePrice,jdbcType=DECIMAL}
@@ -864,7 +872,7 @@
 			#{start}, #{limit}
 		</if>
 	</select>
-	
+
 	<select id="selectListByParam" resultMap="BaseResultMap"
 		parameterType="java.util.Map">
 		select
@@ -990,25 +998,33 @@
 	<select id="selectPageListByParam1newPrice" resultMap="BaseResultMap"
 		parameterType="java.util.Map">
 		select
-		erp.sid, erp.store_code, erp.shop_name, erp.shoppe_code, erp.shoppe_name,
+		erp.sid, erp.store_code, erp.shop_name, erp.shoppe_code,
+		erp.shoppe_name,
 		erp.product_code,
 		erp.code_type, erp.big_code_price,
 		erp.supply_code, erp.offer_no,
-		erp.brand_code, erp.update_time, erp.opt_user_sid, erp.product_name,
+		erp.brand_code, erp.update_time,
+		erp.opt_user_sid, erp.product_name,
 		erp.product_type,
 		erp.product_category, erp.stan_name, erp.article_num, erp.sales_unit,
 		erp.supplier_barcode, pp.promotion_price as sales_price,
 		erp.input_tax, erp.output_tax, erp.sales_tax,
-		erp.pro_status, erp.is_promotion,
+		erp.pro_status,
+		erp.is_promotion,
 		erp.is_adjust_price, erp.manage_category,
-		erp.discount_limit, erp.origin_land, erp.service_fee_type, erp.format_type,
+		erp.discount_limit, erp.origin_land, erp.service_fee_type,
+		erp.format_type,
 		erp.stat_category,erp.notes,erp.product_abbr,
 		erp.commission_rate
 		from pcm_erp_product erp
-		left join pcm_price pp on pp.attribute2 = erp.store_code AND pp.shoppe_pro_sid = erp.product_code 
+		left join pcm_price pp on
+		pp.attribute2 = erp.store_code AND pp.shoppe_pro_sid =
+		erp.product_code
 		AND pp.ifdel = '0'
-		AND NOW() BETWEEN pp.promotion_begin_time
-		AND pp.promotion_end_time
+		AND NOW() BETWEEN
+		pp.promotion_begin_time
+		AND
+		pp.promotion_end_time
 		<where>
 			<if test="sidList != null">
 				and erp.sid in
@@ -1161,41 +1177,72 @@
 	</select>
 	<!-- erp商品下发 -->
 	<select id="selectErpPageByParam" parameterType="java.util.Map"
-		resultMap="resultMap2"> 
-		select
-		erp.sid, erp.store_code, erp.shop_name, erp.shoppe_code,br.brand_name,
+		resultMap="resultMap2">
+		SELECT
+		*
+		FROM
+		(
+		SELECT
+		erp.sid,
+		erp.store_code,
+		erp.shop_name,
+		erp.shoppe_code,
+		br.brand_name,
 		erp.shoppe_name,
-		product_code,code_type, erp.big_code_price,
-		erp.supply_code, erp.offer_no,
-		erp.brand_code, erp.update_time,
-		erp.opt_user_sid, erp.product_name,
-		product_type,product_category,
-		stan_name, article_num,
+		product_code,
+		code_type,
+		erp.big_code_price,
+		erp.supply_code,
+		erp.offer_no,
+		erp.brand_code,
+		erp.update_time,
+		erp.opt_user_sid,
+		erp.product_name,
+		product_type,
+		product_category,
+		stan_name,
+		article_num,
 		sales_unit,
-		supplier_barcode, pp.promotion_price as salesPrice,
+		supplier_barcode,
+		pp.promotion_price AS salesPrice,
 		input_tax,
-		output_tax, sales_tax, pro_status, is_promotion,
-		is_adjust_price, manage_category,
+		output_tax,
+		sales_tax,
+		pro_status,
+		is_promotion,
+		is_adjust_price,
+		manage_category,
 		discount_limit,
 		origin_land,
-		service_fee_type, format_type,
-		stat_category,commission_rate,
-		brg.brand_sid as groupBrandCode
-		from
+		service_fee_type,
+		format_type,
+		stat_category,
+		commission_rate,
+		brg.brand_sid AS groupBrandCode,
+		br.sid
+		AS brsid,
+		org.sid AS orgsid
+		FROM
 		pcm_erp_product erp
-		left join
-		pcm_shoppe sp on erp.shoppe_code= sp.shoppe_code
-		left join
-		pcm_organization org on sp.shop_sid=org.sid
-		left join pcm_brand br on
-		br.brand_sid = erp.brand_code
-		AND br.shop_type = org.store_type
-		left join pcm_brand brg on
-		brg.sid=br.parent_sid
-		LEFT JOIN pcm_price pp ON pp.attribute2 = erp.store_code
-		AND pp.shoppe_pro_sid = erp.product_code
-		AND pp.ifdel = '0'
-		AND NOW() BETWEEN pp.promotion_begin_time
+		LEFT JOIN pcm_shoppe
+		sp ON erp.shoppe_code = sp.shoppe_code
+		LEFT
+		JOIN pcm_organization org ON
+		sp.shop_sid = org.sid
+		LEFT JOIN pcm_brand
+		br ON br.brand_sid =
+		erp.brand_code
+		LEFT JOIN pcm_brand brg ON brg.sid
+		= br.parent_sid
+		LEFT
+		JOIN pcm_price pp ON pp.attribute2 =
+		erp.store_code
+		AND
+		pp.shoppe_pro_sid = erp.product_code
+		AND pp.ifdel =
+		'0'
+		AND NOW() BETWEEN
+		pp.promotion_begin_time
 		AND pp.promotion_end_time
 		<where>
 			1=1
@@ -1320,12 +1367,9 @@
 				and product_abbr = #{productAbbr,jdbcType=VARCHAR}
 			</if>
 		</where>
-		order by
-		erp.sid asc
-		<if test="limit != null">
-			limit
-			#{start}, #{limit}
-		</if>
+		) test
+		JOIN pcm_shop_brand_relation psbr ON psbr.brand_sid = test.brsid
+		AND psbr.shop_sid = test.orgsid
 	</select>
 
 
@@ -1360,7 +1404,8 @@
 		ifnull(erp.supplier_barcode,"") as supplierBarcode,
 		<!-- ifnull(erp.sales_price,"") as salesPrice, -->
 		ifnull(pp.promotion_price,"") as salesPrice,
-		ifnull(erp.input_tax,"") as
+		ifnull(erp.input_tax,"")
+		as
 		inputTax,
 		ifnull(erp.output_tax,"") as outputTax,
 		ifnull(erp.sales_tax,"") as salesTax,
@@ -1385,28 +1430,36 @@
 		LEFT JOIN pcm_shoppe sp ON erp.shoppe_code =
 		sp.shoppe_code
 		LEFT JOIN pcm_organization org ON sp.shop_sid = org.sid
-		LEFT JOIN pcm_brand brg ON brg.brand_sid = erp.brand_code AND org.store_type = brg.shop_type
-		LEFT JOIN pcm_price pp ON pp.attribute2 = erp.store_code AND pp.shoppe_pro_sid = erp.product_code
-		AND pp.ifdel = '0'
+		LEFT JOIN pcm_brand brg ON brg.brand_sid = erp.brand_code AND
+		org.store_type = brg.shop_type
+		LEFT JOIN pcm_price pp ON pp.attribute2
+		= erp.store_code AND pp.shoppe_pro_sid = erp.product_code
+		AND pp.ifdel
+		= '0'
 		AND NOW() BETWEEN pp.promotion_begin_time
-		AND pp.promotion_end_time
+		AND
+		pp.promotion_end_time
 		<if test="supplyCode != null">
-			JOIN pcm_erp_product_supply peps ON peps.erp_product_sid = erp.product_code
-			AND peps.shop_sid = erp.store_code AND peps.`status` = 0
-			JOIN pcm_supply_info supply ON peps.supply_sid = supply.supply_code
+			JOIN pcm_erp_product_supply peps ON peps.erp_product_sid =
+			erp.product_code
+			AND peps.shop_sid = erp.store_code AND peps.`status`
+			= 0
+			JOIN pcm_supply_info supply ON peps.supply_sid =
+			supply.supply_code
 			AND supply.shop_sid = erp.store_code
 		</if>
 		<if test="supplyCode == null">
-			JOIN pcm_supply_info supply ON erp.supply_code = supply.supply_code
+			JOIN pcm_supply_info supply ON erp.supply_code =
+			supply.supply_code
 			AND supply.shop_sid = erp.store_code
 		</if>
 		<where>
 			1=1
 			<if test="erpSid != null">
-				and erp.sid  &lt; #{erpSid,jdbcType=BIGINT}
+				and erp.sid &lt; #{erpSid,jdbcType=BIGINT}
 			</if>
-			<if test="cateList != null" >
-				and erp.manage_category IN 
+			<if test="cateList != null">
+				and erp.manage_category IN
 				<foreach collection="cateList" item="cateCode" index="index"
 					open="(" close=")" separator=",">
 					#{cateCode,jdbcType=VARCHAR}
@@ -1499,19 +1552,23 @@
 				and erp.is_promotion = #{isPromotion,jdbcType=INTEGER}
 			</if>
 			<if test="isAdjustPrice != null">
-				and erp.is_adjust_price = #{isAdjustPrice,jdbcType=INTEGER}
+				and erp.is_adjust_price =
+				#{isAdjustPrice,jdbcType=INTEGER}
 			</if>
 			<if test="manageCategory != null">
-				and erp.manage_category = #{manageCategory,jdbcType=VARCHAR}
+				and erp.manage_category =
+				#{manageCategory,jdbcType=VARCHAR}
 			</if>
 			<if test="discountLimit != null">
-				and erp.discount_limit = #{discountLimit,jdbcType=DECIMAL}
+				and erp.discount_limit =
+				#{discountLimit,jdbcType=DECIMAL}
 			</if>
 			<if test="originLand != null">
 				and erp.origin_land = #{originLand,jdbcType=VARCHAR}
 			</if>
 			<if test="serviceFeeType != null">
-				and erp.service_fee_type = #{serviceFeeType,jdbcType=VARCHAR}
+				and erp.service_fee_type =
+				#{serviceFeeType,jdbcType=VARCHAR}
 			</if>
 			<if test="formatType != null">
 				and erp.format_type = #{formatType,jdbcType=INTEGER}
@@ -1520,7 +1577,8 @@
 				and erp.stat_category = #{statCategory,jdbcType=VARCHAR}
 			</if>
 			<if test="commissionRate != null">
-				and erp.commission_rate = #{commissionRate,jdbcType=DECIMAL}
+				and erp.commission_rate =
+				#{commissionRate,jdbcType=DECIMAL}
 			</if>
 			<if test="notes != null">
 				and erp.notes = #{notes,jdbcType=VARCHAR}
@@ -1534,7 +1592,7 @@
 		<if test="limit != null">
 			limit
 			<if test="erpSid == null">
-			#{start}, 
+				#{start},
 			</if>
 			#{limit}
 		</if>
@@ -1548,13 +1606,16 @@
 		count(erp.sid)
 		from pcm_erp_product erp
 		<if test="supplyCode != null">
-			JOIN pcm_erp_product_supply peps ON peps.erp_product_sid = erp.product_code
-			AND peps.shop_sid = erp.store_code AND peps.`status` = 0
-			JOIN pcm_supply_info supply ON peps.supply_sid = supply.supply_code
+			JOIN pcm_erp_product_supply peps ON peps.erp_product_sid =
+			erp.product_code
+			AND peps.shop_sid = erp.store_code AND peps.`status`
+			= 0
+			JOIN pcm_supply_info supply ON peps.supply_sid =
+			supply.supply_code
 		</if>
 		<where>
-			<if test="cateList != null" >
-				and erp.manage_category IN 
+			<if test="cateList != null">
+				and erp.manage_category IN
 				<foreach collection="cateList" item="cateCode" index="index"
 					open="(" close=")" separator=",">
 					#{cateCode,jdbcType=VARCHAR}
@@ -1641,19 +1702,23 @@
 				and erp.is_promotion = #{isPromotion,jdbcType=INTEGER}
 			</if>
 			<if test="isAdjustPrice != null">
-				and erp.is_adjust_price = #{isAdjustPrice,jdbcType=INTEGER}
+				and erp.is_adjust_price =
+				#{isAdjustPrice,jdbcType=INTEGER}
 			</if>
 			<if test="manageCategory != null">
-				and erp.manage_category = #{manageCategory,jdbcType=VARCHAR}
+				and erp.manage_category =
+				#{manageCategory,jdbcType=VARCHAR}
 			</if>
 			<if test="discountLimit != null">
-				and erp.discount_limit = #{discountLimit,jdbcType=DECIMAL}
+				and erp.discount_limit =
+				#{discountLimit,jdbcType=DECIMAL}
 			</if>
 			<if test="originLand != null">
 				and erp.origin_land = #{originLand,jdbcType=VARCHAR}
 			</if>
 			<if test="serviceFeeType != null">
-				and erp.service_fee_type = #{serviceFeeType,jdbcType=VARCHAR}
+				and erp.service_fee_type =
+				#{serviceFeeType,jdbcType=VARCHAR}
 			</if>
 			<if test="formatType != null">
 				and erp.format_type = #{formatType,jdbcType=INTEGER}
@@ -1662,7 +1727,8 @@
 				and erp.stat_category = #{statCategory,jdbcType=VARCHAR}
 			</if>
 			<if test="commissionRate != null">
-				and erp.commission_rate = #{commissionRate,jdbcType=DECIMAL}
+				and erp.commission_rate =
+				#{commissionRate,jdbcType=DECIMAL}
 			</if>
 			<if test="notes != null">
 				and erp.notes = #{notes,jdbcType=VARCHAR}
@@ -1672,40 +1738,47 @@
 			</if>
 		</where>
 	</select>
-	
-	
+
+
 	<!-- 根据供应商编码、业态、经营方式、门店 获取 专柜列表 （扣率码 （要约号、管理分类代码、统计分类、折扣底线）） -->
-	<select id="GetShoppeInfoAndErp" parameterType="java.util.Map" resultMap="GetShopInfoResultMap">
-	SELECT
-	sup.supply_code AS supplierCode,
-	sup.supply_name AS supplierName,
-	ps.shoppe_code AS shoppeCode,
-	pep.product_code AS erpcode,
-	pep.offer_no AS contractList,
-	pep.discount_limit AS discountLimit,
-	pep.stat_category AS statCategory,
-	pep.manage_category AS manageCategory
-	FROM (SELECT * from pcm_organization WHERE organization_type = 3 
-	<if test="shopCode!=null">  <!-- 门店编码 -->
-	AND organization_code = #{shopCode,jdbcType=VARCHAR}
-	</if>
-	) org
-	INNER JOIN pcm_supply_info sup
-	ON org.organization_code = sup.shop_sid
-	<if test="operateMode!=null">  <!-- 经营方式 -->
-	  AND sup.business_pattern = #{operateMode,jdbcType=VARCHAR}
-	</if>
-	<if test="supplierCode!=null">  <!-- 供应商编码 -->
-	  AND sup.supply_code = #{supplierCode,jdbcType=VARCHAR}
-	</if>
-	INNER JOIN pcm_supply_shoppe_relation pssr
-	ON pssr.supply_sid = sup.sid
-	INNER JOIN pcm_shoppe ps ON pssr.shoppe_sid = ps.sid
-	AND ps.shop_sid = org.sid
-	<if test="type!=null">  <!-- 业态 -->
-	  AND ps.industry_condition_sid = #{type,jdbcType=VARCHAR}
-	</if>
-	INNER JOIN pcm_erp_product pep ON pep.shoppe_code = ps.shoppe_code
-	AND pep.code_type = 4  
+	<select id="GetShoppeInfoAndErp" parameterType="java.util.Map"
+		resultMap="GetShopInfoResultMap">
+		SELECT
+		sup.supply_code AS supplierCode,
+		sup.supply_name AS supplierName,
+		ps.shoppe_code AS shoppeCode,
+		pep.product_code AS erpcode,
+		pep.offer_no
+		AS contractList,
+		pep.discount_limit AS discountLimit,
+		pep.stat_category
+		AS statCategory,
+		pep.manage_category AS manageCategory
+		FROM (SELECT *
+		from pcm_organization WHERE organization_type = 3
+		<if test="shopCode!=null">  <!-- 门店编码 -->
+			AND organization_code = #{shopCode,jdbcType=VARCHAR}
+		</if>
+		) org
+		INNER JOIN pcm_supply_info sup
+		ON org.organization_code =
+		sup.shop_sid
+		<if test="operateMode!=null">  <!-- 经营方式 -->
+			AND sup.business_pattern = #{operateMode,jdbcType=VARCHAR}
+		</if>
+		<if test="supplierCode!=null">  <!-- 供应商编码 -->
+			AND sup.supply_code = #{supplierCode,jdbcType=VARCHAR}
+		</if>
+		INNER JOIN pcm_supply_shoppe_relation pssr
+		ON pssr.supply_sid = sup.sid
+		INNER JOIN pcm_shoppe ps ON pssr.shoppe_sid = ps.sid
+		AND ps.shop_sid =
+		org.sid
+		<if test="type!=null">  <!-- 业态 -->
+			AND ps.industry_condition_sid = #{type,jdbcType=VARCHAR}
+		</if>
+		INNER JOIN pcm_erp_product pep ON pep.shoppe_code = ps.shoppe_code
+		AND
+		pep.code_type = 4
 	</select>
 </mapper>
