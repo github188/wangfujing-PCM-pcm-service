@@ -188,10 +188,19 @@
             <if test="sid != null">
                 AND psps.sid = #{sid}
             </if>
+            <if test="sidList != null">
+                AND psps.sid IN
+                <foreach collection="sidList" open="(" item="sid" separator="," close=")">
+                    #{sid}
+                </foreach>
+            </if>
             <if test="status != null">
                 AND psps.status = #{status}
             </if>
         </where>
+        <if test="start != null and limit != null">
+            limit #{start} , #{limit}
+        </if>
     </select>
     
     <select id="getPrrsInfo" parameterType="java.util.Map" resultMap="BaseResultMap">

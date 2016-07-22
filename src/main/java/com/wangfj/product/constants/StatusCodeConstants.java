@@ -11,7 +11,8 @@ public class StatusCodeConstants {
 		EXCEPTION_PRODUCT("00111001","商品"),
 		EXCEPTION_REGION("00112001","行政区域"),
 		EXCEPTION_PRICE("00300001","价格"),
-		EXCEPTION_STOCK("00301101","库存");
+		EXCEPTION_STOCK("00301101","库存"),
+		EXCEPTION_REDIS("00302001","Redis");
 
 		private String status;
 		private String comment;
