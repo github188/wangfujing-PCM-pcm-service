@@ -228,5 +228,10 @@ public interface PcmStockMapper extends BaseMapper<PcmStock> {
      * @return
      */
     List<PcmStockWCSDto> selectProStockPushByParam(Map<String, Object> param);
+    
+    /**
+     * 根据参数查询edi关联商品可售库存（分页）
+     */
+    List<PcmStock> selectProStockByParam(Map<String, Object> param);
 
 }
