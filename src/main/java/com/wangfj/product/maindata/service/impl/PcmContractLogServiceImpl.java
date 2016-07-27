@@ -335,6 +335,7 @@ public class PcmContractLogServiceImpl implements IPcmContractLogService {
 			// 验证管理分类是否存在
 			if (StringUtils.isNotBlank(contractLogDto.getCol1())) {// 管理分类不为空的时候验证有效性
 				parasMap.clear();
+				parasMap.put("shopSid", contractLogDto.getStoreCode());// 门店编码
 				parasMap.put("categoryCode", contractLogDto.getCol1());// 管理分类编码
 				parasMap.put("categoryType", Constants.MANAGECATEGORY);// 分类类型为1管理分类
 				parasMap.put("status", Constants.Y);// 是否启用
@@ -342,7 +343,7 @@ public class PcmContractLogServiceImpl implements IPcmContractLogService {
 				List<PcmCategory> managecateList = categoryMapper.selectListByParam(parasMap);
 				if (managecateList == null || managecateList.size() != 1) {
 					logger.info("管理分类不存在");
-					throw new BleException(ErrorCode.CONTRACT_CATEGORY_GL_NULL.getErrorCode(),
+					throw new BleException(contractLogDto.getStoreCode() + contractLogDto.getCol1() + ErrorCode.CONTRACT_CATEGORY_GL_NULL.getErrorCode(),
 							ErrorCode.CONTRACT_CATEGORY_GL_NULL.getMemo());
 				}
 			}
