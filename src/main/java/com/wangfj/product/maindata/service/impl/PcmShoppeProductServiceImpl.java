@@ -174,7 +174,8 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 						org = orgMapper.get(shoppeList.get(0).getShopSid());
 					}
 				} else {
-					logger.error(ErrorCode.BRAND_NOSTORE.getMemo() + "--para:" + pageDto.toString());
+					logger.error(
+							ErrorCode.BRAND_NOSTORE.getMemo() + "--para:" + pageDto.toString());
 					throw new BleException(ErrorCode.BRAND_NOSTORE.getErrorCode(),
 							ErrorCode.BRAND_NOSTORE.getMemo());
 				}
@@ -308,7 +309,8 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 						org = orgMapper.get(shoppeList.get(0).getShopSid());
 					}
 				} else {
-					logger.error(ErrorCode.BRAND_NOSTORE.getMemo() + "--para:" + pageDto.toString());
+					logger.error(
+							ErrorCode.BRAND_NOSTORE.getMemo() + "--para:" + pageDto.toString());
 					throw new BleException(ErrorCode.BRAND_NOSTORE.getErrorCode(),
 							ErrorCode.BRAND_NOSTORE.getMemo());
 				}
@@ -415,14 +417,14 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 			} else if (Constants.PCMERPPRODUCT_PRO_STATUS_STOPSALE == (Integer) map
 					.get("productStatus")) {
 				map.put("productStatus", Constants.PCMERPPRODUCT_PRO_STATUS_STOPSALE_STR);
-			} else if (Constants.PCMERPPRODUCT_PRO_STATUS_STOP == (Integer) map
-					.get("productStatus")) {
+			} else
+				if (Constants.PCMERPPRODUCT_PRO_STATUS_STOP == (Integer) map.get("productStatus")) {
 				map.put("productStatus", Constants.PCMERPPRODUCT_PRO_STATUS_STOP_STR);
 			} else if (Constants.PCMERPPRODUCT_PRO_STATUS_DELETE == (Integer) map
 					.get("productStatus")) {
 				map.put("productStatus", Constants.PCMERPPRODUCT_PRO_STATUS_DELETE_STR);
-			} else if (Constants.PCMERPPRODUCT_PRO_STATUS_PASS == (Integer) map
-					.get("productStatus")) {
+			} else
+				if (Constants.PCMERPPRODUCT_PRO_STATUS_PASS == (Integer) map.get("productStatus")) {
 				map.put("productStatus", Constants.PCMERPPRODUCT_PRO_STATUS_PASS_STR);
 			} else if (Constants.PCMERPPRODUCT_PRO_STATUS_PAUSE == (Integer) map
 					.get("productStatus")) {
@@ -453,13 +455,17 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 		if (map.get("operateMode") != null) {
 			if (Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z1 == (Integer) map.get("operateMode")) {
 				map.put("operateMode", Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z1_STR);
-			} else if (Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z2 == (Integer) map.get("operateMode")) {
+			} else
+				if (Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z2 == (Integer) map.get("operateMode")) {
 				map.put("operateMode", Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z2_STR);
-			} else if (Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3 == (Integer) map.get("operateMode")) {
+			} else if (Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3 == (Integer) map
+					.get("operateMode")) {
 				map.put("operateMode", Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3_STR);
-			} else if (Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z4 == (Integer) map.get("operateMode")) {
+			} else
+				if (Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z4 == (Integer) map.get("operateMode")) {
 				map.put("operateMode", Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z4_STR);
-			} else if (Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z5 == (Integer) map.get("operateMode")) {
+			} else if (Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z5 == (Integer) map
+					.get("operateMode")) {
 				map.put("operateMode", Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z5_STR);
 			}
 		}
@@ -755,7 +761,8 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 	 * @Create In 2015年8月3日 By zhangxy
 	 */
 
-	public Page<ProductPageDto> selectBaseProPageByPara(ProductPageDto pageDto) throws BleException {
+	public Page<ProductPageDto> selectBaseProPageByPara(ProductPageDto pageDto)
+			throws BleException {
 		Page<ProductPageDto> page = new Page<ProductPageDto>();
 		if (pageDto.getCurrentPage() != null && pageDto.getCurrentPage() != 0) {
 			page.setCurrentPage(pageDto.getCurrentPage());
@@ -833,7 +840,8 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 	 * @Create In 2016年04月05日 By wangxuan
 	 */
 	@Override
-	public Page<ProductPageDto> getShoppeProductToExcel(ProductPageDto pageDto) throws BleException {
+	public Page<ProductPageDto> getShoppeProductToExcel(ProductPageDto pageDto)
+			throws BleException {
 		logger.info("start getShoppeProductToExcel(),param:" + pageDto.toString());
 		Page<ProductPageDto> page = new Page<ProductPageDto>();
 		pageDto.setStart(null);
@@ -1129,22 +1137,8 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 	public Map<String, Object> selectStockInfo(String shoppeProSid) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("shoppeProSid", shoppeProSid);
-		List<Map<String, Object>> list = shoppeProMapper.selectStockInFo(paramMap);
-		if (list != null && list.size() > 0) {
-			return list.get(0);
-		}
-		return null;
-	}
-
-	public Map<String, Object> selectStockInfo(String shoppeProSid, String sapProductCode) {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("shoppeProSid", shoppeProSid);
-		paramMap.put("sapProductCode", sapProductCode);
-		List<Map<String, Object>> list = shoppeProMapper.selectStockInFo(paramMap);
-		if (list != null && list.size() > 0) {
-			return list.get(0);
-		}
-		return null;
+		Map<String, Object> map = shoppeProMapper.selectStockInFo(paramMap);
+		return map;
 	}
 
 	/**
@@ -1669,7 +1663,7 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 		logger.debug("end findIndustryCategoryByParaForOms(),return:" + returnDto.toString());
 		return returnDto;
 	}
-	
+
 	@Override
 	public Map<String, Object> selectParamByShoppeProCode(String shoppeProCode) {
 		return shoppeProMapper.selectParamByShoppeProCode(shoppeProCode);

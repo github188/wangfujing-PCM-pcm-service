@@ -205,14 +205,23 @@ public interface PcmShoppeProductMapper extends BaseMapper<PcmShoppeProduct> {
 	PcmShoppeProduct selectSpPByPDSidAndSCAndCCIsExists(Map map);
 
 	/**
-	 * 查询专柜商品信息(名称、是否可售、是否可包装、是否管库存、是否负库存销售)
+	 * 
 	 *
 	 * @param paramMap
 	 * @return List<Map<String,Object>>
 	 * @Methods Name selectStockInFo
 	 * @Create In 2015年8月3日 By yedong
 	 */
-	List<Map<String, Object>> selectStockInFo(Map<String, Object> paramMap);
+
+	/**
+	 * 查询专柜商品信息(名称、是否可售、是否可包装、是否管库存、是否负库存销售)
+	 * 
+	 * @Methods Name selectStockInFo
+	 * @Create In 2016年7月27日 By kongqf
+	 * @param paramMap
+	 * @return Map<String,Object>
+	 */
+	Map<String, Object> selectStockInFo(Map<String, Object> paramMap);
 
 	/**
 	 * 一品多供应商关系上传 查询专柜商品信息
@@ -373,14 +382,16 @@ public interface PcmShoppeProductMapper extends BaseMapper<PcmShoppeProduct> {
 	 * @return
 	 */
 	OmsShoppeProductResultDto findIndustryCategoryByParaForOms(OmsShoppeProductDto dto);
-	
+
 	Map<String, Object> selectParamByShoppeProCode(String shoppeProCode);
+
 	/**
 	 * SAP修改商品信息接口，获取专柜商品信息
+	 * 
 	 * @Methods Name getShoproInfoForSAPModify
 	 * @Create In 2016年7月5日 By wangc
 	 * @param paraMap
 	 * @return List<GetShoProInfoForSAPModifyDto>
 	 */
-	List<GetShoProInfoForSAPModifyDto> getShoproInfoForSAPModify(Map<String,Object> paraMap);
-} 
+	List<GetShoProInfoForSAPModifyDto> getShoproInfoForSAPModify(Map<String, Object> paraMap);
+}

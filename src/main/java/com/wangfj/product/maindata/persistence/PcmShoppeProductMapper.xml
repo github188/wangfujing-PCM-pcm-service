@@ -134,7 +134,7 @@
 		<result column="storeBrandName" property="storeBrandName" />
 		<result column="managerCategoryCode" property="managerCategoryCode" />
 		<result column="managerCategoryName" property="managerCategoryName" />
-		<result column="xxhcFlag" property="xxhcFlag"/>
+		<result column="xxhcFlag" property="xxhcFlag" />
 		<collection property="channel"
 			ofType="com.wangfj.product.maindata.domain.vo.PcmProChannelSearchDto">
 			<id column="channelSid" property="channelSid" />
@@ -278,14 +278,14 @@
 	</sql>
 	<select id="getSidListInfo22" resultType="String" parameterType="String">
 		SELECT
-			pro.sid,
-			pro.shoppe_pro_alias
+		pro.sid,
+		pro.shoppe_pro_alias
 		FROM
-			pcm_shoppe_product AS pro
+		pcm_shoppe_product AS pro
 		WHERE
-			sid > 250644 and field4 is NULL
+		sid > 250644 and field4 is NULL
 	</select>
-	
+
 	<!-- 获得参与活动的专柜商品信息 -->
 	<select id="selectProByActiveId" resultMap="ItemsInfoSearchMap"
 		parameterType="java.util.Map">
@@ -428,7 +428,8 @@
 		JOIN pcm_color_dict AS
 		color ON
 		sku.pro_color_sid = color.sid
-		JOIN pcm_brand AS brand ON
+		JOIN
+		pcm_brand AS brand ON
 		spu.brand_root_sid = brand.sid
 		JOIN
 		pcm_product_category AS ppc ON
@@ -932,7 +933,8 @@
 		product_name,
 		sku.pro_color_name AS colorMa,
 		color.sid AS colorCode,
-		color.color_name AS colorName,
+		color.color_name
+		AS colorName,
 		spu.product_sku
 		AS modelCode,
 		brand.brand_sid AS brandCode,
@@ -958,10 +960,12 @@
 		pcm_product_category AS ppc1
 		LEFT JOIN pcm_category
 		AS pc1
-		ON ppc1.category_sid = pc1.sid
+		ON
+		ppc1.category_sid = pc1.sid
 		WHERE
 		ppc1.product_sid = spu.sid
-		AND pc1.category_type = 3
+		AND
+		pc1.category_type = 3
 		AND pc1.is_leaf = 'Y'
 		AND
 		pc1.`status` = 'Y'
@@ -974,9 +978,11 @@
 		pcm_product AS spu ON
 		sku.product_sid =
 		spu.sid
-		JOIN pcm_shoppe_product psp ON psp.product_detail_sid = sku.sid
+		JOIN pcm_shoppe_product
+		psp ON psp.product_detail_sid = sku.sid
 		JOIN pcm_brand AS brand
-		ON spu.brand_root_sid =
+		ON
+		spu.brand_root_sid =
 		brand.sid
 		JOIN
 		pcm_product_category AS ppc ON
@@ -1001,14 +1007,15 @@
 		proDesc.color
 		<where>
 			1 = 1
-			<if test = "sapCodeList != null">
+			<if test="sapCodeList != null">
 				AND
-				<foreach collection="sapCodeList" item="field4" index="index" separator=" OR">
+				<foreach collection="sapCodeList" item="field4" index="index"
+					separator=" OR">
 					psp.field4 = #{field4,jdbcType=VARCHAR}
 				</foreach>
 			</if>
-		    <if test="shoProCode != null">
-			    and psp.shoppe_pro_sid = #{shoProCode,jdbcType=VARCHAR}
+			<if test="shoProCode != null">
+				and psp.shoppe_pro_sid = #{shoProCode,jdbcType=VARCHAR}
 			</if>
 			<if test="photoStatus != null">
 				and sku.photo_status = #{photoStatus,jdbcType=VARCHAR}
@@ -1839,12 +1846,13 @@
 	<select id="getSidListBySapProCode" resultType="Map"
 		parameterType="java.util.Map">
 		select
-			sid
+		sid
 		from pcm_shoppe_product
 		<where>
 			<if test="proList != null">
 				and shoppe_pro_sid in
-				<foreach collection="proList" index="index" item="pro" open="(" close=")" separator=",">
+				<foreach collection="proList" index="index" item="pro" open="("
+					close=")" separator=",">
 					#{pro.PROCODE,jdbcType=VARCHAR}
 				</foreach>
 			</if>
@@ -3143,13 +3151,18 @@
 		psp.category_sid AS categorySid
 		FROM
 		pcm_shoppe_product psp
-		LEFT JOIN pcm_pro_detail ppd ON psp.product_detail_sid = ppd.sid
-		LEFT JOIN pcm_product pp ON ppd.product_sid = pp.sid
-		INNER JOIN pcm_supply_info psi ON psi.sid = psp.supply_sid
+		LEFT JOIN pcm_pro_detail ppd ON
+		psp.product_detail_sid = ppd.sid
+		LEFT JOIN pcm_product pp ON
+		ppd.product_sid = pp.sid
+		INNER JOIN pcm_supply_info psi ON psi.sid =
+		psp.supply_sid
 		INNER JOIN pcm_shoppe ps ON ps.sid = psp.shoppe_sid
 		INNER JOIN pcm_organization org ON ps.shop_sid = org.sid
-		INNER JOIN pcm_brand br ON br.sid = psp.brand_sid
-		LEFT JOIN pcm_channel ch ON ch.channel_code =
+		INNER JOIN
+		pcm_brand br ON br.sid = psp.brand_sid
+		LEFT JOIN pcm_channel ch ON
+		ch.channel_code =
 		<if test="channelSid != null">
 			#{channelSid,jdbcType=VARCHAR}
 		</if>
@@ -3202,7 +3215,8 @@
 			and org.organization_code = #{storeCode,jdbcType=VARCHAR}
 		</if>
 		<if test="supplierCode != null">
-			AND ( psi.supply_code = #{supplierCode} OR psi.sid = #{supplierCode} )
+			AND ( psi.supply_code = #{supplierCode} OR psi.sid =
+			#{supplierCode} )
 		</if>
 		ORDER BY
 		psp.sid DESC
@@ -3219,7 +3233,8 @@
 		FROM
 		pcm_shoppe_product psp
 		<if test="skuCode != null or minSkuCode != null or maxSkuCode != null">
-			LEFT JOIN pcm_pro_detail ppd ON psp.product_detail_sid = ppd.sid
+			LEFT JOIN pcm_pro_detail ppd ON psp.product_detail_sid =
+			ppd.sid
 		</if>
 		<if test="supplierCode != null">
 			INNER JOIN pcm_supply_info psi ON psi.sid = psp.supply_sid
@@ -3229,7 +3244,8 @@
 		</if>
 		<if test="storeCode != null">
 			INNER JOIN pcm_shoppe ps ON ps.sid = psp.shoppe_sid
-			INNER JOIN pcm_organization org ON ps.shop_sid = org.sid
+			INNER
+			JOIN pcm_organization org ON ps.shop_sid = org.sid
 		</if>
 		WHERE
 		1 = 1
@@ -3277,7 +3293,8 @@
 			and org.organization_code = #{storeCode,jdbcType=VARCHAR}
 		</if>
 		<if test="supplierCode != null">
-			AND ( psi.supply_code = #{supplierCode} OR psi.sid = #{supplierCode} )
+			AND ( psi.supply_code = #{supplierCode} OR psi.sid =
+			#{supplierCode} )
 		</if>
 	</select>
 
@@ -4091,34 +4108,27 @@
 	<select id="selectStockInFo" resultType="java.util.Map"
 		parameterType="java.util.Map">
 		select
-		psp.sale_status as saleStatus,
-		psp.is_packing as
-		isPacking,
-		psp.shoppe_pro_name as
-		shoppeProName,
-		psp.is_stock as isStock,
-		pse.negative_stock as negative,
-		ppd.product_detail_sid as sku,
-		psp.shoppe_sid as shoppeSid,
-		pse.shop_sid as shopSid,
+		psp.sale_status AS saleStatus,
+		psp.is_stock AS isStock,
 		psp.shoppe_pro_sid
-		from
-		pcm_shoppe_product as psp
-		join pcm_shoppe as pse
-		on psp.shoppe_sid =
-		pse.sid
-		join
-		pcm_pro_detail as ppd on
-		psp.product_detail_sid = ppd.sid
+		FROM
+		pcm_shoppe_product AS psp
 		<where>
 			<if test="shoppeProSid != null">
 				psp.shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
 			</if>
-			<if test="sapProductCode != null">
-				psp.field4 = #{sapProductCode,jdbcType=VARCHAR}
-			</if>
 		</where>
+		limit 1
 	</select>
+	<!-- <select id="selectStockInFo" resultType="java.util.Map" parameterType="java.util.Map"> 
+		select psp.sale_status as saleStatus, psp.is_packing as isPacking, psp.shoppe_pro_name 
+		as shoppeProName, psp.is_stock as isStock, pse.negative_stock as negative, 
+		ppd.product_detail_sid as sku, psp.shoppe_sid as shoppeSid, pse.shop_sid 
+		as shopSid, psp.shoppe_pro_sid from pcm_shoppe_product as psp join pcm_shoppe 
+		as pse on psp.shoppe_sid = pse.sid join pcm_pro_detail as ppd on psp.product_detail_sid 
+		= ppd.sid <where> <if test="shoppeProSid != null"> psp.shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR} 
+		</if> <if test="sapProductCode != null"> psp.field4 = #{sapProductCode,jdbcType=VARCHAR} 
+		</if> </where> </select> -->
 
 	<!-- 一品多供应商关系上传 查询专柜商品信息 wangxuan -->
 	<select id="selectShoppeProductByShoppeProCode" resultMap="BaseResultMap"
@@ -4403,68 +4413,103 @@
 	<select id="getProInfoPulishSearch" parameterType="java.util.Map"
 		resultMap="proInfoPulishResultMap">
 		SELECT
-			pro.sid AS sid,
-			sku.product_detail_sid AS skuCode,
-			pro.shoppe_pro_sid AS productCode,
-			pro.rate_code AS erpProductCode,
-			pro.shoppe_pro_name AS productName,
-			sku.pro_type AS productType,
-			pro.supply_product_code AS supProductCode,
-			supply.supply_name AS supplierName,
-			supply.supply_code AS supplierCode,
-			supply.business_pattern AS businessPattern,
-			shoppe.shoppe_code AS counterCode,
-			shoppe.shoppe_name AS counterName,
-			org.organization_code AS storeCode,
-			org.organization_name AS storeName,
-			channel.channel_code AS channelCode,
-			channel.channel_name AS channelName,
-			channel.sid AS channelSid,
-			pro.original_price AS marketPrice,
-			pro.stock_mode AS stockMode,
-			pro.negative_stock AS negativeStock,
-			pro.is_stock AS stockType,
-			pro.sale_status AS isSale,
-			sku.pro_color_sid AS colorSid,
-			sku.pro_color_name AS colorCode,
-			sku.pro_color_name AS colorName,
-			sku.pro_stan_sid AS stanCode,
-			sku.pro_stan_name AS stanName,
-			spu.product_sku AS modelCode,
-			pro.field3 AS articleNum,
-			brand.brand_name AS brandGroupName,
-			brand.brand_sid AS brandGroupCode,
-			pro.sale_unit_code AS unitCode,
-			pro.sale_unit_code AS unitName,
-			sku.selling_status AS isSelling,
-			sku.features AS features,
-			spu.primary_attr AS primaryAttr,
-			shoppe.industry_condition_sid AS industry,
-			pro.category_sid AS managerCategoryCode,
-			mdbrand.brand_sid AS storeBrandCode,
-			mdbrand.brand_name AS storeBrandName,
-			manageCate.`name` AS managerCategoryName,
-			pro.field4 AS field4,
-			exte.xxhc_flag AS xxhcFlag
+		pro.sid AS sid,
+		sku.product_detail_sid AS skuCode,
+		pro.shoppe_pro_sid AS productCode,
+		pro.rate_code AS erpProductCode,
+		pro.shoppe_pro_name AS productName,
+		sku.pro_type AS productType,
+		pro.supply_product_code AS supProductCode,
+		supply.supply_name AS
+		supplierName,
+		supply.supply_code AS supplierCode,
+		supply.business_pattern AS businessPattern,
+		shoppe.shoppe_code AS
+		counterCode,
+		shoppe.shoppe_name AS counterName,
+		org.organization_code AS
+		storeCode,
+		org.organization_name AS storeName,
+		channel.channel_code AS
+		channelCode,
+		channel.channel_name AS channelName,
+		channel.sid AS
+		channelSid,
+		pro.original_price AS marketPrice,
+		pro.stock_mode AS
+		stockMode,
+		pro.negative_stock AS negativeStock,
+		pro.is_stock AS
+		stockType,
+		pro.sale_status AS isSale,
+		sku.pro_color_sid AS colorSid,
+		sku.pro_color_name AS colorCode,
+		sku.pro_color_name AS colorName,
+		sku.pro_stan_sid AS stanCode,
+		sku.pro_stan_name AS stanName,
+		spu.product_sku AS modelCode,
+		pro.field3 AS articleNum,
+		brand.brand_name AS brandGroupName,
+		brand.brand_sid AS brandGroupCode,
+		pro.sale_unit_code AS unitCode,
+		pro.sale_unit_code AS unitName,
+		sku.selling_status AS isSelling,
+		sku.features AS features,
+		spu.primary_attr AS primaryAttr,
+		shoppe.industry_condition_sid AS
+		industry,
+		pro.category_sid AS managerCategoryCode,
+		mdbrand.brand_sid AS
+		storeBrandCode,
+		mdbrand.brand_name AS storeBrandName,
+		manageCate.`name`
+		AS managerCategoryName,
+		pro.field4 AS field4,
+		exte.xxhc_flag AS xxhcFlag
 		FROM
-			pcm_shoppe_product AS pro
-		JOIN pcm_pro_detail AS sku ON sku.sid = pro.product_detail_sid
-		JOIN pcm_product AS spu ON spu.sid = sku.product_sid
-		JOIN pcm_shoppe_product_supply AS psps ON psps.shoppe_product_sid = pro.sid
-		JOIN pcm_supply_info AS supply ON supply.sid = psps.supply_sid
-		AND supply.`status` = 'Y'
-		JOIN pcm_shoppe AS shoppe ON shoppe.sid = pro.shoppe_sid
+		pcm_shoppe_product AS pro
+		JOIN pcm_pro_detail AS sku ON sku.sid =
+		pro.product_detail_sid
+		JOIN pcm_product AS spu ON spu.sid =
+		sku.product_sid
+		JOIN
+		pcm_shoppe_product_supply AS psps ON
+		psps.shoppe_product_sid = pro.sid
+		JOIN pcm_supply_info AS supply ON
+		supply.sid = psps.supply_sid
+		AND
+		supply.`status` = 'Y'
+		JOIN pcm_shoppe AS
+		shoppe ON shoppe.sid =
+		pro.shoppe_sid
 		AND shoppe.shoppe_status = 1
-		JOIN pcm_organization AS org ON org.sid = shoppe.shop_sid
-		AND org.organization_type = 3
-		AND org.organization_status = 0
-		JOIN pcm_channel_sale_config AS sale ON sale.shoppe_pro_sid = shoppe.sid
-		AND sale.sale_stauts = 0
-		JOIN pcm_channel AS channel ON channel.channel_code = sale.channel_sid
-		JOIN pcm_brand AS brand ON brand.sid = spu.brand_root_sid
-		JOIN pcm_brand AS mdbrand ON mdbrand.sid = pro.brand_sid
-		JOIN pcm_shoppe_product_extend AS exte ON exte.shoppe_pro_sid = pro.sid
-		LEFT JOIN pcm_category AS manageCate ON pro.category_sid = manageCate.category_code
+		JOIN
+		pcm_organization AS org
+		ON org.sid = shoppe.shop_sid
+		AND
+		org.organization_type = 3
+		AND
+		org.organization_status = 0
+		JOIN
+		pcm_channel_sale_config AS sale ON
+		sale.shoppe_pro_sid = shoppe.sid
+		AND
+		sale.sale_stauts = 0
+		JOIN
+		pcm_channel AS channel ON channel.channel_code
+		= sale.channel_sid
+		JOIN
+		pcm_brand AS brand ON brand.sid =
+		spu.brand_root_sid
+		JOIN pcm_brand AS
+		mdbrand ON mdbrand.sid =
+		pro.brand_sid
+		JOIN pcm_shoppe_product_extend
+		AS exte ON
+		exte.shoppe_pro_sid = pro.sid
+		LEFT JOIN pcm_category AS
+		manageCate ON
+		pro.category_sid = manageCate.category_code
 		<where>
 			<if test="sidList != null">
 				pro.sid in
@@ -4558,7 +4603,8 @@
 		ifnull(pro.supply_product_code,"") AS supplyProCode,
 		ifnull(pro.erpProductCode,"") AS discountCode,
 		ifnull(pro.sale_status,"") AS isSale,
-		ifnull(pro.sale_unit_code,"") AS unitCode,
+		ifnull(pro.sale_unit_code,"") AS
+		unitCode,
 		ifnull(pro.category_sid,"") AS manageCategoryCode,
 		ifnull(pro.shoppe_pro_alias,"") AS productAbbr,
 		ifnull(supply.supply_code,"") AS supplierCode,
@@ -4567,54 +4613,72 @@
 		ifnull(org.organization_code,"") AS storeCode,
 		ifnull(sku.pro_color_name,"") AS colorCode,
 		ifnull(sku.pro_stan_name,"") AS stanCode,
-		ifnull(spu.product_sku,"") AS modelCode,
+		ifnull(spu.product_sku,"") AS
+		modelCode,
 		ifnull(pro.field3,"") AS articleNum,
 		ifnull(pro.original_price,"") AS marketPrice,
 		ifnull(sku.product_detail_sid,"") AS skuCode,
-		ifnull(sku.sid,"") AS skuSid,
+		ifnull(sku.sid,"") AS
+		skuSid,
 		ifnull(spu.sid,"") AS spuSid,
-		ifnull(spu.product_sid,"") AS spuCode,
+		ifnull(spu.product_sid,"") AS
+		spuCode,
 		ifnull(sku.pro_type,"") AS productType,
 		ifnull(pro.original_price,"") AS originPrice,
 		ifnull(supply.supply_name,"") AS supplierCode,
 		ifnull(channel.channel_code,"") AS channelSid,
 		ifnull(pro.stock_mode,"") AS stockMode,
-		ifnull(pro.discountLimit,"") AS maxDiscountRate,
+		ifnull(pro.discountLimit,"") AS
+		maxDiscountRate,
 		ifnull(erp.code_type,"") AS erpSkuType,
 		ifnull(brand1.brand_sid,"") AS brandCode,
 		ifnull(pr.promotion_price,"") AS promotionPrice,
 		ifnull(pro.shoppe_pro_type,"") AS manageType,
-		ifnull(pro.is_cod,"") AS isCOD,
+		ifnull(pro.is_cod,"") AS
+		isCOD,
 		ifnull(pro.is_gift,"") AS isGift,
-		ifnull(pro.is_discountable,"") AS isDiscountable
+		ifnull(pro.is_discountable,"")
+		AS isDiscountable
 		FROM
 		pcm_shoppe_product AS pro
 		JOIN
-		pcm_pro_detail AS sku ON sku.sid = pro.product_detail_sid
+		pcm_pro_detail AS
+		sku ON sku.sid = pro.product_detail_sid
 		JOIN
-		pcm_product AS spu ON spu.sid = sku.product_sid
+		pcm_product AS spu ON
+		spu.sid = sku.product_sid
 		JOIN pcm_shoppe AS
-		shoppe ON shoppe.sid = pro.shoppe_sid
+		shoppe ON shoppe.sid =
+		pro.shoppe_sid
 		JOIN pcm_organization AS org ON
 		org.sid = shoppe.shop_sid
 		JOIN pcm_supply_info AS supply ON supply.sid
 		= pro.supply_sid
-		JOIN pcm_pro_input AS input ON input.shoppe_pro_sid =
+		JOIN
+		pcm_pro_input AS input ON input.shoppe_pro_sid =
 		pro.sid
-		JOIN pcm_channel_sale_config AS pcsc ON pcsc.shoppe_pro_sid =
-		shoppe.sid AND pcsc.sale_stauts = 0
-		JOIN pcm_channel AS channel ON channel.channel_code =
+		JOIN
+		pcm_channel_sale_config AS pcsc ON pcsc.shoppe_pro_sid =
+		shoppe.sid AND
+		pcsc.sale_stauts = 0
+		JOIN pcm_channel AS channel ON
+		channel.channel_code =
 		pcsc.channel_sid
-		JOIN pcm_brand AS brand1 ON brand1.sid = pro.brand_sid
-		LEFT JOIN pcm_erp_product AS erp ON erp.product_code =
+		JOIN pcm_brand AS brand1 ON
+		brand1.sid = pro.brand_sid
+		LEFT JOIN pcm_erp_product AS erp ON
+		erp.product_code =
 		pro.erpProductCode
-		LEFT JOIN pcm_price pr ON pr.shoppe_pro_sid =
+		LEFT JOIN pcm_price pr ON
+		pr.shoppe_pro_sid =
 		pro.shoppe_pro_sid
 		AND pr.channel_sid = '0'
-		AND NOW() BETWEEN
+		AND NOW()
+		BETWEEN
 		pr.promotion_begin_time
 		AND pr.promotion_end_time
-		AND pr.ifdel = 0
+		AND pr.ifdel =
+		0
 		<where>
 			channel.channel_code = '0'
 			<if test="sidList != null">
@@ -4636,24 +4700,30 @@
 		ifnull(pro.shoppe_pro_name,"") AS productName,
 		ifnull(sku.product_detail_sid,"") AS skuCode,
 		ifnull(spu.product_sid,"") AS spuCode,
-		ifnull(pro.shoppe_pro_alias,"") AS description,
+		ifnull(pro.shoppe_pro_alias,"")
+		AS description,
 		ifnull(spu.product_sku,"") AS modelCode,
 		ifnull(pro.field2,"") AS materialNum,
-		ifnull(sku.pro_color_name,"") AS colorCode,
+		ifnull(sku.pro_color_name,"") AS
+		colorCode,
 		ifnull(sku.pro_color_name,"") AS colorName,
 		ifnull(sku.pro_stan_name,"") AS sizeName,
-		ifnull(sku.pro_stan_sid,"") AS sizeCode,
+		ifnull(sku.pro_stan_sid,"")
+		AS sizeCode,
 		ifnull(pro.sale_unit_code,"") AS originSalesUnit,
 		ifnull(pr.promotion_price,"") AS basePrice,
 		ifnull(pro.original_price,"") AS marketPrice,
 		ifnull(pro.erpProductCode,"") AS erpCode,
-		ifnull(erp.code_type,"") AS erpSkuType,
+		ifnull(erp.code_type,"") AS
+		erpSkuType,
 		ifnull(pro.discountLimit,"") AS discountLimit,
 		ifnull(brand1.brand_sid,"") AS brandCode,
-		ifnull(brand1.brand_name,"") AS brandName,
+		ifnull(brand1.brand_name,"")
+		AS brandName,
 		ifnull(stock.pro_sum,"") AS saleStock,
 		ifnull(spu.season_code,"") AS season,
-		ifnull(spu.year_to_market,"") AS onMarketDate,
+		ifnull(spu.year_to_market,"") AS
+		onMarketDate,
 		ifnull(supply.supply_code,"") AS supplierCode,
 		ifnull(supply.supply_name,"") AS supplierName,
 		ifnull(cate.category_code,"") AS productCategoryCode,
@@ -4662,65 +4732,86 @@
 		ifnull(supply.business_pattern,"") AS operateMode,
 		ifnull(pro.erpProductCode,"") AS erpProductCode,
 		ifnull(pro.is_gift,"") AS isGift,
-		ifnull(pro.stock_mode,"") AS productType,
+		ifnull(pro.stock_mode,"") AS
+		productType,
 		ifnull(pro.sales_tax,"") AS tax,
 		ifnull(cate2.category_code,"") AS statisticsCateNo,
 		ifnull(cate2.category_code,"") AS productClass,
 		ifnull(pro.category_sid,"") AS managerCateNo,
 		ifnull(pro.supply_product_code,"") AS supplyInnerProdNo,
 		ifnull(pro.stock_mode,"") AS stockTypeLib,
-		ifnull(stock.pro_sum,"") AS stockAmount
+		ifnull(stock.pro_sum,"") AS
+		stockAmount
 		FROM
 		pcm_shoppe_product AS pro
-		JOIN pcm_pro_detail AS sku ON sku.sid = pro.product_detail_sid
-		JOIN pcm_product AS spu ON spu.sid = sku.product_sid
+		JOIN pcm_pro_detail AS sku ON
+		sku.sid = pro.product_detail_sid
+		JOIN pcm_product AS spu ON spu.sid =
+		sku.product_sid
 		JOIN pcm_shoppe AS
 		shoppe ON shoppe.sid = pro.shoppe_sid
 		JOIN pcm_organization AS org ON
 		org.sid = shoppe.shop_sid
-		JOIN pcm_supply_info AS supply ON supply.sid
+		JOIN
+		pcm_supply_info AS supply ON supply.sid
 		= pro.supply_sid
-		JOIN pcm_pro_input AS input ON input.shoppe_pro_sid =
+		JOIN
+		pcm_pro_input AS input ON input.shoppe_pro_sid =
 		pro.sid
-		JOIN pcm_channel_sale_config AS pcsc ON pcsc.shoppe_pro_sid =
+		JOIN
+		pcm_channel_sale_config AS pcsc ON pcsc.shoppe_pro_sid =
 		shoppe.sid
-		AND pcsc.sale_stauts = 0
+		AND
+		pcsc.sale_stauts = 0
 		AND pcsc.channel_sid = 0
 		JOIN
-		pcm_channel AS channel ON channel.channel_code = pcsc.channel_sid
+		pcm_channel AS channel
+		ON channel.channel_code = pcsc.channel_sid
 		AND
 		channel_code = '0'
-		JOIN pcm_brand AS brand1 ON brand1.sid =
+		JOIN
+		pcm_brand AS brand1 ON brand1.sid =
 		pro.brand_sid
-		LEFT JOIN pcm_erp_product AS erp ON erp.product_code =
+		LEFT JOIN
+		pcm_erp_product AS erp ON erp.product_code =
 		pro.erpProductCode
-		LEFT JOIN pcm_price pr ON pr.shoppe_pro_sid =
+		LEFT
+		JOIN pcm_price pr ON pr.shoppe_pro_sid =
 		pro.shoppe_pro_sid
-		AND pr.channel_sid = '0'
+		AND
+		pr.channel_sid = '0'
 		AND NOW() BETWEEN
 		pr.promotion_begin_time
-		AND pr.promotion_end_time
+		AND
+		pr.promotion_end_time
 		AND pr.ifdel = 0
 		JOIN
-		pcm_product_category AS ppc ON spu.sid = ppc.product_sid
+		pcm_product_category AS ppc
+		ON spu.sid = ppc.product_sid
 		JOIN
-		pcm_category AS cate ON cate.sid = ppc.category_sid
+		pcm_category AS cate ON cate.sid =
+		ppc.category_sid
 		AND cate.is_display
 		= 1
 		AND cate.is_leaf = 'Y'
-		AND cate.`status` = 'Y'
+		AND
+		cate.`status` = 'Y'
 		AND cate.category_type
 		= 0
-		JOIN pcm_product_category AS ppc2 ON pro.sid =
+		JOIN pcm_product_category
+		AS ppc2 ON pro.sid =
 		ppc2.product_sid
-		JOIN pcm_category AS cate2 ON cate2.sid =
+		JOIN pcm_category AS cate2 ON
+		cate2.sid =
 		ppc2.category_sid
 		AND cate2.is_display = 1
-		AND cate2.is_leaf = 'Y'
+		AND cate2.is_leaf
+		= 'Y'
 		AND
 		cate2.`status` = 'Y'
 		AND cate2.category_type = 2
-		LEFT JOIN pcm_stock AS
+		LEFT JOIN
+		pcm_stock AS
 		stock ON stock.shoppe_pro_sid = pro.shoppe_pro_sid
 		AND
 		stock.stock_type_sid = 1001
@@ -4736,7 +4827,8 @@
 		resultType="com.wangfj.product.maindata.domain.vo.PcmPublishSapErpDto">
 		SELECT
 		org.organization_code AS STORECODE,
-		sku.product_detail_sid AS PCM_SKU,
+		sku.product_detail_sid AS
+		PCM_SKU,
 		pro.supply_product_code AS SUPPLIERPRODUCTCODE,
 		pro.shoppe_pro_sid AS PRODUCTCODE,
 		pro.field4 AS ERPCODE,
@@ -4744,20 +4836,27 @@
 		shoppe.shoppe_code AS ZGID,
 		shoppe.industry_condition_sid AS BUSINESSTYPELIB,
 		supply.business_pattern AS BUSINESSPRACTICELIB,
-		pro.stock_mode AS STOCKTYPELIB,
+		pro.stock_mode AS
+		STOCKTYPELIB,
 		spu.product_sid AS BASEPRODUCTCODE,
 		pro.is_gift AS ISGIFT
 		FROM
 		pcm_shoppe_product AS pro
-		JOIN pcm_pro_detail AS sku ON sku.sid = pro.product_detail_sid
+		JOIN pcm_pro_detail AS sku ON sku.sid =
+		pro.product_detail_sid
 		AND pro.sale_status = 0
-		JOIN pcm_product AS spu ON spu.sid = sku.product_sid
-		JOIN pcm_shoppe AS shoppe ON shoppe.sid = pro.shoppe_sid
+		JOIN pcm_product AS spu
+		ON spu.sid = sku.product_sid
+		JOIN pcm_shoppe AS shoppe ON shoppe.sid =
+		pro.shoppe_sid
 		AND shoppe.shoppe_status = 1
-		JOIN pcm_organization AS org ON org.sid = shoppe.shop_sid
+		JOIN pcm_organization AS org
+		ON org.sid = shoppe.shop_sid
 		AND org.organization_status = 0
-		JOIN pcm_supply_info AS supply ON supply.sid = pro.supply_sid
-		AND supply.`status` = 'Y'
+		JOIN
+		pcm_supply_info AS supply ON supply.sid = pro.supply_sid
+		AND
+		supply.`status` = 'Y'
 		<where>
 			<if test="sidList != null">
 				and pro.sid in
@@ -4777,44 +4876,50 @@
 
 	<!--按条件查询专柜商品基本信息及统计分类 -->
 	<select id="findShoppeProductAndCategoryByPara"
-			parameterType="com.wangfj.product.maindata.domain.vo.ProductPageDto"
-			resultType="com.wangfj.product.maindata.domain.vo.ProductPageDto">
+		parameterType="com.wangfj.product.maindata.domain.vo.ProductPageDto"
+		resultType="com.wangfj.product.maindata.domain.vo.ProductPageDto">
 		SELECT
-			psp.sid AS sid,
-			psp.product_detail_sid AS skuSid,
-			psp.shoppe_sid AS counterSid,
-			psp.supply_sid AS supplierSid,
-			psp.brand_sid AS brandSid,
-			psp.category_sid AS manageCategoryCode,
-			psp.shoppe_pro_name AS productName,
-			psp.shoppe_pro_sid AS productCode,
-			psp.shoppe_pro_alias AS productAbbr,
-			psp.sale_unit_code AS unitName,
-			psp.discountLimit AS maxDiscountRate,
-			psp.process_type AS processType,
-			psp.field3 AS articleNum,
-			psp.input_tax AS inputTax,
-			psp.output_tax AS outputTax,
-			psp.sales_tax AS salesTax,
-			psp.rate_code AS discountCode,
-			psp.field4 AS field4,
-			psp.origin_land2 AS originLand2,
-			psp.stock_mode AS stockMode,
-			psp.is_cod AS isCOD,
-			psp.is_packing AS isPacking,
-			psp.tms_param AS tmsParam,
-			psp.supply_product_code AS supplyProCode,
-			psp.original_price AS marketPrice,
-			psp.field1 AS notes,
-			psp.origin_land AS originLand,
-			pc.sid AS statCategory,
-			pc.name AS statCategoryName
+		psp.sid AS sid,
+		psp.product_detail_sid AS skuSid,
+		psp.shoppe_sid AS counterSid,
+		psp.supply_sid AS supplierSid,
+		psp.brand_sid AS brandSid,
+		psp.category_sid AS manageCategoryCode,
+		psp.shoppe_pro_name AS productName,
+		psp.shoppe_pro_sid AS productCode,
+		psp.shoppe_pro_alias AS productAbbr,
+		psp.sale_unit_code AS unitName,
+		psp.discountLimit AS maxDiscountRate,
+		psp.process_type AS processType,
+		psp.field3 AS articleNum,
+		psp.input_tax AS inputTax,
+		psp.output_tax AS
+		outputTax,
+		psp.sales_tax AS salesTax,
+		psp.rate_code AS discountCode,
+		psp.field4 AS field4,
+		psp.origin_land2 AS originLand2,
+		psp.stock_mode AS
+		stockMode,
+		psp.is_cod AS isCOD,
+		psp.is_packing AS isPacking,
+		psp.tms_param AS tmsParam,
+		psp.supply_product_code AS supplyProCode,
+		psp.original_price AS marketPrice,
+		psp.field1 AS notes,
+		psp.origin_land
+		AS originLand,
+		pc.sid AS statCategory,
+		pc.name AS statCategoryName
 		FROM
-			pcm_shoppe_product psp
-		INNER JOIN pcm_product_category ppc ON psp.sid = ppc.product_sid
-		INNER JOIN pcm_category pc ON ppc.category_sid = pc.sid AND pc.category_type = 2
+		pcm_shoppe_product psp
+		INNER JOIN pcm_product_category ppc ON psp.sid =
+		ppc.product_sid
+		INNER JOIN pcm_category pc ON ppc.category_sid = pc.sid
+		AND
+		pc.category_type = 2
 		WHERE
-			psp.shoppe_pro_sid = #{productCode}
+		psp.shoppe_pro_sid = #{productCode}
 	</select>
 
 	<!--按条件查询单个专柜商品的基本信息（优化） -->
@@ -4839,7 +4944,8 @@
 		) AS promotionPrice,
 		(
 		SELECT
-		IFNULL(SUM(IF(st.stock_type_sid = 1001,st.pro_sum,0)),0)
+		IFNULL(SUM(IF(st.stock_type_sid =
+		1001,st.pro_sum,0)),0)
 		FROM
 		pcm_stock st
 		<where>
@@ -4853,38 +4959,49 @@
 		LIMIT 1
 		) AS saleStock,
 		ssu.original_price AS marketPrice,
-		ssu.sid AS sid,
+		ssu.sid AS
+		sid,
 		ssu.product_detail_sid AS skuSid,
 		ssu.shoppe_sid AS counterSid,
 		ssu.supply_sid AS supplierSid,
 		ssu.brand_sid AS brandSid,
 		ssu.category_sid AS manageCategoryCode,
-		ssu.shoppe_pro_name AS productName,
+		ssu.shoppe_pro_name AS
+		productName,
 		ssu.shoppe_pro_sid AS productCode,
-		ssu.shoppe_pro_alias AS productAbbr,
+		ssu.shoppe_pro_alias AS
+		productAbbr,
 		ssu.sale_unit_code AS unitName,
-		ssu.discountLimit AS maxDiscountRate,
+		ssu.discountLimit AS
+		maxDiscountRate,
 		ssu.process_type AS processType,
-		ssu.field3 AS articleNum,
+		ssu.field3 AS
+		articleNum,
 		ssu.input_tax AS inputTax,
 		ssu.output_tax AS outputTax,
 		ssu.sales_tax AS salesTax,
 		ssu.rate_code AS discountCode,
-		ssu.field4 AS field4,
+		ssu.field4 AS
+		field4,
 		ssu.origin_land2 AS originLand2,
 		ssu.stock_mode AS stockMode,
 		ssu.is_cod AS isCOD,
 		ssu.is_packing AS isPacking,
-		ssu.tms_param AS tmsParam,
+		ssu.tms_param AS
+		tmsParam,
 		ssu.supply_product_code AS supplyProCode,
-		pspe.base_unit_code AS baseUnitCode,
+		pspe.base_unit_code
+		AS baseUnitCode,
 		pspe.origin_country AS originCountry,
-		pspe.is_card AS isCard,
+		pspe.is_card AS
+		isCard,
 		pspe.is_origin_package AS isOriginPackage,
-		pspe.xxhc_flag AS xxhcFlag
+		pspe.xxhc_flag AS
+		xxhcFlag
 		FROM
 		pcm_shoppe_product ssu
-		INNER JOIN pcm_shoppe_product_extend pspe ON ssu.sid = pspe.shoppe_pro_sid
+		INNER JOIN pcm_shoppe_product_extend
+		pspe ON ssu.sid = pspe.shoppe_pro_sid
 		<where>
 			<if test="sid != null">
 				and ssu.sid = #{sid,jdbcType=BIGINT}
@@ -4906,9 +5023,11 @@
 		resultType="com.wangfj.product.maindata.domain.vo.ProductPageDto">
 		SELECT
 		org.organization_code AS storeCode,
-		org.organization_name AS storeName,
+		org.organization_name AS
+		storeName,
 		ps.shoppe_name AS counterName,
-		ps.industry_condition_sid AS industrySid,
+		ps.industry_condition_sid AS
+		industrySid,
 		(
 		SELECT
 		psi.supply_name
@@ -4951,26 +5070,28 @@
 		WHERE
 		pc.category_type = 2
 		AND pc.sid IN (
-			SELECT
-			ppc.category_sid
-			FROM
-			pcm_product_category ppc
-			<where>
-				<if test="sid != null">
-					and ppc.product_sid = #{sid}
-				</if>
-				<if test="sid == null">
-					and ppc.product_sid = 0
-				</if>
-			</where>
+		SELECT
+		ppc.category_sid
+		FROM
+		pcm_product_category ppc
+		<where>
+			<if test="sid != null">
+				and ppc.product_sid = #{sid}
+			</if>
+			<if test="sid == null">
+				and ppc.product_sid = 0
+			</if>
+		</where>
 		)
 		LIMIT 0,
 		1
 		) AS statCategory
 		FROM
 		pcm_shoppe ps
-		INNER JOIN pcm_organization org ON ps.shop_sid = org.sid
-		AND org.organization_type = 3
+		INNER JOIN
+		pcm_organization org ON ps.shop_sid = org.sid
+		AND org.organization_type
+		= 3
 		AND org.organization_status = 0
 		<where>
 			<if test="counterSid != null">
@@ -4991,12 +5112,15 @@
 		resultType="com.wangfj.product.maindata.domain.vo.ProductPageDto">
 		SELECT
 		pcl.contract_code AS contractCode,
-		pcl.manage_type AS operateMode,
+		pcl.manage_type AS
+		operateMode,
 		ppi.input_user_code AS inputUserCode,
 		ppi.procurement_user_code AS procurementUserCode
 		FROM
-		pcm_contract_log pcl
-		INNER JOIN pcm_pro_input ppi ON ppi.contract_code = pcl.contract_code
+		pcm_contract_log
+		pcl
+		INNER JOIN pcm_pro_input ppi ON ppi.contract_code =
+		pcl.contract_code
 		<where>
 			<if test="sid != null">
 				and ppi.shoppe_pro_sid = #{sid,jdbcType=BIGINT}
@@ -5024,7 +5148,8 @@
 		sku.article_num AS articleNum
 		FROM
 		pcm_pro_detail sku
-		INNER JOIN pcm_product spu ON sku.product_sid = spu.sid
+		INNER JOIN pcm_product spu ON sku.product_sid =
+		spu.sid
 		INNER JOIN pcm_color_dict pcd ON sku.pro_color_sid = pcd.sid
 		<where>
 			<if test="skuSid != null">
@@ -5043,50 +5168,67 @@
 		SELECT
 		ps.industry_condition_sid,
 		psp.*,
-		sku.product_detail_sid AS productCode,
+		sku.product_detail_sid AS
+		productCode,
 		spu.product_sid AS baseProductCode ,
-		spu.product_sku AS modelNumber,
+		spu.product_sku AS
+		modelNumber,
 		sku.pro_stan_sid AS sizeCode,
-		sku.pro_color_name AS styleCode,
+		sku.pro_color_name AS
+		styleCode,
 		input.order_no AS billsNo,
-		input.contract_code AS contractCode,
+		input.contract_code AS
+		contractCode,
 		input.procurement_user_code AS procurementUserCode,
 		input.input_user_code AS inputUserCode,
-		sup.supply_code AS supplierCode,
+		sup.supply_code AS
+		supplierCode,
 		sup.business_pattern AS operateMode,
-		sup.shop_sid AS storeCode,
+		sup.shop_sid AS
+		storeCode,
 		ps.shoppe_code AS counterCode,
-		pri.promotion_price AS salesPrice,
+		pri.promotion_price AS
+		salesPrice,
 		pri.original_price AS marketPrice,
-		cate.category_code AS statCategory,
+		cate.category_code AS
+		statCategory,
 		pbr.brand_sid AS brandCode,
-		erp.pro_status AS productStatus
+		erp.pro_status AS
+		productStatus
 		FROM
 		(
 		SELECT
 		chipsp.sid AS sid,
-		chipsp.shoppe_pro_sid AS 'code',
+		chipsp.shoppe_pro_sid AS
+		'code',
 		chipsp.shoppe_pro_name AS productName,
 		chipsp.product_detail_sid AS product_detail_sid,
-		chipsp.supply_sid AS supply_sid,
+		chipsp.supply_sid AS
+		supply_sid,
 		chipsp.shoppe_sid AS shoppe_sid,
-		chipsp.brand_sid AS brand_sid,
+		chipsp.brand_sid AS
+		brand_sid,
 		chipsp.category_sid AS manageCategory,
-		chipsp.discountLimit AS maxDiscountRate,
+		chipsp.discountLimit
+		AS maxDiscountRate,
 		chipsp.sale_status AS sale_status,
 		chipsp.sale_unit_code AS sale_unit_code,
 		IFNULL(chipsp.supply_product_code,"") AS supplierIntBarCode,
 		chipsp.shoppe_pro_alias AS productAbbr,
-		IFNULL(chipsp.input_tax,"0") AS inputTax,
+		IFNULL(chipsp.input_tax,"0") AS
+		inputTax,
 		IFNULL(chipsp.output_tax,"0") AS outputTax,
 		IFNULL(chipsp.sales_tax,"0") AS salesTax,
 		IFNULL(chipsp.purchase_price,"0") AS purchasePrice,
 		IFNULL(chipsp.buying_price,"0") AS buyingPrice,
-		chipsp.process_type AS processType,
+		chipsp.process_type AS
+		processType,
 		chipsp.origin_land AS originLand,
-		chipsp.order_type AS orderType,
+		chipsp.order_type AS
+		orderType,
 		chipsp.is_promotion AS isPromotion,
-		chipsp.is_adjust_price AS isAdjustPrice,
+		chipsp.is_adjust_price AS
+		isAdjustPrice,
 		IFNULL(chipsp.erpProductCode,"") AS erpProductCode,
 		chipsp.field1 AS notes,
 		chipsp.field3 AS materialNum
@@ -5106,30 +5248,41 @@
 		</where>
 		) psp
 		INNER JOIN pcm_shoppe ps
-		ON psp.shoppe_sid = ps.sid AND ps.industry_condition_sid != 2
+		ON psp.shoppe_sid = ps.sid AND
+		ps.industry_condition_sid != 2
 		INNER JOIN pcm_pro_detail
 		sku
-		ON psp.product_detail_sid = sku.sid
+		ON
+		psp.product_detail_sid = sku.sid
 		INNER JOIN pcm_product spu
-		ON sku.product_sid = spu.sid
+		ON
+		sku.product_sid = spu.sid
 		INNER JOIN pcm_pro_input input
-		ON psp.sid = input.shoppe_pro_sid
+		ON psp.sid =
+		input.shoppe_pro_sid
 		INNER JOIN pcm_supply_info sup
-		ON sup.sid = psp.supply_sid
+		ON sup.sid =
+		psp.supply_sid
 		left JOIN pcm_price pri
-		ON pri.shoppe_pro_sid = psp.`code`
+		ON pri.shoppe_pro_sid =
+		psp.`code`
 		AND pri.channel_sid = '0'
 		AND pri.ifdel = '0'
-		AND NOW() BETWEEN pri.promotion_begin_time AND pri.promotion_end_time
-		LEFT JOIN pcm_product_category ppc ON psp.sid = ppc.product_sid
-		LEFT JOIN pcm_category cate ON ppc.category_sid = cate.sid
+		AND NOW()
+		BETWEEN pri.promotion_begin_time AND pri.promotion_end_time
+		LEFT JOIN
+		pcm_product_category ppc ON psp.sid = ppc.product_sid
+		LEFT JOIN
+		pcm_category cate ON ppc.category_sid = cate.sid
 		AND cate.is_leaf = 'Y'
 		AND cate. STATUS = 'Y'
 		AND cate.is_display = 1
-		AND cate.category_type = 2
+		AND cate.category_type =
+		2
 		INNER JOIN pcm_brand pbr
 		ON psp.brand_sid = pbr.sid
-		LEFT JOIN pcm_erp_product erp
+		LEFT JOIN
+		pcm_erp_product erp
 		ON psp.erpProductCode = erp.product_code
 	</select>
 
@@ -5151,7 +5304,8 @@
 		JOIN pcm_shoppe AS shoppe ON shoppe.sid = pro.shoppe_sid
 		AND
 		shoppe.shoppe_status = 1
-		JOIN pcm_organization AS org ON org.sid = shoppe.shop_sid
+		JOIN pcm_organization AS org ON org.sid =
+		shoppe.shop_sid
 		AND
 		org.organization_status = 0
 		<where>
@@ -5182,18 +5336,24 @@
 		count(*)
 		FROM
 		pcm_shoppe_product AS pro
-		JOIN pcm_pro_detail AS sku ON sku.sid = pro.product_detail_sid
+		JOIN pcm_pro_detail AS sku
+		ON sku.sid = pro.product_detail_sid
 		AND pro.sale_status = 0
-		JOIN pcm_product AS spu ON spu.sid =
+		JOIN
+		pcm_product AS spu ON spu.sid =
 		sku.product_sid
-		JOIN pcm_shoppe AS shoppe ON shoppe.sid =
+		JOIN pcm_shoppe AS
+		shoppe ON shoppe.sid =
 		pro.shoppe_sid
 		AND shoppe.shoppe_status = 1
-		JOIN pcm_organization AS org
-		ON org.sid = shoppe.shop_sid
-		AND org.organization_status = 0
 		JOIN
-		pcm_supply_info AS supply ON supply.sid = pro.supply_sid
+		pcm_organization AS org
+		ON org.sid = shoppe.shop_sid
+		AND
+		org.organization_status = 0
+		JOIN
+		pcm_supply_info AS supply ON supply.sid
+		= pro.supply_sid
 		AND
 		supply.`status` = 0
 		<where>
@@ -5206,49 +5366,66 @@
 	<select id="searchSpByStore" parameterType="Map" resultMap="pcmSearchProInfoMap">
 		SELECT
 		pro.shoppe_pro_sid AS itemCode,
-		sku.product_detail_sid AS skuCode,
+		sku.product_detail_sid AS
+		skuCode,
 		shoppe.shoppe_code AS shoppeCode,
-		supply.supply_code AS supplierCode,
+		supply.supply_code AS
+		supplierCode,
 		supply.supply_name AS supplierName,
-		pro.discountLimit AS discountLimit,
+		pro.discountLimit AS
+		discountLimit,
 		spu.season_code AS season,
-		spu.year_to_market AS onMarketDate,
+		spu.year_to_market AS
+		onMarketDate,
 		brand.brand_sid AS storeBrandCode,
-		erp.product_code AS rateCode,
+		erp.product_code AS
+		rateCode,
 		pro.shoppe_pro_name AS shoppeItemName,
-		pro.sale_status AS saleStatus,
+		pro.sale_status AS
+		saleStatus,
 		pro.shoppe_pro_type AS shoppeItemType,
-		erp.product_code AS erpProductCode,
+		erp.product_code AS
+		erpProductCode,
 		erp.code_type AS erpSkuType,
-		pro.shoppe_pro_type AS manageType,
+		pro.shoppe_pro_type AS
+		manageType,
 		bar.barcode AS barcode,
 		pro.field3 AS article_num,
 		pro.category_sid AS manageCategoryType,
-		pro.original_price AS originPrice,
+		pro.original_price AS
+		originPrice,
 		erp.format_type AS productCategory,
-		pro.sale_unit_code AS unit,
+		pro.sale_unit_code AS
+		unit,
 		org.organization_code AS storeCode
 		FROM
 		pcm_shoppe_product AS pro
 		JOIN pcm_pro_detail AS sku ON sku.sid = pro.product_detail_sid
-		AND pro.sale_status = 0
+		AND
+		pro.sale_status = 0
 		JOIN pcm_product AS spu ON spu.sid =
 		sku.product_sid
 		JOIN pcm_shoppe AS shoppe ON shoppe.sid =
 		pro.shoppe_sid and shoppe.industry_condition_sid != 2
-		AND shoppe.shoppe_status = 1
+		AND
+		shoppe.shoppe_status = 1
 		JOIN pcm_organization AS org
-		ON org.sid = shoppe.shop_sid
+		ON org.sid =
+		shoppe.shop_sid
 		AND org.organization_status = 0
 		JOIN
-		pcm_supply_info AS supply ON supply.sid = pro.supply_sid
+		pcm_supply_info AS
+		supply ON supply.sid = pro.supply_sid
 		AND
 		supply.`status` = 0
-		JOIN pcm_brand AS brand ON brand.sid =
+		JOIN
+		pcm_brand AS brand ON brand.sid =
 		pro.brand_sid
-		LEFT JOIN pcm_barcode AS bar ON bar.shoppe_pro_sid =
+		LEFT JOIN pcm_barcode AS
+		bar ON bar.shoppe_pro_sid =
 		pro.shoppe_pro_sid
-		LEFT JOIN pcm_erp_product AS erp ON erp.product_code
+		LEFT JOIN pcm_erp_product
+		AS erp ON erp.product_code
 		= pro.rate_code
 		<where>
 			<if test="sidList != null">
@@ -5292,7 +5469,7 @@
 		<result column="storeName" property="storeName" />
 		<result column="supplyNo" property="supplyNo" />
 		<result column="suppllyName" property="suppllyName" />
-		<result column="joinSite" property="joinSite"/>
+		<result column="joinSite" property="joinSite" />
 		<result column="stockMode" property="stockMode" />
 		<result column="operateMode" property="operateMode" />
 		<result column="discountLimit" property="discountLimit" />
@@ -5312,78 +5489,98 @@
 	<select id="omsGetResProInfo" resultMap="omsGetResProMap"
 		parameterType="Map">
 		SELECT
-			aa.*, extend.xxhc_flag AS xxhcFlag
+		aa.*, extend.xxhc_flag AS xxhcFlag
 		FROM
-			(
-				SELECT
-					pro.sid AS sid,
-					pro.shoppe_pro_sid AS supplyProductNo,
-					sku.pro_detail_name AS shoppeProName,
-					sku.product_detail_sid AS skuNo,
-					spu.product_sid AS spuNo,
-					pro.supply_product_code AS supplyInnerProdNo,
-					pro.sale_unit_code AS unit,
-					brand.brand_sid AS brandNo,
-					brand.brand_name AS brandName,
-					bar.barcode AS barcode,
-					sku.pro_color_name AS colorNo,
-					sku.pro_color_name AS colorName,
-					sku.pro_stan_name AS sizeNo,
-					sku.pro_stan_name AS sizeName,
-					pro.category_sid AS managerCateNo,
-					cate.category_code AS statisticsCateNo,
-					pro.original_price AS standPrice,
-					pro.tms_param AS shippingAttribute,
-					pro.rate_code AS discountCode,
-					cate.category_code AS productClass,
-					sku.pro_type AS productType,
-					pro.sales_tax AS tax,
-					shoppe.shoppe_code AS shoppeNo,
-					shoppe.shoppe_name AS shoppeName,
-					org.organization_code AS shopNo,
-					org.organization_name AS storeName,
-					supply.supply_code AS supplyNo,
-					supply.supply_name AS suppllyName,
-					supply.join_site AS joinSite,
-					pro.stock_mode AS stockMode,
-					supply.business_pattern AS operateMode,
-					pro.discountLimit AS discountLimit,
-					pro.category_sid AS shoppeGroup,
-					pro.field3 AS materialNum,
-					pro.field4 AS field4,
-					pro.erpProductCode AS erpProductCode,
-					shoppe.industry_condition_sid AS industrySid,
-					sku.pro_color_sid AS proColorSid,
-					sku.selling_status AS sellingStatus,
-					pro.is_cod AS isCodePlay
-				FROM
-					pcm_shoppe_product AS pro
-				JOIN pcm_pro_detail AS sku ON sku.sid = pro.product_detail_sid
-				AND pro.sale_status = 0
-				JOIN pcm_product AS spu ON spu.sid = sku.product_sid
-				JOIN pcm_shoppe AS shoppe ON shoppe.sid = pro.shoppe_sid
-				AND shoppe.shoppe_status = 1
-				JOIN pcm_organization AS org ON org.sid = shoppe.shop_sid
-				AND org.organization_status = 0
-				JOIN pcm_supply_info AS supply ON supply.sid = pro.supply_sid
-				AND supply.`status` = 0
-				JOIN pcm_brand AS brand ON brand.sid = pro.brand_sid
-				LEFT JOIN pcm_barcode AS bar ON bar.shoppe_pro_sid = pro.shoppe_pro_sid
-				LEFT JOIN pcm_erp_product AS erp ON erp.product_code = pro.rate_code
-				JOIN pcm_product_category AS ppc ON ppc.product_sid = pro.sid
-				JOIN pcm_category AS cate ON ppc.category_sid = cate.sid
-				AND cate.category_type = 2
-				AND cate.`status` = 'Y'
-				AND cate.is_leaf = 'Y'
-				AND cate.is_display = 1
-				<where>
-					<if test="proCode != null">
-						AND pro.shoppe_pro_sid = #{proCode}
-					</if>
-				</where>
-			) aa
-		JOIN pcm_shoppe_product_extend AS extend ON extend.shoppe_pro_sid = aa.sid
-		
+		(
+		SELECT
+		pro.sid AS sid,
+		pro.shoppe_pro_sid AS supplyProductNo,
+		sku.pro_detail_name AS
+		shoppeProName,
+		sku.product_detail_sid AS skuNo,
+		spu.product_sid AS
+		spuNo,
+		pro.supply_product_code AS supplyInnerProdNo,
+		pro.sale_unit_code
+		AS unit,
+		brand.brand_sid AS brandNo,
+		brand.brand_name AS brandName,
+		bar.barcode AS barcode,
+		sku.pro_color_name AS colorNo,
+		sku.pro_color_name AS colorName,
+		sku.pro_stan_name AS sizeNo,
+		sku.pro_stan_name AS sizeName,
+		pro.category_sid AS managerCateNo,
+		cate.category_code AS statisticsCateNo,
+		pro.original_price AS
+		standPrice,
+		pro.tms_param AS shippingAttribute,
+		pro.rate_code AS
+		discountCode,
+		cate.category_code AS productClass,
+		sku.pro_type AS
+		productType,
+		pro.sales_tax AS tax,
+		shoppe.shoppe_code AS shoppeNo,
+		shoppe.shoppe_name AS shoppeName,
+		org.organization_code AS shopNo,
+		org.organization_name AS storeName,
+		supply.supply_code AS supplyNo,
+		supply.supply_name AS suppllyName,
+		supply.join_site AS joinSite,
+		pro.stock_mode AS stockMode,
+		supply.business_pattern AS operateMode,
+		pro.discountLimit AS discountLimit,
+		pro.category_sid AS shoppeGroup,
+		pro.field3 AS materialNum,
+		pro.field4 AS field4,
+		pro.erpProductCode AS
+		erpProductCode,
+		shoppe.industry_condition_sid AS industrySid,
+		sku.pro_color_sid AS proColorSid,
+		sku.selling_status AS sellingStatus,
+		pro.is_cod AS isCodePlay
+		FROM
+		pcm_shoppe_product AS pro
+		JOIN
+		pcm_pro_detail AS sku ON sku.sid = pro.product_detail_sid
+		AND
+		pro.sale_status = 0
+		JOIN pcm_product AS spu ON spu.sid =
+		sku.product_sid
+		JOIN pcm_shoppe AS shoppe ON shoppe.sid =
+		pro.shoppe_sid
+		AND shoppe.shoppe_status = 1
+		JOIN pcm_organization AS org
+		ON org.sid = shoppe.shop_sid
+		AND org.organization_status = 0
+		JOIN
+		pcm_supply_info AS supply ON supply.sid = pro.supply_sid
+		AND
+		supply.`status` = 0
+		JOIN pcm_brand AS brand ON brand.sid =
+		pro.brand_sid
+		LEFT JOIN pcm_barcode AS bar ON bar.shoppe_pro_sid =
+		pro.shoppe_pro_sid
+		LEFT JOIN pcm_erp_product AS erp ON erp.product_code
+		= pro.rate_code
+		JOIN pcm_product_category AS ppc ON ppc.product_sid =
+		pro.sid
+		JOIN pcm_category AS cate ON ppc.category_sid = cate.sid
+		AND
+		cate.category_type = 2
+		AND cate.`status` = 'Y'
+		AND cate.is_leaf = 'Y'
+		AND cate.is_display = 1
+		<where>
+			<if test="proCode != null">
+				AND pro.shoppe_pro_sid = #{proCode}
+			</if>
+		</where>
+		) aa
+		JOIN pcm_shoppe_product_extend AS extend ON extend.shoppe_pro_sid
+		= aa.sid
+
 	</select>
 	<select id="picOldToNew" resultType="Map" parameterType="Map">
 		SELECT
@@ -5392,8 +5589,10 @@
 		sku.pro_color_sid as colorCode
 		FROM
 		pcm_shoppe_product AS pro
-		JOIN pcm_pro_detail AS sku ON sku.sid = pro.product_detail_sid
-		JOIN pcm_product AS spu ON spu.sid = sku.product_sid
+		JOIN
+		pcm_pro_detail AS sku ON sku.sid = pro.product_detail_sid
+		JOIN
+		pcm_product AS spu ON spu.sid = sku.product_sid
 		<where>
 			1 = 1
 			<if test="erpProList != null">
@@ -5420,13 +5619,15 @@
 		sku.pro_color_name AS colorCode,
 		spu.product_sku AS modelCode,
 		ps.shoppe_code AS counterCode,
-		ps.industry_condition_sid AS industrySid,
+		ps.industry_condition_sid AS
+		industrySid,
 		cate.category_code AS productCategoryCode,
 		pri.original_price AS marketPrice,
 		pri.promotion_price AS price,
 		erp.code_type AS erpSkuType,
 		barcode.sid AS barCodeSid,
-		barcode.barcode AS barCode,
+		barcode.barcode
+		AS barCode,
 		sup.business_pattern AS operateMode
 		FROM
 		(
@@ -5436,9 +5637,11 @@
 		product_detail_sid,
 		shoppe_sid,
 		sale_unit_code AS originSalesUnit,
-		shoppe_pro_type AS manageType,
+		shoppe_pro_type AS
+		manageType,
 		erpProductCode AS erpProductCode,
-		shoppe_pro_alias AS description,
+		shoppe_pro_alias AS
+		description,
 		shoppe_pro_name AS productName,
 		field3 AS materialNum
 		FROM
@@ -5459,25 +5662,38 @@
 			</if>
 		</where>
 		) psp
-		LEFT JOIN pcm_barcode barcode ON psp.productCode = barcode.shoppe_pro_sid
+		LEFT JOIN pcm_barcode barcode ON psp.productCode =
+		barcode.shoppe_pro_sid
 		AND barcode.code_type = 1
-		INNER JOIN pcm_pro_detail sku ON psp.product_detail_sid = sku.sid
-		INNER JOIN pcm_product spu ON sku.product_sid = spu.sid
-		INNER JOIN pcm_supply_info sup ON psp.supply_sid = sup.sid
-		INNER JOIN pcm_shoppe ps ON psp.shoppe_sid = ps.sid
-		INNER JOIN pcm_product_category pcate ON pcate.product_sid = spu.sid
-		INNER JOIN pcm_category cate ON cate.sid = pcate.category_sid
+		INNER JOIN
+		pcm_pro_detail sku ON psp.product_detail_sid = sku.sid
+		INNER JOIN
+		pcm_product spu ON sku.product_sid = spu.sid
+		INNER JOIN pcm_supply_info
+		sup ON psp.supply_sid = sup.sid
+		INNER JOIN pcm_shoppe ps ON
+		psp.shoppe_sid = ps.sid
+		INNER JOIN pcm_product_category pcate ON
+		pcate.product_sid = spu.sid
+		INNER JOIN pcm_category cate ON cate.sid =
+		pcate.category_sid
 		AND cate.is_leaf = 'Y'
 		AND cate. STATUS = 'Y'
-		AND cate.is_display = 1
+		AND
+		cate.is_display = 1
 		AND cate.category_type = 0
-		LEFT JOIN pcm_price pri ON pri.shoppe_pro_sid = psp.productCode
+		LEFT JOIN pcm_price pri
+		ON pri.shoppe_pro_sid = psp.productCode
 		AND pri.channel_sid = '0'
-		AND pri.ifdel = '0'
+		AND
+		pri.ifdel = '0'
 		AND NOW() BETWEEN pri.promotion_begin_time
-		AND pri.promotion_end_time
-		LEFT JOIN pcm_brand brand ON brand.brand_sid = spu.brand_sid
-		LEFT JOIN pcm_erp_product erp ON erp.product_code = psp.erpProductCode
+		AND
+		pri.promotion_end_time
+		LEFT JOIN pcm_brand brand ON brand.brand_sid =
+		spu.brand_sid
+		LEFT JOIN pcm_erp_product erp ON erp.product_code =
+		psp.erpProductCode
 	</select>
 
 
@@ -5551,8 +5767,10 @@
 		pro.shoppe_pro_sid
 		FROM
 		pcm_shoppe_product AS pro
-		JOIN pcm_pro_detail AS sku ON sku.sid = pro.product_detail_sid
-		JOIN pcm_product AS spu ON spu.sid = sku.product_sid
+		JOIN
+		pcm_pro_detail AS sku ON sku.sid = pro.product_detail_sid
+		JOIN
+		pcm_product AS spu ON spu.sid = sku.product_sid
 		<where>
 			<if test="spuCode != null">
 				spu.product_sid = #{spuCode}
@@ -5568,9 +5786,9 @@
 			</if>
 		</where>
 	</select>
-	
+
 	<select id="pcmPublishSapErpSourcePis" parameterType="HashMap"
-	resultType="com.wangfj.product.maindata.domain.vo.PcmSapInfoToSapSourcePis">
+		resultType="com.wangfj.product.maindata.domain.vo.PcmSapInfoToSapSourcePis">
 		SELECT
 		pro.sid AS sid,
 		ext.field4 AS MTART,
@@ -5579,7 +5797,8 @@
 		spu.sid AS MATKL, <!-- 工业分类字段保存spu的sid,后面用spusid单独查询工业分类 -->
 		pro.category_sid AS GLJG,
 		pbr1.brand_sid AS ZBRAND_ID,
-		spu.product_sku AS
+		spu.product_sku
+		AS
 		ZZSTYLENO,
 		pro.field3 AS ZZDKNO,
 		<!-- pbar.barcode AS ZZE_EAN, -->
@@ -5587,26 +5806,31 @@
 		ext.base_unit_code AS MEINS,
 		sku.pro_color_sid AS ZZCOLORID,
 		ext.zcolor AS ZCOLOR,
-		ext.zsize AS ZSIZE,
+		ext.zsize AS
+		ZSIZE,
 		pro.input_tax AS MWSKZ,
 		pro.output_tax AS
 		TAXKM1,
-		pro.sales_tax AS TAXKM2,
+		pro.sales_tax AS
+		TAXKM2,
 		pro.purchase_price AS ZZGJ_TAX,
-		ppr.promotion_price AS ZZP01_TAX,
+		ppr.promotion_price AS
+		ZZP01_TAX,
 		ppr.original_price AS ZZPRICE,
 		ext.origin_country AS WHERL,
 		ext.field8 AS WHERR,
 		spu.year_to_market AS
 		ZZSSDATE,
-		spu.season_code AS EXTWG,
+		spu.season_code AS
+		EXTWG,
 		spu.sex_sid AS ZZGENDER,
 		pro.is_cod AS
 		ZZCOD,
 		ext.is_origin_package AS ZZYCPACK,
 		ext.field5 AS MHDHB,
 		ext.field6
-		AS MHDRZ,
+		AS
+		MHDRZ,
 		pro.tms_param AS MAGRV,
 		org.organization_code AS STORECODE,
 		sku.product_detail_sid AS PCM_SKU,
@@ -5616,7 +5840,8 @@
 		pro.field4 AS
 		ERPCODE,
 		supply.supply_code AS LIFNR,
-		shoppe.shoppe_code AS ZGID,
+		shoppe.shoppe_code AS
+		ZGID,
 		shoppe.industry_condition_sid AS BUSINESSTYPELIB,
 		supply.business_pattern AS BUSINESSPRACTICELIB,
 		pro.stock_mode AS
@@ -5629,7 +5854,8 @@
 		FROM
 		pcm_barcode pbr
 		WHERE
-		pbr.shoppe_pro_sid = pro.shoppe_pro_sid
+		pbr.shoppe_pro_sid =
+		pro.shoppe_pro_sid
 		LIMIT 1) as ZZE_EAN
 		FROM
 		(
@@ -5659,29 +5885,35 @@
 		WHERE
 		1 = 1
 		<if test="sidList != null">
-			   and  sid in
-				<foreach collection="sidList" item="itemSid" index="index"
-					open="(" close=")" separator=",">
-					#{itemSid,jdbcType=VARCHAR}
-				</foreach>
-	    </if>
+			and sid in
+			<foreach collection="sidList" item="itemSid" index="index"
+				open="(" close=")" separator=",">
+				#{itemSid,jdbcType=VARCHAR}
+			</foreach>
+		</if>
 		<if test="num != null">
 			limit #{num}
 		</if>
 		) pro
 		JOIN pcm_pro_detail AS sku ON sku.sid = pro.product_detail_sid
 		AND pro.sale_status = 0
-		JOIN pcm_product AS spu ON spu.sid = sku.product_sid
-		LEFT JOIN (SELECT * FROM pcm_brand pbr WHERE pbr.brand_type = 1) pbr1 ON pbr1.sid = pro.brand_sid
-		JOIN pcm_shoppe AS shoppe ON shoppe.sid = pro.shoppe_sid
+		JOIN pcm_product AS spu ON spu.sid =
+		sku.product_sid
+		LEFT JOIN (SELECT * FROM pcm_brand pbr WHERE
+		pbr.brand_type = 1) pbr1 ON pbr1.sid = pro.brand_sid
+		JOIN pcm_shoppe AS
+		shoppe ON shoppe.sid = pro.shoppe_sid
 		AND shoppe.shoppe_status = 1
-		JOIN pcm_organization AS org ON org.sid = shoppe.shop_sid
-		AND org.organization_status = 0
+		JOIN
+		pcm_organization AS org ON org.sid = shoppe.shop_sid
+		AND
+		org.organization_status = 0
 		<if test="storeCode != null">
-				and org.organization_code = #{storeCode,jdbcType=VARCHAR}
+			and org.organization_code = #{storeCode,jdbcType=VARCHAR}
 		</if>
 		JOIN pcm_supply_info AS supply ON supply.sid = pro.supply_sid
-		AND supply.`status` = 'Y'
+		AND
+		supply.`status` = 'Y'
 		LEFT JOIN (
 		SELECT
 		sid,
@@ -5701,23 +5933,26 @@
 		WHERE
 		1 = 1
 		<if test="sidList != null">
-			   and shoppe_pro_sid IN
-				<foreach collection="sidList" item="itemSid" index="index"
-					open="(" close=")" separator=",">
-					#{itemSid,jdbcType=VARCHAR}
-				</foreach>
-	    </if>
+			and shoppe_pro_sid IN
+			<foreach collection="sidList" item="itemSid" index="index"
+				open="(" close=")" separator=",">
+				#{itemSid,jdbcType=VARCHAR}
+			</foreach>
+		</if>
 		<if test="num != null">
 			limit #{num}
 		</if>
 		) ext ON pro.sid = ext.shoppe_pro_sid
-		LEFT JOIN pcm_price ppr ON ppr.shoppe_pro_sid = pro.shoppe_pro_sid
-		AND NOW() BETWEEN ppr.promotion_begin_time
+		LEFT JOIN pcm_price ppr ON
+		ppr.shoppe_pro_sid = pro.shoppe_pro_sid
+		AND NOW() BETWEEN
+		ppr.promotion_begin_time
 		AND ppr.promotion_end_time
 		AND ppr.ifdel = 0
 		AND ppr.channel_sid = 0
-    </select>
-	<select id="getGyCateToSapInfo" parameterType="HashMap" resultType="HashMap">
+	</select>
+	<select id="getGyCateToSapInfo" parameterType="HashMap"
+		resultType="HashMap">
 		SELECT
 		gycate1.category_code AS cateCode,
 		ppc.product_sid AS spuSid
@@ -5731,23 +5966,26 @@
 		WHERE
 		gycate.category_type = 0
 		AND gycate. STATUS = 0
-		AND gycate.is_display = 1
+		AND gycate.is_display =
+		1
 		) gycate1
-		left JOIN pcm_product_category ppc ON ppc.category_sid = gycate1.sid
+		left JOIN pcm_product_category ppc ON ppc.category_sid =
+		gycate1.sid
 		LEFT JOIN pcm_product spu ON ppc.product_sid = spu.sid
-		where  1=1
+		where 1=1
 		<if test="spuSidList != null">
-			   and ppc.product_sid IN
-				<foreach collection="spuSidList" item="itemSid" index="index"
-					open="(" close=")" separator=",">
-					#{itemSid,jdbcType=VARCHAR}
-				</foreach>
-	    </if>
+			and ppc.product_sid IN
+			<foreach collection="spuSidList" item="itemSid" index="index"
+				open="(" close=")" separator=",">
+				#{itemSid,jdbcType=VARCHAR}
+			</foreach>
+		</if>
 		<if test="num != null">
 			limit #{num}
 		</if>
-    </select>
-    <select id="getTjCateToSapInfo" parameterType="HashMap" resultType="HashMap">
+	</select>
+	<select id="getTjCateToSapInfo" parameterType="HashMap"
+		resultType="HashMap">
 		SELECT
 		tjcate1.category_code AS cateCode,
 		ppc.product_sid AS proCode
@@ -5761,66 +5999,82 @@
 		WHERE
 		tjcate.category_type = 2
 		AND tjcate. STATUS = 0
-		AND tjcate.is_display = 1
+		AND
+		tjcate.is_display = 1
 		) tjcate1
-		left JOIN pcm_product_category ppc ON ppc.category_sid = tjcate1.sid
-		where 1=1 
-          <if test="proCodeList != null">
-                and ppc.product_sid IN 
-				<foreach collection="proCodeList" item="itemSid" index="index"
-					open="(" close=")" separator=",">
-					#{itemSid,jdbcType=VARCHAR}
-				</foreach>
-	    </if>
-	    <if test="num != null">
+		left JOIN pcm_product_category ppc ON
+		ppc.category_sid = tjcate1.sid
+		where 1=1
+		<if test="proCodeList != null">
+			and ppc.product_sid IN
+			<foreach collection="proCodeList" item="itemSid" index="index"
+				open="(" close=")" separator=",">
+				#{itemSid,jdbcType=VARCHAR}
+			</foreach>
+		</if>
+		<if test="num != null">
 			limit #{num}
 		</if>
-    </select>
+	</select>
 
-    <select id="findIndustryCategoryByParaForOms" parameterType="com.wangfj.product.maindata.domain.vo.OmsShoppeProductDto"
-            resultType="com.wangfj.product.maindata.domain.vo.OmsShoppeProductResultDto">
-        SELECT
-            psp.shoppe_pro_sid AS shoppeProSid,
-            pc.name AS industryCategoryName,
-            pc.category_code AS industryCategoryCode,
-            pc.level AS industryCategoryLevel,
-            pc.parent_sid AS categoryParentSid
-        FROM
-            pcm_shoppe_product psp
-        INNER JOIN pcm_pro_detail ppd ON psp.product_detail_sid = ppd.sid
-        INNER JOIN pcm_product pp ON ppd.product_sid = pp.sid
-        INNER JOIN pcm_product_category ppc ON ppc.product_sid = pp.sid
-        INNER JOIN pcm_category pc ON pc.sid = ppc.category_sid
-        AND pc.category_type = 0
-        WHERE
-            psp.shoppe_pro_sid = #{shoppeProSid}
-    </select>
-    
-    <select id="selectParamByShoppeProCode" parameterType="String"
+	<select id="findIndustryCategoryByParaForOms"
+		parameterType="com.wangfj.product.maindata.domain.vo.OmsShoppeProductDto"
+		resultType="com.wangfj.product.maindata.domain.vo.OmsShoppeProductResultDto">
+		SELECT
+		psp.shoppe_pro_sid AS shoppeProSid,
+		pc.name AS
+		industryCategoryName,
+		pc.category_code AS industryCategoryCode,
+		pc.level AS industryCategoryLevel,
+		pc.parent_sid AS categoryParentSid
+		FROM
+		pcm_shoppe_product psp
+		INNER JOIN pcm_pro_detail ppd ON
+		psp.product_detail_sid = ppd.sid
+		INNER JOIN pcm_product pp ON
+		ppd.product_sid = pp.sid
+		INNER JOIN pcm_product_category ppc ON
+		ppc.product_sid = pp.sid
+		INNER JOIN pcm_category pc ON pc.sid =
+		ppc.category_sid
+		AND pc.category_type = 0
+		WHERE
+		psp.shoppe_pro_sid =
+		#{shoppeProSid}
+	</select>
+
+	<select id="selectParamByShoppeProCode" parameterType="String"
 		resultType="java.util.Map">
 		SELECT
-			psp.stock_mode AS stockType,
-			pspe.xxhc_flag AS xxhcFlag,
-			psi.shop_sid AS shopCode,
-			psi.business_pattern AS businessMode
+		psp.stock_mode AS stockType,
+		pspe.xxhc_flag AS
+		xxhcFlag,
+		psi.shop_sid AS shopCode,
+		psi.business_pattern AS businessMode
 		FROM
-			pcm_shoppe_product psp
-		JOIN pcm_shoppe_product_extend pspe ON psp.sid = pspe.shoppe_pro_sid
+		pcm_shoppe_product psp
+		JOIN pcm_shoppe_product_extend pspe ON
+		psp.sid =
+		pspe.shoppe_pro_sid
 		AND psp.shoppe_pro_sid = #{shoppeProCode}
-		JOIN pcm_supply_info psi ON psp.supply_sid = psi.sid
+		JOIN
+		pcm_supply_info psi ON psp.supply_sid = psi.sid
 	</select>
-	
-	<select id="getShoproInfoForSAPModify" resultType="com.wangfj.product.maindata.domain.vo.GetShoProInfoForSAPModifyDto"
+
+	<select id="getShoproInfoForSAPModify"
+		resultType="com.wangfj.product.maindata.domain.vo.GetShoProInfoForSAPModifyDto"
 		parameterType="java.util.Map">
 		select
 		psp.sid AS sid,
 		psp.shoppe_pro_sid AS shoppeProSid,
 		psp.category_sid AS categorySid,
-		psp.supply_product_code AS supplyProductCode,
+		psp.supply_product_code AS
+		supplyProductCode,
 		psi.supply_code AS supplyCode,
 		psp.field4 AS field4
 		from pcm_shoppe_product psp
-		inner join pcm_supply_info psi on psi.sid = psp.supply_sid
+		inner join pcm_supply_info psi on psi.sid =
+		psp.supply_sid
 		<where>
 			<if test="shoppeProSid != null">
 				and psp.shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}

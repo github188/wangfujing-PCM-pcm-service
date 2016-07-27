@@ -458,18 +458,11 @@ public class PcmStockServiceImpl implements IPcmStockService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<StockProCountDto> dtoList = new ArrayList<StockProCountDto>();
 		for (StockProCountDto stockProCountDto : products) {
-			// StockResultDto resultDto = new StockResultDto();
 			if (StringUtils.isNotBlank(stockProCountDto.getSupplyProductNo())) {
-				if (stockProCountDto.getSupplyProductNo().length() == 18) {
-					map = pcmShoppeProSid.selectStockInfo(null,
-							stockProCountDto.getSupplyProductNo());
-				} else {
-					map = pcmShoppeProSid.selectStockInfo(stockProCountDto.getSupplyProductNo());
-				}
+				map = pcmShoppeProSid.selectStockInfo(stockProCountDto.getSupplyProductNo());
 			}
 			/* 判断是否为专柜商品 */
 			if (map != null && stockProCountDto.getSupplyProductNo() != null) {
-				stockProCountDto.setSupplyProductNo(map.get("shoppe_pro_sid").toString());
 				/* 判断商品是否可售 0可售 1不可售 */
 				if (((Integer) map.get("saleStatus")).equals(0)) {
 					/* 是否管库存 0 管库存，1 不管库存 */
