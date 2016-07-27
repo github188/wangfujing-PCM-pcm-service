@@ -1,6 +1,7 @@
 package com.wangfj.product.stocks.service.intf;
 
 import com.wangfj.core.framework.base.page.Page;
+import com.wangfj.product.stocks.domain.entity.PcmStock;
 import com.wangfj.product.stocks.domain.vo.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -250,4 +251,9 @@ public interface IPcmStockService {
      * @return
      */
     public List<PcmStockWCSDto> selectProStockPushByParam(Map<String, Object> param);
+
+    /**
+     * 根据参数查询edi关联商品可售库存（分页）
+     */
+	List<PcmStock> selectProStockByParam(Map<String, Object> param);
 }

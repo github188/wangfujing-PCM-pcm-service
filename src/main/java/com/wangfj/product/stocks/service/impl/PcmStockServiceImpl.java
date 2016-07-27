@@ -2196,4 +2196,9 @@ public class PcmStockServiceImpl implements IPcmStockService {
 		return pcmStockMapper.selectProStockPushByParam(param);
 	}
 
+	@Override
+	public List<PcmStock> selectProStockByParam(Map<String, Object> param) {
+		return pcmStockMapper.selectProStockByParam(param);
+	}
+
 }
