@@ -925,6 +925,8 @@
         <if test="supplySid != null">
             AND psi.sid = #{supplySid}
         </if>
+        GROUP BY
+          ps.shoppe_code
         ORDER BY
         CONVERT(ps.shoppe_name USING gbk) ASC
     </select>
