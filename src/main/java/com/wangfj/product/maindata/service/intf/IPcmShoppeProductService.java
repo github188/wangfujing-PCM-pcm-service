@@ -112,8 +112,6 @@ public interface IPcmShoppeProductService {
 	 */
 	public Map<String, Object> selectStockInfo(String shoppeProSid);
 
-	public Map<String, Object> selectStockInfo(String shoppeProSid, String sapProductCode);
-
 	/**
 	 * 下发DTO数据处理
 	 *
