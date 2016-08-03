@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -161,6 +160,7 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 								dto.setStatus("0");// 已上架
 								errorMag = "已上架";
 							} else {
+								proEdi.setChannelProSid(ediProDto.getEDIProCode());
 								proEdi.setField1(proList.get(0).getShoppeProSid());
 								PcmStock entity = new PcmStock();
 								entity.setShoppeProSid(proEdi.getField1());
@@ -202,11 +202,11 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 									}
 								}
 								if (errorMag == null) {
-									proEdi.setIsPayReducestock(
-											Integer.parseInt(ediProDto.getIsPayReduceStock()));
+									proEdi.setIsPayReducestock(Integer.parseInt(ediProDto
+											.getIsPayReduceStock()));
 									if (StringUtils.isNotBlank(ediProDto.getIsPresell())) {
-										proEdi.setIsPresell(
-												Integer.parseInt(ediProDto.getIsPresell()));
+										proEdi.setIsPresell(Integer.parseInt(ediProDto
+												.getIsPresell()));
 									}
 									SimpleDateFormat df = new SimpleDateFormat(
 											"yyyy-MM-dd HH:mm:ss");
@@ -294,8 +294,8 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 							result = null;
 							PcmExceptionLogDto pcmExceptionLogDto = new PcmExceptionLogDto();
 							pcmExceptionLogDto.setInterfaceName("pushstocktoedi");
-							pcmExceptionLogDto
-									.setExceptionType(StatusCode.EXCEPTION_STOCK.getStatus());
+							pcmExceptionLogDto.setExceptionType(StatusCode.EXCEPTION_STOCK
+									.getStatus());
 							pcmExceptionLogDto.setErrorMessage(e.getMessage());
 							pcmExceptionLogDto.setDataContent(JsonUtil.getJSONString(tempDto));
 							pcmExceptionLogDto.setUuid(UUID.randomUUID().toString());
