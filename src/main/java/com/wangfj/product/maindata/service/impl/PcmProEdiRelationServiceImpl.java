@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wangfj.core.utils.JsonUtil;
 import com.wangfj.product.common.domain.vo.PcmExceptionLogDto;
 import com.wangfj.product.common.service.impl.PcmExceptionLogService;
 import com.wangfj.product.constants.StatusCodeConstants.StatusCode;
@@ -40,6 +42,7 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 	private PcmChannelSaleConfigMapper saleMapper;
 	@Autowired
 	private PcmExceptionLogService pcmExceptionLogService;
+
 	/**
 	 * edi查询信息基础service
 	 * 
@@ -48,7 +51,7 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 	 * @param entity
 	 * @return List<PcmShoppeProductEdiRelation>
 	 */
-	public List<PcmShoppeProductEdiRelation> selectListByParam(PcmShoppeProductEdiRelation entity){
+	public List<PcmShoppeProductEdiRelation> selectListByParam(PcmShoppeProductEdiRelation entity) {
 		List<PcmShoppeProductEdiRelation> ediList = proEdiMapper.selectListByParam(entity);
 		return ediList;
 	}
@@ -107,51 +110,54 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 							PcmShoppeProductEdiRelation proEdi = new PcmShoppeProductEdiRelation();
 							proEdi.setChannelCode(ediProDto.getChannelCode());
 							proEdi.setShoppeProSid(ediProDto.getShoppeProCode());
-//							proEdi.setChannelProSid(ediProDto.getEDIProCode());
+							// proEdi.setChannelProSid(ediProDto.getEDIProCode());
 							proEdi.setIfdel(Constants.PUBLIC_1);
 							List<PcmShoppeProductEdiRelation> ediList = proEdiMapper
 									.selectListByParam(proEdi);// 查询Edi关联关系是否存在
 							if (ediList != null && ediList.size() > 0) {// 如果存在
-//								proEdi.setField1(ediList.get(0).getField1());
-//								PcmStock entity = new PcmStock();
-//								entity.setShoppeProSid(proEdi.getField1());
-//								entity.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
-//								entity.setChannelSid(ediProDto.getChannelCode());
-//								List<PcmStock> stock = stockMapper.selectListByParam(entity);
-//								if (stock != null && stock.size() > 0) {
-//									if (stock.get(0).getProSum() == 0) {
-//										if (Constants.PCMSTOCK_ISPUSH_EDI.equals("1")) {
-//											PcmStock entity1 = new PcmStock();
-//											entity1.setShoppeProSid(ediList.get(0).getField1());
-//											entity1.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
-//											entity1.setChannelSid("0");
-//											List<PcmStock> stock1 = stockMapper
-//													.selectListByParam(entity1);
-//											if (stock1 != null && stock1.size() > 0) {
-//												dto.setProNum(stock1.get(0).getProSum().toString());
-//											}
-//										} else {
-//											dto.setProNum(stock.get(0).getProSum().toString());
-//										}
-//									} else {
-//										dto.setProNum(stock.get(0).getProSum().toString());
-//									}
-//								} else {
-//									if (Constants.PCMSTOCK_ISPUSH_EDI.equals("1")) {
-//										PcmStock entity1 = new PcmStock();
-//										entity1.setShoppeProSid(ediList.get(0).getField1());
-//										entity1.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
-//										entity1.setChannelSid("0");
-//										List<PcmStock> stock1 = stockMapper
-//												.selectListByParam(entity1);
-//										if (stock1 != null && stock1.size() > 0) {
-//											dto.setProNum(stock1.get(0).getProSum().toString());
-//										}
-//									} else {
-//										dto.setStatus("0");// 开关关闭-库存不足
-//										errorMag = "开关关闭-库存不足";
-//									}
-//								}
+								// proEdi.setField1(ediList.get(0).getField1());
+								// PcmStock entity = new PcmStock();
+								// entity.setShoppeProSid(proEdi.getField1());
+								// entity.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
+								// entity.setChannelSid(ediProDto.getChannelCode());
+								// List<PcmStock> stock =
+								// stockMapper.selectListByParam(entity);
+								// if (stock != null && stock.size() > 0) {
+								// if (stock.get(0).getProSum() == 0) {
+								// if
+								// (Constants.PCMSTOCK_ISPUSH_EDI.equals("1")) {
+								// PcmStock entity1 = new PcmStock();
+								// entity1.setShoppeProSid(ediList.get(0).getField1());
+								// entity1.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
+								// entity1.setChannelSid("0");
+								// List<PcmStock> stock1 = stockMapper
+								// .selectListByParam(entity1);
+								// if (stock1 != null && stock1.size() > 0) {
+								// dto.setProNum(stock1.get(0).getProSum().toString());
+								// }
+								// } else {
+								// dto.setProNum(stock.get(0).getProSum().toString());
+								// }
+								// } else {
+								// dto.setProNum(stock.get(0).getProSum().toString());
+								// }
+								// } else {
+								// if
+								// (Constants.PCMSTOCK_ISPUSH_EDI.equals("1")) {
+								// PcmStock entity1 = new PcmStock();
+								// entity1.setShoppeProSid(ediList.get(0).getField1());
+								// entity1.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
+								// entity1.setChannelSid("0");
+								// List<PcmStock> stock1 = stockMapper
+								// .selectListByParam(entity1);
+								// if (stock1 != null && stock1.size() > 0) {
+								// dto.setProNum(stock1.get(0).getProSum().toString());
+								// }
+								// } else {
+								// dto.setStatus("0");// 开关关闭-库存不足
+								// errorMag = "开关关闭-库存不足";
+								// }
+								// }
 								dto.setStatus("0");// 已上架
 								errorMag = "已上架";
 							} else {
@@ -196,11 +202,11 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 									}
 								}
 								if (errorMag == null) {
-									proEdi.setIsPayReducestock(Integer.parseInt(ediProDto
-											.getIsPayReduceStock()));
+									proEdi.setIsPayReducestock(
+											Integer.parseInt(ediProDto.getIsPayReduceStock()));
 									if (StringUtils.isNotBlank(ediProDto.getIsPresell())) {
-										proEdi.setIsPresell(Integer.parseInt(ediProDto
-												.getIsPresell()));
+										proEdi.setIsPresell(
+												Integer.parseInt(ediProDto.getIsPresell()));
 									}
 									SimpleDateFormat df = new SimpleDateFormat(
 											"yyyy-MM-dd HH:mm:ss");
@@ -282,7 +288,19 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 
 				if (tempList != null && tempList.size() > 0) {
 					for (PcmEdiProductStockDto tempDto : tempList) {
-						result = getEdiStockList(tempDto, dto.getChannelCode());
+						try {
+							result = getEdiStockList(tempDto, dto.getChannelCode());
+						} catch (Exception e) {
+							result = null;
+							PcmExceptionLogDto pcmExceptionLogDto = new PcmExceptionLogDto();
+							pcmExceptionLogDto.setInterfaceName("pushstocktoedi");
+							pcmExceptionLogDto
+									.setExceptionType(StatusCode.EXCEPTION_STOCK.getStatus());
+							pcmExceptionLogDto.setErrorMessage(e.getMessage());
+							pcmExceptionLogDto.setDataContent(JsonUtil.getJSONString(tempDto));
+							pcmExceptionLogDto.setUuid(UUID.randomUUID().toString());
+							pcmExceptionLogService.saveExceptionLogInfo(pcmExceptionLogDto);
+						}
 						if (result != null) {
 							resultList.add(result);
 						}
@@ -290,7 +308,6 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 				}
 			}
 		}
-
 		return resultList;
 	}
 
@@ -323,6 +340,5 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 			}
 		}
 		return result;
-
 	}
 }
