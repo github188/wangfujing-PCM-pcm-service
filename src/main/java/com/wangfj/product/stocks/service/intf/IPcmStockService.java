@@ -256,4 +256,11 @@ public interface IPcmStockService {
      * 根据参数查询edi关联商品可售库存（分页）
      */
 	List<PcmStock> selectProStockByParam(Map<String, Object> param);
+
+	/**
+     * 根据商品编码和渠道批量下发商品库存给wcs
+     * @param param
+     * @return
+     */
+	List<PcmStockWCSDto> selectProStockPushByPros(Map<String, Object> param);
 }

@@ -1593,16 +1593,80 @@
 		resultType="com.wangfj.product.stocks.domain.vo.PcmStockWCSDto">
 		SELECT
 			1 AS type,
-			ps.shoppe_pro_sid AS matnr,
-			ps.pro_sum AS num,
-			psp.stock_mode AS flag
+			pss.shoppe_pro_sid AS matnr,
+			(pss.pro_sum + pss.pro_sum1) AS num,
+			pss.stock_mode AS flag
 		FROM
-			pcm_stock ps
-		JOIN pcm_shoppe_product psp ON ps.shoppe_pro_sid = psp.shoppe_pro_sid
-		AND ps.stock_type_sid = 1001
-		<if test="page!=null">
-			LIMIT #{page}, 200
-		</if>
+			(
+				SELECT
+					ps.shoppe_pro_sid,
+					ps.pro_sum,
+					IFNULL(ps2.pro_sum, 0) AS pro_sum1,
+					ps.stock_mode
+				FROM
+					(
+						SELECT
+							ps1.shoppe_pro_sid,
+							ps1.pro_sum,
+							psp.stock_mode
+						FROM
+							pcm_stock ps1
+						JOIN pcm_shoppe_product psp ON ps1.shoppe_pro_sid = psp.shoppe_pro_sid
+						WHERE
+							ps1.stock_type_sid = '1001'
+						AND ps1.channel_sid = '0'
+						<if test="page!=null">
+							LIMIT #{page}, 50
+						</if>
+					) ps
+				LEFT JOIN pcm_stock ps2 ON ps.shoppe_pro_sid = ps2.shoppe_pro_sid
+				AND ps2.stock_type_sid = '1004'
+				AND ps2.stock_type_sid = '0'
+			) pss
+	</select>
+	
+	<select id="selectProStockPushByPros"
+		parameterType="java.util.Map"
+		resultType="com.wangfj.product.stocks.domain.vo.PcmStockWCSDto">
+		SELECT
+			1 AS type,
+			pss.shoppe_pro_sid AS matnr,
+			(pss.pro_sum + pss.pro_sum1) AS num,
+			pss.stock_mode AS flag
+		FROM
+			(
+				SELECT
+					ps.shoppe_pro_sid,
+					ps.pro_sum,
+					IFNULL(ps2.pro_sum, 0) AS pro_sum1,
+					ps.stock_mode
+				FROM
+					(
+						SELECT
+							ps1.shoppe_pro_sid,
+							ps1.pro_sum,
+							psp.stock_mode
+						FROM
+							pcm_stock ps1
+						JOIN pcm_shoppe_product psp ON ps1.shoppe_pro_sid = psp.shoppe_pro_sid
+						WHERE
+							ps1.stock_type_sid = '1001'
+						<if test="channelSid != null">
+							AND ps1.channel_sid = #{channelSid,jdbcType=VARCHAR}
+						</if>
+						<if test="productCodeList != null">
+							AND ps1.shoppe_pro_sid IN
+							<foreach collection="productCodeList" open="(" item="item" separator="," close=")">
+								#{item}
+							</foreach>
+						</if>
+					) ps
+				LEFT JOIN pcm_stock ps2 ON ps.shoppe_pro_sid = ps2.shoppe_pro_sid
+				AND ps2.stock_type_sid = '1004'
+				<if test="channelSid != null">
+					AND ps2.channel_sid = #{channelSid,jdbcType=VARCHAR}
+				</if>
+			) pss
 	</select>
 	
 	<select id="selectProStockByParam"
