@@ -4844,7 +4844,6 @@
 		pcm_shoppe_product AS pro
 		JOIN pcm_pro_detail AS sku ON sku.sid =
 		pro.product_detail_sid
-		AND pro.sale_status = 0
 		JOIN pcm_product AS spu
 		ON spu.sid = sku.product_sid
 		JOIN pcm_shoppe AS shoppe ON shoppe.sid =
