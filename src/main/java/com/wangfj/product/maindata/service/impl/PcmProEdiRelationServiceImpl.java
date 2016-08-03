@@ -107,51 +107,53 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 							PcmShoppeProductEdiRelation proEdi = new PcmShoppeProductEdiRelation();
 							proEdi.setChannelCode(ediProDto.getChannelCode());
 							proEdi.setShoppeProSid(ediProDto.getShoppeProCode());
-							proEdi.setChannelProSid(ediProDto.getEDIProCode());
+//							proEdi.setChannelProSid(ediProDto.getEDIProCode());
 							proEdi.setIfdel(Constants.PUBLIC_1);
 							List<PcmShoppeProductEdiRelation> ediList = proEdiMapper
 									.selectListByParam(proEdi);// 查询Edi关联关系是否存在
 							if (ediList != null && ediList.size() > 0) {// 如果存在
-								proEdi.setField1(ediList.get(0).getField1());
-								PcmStock entity = new PcmStock();
-								entity.setShoppeProSid(proEdi.getField1());
-								entity.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
-								entity.setChannelSid(ediProDto.getChannelCode());
-								List<PcmStock> stock = stockMapper.selectListByParam(entity);
-								if (stock != null && stock.size() > 0) {
-									if (stock.get(0).getProSum() == 0) {
-										if (Constants.PCMSTOCK_ISPUSH_EDI.equals("1")) {
-											PcmStock entity1 = new PcmStock();
-											entity1.setShoppeProSid(ediList.get(0).getField1());
-											entity1.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
-											entity1.setChannelSid("0");
-											List<PcmStock> stock1 = stockMapper
-													.selectListByParam(entity1);
-											if (stock1 != null && stock1.size() > 0) {
-												dto.setProNum(stock1.get(0).getProSum().toString());
-											}
-										} else {
-											dto.setProNum(stock.get(0).getProSum().toString());
-										}
-									} else {
-										dto.setProNum(stock.get(0).getProSum().toString());
-									}
-								} else {
-									if (Constants.PCMSTOCK_ISPUSH_EDI.equals("1")) {
-										PcmStock entity1 = new PcmStock();
-										entity1.setShoppeProSid(ediList.get(0).getField1());
-										entity1.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
-										entity1.setChannelSid("0");
-										List<PcmStock> stock1 = stockMapper
-												.selectListByParam(entity1);
-										if (stock1 != null && stock1.size() > 0) {
-											dto.setProNum(stock1.get(0).getProSum().toString());
-										}
-									} else {
-										dto.setStatus("0");// 开关关闭-库存不足
-										errorMag = "开关关闭-库存不足";
-									}
-								}
+//								proEdi.setField1(ediList.get(0).getField1());
+//								PcmStock entity = new PcmStock();
+//								entity.setShoppeProSid(proEdi.getField1());
+//								entity.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
+//								entity.setChannelSid(ediProDto.getChannelCode());
+//								List<PcmStock> stock = stockMapper.selectListByParam(entity);
+//								if (stock != null && stock.size() > 0) {
+//									if (stock.get(0).getProSum() == 0) {
+//										if (Constants.PCMSTOCK_ISPUSH_EDI.equals("1")) {
+//											PcmStock entity1 = new PcmStock();
+//											entity1.setShoppeProSid(ediList.get(0).getField1());
+//											entity1.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
+//											entity1.setChannelSid("0");
+//											List<PcmStock> stock1 = stockMapper
+//													.selectListByParam(entity1);
+//											if (stock1 != null && stock1.size() > 0) {
+//												dto.setProNum(stock1.get(0).getProSum().toString());
+//											}
+//										} else {
+//											dto.setProNum(stock.get(0).getProSum().toString());
+//										}
+//									} else {
+//										dto.setProNum(stock.get(0).getProSum().toString());
+//									}
+//								} else {
+//									if (Constants.PCMSTOCK_ISPUSH_EDI.equals("1")) {
+//										PcmStock entity1 = new PcmStock();
+//										entity1.setShoppeProSid(ediList.get(0).getField1());
+//										entity1.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
+//										entity1.setChannelSid("0");
+//										List<PcmStock> stock1 = stockMapper
+//												.selectListByParam(entity1);
+//										if (stock1 != null && stock1.size() > 0) {
+//											dto.setProNum(stock1.get(0).getProSum().toString());
+//										}
+//									} else {
+//										dto.setStatus("0");// 开关关闭-库存不足
+//										errorMag = "开关关闭-库存不足";
+//									}
+//								}
+								dto.setStatus("0");// 已上架
+								errorMag = "已上架";
 							} else {
 								proEdi.setField1(proList.get(0).getShoppeProSid());
 								PcmStock entity = new PcmStock();
