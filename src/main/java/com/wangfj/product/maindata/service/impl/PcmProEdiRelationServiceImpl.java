@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wangfj.core.utils.JsonUtil;
+import com.wangfj.product.common.domain.entity.PcmExceptionLog;
 import com.wangfj.product.common.domain.vo.PcmExceptionLogDto;
+import com.wangfj.product.common.persistence.PcmExceptionLogMapper;
 import com.wangfj.product.common.service.impl.PcmExceptionLogService;
 import com.wangfj.product.constants.StatusCodeConstants.StatusCode;
 import com.wangfj.product.maindata.domain.entity.PcmShoppeProduct;
@@ -41,6 +43,8 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 	private PcmChannelSaleConfigMapper saleMapper;
 	@Autowired
 	private PcmExceptionLogService pcmExceptionLogService;
+	@Autowired
+	private PcmExceptionLogMapper exLogMapper;
 
 	/**
 	 * edi查询信息基础service
@@ -262,7 +266,8 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 				pcmExceptionLogDto.setErrorMessage(errorMag);
 				pcmExceptionLogDto.setDataContent(resultList.get(0).toString());
 				pcmExceptionLogDto.setUuid(UUID.randomUUID().toString());
-				pcmExceptionLogService.saveExceptionLogInfo(pcmExceptionLogDto);
+				exLogMapper.insertSelective(pcmExceptionLogDto);
+//				pcmExceptionLogService.saveExceptionLogInfo(pcmExceptionLogDto);
 			}
 		}
 		return resultList.get(0);
