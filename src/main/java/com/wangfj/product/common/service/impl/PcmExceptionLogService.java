@@ -143,4 +143,15 @@ public class PcmExceptionLogService implements IPcmExceptionLogService {
 			}
 		});
 	}
+
+	@Override
+	public int addExceptionLogInfo(PcmExceptionLogDto pcmExceptionLogdto) {
+		int result = 0;
+		try {
+			result = pcmExceptionLogMapper.insertSelective(pcmExceptionLogdto);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		return result;
+	}
 }
