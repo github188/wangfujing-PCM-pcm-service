@@ -1678,17 +1678,26 @@
 			ps.pro_sum
 		FROM
 			pcm_stock ps
-		JOIN pcm_shoppe_product_edi_relation psp ON ps.shoppe_pro_sid = psp.field1
-		WHERE
-			ps.stock_type_sid = '1001'
+		JOIN (
+			SELECT
+				field1,
+				COUNT(field1) AS aa
+			FROM
+				pcm_shoppe_product_edi_relation
+			WHERE
+				ifdel = 1
+			GROUP BY
+				field1
+			<if test="start != null">
+				<if test="limit != null">
+					limit
+					#{start}, #{limit}
+				</if>
+			</if>
+		) psp ON psp.field1 = ps.shoppe_pro_sid
+		AND ps.stock_type_sid = 1001
 		<if test="channelSid !=null">
 			and ps.channel_sid=#{channelSid,jdbcType=VARCHAR}
-		</if>
-		<if test="start != null">
-			<if test="limit != null">
-				limit
-				#{start}, #{limit}
-			</if>
 		</if>
 	</select>
 </mapper>
