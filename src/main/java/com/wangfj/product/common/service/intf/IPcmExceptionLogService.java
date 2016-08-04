@@ -15,7 +15,7 @@ import com.wangfj.product.common.domain.vo.PcmExceptionLogDtos;
 public interface IPcmExceptionLogService {
 
 	/**
-	 * 保存异常信息
+	 * 保存异常信息并发送到减库平台
 	 * 
 	 * @Methods Name saveExceptionLogInfo
 	 * @Create In 2015年8月5日 By kongqf
@@ -23,6 +23,16 @@ public interface IPcmExceptionLogService {
 	 * @return int
 	 */
 	public int saveExceptionLogInfo(PcmExceptionLogDto pcmExceptionLogdto);
+
+	/**
+	 * 保存异常信息
+	 * 
+	 * @Methods Name addExceptionLogInfo
+	 * @Create In 2016年8月4日 By kongqf
+	 * @param pcmExceptionLogdto
+	 * @return int
+	 */
+	public int addExceptionLogInfo(PcmExceptionLogDto pcmExceptionLogdto);
 
 	/**
 	 * 分页查询异常信息
