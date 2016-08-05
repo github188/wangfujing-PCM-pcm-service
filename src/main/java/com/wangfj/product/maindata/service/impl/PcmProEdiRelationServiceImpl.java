@@ -118,7 +118,7 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 							List<PcmShoppeProductEdiRelation> ediList = proEdiMapper
 									.selectListByParam(proEdi);// 查询Edi关联关系是否存在
 							if (ediList != null && ediList.size() > 0) {// 如果存在
-								if(ediList.get(0).getChannelCode().equals(ediProDto.getEDIProCode())){
+								if(ediList.get(0).getChannelProSid().equals(ediProDto.getEDIProCode())){
 									proEdi.setField1(ediList.get(0).getField1());
 									PcmStock entity = new PcmStock();
 									entity.setShoppeProSid(proEdi.getField1());
@@ -242,15 +242,17 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 					List<PcmShoppeProductEdiRelation> proEdiList = proEdiMapper
 							.selectListByParam(proEdi);
 					if (proEdiList != null && proEdiList.size() > 0) {
-						proEdi.setSid(proEdiList.get(0).getSid());
-						proEdi.setIfdel(Constants.PUBLIC_0);
-						SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-						String time = df.format(new Date());
-						proEdi.setField2(time);
-						int u = proEdiMapper.updateByPrimaryKeySelective(proEdi);
-						if (u == 0) {
-							dto.setStatus("0");// 数据库错误
-							errorMag = "update数据库错误";
+						for (PcmShoppeProductEdiRelation ediPro : proEdiList) {
+							proEdi.setSid(ediPro.getSid());
+							proEdi.setIfdel(Constants.PUBLIC_0);
+							SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							String time = df.format(new Date());
+							proEdi.setField2(time);
+							int u = proEdiMapper.updateByPrimaryKeySelective(proEdi);
+							if (u == 0) {
+								dto.setStatus("0");// 数据库错误
+								errorMag = "update数据库错误";
+							}
 						}
 					} else {
 						dto.setStatus("0");//
