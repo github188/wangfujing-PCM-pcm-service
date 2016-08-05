@@ -234,29 +234,34 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 						}
 					}
 				} else if (ediProDto.getActionCode().equals(Constants.D)) {
-					PcmShoppeProductEdiRelation proEdi = new PcmShoppeProductEdiRelation();
-					proEdi.setChannelCode(ediProDto.getChannelCode());
-					proEdi.setShoppeProSid(ediProDto.getShoppeProCode());
-					proEdi.setChannelProSid(ediProDto.getEDIProCode());
-					proEdi.setIfdel(Constants.PUBLIC_1);
-					List<PcmShoppeProductEdiRelation> proEdiList = proEdiMapper
-							.selectListByParam(proEdi);
-					if (proEdiList != null && proEdiList.size() > 0) {
-						for (PcmShoppeProductEdiRelation ediPro : proEdiList) {
-							proEdi.setSid(ediPro.getSid());
-							proEdi.setIfdel(Constants.PUBLIC_0);
-							SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-							String time = df.format(new Date());
-							proEdi.setField2(time);
-							int u = proEdiMapper.updateByPrimaryKeySelective(proEdi);
-							if (u == 0) {
-								dto.setStatus("0");// 数据库错误
-								errorMag = "update数据库错误";
-							}
-						}
-					} else {
+					if(ediProDto.getShoppeProCode().equals("") || ediProDto.getShoppeProCode().equals(null)){
 						dto.setStatus("0");//
-						errorMag = "商品未上架，不可下架";
+						errorMag = "下架商品编码不能为空";
+					}else{
+						PcmShoppeProductEdiRelation proEdi = new PcmShoppeProductEdiRelation();
+						proEdi.setChannelCode(ediProDto.getChannelCode());
+						proEdi.setShoppeProSid(ediProDto.getShoppeProCode());
+						proEdi.setChannelProSid(ediProDto.getEDIProCode());
+						proEdi.setIfdel(Constants.PUBLIC_1);
+						List<PcmShoppeProductEdiRelation> proEdiList = proEdiMapper
+								.selectListByParam(proEdi);
+						if (proEdiList != null && proEdiList.size() > 0) {
+							for (PcmShoppeProductEdiRelation ediPro : proEdiList) {
+								proEdi.setSid(ediPro.getSid());
+								proEdi.setIfdel(Constants.PUBLIC_0);
+								SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+								String time = df.format(new Date());
+								proEdi.setField2(time);
+								int u = proEdiMapper.updateByPrimaryKeySelective(proEdi);
+								if (u == 0) {
+									dto.setStatus("0");// 数据库错误
+									errorMag = "update数据库错误";
+								}
+							}
+						} else {
+							dto.setStatus("0");//
+							errorMag = "商品未上架，不可下架";
+						}
 					}
 				}
 			}
