@@ -386,22 +386,27 @@ public class PcmStockServiceImpl implements IPcmStockService {
 		if (Constants.SUPPLIERCENTER.equals(pcmStockDto.getSource().toUpperCase())) {
 			Map<String, Object> paramMap = pcmShoppeProSid
 					.selectParamByShoppeProCode(pcmStockDto.getShoppeProSid());
-			if (Constants.PCMORGANIZATION_E_STORE_CODE.equals(paramMap.get("shopCode"))) {
-				String stockType = String.valueOf(paramMap.get("stockType"));
-				String xxhcFlag = String.valueOf(paramMap.get("xxhcFlag"));
+			if (paramMap != null && !paramMap.isEmpty()) {
+				if (Constants.PCMORGANIZATION_E_STORE_CODE.equals(paramMap.get("shopCode"))) {
+					String stockType = String.valueOf(paramMap.get("stockType"));
+					String xxhcFlag = String.valueOf(paramMap.get("xxhcFlag"));
 
-				if (!Constants.STOCKTYPE_2.equals(stockType)
-						&& !Constants.XXHCFLAG_0.equals(xxhcFlag)) {
-					throw new BleException(ErrorCode.NOT_XKORXXHC.getErrorCode(),
-							ErrorCode.NOT_XKORXXHC.getMemo());
+					if (!Constants.STOCKTYPE_2.equals(stockType)
+							&& !Constants.XXHCFLAG_0.equals(xxhcFlag)) {
+						throw new BleException(ErrorCode.NOT_XKORXXHC.getErrorCode(),
+								ErrorCode.NOT_XKORXXHC.getMemo());
+					}
+
+				} else {
+					String businessMode = String.valueOf(paramMap.get("businessMode"));
+					if (!(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3 + "").equals(businessMode)) {
+						throw new BleException(ErrorCode.NOT_ASSOCIATED.getErrorCode(),
+								ErrorCode.NOT_ASSOCIATED.getMemo());
+					}
 				}
-
 			} else {
-				String businessMode = String.valueOf(paramMap.get("businessMode"));
-				if (!(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3 + "").equals(businessMode)) {
-					throw new BleException(ErrorCode.NOT_ASSOCIATED.getErrorCode(),
-							ErrorCode.NOT_ASSOCIATED.getMemo());
-				}
+				throw new BleException(ErrorCode.STOCK_SHOPPEPROSID_IS_NOT_EXITS.getErrorCode(),
+						ErrorCode.STOCK_SHOPPEPROSID_IS_NOT_EXITS.getMemo());
 			}
 		}
 		if (StringUtils.isBlank(pcmStockDto.getOperator())) {
@@ -2195,7 +2200,7 @@ public class PcmStockServiceImpl implements IPcmStockService {
 	public List<PcmStockWCSDto> selectProStockPushByParam(Map<String, Object> param) {
 		return pcmStockMapper.selectProStockPushByParam(param);
 	}
-	
+
 	@Override
 	public List<PcmStockWCSDto> selectProStockPushByPros(Map<String, Object> param) {
 		return pcmStockMapper.selectProStockPushByPros(param);
