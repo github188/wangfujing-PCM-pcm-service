@@ -130,6 +130,14 @@ public class PcmRedisExceptionService implements IPcmRedisExceptionService {
                 }
                 Map<String, Object> paramMap = new HashMap<String, Object>();
                 instanceList = instanceMapper.selectListByParam(paramMap);
+                if (instanceList != null && instanceList.size() > 0) {
+                    for (int i = 0; i < instanceList.size(); i++) {
+                        String code = instanceList.get(i).getCode();
+                        if ("pcm-syn".equalsIgnoreCase(code)) {
+                            instanceList.remove(i);
+                        }
+                    }
+                }
             }
         } else {
             // Redis服务器挂了
