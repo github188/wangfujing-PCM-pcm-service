@@ -352,4 +352,8 @@ public interface ICategoryService {
 	 * @return List<Map<String,String>>
 	 */
 	List<Map<String ,String>> getPropNameAndValueByShoprosid(Map<String,Object> paraMap);
+
+	String uploadManagerCateFromErp(PcmAddCategoryDto cateDto);
+
+	String uploadManagerCateFromSap(PcmAddCategoryDto cateDto);
 }

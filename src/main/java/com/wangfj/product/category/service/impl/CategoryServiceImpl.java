@@ -191,12 +191,7 @@ public class CategoryServiceImpl implements ICategoryService {
 				PcmCategory cateType = new PcmCategory();
 				// 根据当前传入的parent_sid 判断它的上级状态是不是可用
 				if (cateDto.getCategoryType() == 1) {
-					PcmCategory glcateType = cateMapper.selectByCategorySid(cateDto.getParentSid());
-					if(glcateType != null && (Constants.PUBLIC_0+"").equals(glcateType.getCategoryCode())){
-						cateType = glcateType;
-					} else {
-						cateType = cateMapper.selectByGLCategorySid(cateDto);
-					}
+					cateType = cateMapper.selectByGLCategorySid(cateDto);
 				} else {
 					cateType = cateMapper.selectByCategorySid(cateDto.getParentSid());
 				}
@@ -373,12 +368,7 @@ public class CategoryServiceImpl implements ICategoryService {
 					p.setShopSid(pcmcate.getShopSid());
 					PcmCategory uppcm = new PcmCategory();
 					if (cateDto.getCategoryType() == 1) {
-						PcmCategory glcateType = cateMapper.selectByCategorySid(cateDto.getParentSid());
-						if(glcateType != null && (Constants.PUBLIC_0+"").equals(glcateType.getCategoryCode())){
-							uppcm = glcateType;
-						} else {
-							uppcm = cateMapper.selectByGLCategorySid(cateDto);
-						}
+						uppcm = cateMapper.selectByGLCategorySid(cateDto);
 					} else {
 						uppcm = cateMapper.selectByCategorySid(cateDto.getParentSid());
 					}
@@ -845,12 +835,7 @@ public class CategoryServiceImpl implements ICategoryService {
 				PcmCategory cateType = new PcmCategory();
 				// 根据当前传入的parent_sid 判断它的上级状态是不是可用
 				if (cateDto.getCategoryType() == 1) {
-					PcmCategory glcateType = cateMapper.selectByCategorySid(cateDto.getParentSid());
-					if(glcateType != null && (Constants.PUBLIC_0+"").equals(glcateType.getCategoryCode())){
-						cateType = glcateType;
-					} else {
-						cateType = cateMapper.selectByGLCategorySid(cateDto);
-					}
+					cateType = cateMapper.selectByGLCategorySid(cateDto);
 				} else {
 					cateType = cateMapper.selectByCategorySid(cateDto.getParentSid());
 				}
@@ -1014,12 +999,7 @@ public class CategoryServiceImpl implements ICategoryService {
 					p.setShopSid(pcmcate.getShopSid());
 					PcmCategory uppcm = new PcmCategory();
 					if (cateDto.getCategoryType() == 1) {
-						PcmCategory glcateType = cateMapper.selectByCategorySid(cateDto.getParentSid());
-						if(glcateType != null && (Constants.PUBLIC_0+"").equals(glcateType.getCategoryCode())){
-							uppcm = glcateType;
-						} else {
-							uppcm = cateMapper.selectByGLCategorySid(cateDto);
-						}
+						uppcm = cateMapper.selectByGLCategorySid(cateDto);
 					} else {
 						uppcm = cateMapper.selectByCategorySid(cateDto.getParentSid());
 					}
@@ -1336,15 +1316,8 @@ public class CategoryServiceImpl implements ICategoryService {
 				PcmCategory cateType = new PcmCategory();
 				// 根据当前传入的parent_sid 判断它的上级状态是不是可用
 				if (cateDto.getCategoryType() == 1) {
-					PcmCategory glcateType = cateMapper.selectByCategorySid(cateDto.getParentSid());
-					if(glcateType != null && (Constants.PUBLIC_0+"").equals(glcateType.getCategoryCode())){
-						cateType = glcateType;
-					} else {
-						cateType = cateMapper.selectByGLCategorySid(cateDto);
-					}
-				} else {
-					cateType = cateMapper.selectByCategorySid(cateDto.getParentSid());
-				}
+					cateType = cateMapper.selectByGLCategorySid(cateDto);
+				} 
 				// 如果状态=N时，状态不可用
 				if (cateType == null || Constants.N.equals(cateType.getStatus())) {
 					logger.error("上级分类状态为不可用");
@@ -1505,15 +1478,8 @@ public class CategoryServiceImpl implements ICategoryService {
 					p.setShopSid(pcmcate.getShopSid());
 					PcmCategory uppcm = new PcmCategory();
 					if (cateDto.getCategoryType() == 1) {
-						PcmCategory glcateType = cateMapper.selectByCategorySid(cateDto.getParentSid());
-						if(glcateType != null && (Constants.PUBLIC_0+"").equals(glcateType.getCategoryCode())){
-							uppcm = glcateType;
-						} else {
-							uppcm = cateMapper.selectByGLCategorySid(cateDto);
-						}
-					} else {
-						uppcm = cateMapper.selectByCategorySid(cateDto.getParentSid());
-					}
+						uppcm = cateMapper.selectByGLCategorySid(cateDto);
+					} 
 					// PcmCategory uppcm = new PcmCategory();
 					if (uppcm != null) {
 						// uppcm =
@@ -1738,11 +1704,6 @@ public class CategoryServiceImpl implements ICategoryService {
 				pcmcate.setCategoryCode(cateDto.getCategoryCode());// 手工录入编码
 			}
 			
-			HashMap<String, Object> paramMaps2 = new HashMap<String, Object>();
-			paramMaps2.put("name", cateDto.getName());
-			paramMaps2.put("isDisplay", 1);
-			paramMaps2.put("parentSid", cateDto.getParentSid());
-			paramMaps2.put("category_sid", cateDto.getCategorySid());
 			PcmCategory cate = cateListes.get(0);
 			
 			pcmcate.setSid(cate.getSid());
@@ -2616,5 +2577,331 @@ public class CategoryServiceImpl implements ICategoryService {
 		List<Map<String,String>> resultList = new ArrayList<Map<String,String>>();
 		resultList = cateMapper.getPropNameAndValueByShoprosid(paraMap);
 		return resultList;
+	}
+	
+	/**
+	 * zdl
+	 * 门店管理分类上传
+	 */
+	@Override
+	public String uploadManagerCateFromErp(PcmAddCategoryDto cateDto){
+		String message = "";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		PcmCategory pcmNewCate = new PcmCategory();
+		
+		if(Constants.A.equals(cateDto.getActionCode())){
+			// 如果不是父级分类并且没有对应的上级分类
+			if ("".equals(cateDto.getParentSid()) || null == cateDto.getParentSid()) {
+				logger.error("该工业分类没有对应的上级分类，需先添加上级分类");
+				message = "该工业分类没有对应的上级分类，需先添加上级分类";
+				throw new BleException(
+						ComErrorCodeConstants.ErrorCode.CATEGORY_SUPERIOR_NOT_EXIST
+								.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATEGORY_SUPERIOR_NOT_EXIST.getMemo());
+			}
+			// 根据当前传入的parent_sid 判断它的上级状态是不是可用
+			PcmCategory cateType = cateMapper.selectByGLCategorySid(cateDto);
+			// 如果状态=N时，状态不可用
+			if (cateType == null || Constants.N.equals(cateType.getStatus())) {
+				logger.error("上级分类状态为不可用");
+				message = "上级分类状态为不可用";
+				throw new BleException(
+						ComErrorCodeConstants.ErrorCode.CATEGORY_NO_STATUS.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATEGORY_NO_STATUS.getMemo());
+			}
+			// 根据编码判重
+			paramMap.put("categoryCode", cateDto.getCategoryCode());
+			paramMap.put("isDisplay", 1);
+			paramMap.put("categoryType", cateDto.getCategoryType());
+			paramMap.put("shopSid", cateDto.getShopSid());
+			Integer count2 = cateMapper.getCountByParam(paramMap);
+			if (count2 > 0) {
+				logger.error("分类编码重复");
+				message = "分类编码重复";
+				throw new BleException(
+						ComErrorCodeConstants.ErrorCode.CATEGORY_CATEGORYSID_HAVA
+								.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATEGORY_CATEGORYSID_HAVA.getMemo());
+			}
+			// 如果状态可用并且不是父级节点但有对应的上级分类（即叶子节点），则需进行添加
+			paramMap.clear();
+			paramMap.put("name", cateDto.getName());
+			paramMap.put("isDisplay", 1);
+			paramMap.put("categoryType", cateDto.getCategoryType());
+			paramMap.put("parentSid", cateType.getSid());
+			Integer count = cateMapper.getCountByParam(paramMap);
+			if(count != 0){
+				logger.info("该分类已经存在");
+				message = "该分类已经存在";
+				throw new BleException(
+						ComErrorCodeConstants.ErrorCode.CATEGORY_IS_HAVA.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATEGORY_IS_HAVA.getMemo());
+			}
+			BeanUtils.copyProperties(cateDto, pcmNewCate);
+			pcmNewCate.setParentSid(cateType.getSid()+"");//设置父级id
+			String cateName = cateDto.getName();
+			pcmNewCate.setName(cateName.trim());
+			// 管理分类是全渠道
+			pcmNewCate.setChannelSid((Long.parseLong(Constants.PUBLIC_0 + "")));
+			
+			if(Constants.Y.equals(cateDto.getIsLeaf())){
+				pcmNewCate.setIsParent(Constants.PUBLIC_0);
+				// 赋值到is_leaf字段
+				pcmNewCate.setIsLeaf(Constants.Y);
+			} else {
+				pcmNewCate.setIsParent(Constants.PUBLIC_1);
+				// 赋值到is_leaf字段
+				pcmNewCate.setIsLeaf(Constants.N);
+			}
+			//分类的根id
+			pcmNewCate.setRootSid(cateType.getRootSid());
+			// 获取同一父类和渠道的排序最大值
+			Integer sortorder = this.getMaxSortOrder(cateType.getSid()+"");
+			pcmNewCate.setSortOrder(sortorder + 1);
+
+			pcmNewCate.setIsDisplay(Constants.PUBLIC_1);// 默认为显示
+			pcmNewCate.setIsSelfBuilt(Constants.PUBLIC_1);
+			//添加分类
+			Integer results = cateMapper.insertSelective(pcmNewCate);
+			
+			//如果添加的是非叶子节点，则查找是否是先删除的添加
+			if(Constants.N.equals(cateDto.getIsLeaf())){
+				paramMap.clear();
+				paramMap.put("parent_sid", pcmNewCate.getShopSid() + pcmNewCate.getCategorySid());
+				paramMap.put("categoryType", pcmNewCate.getCategoryType());
+				List<PcmCategory> cateList = cateMapper.selectByParentSid(paramMap);
+				if (cateList != null && cateList.size() != 0) {
+					paramMap.clear();
+					paramMap.put("parentSid", pcmNewCate.getSid());
+					paramMap.put("list", cateList);
+					cateMapper.updateByListSelective(paramMap);
+					deleteCateCache(pcmNewCate.getSid() + "");
+				}
+			}
+			
+			if (results.intValue() != Constants.PUBLIC_1) {
+				logger.error("添加失败");
+				message = "添加失败";
+				throw new BleException(
+						ComErrorCodeConstants.ErrorCode.CATEGORY_ADD_ERROR.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATEGORY_ADD_ERROR.getMemo());
+			}
+			logger.info("add success");
+			message = "添加成功";
+			// 缓存删除
+			if("0".equals(cateType.getCategoryCode())){
+				deleteCateCache("0");
+			} else {
+				deleteCateCache(cateType.getSid()+"");
+			}
+			return message;
+		} else if(Constants.D.equals(cateDto.getActionCode())){
+			PcmCategory cate1 = null, pcmcate = new PcmCategory();
+			PcmCategory pcmCate = new PcmCategory();
+			pcmCate.setCategoryCode(cateDto.getCategoryCode());
+			pcmCate.setShopSid(cateDto.getShopSid());
+			pcmCate.setIsDisplay(1);
+			cate1 = cateMapper.getByParams(pcmCate);
+			if (cate1 == null) {
+				throw new BleException(
+						ComErrorCodeConstants.ErrorCode.CATE_NOT_IS_EXIST.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATE_NOT_IS_EXIST.getMemo());
+			}
+			pcmcate.setSid(cate1.getSid());
+			pcmcate.setStatus("N");
+			pcmcate.setIsDisplay(0);
+			Integer result = cateMapper.updateByPrimaryKeySelective(pcmcate);
+
+			Map<String, Object> paramMap1 = new HashMap<String, Object>();
+			paramMap1.put("parent_sid", cate1.getSid());
+			List<PcmCategory> cateList = cateMapper.selectByParentSid(paramMap1);
+			paramMap1.clear();
+			if (cateList != null && cateList.size() != 0) {
+				paramMap1.put("parentSid", cate1.getShopSid() + cate1.getCategorySid());
+				paramMap1.put("list", cateList);
+				cateMapper.updateByListSelective(paramMap1);
+				deleteCateCache(cate1.getSid() + "");
+			}
+
+			if (StringUtils.isNotBlank(cate1.getParentSid())) {
+				deleteCateCache(cate1.getParentSid());
+			} else {
+				deleteCateCache("0");
+			}
+			if (result == Constants.PUBLIC_0) {
+				logger.error("修改状态失败");
+				message = "修改失败";
+				throw new BleException(
+						ComErrorCodeConstants.ErrorCode.CATEGORY_UPDATE_ERROR.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATEGORY_UPDATE_ERROR.getMemo());
+			}
+			logger.info("update success");
+			message = "修改成功";
+			return message;
+		}
+		return message;
+	}
+	
+	/**
+	 * zdl
+	 * SAP管理分类上传
+	 */
+	@Override
+	public String uploadManagerCateFromSap(PcmAddCategoryDto cateDto){
+		String message = "";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		PcmCategory pcmNewCate = new PcmCategory();
+		
+		paramMap.put("categoryCode", cateDto.getCategoryCode());
+		paramMap.put("isDisplay", 1);
+		paramMap.put("shopSid", cateDto.getShopSid());
+		List<PcmCategory> cateListes = cateMapper.selectListByParam(paramMap);
+		
+		if(cateListes == null || cateListes.size() == 0){
+			// 如果不是父级分类并且没有对应的上级分类
+			if ("".equals(cateDto.getParentSid()) || null == cateDto.getParentSid()) {
+				logger.error("该工业分类没有对应的上级分类，需先添加上级分类");
+				message = "该工业分类没有对应的上级分类，需先添加上级分类";
+				throw new BleException(
+						ComErrorCodeConstants.ErrorCode.CATEGORY_SUPERIOR_NOT_EXIST
+								.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATEGORY_SUPERIOR_NOT_EXIST.getMemo());
+			}
+			// 根据当前传入的parent_sid 判断它的上级状态是不是可用
+			PcmCategory cateType = cateMapper.selectByGLCategorySid(cateDto);
+			// 如果状态=N时，状态不可用
+			if (cateType == null || Constants.N.equals(cateType.getStatus())) {
+				logger.error("上级分类状态为不可用");
+				message = "上级分类状态为不可用";
+				throw new BleException(
+						ComErrorCodeConstants.ErrorCode.CATEGORY_NO_STATUS.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATEGORY_NO_STATUS.getMemo());
+			}
+			// 根据编码判重
+			paramMap.clear();
+			paramMap.put("categoryCode", cateDto.getCategoryCode());
+			paramMap.put("isDisplay", 1);
+			paramMap.put("categoryType", cateDto.getCategoryType());
+			paramMap.put("shopSid", cateDto.getShopSid());
+			Integer count2 = cateMapper.getCountByParam(paramMap);
+			if (count2 > 0) {
+				logger.error("分类编码重复");
+				message = "分类编码重复";
+				throw new BleException(
+						ComErrorCodeConstants.ErrorCode.CATEGORY_CATEGORYSID_HAVA
+								.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATEGORY_CATEGORYSID_HAVA.getMemo());
+			}
+			// 如果状态可用并且不是父级节点但有对应的上级分类（即叶子节点），则需进行添加
+			paramMap.clear();
+			paramMap.put("name", cateDto.getName());
+			paramMap.put("isDisplay", 1);
+			paramMap.put("categoryType", cateDto.getCategoryType());
+			paramMap.put("parentSid", cateType.getSid());
+			Integer count = cateMapper.getCountByParam(paramMap);
+			if(count != 0){
+				logger.info("该分类已经存在");
+				message = "该分类已经存在";
+				throw new BleException(
+						ComErrorCodeConstants.ErrorCode.CATEGORY_IS_HAVA.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATEGORY_IS_HAVA.getMemo());
+			}
+			BeanUtils.copyProperties(cateDto, pcmNewCate);
+			pcmNewCate.setParentSid(cateType.getSid()+"");//设置父级id
+			String cateName = cateDto.getName();
+			pcmNewCate.setName(cateName.trim());
+			// 管理分类是全渠道
+			pcmNewCate.setChannelSid((Long.parseLong(Constants.PUBLIC_0 + "")));
+			
+			if(Constants.Y.equals(cateDto.getIsLeaf())){
+				pcmNewCate.setIsParent(Constants.PUBLIC_0);
+				// 赋值到is_leaf字段
+				pcmNewCate.setIsLeaf(Constants.Y);
+			} else {
+				pcmNewCate.setIsParent(Constants.PUBLIC_1);
+				// 赋值到is_leaf字段
+				pcmNewCate.setIsLeaf(Constants.N);
+			}
+			//分类的根id
+			pcmNewCate.setRootSid(cateType.getRootSid());
+			// 获取同一父类和渠道的排序最大值
+			Integer sortorder = this.getMaxSortOrder(cateType.getSid()+"");
+			pcmNewCate.setSortOrder(sortorder + 1);
+
+			pcmNewCate.setIsDisplay(Constants.PUBLIC_1);// 默认为显示
+			pcmNewCate.setIsSelfBuilt(Constants.PUBLIC_1);
+			//添加分类
+			Integer results = cateMapper.insertSelective(pcmNewCate);
+			
+			if (results.intValue() != Constants.PUBLIC_1) {
+				logger.error("添加失败");
+				message = "添加失败";
+				throw new BleException(
+						ComErrorCodeConstants.ErrorCode.CATEGORY_ADD_ERROR.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATEGORY_ADD_ERROR.getMemo());
+			}
+			logger.info("add success");
+			message = "添加成功";
+			// 缓存删除
+			if("0".equals(cateType.getCategoryCode())){
+				deleteCateCache("0");
+			} else {
+				deleteCateCache(cateType.getSid()+"");
+			}
+			return message;
+		} else {
+			// 查出要修改节点的上级
+			PcmCategory cate1 = cateMapper.selectByGLCategorySid(cateDto);
+			if (cate1 == null) {
+				throw new BleException(
+						ComErrorCodeConstants.ErrorCode.CATE_NOT_IS_EXIST.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATE_NOT_IS_EXIST.getMemo());
+			}
+			
+			paramMap.clear();
+			paramMap.put("name", cateDto.getName());
+			paramMap.put("isDisplay", 1);
+			paramMap.put("categoryType", cateDto.getCategoryType());
+			paramMap.put("parentSid", cate1.getSid());
+			Integer count = cateMapper.getCountByParam(paramMap);
+			if(count != 0){
+				logger.info("该分类名称已经存在，不能修改");
+				message = "该分类名称已经存在，不能修改";
+				throw new BleException(
+						ComErrorCodeConstants.ErrorCode.CATEGORY_UPDATE_ERROR.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATEGORY_UPDATE_ERROR.getMemo());
+			}
+
+			BeanUtils.copyProperties(cateDto, pcmNewCate);
+			pcmNewCate.setName(cateDto.getName().trim());
+			pcmNewCate.setIsMarket(cateDto.getIsMarket());
+			pcmNewCate.setCategorySid(cateDto.getCategorySid());
+			pcmNewCate.setParentSid(cate1.getSid()+"");
+			pcmNewCate.setCategoryCode(cateDto.getCategoryCode());
+			
+			PcmCategory cate = cateListes.get(0);
+			
+			pcmNewCate.setSid(cate.getSid());
+			Integer result = cateMapper.updateByPrimaryKeySelective(pcmNewCate);
+			paramMap.clear();
+			paramMap.put("categorySid", pcmNewCate.getSid());
+			paramMap.put("categoryName", pcmNewCate.getName());
+			pcmcatepropvalueMapper.updateByCategorySid(paramMap);
+			if (result == Constants.PUBLIC_0) {
+				logger.error("修改失败");
+				message = "修改失败";
+				throw new BleException(
+						ComErrorCodeConstants.ErrorCode.CATEGORY_UPDATE_ERROR.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATEGORY_UPDATE_ERROR.getMemo());
+			}
+			logger.info("update success");
+			message = "修改成功";
+			//删除缓存
+			deleteCateCache(cate.getParentSid());
+			if(!pcmNewCate.getParentSid().equals(cate.getParentSid()) ){
+				deleteCateCache(pcmNewCate.getParentSid());
+			}
+			return message;
+		}
 	}
 }
