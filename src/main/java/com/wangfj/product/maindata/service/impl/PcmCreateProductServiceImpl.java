@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wangfj.core.constants.ComErrorCodeConstants.ErrorCode;
 import com.wangfj.core.framework.exception.BleException;
 import com.wangfj.core.utils.DateUtil;
+import com.wangfj.core.utils.JsonUtil;
 import com.wangfj.product.brand.domain.entity.PcmBrand;
 import com.wangfj.product.brand.domain.entity.PcmShopBrandRelation;
 import com.wangfj.product.brand.persistence.PcmBrandMapper;
@@ -28,6 +30,9 @@ import com.wangfj.product.category.domain.entity.PcmProductCategory;
 import com.wangfj.product.category.domain.vo.SelectCategoryParamDto;
 import com.wangfj.product.category.persistence.PcmCategoryMapper;
 import com.wangfj.product.category.persistence.PcmProductCategoryMapper;
+import com.wangfj.product.common.domain.vo.PcmExceptionLogDto;
+import com.wangfj.product.common.service.impl.PcmExceptionLogService;
+import com.wangfj.product.constants.StatusCodeConstants.StatusCode;
 import com.wangfj.product.maindata.domain.entity.PcmBarcode;
 import com.wangfj.product.maindata.domain.entity.PcmContractLog;
 import com.wangfj.product.maindata.domain.entity.PcmProDetail;
@@ -155,6 +160,8 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 	// 门店-门店品牌关系表
 	@Autowired
 	private PcmShopBrandRelationMapper psbrMapper;
+	@Autowired
+	private PcmExceptionLogService pcmExceptionLogService;
 
 	/**
 	 * 创建SPU
@@ -1007,6 +1014,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		// 查询专柜商品信息
 		paramMap.put("shoppeProSid", shoppeProSid);
+		getLogSupShoppeByProCode(paramMap,dataDto);
 		List<GetShoProInfoForSAPModifyDto> shoPros = shoppeProMapper.getShoproInfoForSAPModify(paramMap);
 		if (shoPros == null || shoPros.size() == 0) {
 			logger.error(ErrorCode.SHOPP_NOT_EXIST.getMemo());
@@ -1231,6 +1239,36 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		dsProMapper.updateByPrimaryKeySelective(pspe);
 		logger.error("updateSProductBySProductCode2 end");
 		return result.get(0);
+	}
+	public void getLogSupShoppeByProCode(Map<String, Object> paraMap,PullDataDto dataDto){
+		Map<String, Object> map = shoppeProMapper.getLogSupShoppeByProCode(paraMap);
+		if(map != null){
+			Map<String, Object> excepMap = new HashMap<String, Object>();
+			if(!map.get("shoppeCode").equals(dataDto.getCounterCode())){
+				//专柜不一致
+				excepMap.put("shoppeCode", "新旧专柜不一致，新：" + dataDto.getCounterCode() + "旧：" + map.get("shoppeCode"));
+			}else{
+				if(!map.get("shoppeCode").equals("D00100001")){
+					if(!map.get("supplyCode").equals(dataDto.getSupplierCode())){
+						//供应商不一致
+						excepMap.put("supplyCode", "新旧供应商不一致，新：" + dataDto.getSupplierCode() + "旧：" + map.get("supplyCode"));
+					}				
+					if(!map.get("logCode").equals(dataDto.getOfferNumber())){
+						//合同不一致
+						excepMap.put("logCode", "新旧合同不一致，新：" + dataDto.getOfferNumber() + "旧：" + map.get("logCode"));
+					}
+				}
+			}
+			if(excepMap != null){
+				PcmExceptionLogDto pcmExceptionLogDto = new PcmExceptionLogDto();
+				pcmExceptionLogDto.setInterfaceName("ValidLogSupShoppeByProCode");
+				pcmExceptionLogDto.setExceptionType(StatusCode.EXCEPTION_PRODUCT.getStatus());
+				pcmExceptionLogDto.setErrorMessage(JsonUtil.getJSONString(excepMap));
+				pcmExceptionLogDto.setDataContent(JsonUtil.getJSONString(dataDto));
+				pcmExceptionLogDto.setUuid(UUID.randomUUID().toString());
+				pcmExceptionLogService.saveExceptionLogInfo(pcmExceptionLogDto);				
+			}
+		}
 	}
 
 }

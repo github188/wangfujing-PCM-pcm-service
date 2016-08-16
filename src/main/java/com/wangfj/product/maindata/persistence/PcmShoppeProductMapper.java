@@ -394,4 +394,14 @@ public interface PcmShoppeProductMapper extends BaseMapper<PcmShoppeProduct> {
 	 * @return List<GetShoProInfoForSAPModifyDto>
 	 */
 	List<GetShoProInfoForSAPModifyDto> getShoproInfoForSAPModify(Map<String, Object> paraMap);
+	/**
+	 * 根据专柜商品编码获得供应商编码，专柜编码，要约号
+	 * 
+	 * @Methods Name getLogSupShoppeByProCode
+	 * @Create In 2016年8月16日 By yedong
+	 * @param paraMap
+	 * @return Map<String,Object>
+	 */
+	Map<String, Object> getLogSupShoppeByProCode(Map<String, Object> paraMap);
+
 }

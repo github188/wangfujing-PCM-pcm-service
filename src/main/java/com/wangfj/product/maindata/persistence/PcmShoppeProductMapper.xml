@@ -6084,4 +6084,18 @@
 			</if>
 		</where>
 	</select>
+	<select id="getLogSupShoppeByProCode" resultType="Map" parameterType="Map">
+		SELECT
+			input.contract_code logCode,
+			shoppe.shoppe_code shoppeCode,
+			supply.supply_code suppluCode
+		FROM
+			pcm_shoppe_product pro
+		JOIN pcm_pro_input input ON input.shoppe_pro_sid = pro.sid
+		JOIN pcm_supply_info supply ON supply.sid = pro.supply_sid
+		JOIN pcm_shoppe shoppe ON shoppe.sid = pro.shoppe_sid
+		WHERE
+			pro.shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
+		LIMIT 1
+	</select>
 </mapper>
