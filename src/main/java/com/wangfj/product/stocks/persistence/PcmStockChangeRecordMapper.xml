@@ -345,6 +345,5 @@
 				and channel_sid = '0'
 			</if>
 		</where>
-		ORDER BY change_time
 	</select>
 </mapper>
