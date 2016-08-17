@@ -75,9 +75,6 @@
             <if test="erpProductSid != null">
                 erp_product_sid = #{erpProductSid,jdbcType=VARCHAR},
             </if>
-            <if test="shopSid != null">
-                shop_sid = #{shopSid,jdbcType=VARCHAR},
-            </if>
             <if test="status != null">
                 status = #{status,jdbcType=INTEGER},
             </if>
@@ -88,7 +85,6 @@
     update pcm_erp_product_supply
     set supply_sid = #{supplySid,jdbcType=VARCHAR},
       erp_product_sid = #{erpProductSid,jdbcType=VARCHAR},
-      shop_sid = #{shopSid,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER}
     where sid = #{sid,jdbcType=BIGINT}
   </update>

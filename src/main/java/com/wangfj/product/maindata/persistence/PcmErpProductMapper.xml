@@ -457,9 +457,6 @@
 		parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProduct">
 		update pcm_erp_product
 		<set>
-			<if test="storeCode != null">
-				store_code = #{storeCode,jdbcType=VARCHAR},
-			</if>
 			<if test="shopName != null">
 				shop_name = #{shopName,jdbcType=VARCHAR},
 			</if>
@@ -569,9 +566,6 @@
 		parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProduct">
 		update pcm_erp_product
 		<set>
-			<if test="storeCode != null">
-				store_code = #{storeCode,jdbcType=VARCHAR},
-			</if>
 			<if test="shopName != null">
 				shop_name = #{shopName,jdbcType=VARCHAR},
 			</if>
@@ -680,8 +674,6 @@
 	<update id="updateByPrimaryKey"
 		parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProduct">
 		update pcm_erp_product
-		set store_code =
-		#{storeCode,jdbcType=VARCHAR},
 		shop_name =
 		#{shopName,jdbcType=VARCHAR},
 		shoppe_code =

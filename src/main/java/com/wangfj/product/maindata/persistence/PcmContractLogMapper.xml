@@ -172,9 +172,6 @@
             <if test="contractCode != null">
                 contract_code = #{contractCode,jdbcType=VARCHAR},
             </if>
-            <if test="storeCode != null">
-                store_code = #{storeCode,jdbcType=VARCHAR},
-            </if>
             <if test="supplyCode != null">
                 supply_code = #{supplyCode,jdbcType=VARCHAR},
             </if>
@@ -223,9 +220,6 @@
             <if test="contractCode != null">
                 contract_code = #{contractCode,jdbcType=VARCHAR},
             </if>
-            <if test="storeCode != null">
-                store_code = #{storeCode,jdbcType=VARCHAR},
-            </if>
             <if test="supplyCode != null">
                 supply_code = #{supplyCode,jdbcType=VARCHAR},
             </if>
@@ -270,8 +264,6 @@
 		update pcm_contract_log
 		set contract_code =
 		#{contractCode,jdbcType=VARCHAR},
-		store_code =
-		#{storeCode,jdbcType=VARCHAR},
 		supply_code =
 		#{supplyCode,jdbcType=VARCHAR},
 		manage_type =

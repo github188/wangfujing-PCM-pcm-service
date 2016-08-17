@@ -436,6 +436,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		psp.setOrderType(createShoppePro.getOrderType());// 订货类型
 		psp.setField3(createShoppePro.getField3());// 货号
 		psp.setField4(createShoppePro.getField4());// 原系统商品编码
+		psp.setField5(createShoppePro.getShopCode());// 门店编码
 		if (createShoppePro.getIsPromotion() != null) {
 			psp.setIsPromotion(createShoppePro.getIsPromotion());// 是否允许ERP促销
 		} else {
@@ -1270,5 +1271,6 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 			}
 		}
 	}
-
+	
 }
+	

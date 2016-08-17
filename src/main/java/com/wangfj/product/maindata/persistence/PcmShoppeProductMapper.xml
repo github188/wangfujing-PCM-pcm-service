@@ -1498,9 +1498,6 @@
 			<if test="field4 != null">
 				field4 = #{field4,jdbcType=VARCHAR},
 			</if>
-			<if test="field5 != null">
-				field5 = #{field5,jdbcType=VARCHAR},
-			</if>
 		</set>
 		where sid = #{sid,jdbcType=BIGINT}
 	</update>
@@ -1626,9 +1623,6 @@
 			</if>
 			<if test="field4 != null">
 				field4 = #{field4,jdbcType=VARCHAR},
-			</if>
-			<if test="field5 != null">
-				field5 = #{field5,jdbcType=VARCHAR},
 			</if>
 		</set>
 		where product_detail_sid = #{productDetailSid,jdbcType=BIGINT}
@@ -1757,9 +1751,6 @@
 			<if test="field4 != null">
 				field4 = #{field4,jdbcType=VARCHAR},
 			</if>
-			<if test="field5 != null">
-				field5 = #{field5,jdbcType=VARCHAR},
-			</if>
 		</set>
 		where shoppe_pro_sid = #{shoppeProSid,jdbcType=BIGINT}
 	</update>
@@ -1838,9 +1829,7 @@
 		field2 = #{field2,jdbcType=VARCHAR},
 		field3 =
 		#{field3,jdbcType=VARCHAR},
-		field4 = #{field4,jdbcType=VARCHAR},
-		field5
-		= #{field5,jdbcType=VARCHAR}
+		field4 = #{field4,jdbcType=VARCHAR}
 		where sid = #{sid,jdbcType=BIGINT}
 	</update>
 	<select id="getSidListBySapProCode" resultType="Map"

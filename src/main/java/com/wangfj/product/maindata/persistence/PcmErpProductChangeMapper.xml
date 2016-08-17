@@ -140,9 +140,6 @@
             parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProductChange">
         update pcm_erp_product_change
         <set>
-            <if test="storeCode != null">
-                store_code = #{storeCode,jdbcType=VARCHAR},
-            </if>
             <if test="billNo != null">
                 bill_no = #{billNo,jdbcType=VARCHAR},
             </if>
@@ -182,7 +179,7 @@
     <update id="updateByPrimaryKeyWithBLOBs"
             parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProductChange">
     update pcm_erp_product_change
-    set store_code = #{storeCode,jdbcType=VARCHAR},
+    set 
       bill_no = #{billNo,jdbcType=VARCHAR},
       rowno = #{rowno,jdbcType=VARCHAR},
       bill_type = #{billType,jdbcType=INTEGER},
@@ -198,7 +195,7 @@
   </update>
     <update id="updateByPrimaryKey" parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProductChange">
     update pcm_erp_product_change
-    set store_code = #{storeCode,jdbcType=VARCHAR},
+    set 
       bill_no = #{billNo,jdbcType=VARCHAR},
       rowno = #{rowno,jdbcType=VARCHAR},
       bill_type = #{billType,jdbcType=INTEGER},

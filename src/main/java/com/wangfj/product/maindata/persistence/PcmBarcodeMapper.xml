@@ -201,7 +201,7 @@
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmBarcode" >
     update pcm_barcode
-    <set >
+    <set>
       <if test="barcode != null" >
         barcode = #{barcode,jdbcType=VARCHAR},
       </if>
@@ -219,9 +219,6 @@
       </if>
       <if test="shoppeProSid != null" >
         shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR},
-      </if>
-      <if test="storeCode != null" >
-        store_code = #{storeCode,jdbcType=VARCHAR},
       </if>
       <if test="productCode != null" >
         product_code = #{productCode,jdbcType=VARCHAR},
@@ -252,7 +249,6 @@
       barcode_rate = #{barcodeRate,jdbcType=DECIMAL},
       code_type = #{codeType,jdbcType=INTEGER},
       shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR},
-      store_code = #{storeCode,jdbcType=VARCHAR},
       product_code = #{productCode,jdbcType=VARCHAR},
       supply_code = #{supplyCode,jdbcType=VARCHAR},
       shoppe_code = #{shoppeCode,jdbcType=VARCHAR},

@@ -419,9 +419,6 @@
 		parameterType="com.wangfj.product.price.domain.entity.PcmChangePriceRecord">
 		update pcm_change_price_record
 		<set>
-			<if test="storeCode != null">
-				store_code = #{storeCode,jdbcType=VARCHAR},
-			</if>
 			<if test="matnr != null">
 				matnr = #{matnr,jdbcType=VARCHAR},
 			</if>
@@ -486,8 +483,7 @@
 	<update id="updateByPrimaryKey"
 		parameterType="com.wangfj.product.price.domain.entity.PcmChangePriceRecord">
 		update pcm_change_price_record
-		set store_code =
-		#{storeCode,jdbcType=VARCHAR},
+		set 
 		matnr = #{matnr,jdbcType=VARCHAR},
 		supplier_prod_code = #{supplierProdCode,jdbcType=VARCHAR},
 		zsprice =

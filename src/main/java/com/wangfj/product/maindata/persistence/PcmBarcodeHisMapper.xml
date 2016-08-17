@@ -155,9 +155,6 @@
       <if test="shoppeProSid != null" >
         shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR},
       </if>
-      <if test="storeCode != null" >
-        store_code = #{storeCode,jdbcType=VARCHAR},
-      </if>
       <if test="productCode != null" >
         product_code = #{productCode,jdbcType=VARCHAR},
       </if>
@@ -187,7 +184,6 @@
       barcode_rate = #{barcodeRate,jdbcType=DECIMAL},
       code_type = #{codeType,jdbcType=INTEGER},
       shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR},
-      store_code = #{storeCode,jdbcType=VARCHAR},
       product_code = #{productCode,jdbcType=VARCHAR},
       supply_code = #{supplyCode,jdbcType=VARCHAR},
       shoppe_code = #{shoppeCode,jdbcType=VARCHAR},
