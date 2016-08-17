@@ -1,6 +1,7 @@
 package com.wangfj.product.maindata.service.intf;
 
 import java.util.List;
+import java.util.Map;
 
 import com.wangfj.core.framework.exception.BleException;
 import com.wangfj.product.maindata.domain.entity.PcmProDetail;
@@ -20,6 +21,7 @@ import com.wangfj.product.maindata.domain.vo.PullDataDto;
  * @Create In 2015-8-17
  */
 public interface IPcmCreateProductService {
+	public void getLogSupShoppeByProCode(Map<String, Object> paraMap,PullDataDto dataDto);
 	/**
 	 * 创建spu
 	 * 

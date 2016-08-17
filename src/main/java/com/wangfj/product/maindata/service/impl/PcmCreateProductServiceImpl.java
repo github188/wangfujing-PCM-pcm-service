@@ -1241,6 +1241,8 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		logger.error("updateSProductBySProductCode2 end");
 		return result.get(0);
 	}
+	
+	@Transactional
 	public void getLogSupShoppeByProCode(Map<String, Object> paraMap,PullDataDto dataDto){
 		Map<String, Object> map = shoppeProMapper.getLogSupShoppeByProCode(paraMap);
 		if(map != null){
