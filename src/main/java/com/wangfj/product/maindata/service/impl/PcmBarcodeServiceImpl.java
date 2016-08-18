@@ -136,7 +136,8 @@ public class PcmBarcodeServiceImpl implements IPcmBarcodeService {
                         record.setSalePrice(salePrice);
                     }
                     record.setOriginLand(barcode.getOriginLand());
-
+                    //添加修改条件(where)门店号，分库路由使用
+                    record.setStoreCode(barcode.getStoreCode());
                     int count = pcmBarcodeMapper.updateByPrimaryKeySelective(record);// 修改
                     if (count != 1) {
                         throw new BleException(ErrorCode.DATA_OPER_ERROR.getMemo());
