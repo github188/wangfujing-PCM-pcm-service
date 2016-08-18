@@ -101,7 +101,10 @@ public class PcmBarcodeServiceImpl implements IPcmBarcodeService {
 
                     int count = barcodeHisMapper.insertSelective(barcodeHis);// 迁移到历史记录表
                     if (count == 1) {
-                        pcmBarcodeMapper.deleteByPrimaryKey(barcode.getSid());// 删除条码
+                        Map<String, Object> delMap = new HashMap<String, Object>();
+                        delMap.put("sid", barcode.getSid());
+                        delMap.put("storeCode", barcode.getStoreCode());
+                        pcmBarcodeMapper.deleteByPrimaryKeyAndStoreCode(delMap);// 删除条码
                     } else {
                         throw new BleException(ErrorCode.DATA_OPER_ERROR.getMemo());
                     }

@@ -96,6 +96,15 @@
     delete from pcm_barcode
     where sid = #{sid,jdbcType=BIGINT}
   </delete>
+
+    <delete id="deleteByPrimaryKeyAndStoreCode" parameterType="java.util.Map">
+        delete from pcm_barcode
+        where sid = #{sid}
+        <if test="storeCode != null" >
+            and store_code = #{storeCode}
+        </if>
+    </delete>
+
   <insert id="insert" parameterType="com.wangfj.product.maindata.domain.entity.PcmBarcode" >
     insert into pcm_barcode (sid, barcode, barcode_name, 
       barcode_unit, barcode_rate, code_type, 

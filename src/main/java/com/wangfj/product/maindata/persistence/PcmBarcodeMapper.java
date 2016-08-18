@@ -33,4 +33,12 @@ public interface PcmBarcodeMapper extends BaseMapper<PcmBarcode> {
      */
     List<PcmBarcode> pushBarcode(Map<String, Object> paramMap);
 
+    /**
+     * 根据sid和门店号删除
+     *
+     * @param paramMap
+     * @return
+     */
+    int deleteByPrimaryKeyAndStoreCode(Map<String, Object> paramMap);
+
 }
