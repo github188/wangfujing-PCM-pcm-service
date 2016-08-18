@@ -80,6 +80,9 @@
             </if>
         </set>
         where sid = #{sid,jdbcType=BIGINT}
+        <if test="shopSid != null">
+            AND shop_sid = #{shopSid}
+        </if>
     </update>
     <update id="updateByPrimaryKey" parameterType="com.wangfj.product.maindata.domain.entity.PcmErpProductSupply">
     update pcm_erp_product_supply
