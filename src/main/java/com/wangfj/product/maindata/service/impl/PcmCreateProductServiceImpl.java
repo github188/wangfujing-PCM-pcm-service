@@ -679,7 +679,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		if (dsPro != null) {
 			dsPro.setShoppeProSid(spSid);
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String newtime = sdf.format(date);
 			dsPro.setField9(newtime);// 创建时间
 			dsPro.setField10(newtime);// 更新时间
