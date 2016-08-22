@@ -221,6 +221,9 @@ public class PcmStockServiceImpl implements IPcmStockService {
 		Map<String, Object> map = pcmShoppeProSid.selectStockInfo(dto.getShoppeProSid());
 		List<StockProResultDto> redisList = new ArrayList<StockProResultDto>();
 		if (map != null) {/* 存在该专柜商品 */
+			if (StringUtils.isNotEmpty(map.get("storeCode") + "")) {
+				dto.setStoreCode(map.get("storeCode") + "");
+			}
 			/* 是否管库存 0管 1不管 */
 			if (((Integer) map.get("isStock")).equals(0)) {
 				int count = 0;

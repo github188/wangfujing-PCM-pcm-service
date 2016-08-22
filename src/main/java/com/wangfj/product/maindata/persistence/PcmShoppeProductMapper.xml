@@ -4100,11 +4100,11 @@
 		psp.sale_status AS saleStatus,
 		psp.is_stock AS isStock,
 		psp.shoppe_pro_sid,
-		pse.negative_stock AS negative
-		FROM
-		pcm_shoppe_product AS psp
-		JOIN pcm_shoppe AS pse ON psp.shoppe_sid =
-		pse.sid
+		pse.negative_stock AS negative,
+		po.organization_code as storeCode
+		FROM pcm_shoppe_product AS psp
+		JOIN pcm_shoppe AS pse ON psp.shoppe_sid = pse.sid
+		JOIN pcm_organization as po on po.sid=pse.shop_sid
 		<where>
 			<if test="shoppeProSid != null">
 				psp.shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}

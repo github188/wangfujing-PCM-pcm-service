@@ -103,6 +103,19 @@ public class PcmStockDto extends BaseDto {
 	 */
 	private String guid;
 
+	/**
+	 * 门店编号
+	 */
+	private String storeCode;
+
+	public String getStoreCode() {
+		return storeCode;
+	}
+
+	public void setStoreCode(String storeCode) {
+		this.storeCode = storeCode;
+	}
+
 	public Long getSid() {
 		return sid;
 	}
