@@ -2850,56 +2850,63 @@ public class CategoryServiceImpl implements ICategoryService {
 			}
 			return message;
 		} else {
-			// 查出要修改节点的上级
-			PcmCategory cate1 = cateMapper.selectByGLCategorySid(cateDto);
-			if (cate1 == null || Constants.N.equals(cate1.getStatus())) {
-				throw new BleException(
-						ComErrorCodeConstants.ErrorCode.CATEGORY_NO_STATUS.getErrorCode(),
-						ComErrorCodeConstants.ErrorCode.CATEGORY_NO_STATUS.getMemo());
-			}
+			PcmCategory cate = cateListes.get(0);//查出修改节点
 			
-			paramMap.clear();
-			paramMap.put("name", cateDto.getName());
-			paramMap.put("isDisplay", 1);
-			paramMap.put("categoryType", cateDto.getCategoryType());
-			paramMap.put("parentSid", cate1.getSid());
-			Integer count = cateMapper.getCountByParam(paramMap);
-			if(count != 0){
-				logger.info("该分类名称已经存在，不能修改");
-				message = "该分类名称已经存在，不能修改";
-				throw new BleException(
-						ComErrorCodeConstants.ErrorCode.CATENAME_IS_EXIST.getErrorCode(),
-						ComErrorCodeConstants.ErrorCode.CATENAME_IS_EXIST.getMemo());
-			}
+			if(!cateDto.getName().equals(cate.getName())){
+				// 查出要修改节点的上级
+				PcmCategory cate1 = cateMapper.selectByGLCategorySid(cateDto);
+				if (cate1 == null || Constants.N.equals(cate1.getStatus())) {
+					throw new BleException(
+							ComErrorCodeConstants.ErrorCode.CATEGORY_NO_STATUS.getErrorCode(),
+							ComErrorCodeConstants.ErrorCode.CATEGORY_NO_STATUS.getMemo());
+				}
+				
+				paramMap.clear();
+				paramMap.put("name", cateDto.getName());
+				paramMap.put("isDisplay", 1);
+				paramMap.put("categoryType", cateDto.getCategoryType());
+				paramMap.put("parentSid", cate1.getSid());
+				Integer count = cateMapper.getCountByParam(paramMap);
+				if(count != 0){
+					logger.info("该分类名称已经存在，不能修改");
+					message = "该分类名称已经存在，不能修改";
+					throw new BleException(
+							ComErrorCodeConstants.ErrorCode.CATENAME_IS_EXIST.getErrorCode(),
+							ComErrorCodeConstants.ErrorCode.CATENAME_IS_EXIST.getMemo());
+				}
 
-			BeanUtils.copyProperties(cateDto, pcmNewCate);
-			pcmNewCate.setName(cateDto.getName().trim());
-			pcmNewCate.setIsMarket(cateDto.getIsMarket());
-			pcmNewCate.setCategorySid(cateDto.getCategorySid());
-			pcmNewCate.setParentSid(cate1.getSid()+"");
-			pcmNewCate.setCategoryCode(cateDto.getCategoryCode());
-			
-			PcmCategory cate = cateListes.get(0);
-			
-			pcmNewCate.setSid(cate.getSid());
-			Integer result = cateMapper.updateByPrimaryKeySelective(pcmNewCate);
-			paramMap.clear();
-			paramMap.put("categorySid", pcmNewCate.getSid());
-			paramMap.put("categoryName", pcmNewCate.getName());
-			pcmcatepropvalueMapper.updateByCategorySid(paramMap);
-			if (result == Constants.PUBLIC_0) {
-				logger.error("修改失败");
-				message = "修改失败";
-				throw new BleException(
-						ComErrorCodeConstants.ErrorCode.CATEGORY_UPDATE_ERROR.getErrorCode(),
-						ComErrorCodeConstants.ErrorCode.CATEGORY_UPDATE_ERROR.getMemo());
-			}
-			logger.info("update success");
-			message = Constants.UPDATESUCCESS;
-			//删除缓存
-			deleteCateCache(cate.getParentSid());
-			if(!pcmNewCate.getParentSid().equals(cate.getParentSid()) ){
-				deleteCateCache(pcmNewCate.getParentSid());
+				BeanUtils.copyProperties(cateDto, pcmNewCate);
+				pcmNewCate.setName(cateDto.getName().trim());
+				pcmNewCate.setIsMarket(cateDto.getIsMarket());
+				pcmNewCate.setCategorySid(cateDto.getCategorySid());
+				pcmNewCate.setParentSid(cate1.getSid()+"");
+				pcmNewCate.setCategoryCode(cateDto.getCategoryCode());
+				
+				
+				
+				pcmNewCate.setSid(cate.getSid());
+				Integer result = cateMapper.updateByPrimaryKeySelective(pcmNewCate);
+				paramMap.clear();
+				paramMap.put("categorySid", pcmNewCate.getSid());
+				paramMap.put("categoryName", pcmNewCate.getName());
+				pcmcatepropvalueMapper.updateByCategorySid(paramMap);
+				if (result == Constants.PUBLIC_0) {
+					logger.error("修改失败");
+					message = "修改失败";
+					throw new BleException(
+							ComErrorCodeConstants.ErrorCode.CATEGORY_UPDATE_ERROR.getErrorCode(),
+							ComErrorCodeConstants.ErrorCode.CATEGORY_UPDATE_ERROR.getMemo());
+				}
+				logger.info("update success");
+				message = Constants.UPDATESUCCESS;
+				//删除缓存
+				deleteCateCache(cate.getParentSid());
+				if(!pcmNewCate.getParentSid().equals(cate.getParentSid()) ){
+					deleteCateCache(pcmNewCate.getParentSid());
+				}
+			} else {
+				logger.info("update success");
+				message = Constants.UPDATESUCCESS;
 			}
 			return message;
 		}

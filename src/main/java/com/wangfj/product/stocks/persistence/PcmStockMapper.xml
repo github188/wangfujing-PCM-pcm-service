@@ -259,9 +259,6 @@
 			<if test="channelSid == null">
 				and channel_sid = '0'
 			</if>
-			<if test="storeCode != null">
-				and store_code = #{storeCode,jdbcType=VARCHAR}
-			</if>
 		</where>
 	</select>
 	<!-- 查询all总库存 -->
