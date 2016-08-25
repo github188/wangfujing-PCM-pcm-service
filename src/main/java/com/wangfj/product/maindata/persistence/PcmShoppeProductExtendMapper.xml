@@ -25,7 +25,8 @@
   <sql id="Base_Column_List" >
     sid, shoppe_pro_sid, is_card, base_unit_code, origin_country, is_origin_package, 
     xxhc_flag, zcolor, zsize, field1, field2, field3, field4, field5, field6, field7, 
-    field8, field9, field10
+    field8, field9, field10, field11, field12, field13, field14, field15, field16, field17, 
+    field18, field19, field20, field21, store_code
   </sql>
   <select id="getSidByShopProSid" resultType="java.lang.Long" parameterType="java.lang.Long" >
     select 
@@ -125,6 +126,36 @@
       <if test="field12 != null" >
         field12,
       </if>
+      <if test="field13 != null" >
+        field13,
+      </if>
+      <if test="field14 != null" >
+        field14,
+      </if>
+      <if test="field15 != null" >
+        field15,
+      </if>
+      <if test="field16 != null" >
+        field16,
+      </if>
+      <if test="field17 != null" >
+        field17,
+      </if>
+      <if test="field18 != null" >
+        field18,
+      </if>
+      <if test="field19 != null" >
+        field19,
+      </if>
+      <if test="field20 != null" >
+        field20,
+      </if>
+      <if test="field21 != null" >
+        field21,
+      </if>
+      <if test="storeCdoe != null" >
+        store_code,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="sid != null" >
@@ -190,6 +221,36 @@
       <if test="field12 != null" >
         #{field12,jdbcType=VARCHAR},
       </if>
+      <if test="field13 != null" >
+        #{field13,jdbcType=VARCHAR},
+      </if>
+      <if test="field14 != null" >
+        #{field14,jdbcType=VARCHAR},
+      </if>
+      <if test="field15 != null" >
+        #{field15,jdbcType=VARCHAR},
+      </if>
+      <if test="field16 != null" >
+        #{field16,jdbcType=VARCHAR},
+      </if>
+      <if test="field17 != null" >
+        #{field17,jdbcType=VARCHAR},
+      </if>
+      <if test="field18 != null" >
+        #{field18,jdbcType=VARCHAR},
+      </if>
+      <if test="field19 != null" >
+        #{field19,jdbcType=VARCHAR},
+      </if>
+      <if test="field20 != null" >
+        #{field20,jdbcType=VARCHAR},
+      </if>
+      <if test="field21 != null" >
+        #{field21,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCode != null" >
+        #{store_code,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.maindata.domain.entity.PcmShoppeProductExtend" >
@@ -248,6 +309,39 @@
       </if>
       <if test="field10 != null" >
         field10 = #{field10,jdbcType=VARCHAR},
+      </if>
+      <if test="field11 != null" >
+        field11 = #{field11,jdbcType=VARCHAR},
+      </if>
+      <if test="field12 != null" >
+        field12 = #{field12,jdbcType=VARCHAR},
+      </if>
+      <if test="field13 != null" >
+        field13 = #{field13,jdbcType=VARCHAR},
+      </if>
+      <if test="field14 != null" >
+        field14 = #{field14,jdbcType=VARCHAR},
+      </if>
+      <if test="field15 != null" >
+        field15 = #{field15,jdbcType=VARCHAR},
+      </if>
+      <if test="field16 != null" >
+        field16 = #{field16,jdbcType=VARCHAR},
+      </if>
+      <if test="field17 != null" >
+        field17 = #{field17,jdbcType=VARCHAR},
+      </if>
+      <if test="field18 != null" >
+        field18 = #{field18,jdbcType=VARCHAR},
+      </if>
+      <if test="field19 != null" >
+        field19 = #{field19,jdbcType=VARCHAR},
+      </if>
+      <if test="field20 != null" >
+        field20 = #{field20,jdbcType=VARCHAR},
+      </if>
+      <if test="field21 != null" >
+        field21 = #{field21,jdbcType=VARCHAR},
       </if>
     </set>
     where sid = #{sid,jdbcType=BIGINT}

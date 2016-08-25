@@ -568,7 +568,7 @@ public class PcmUploadProductServiceImpl implements IPcmUploadProductService {
 								&& StringUtils.isNotBlank(dataDto.getOfferNumber())) {
 							createService.insertProductInput(shoppePro.getSid(),
 									dataDto.getOfferNumber(), dataDto.getEntryNumber(),
-									dataDto.getProcurementPersonnelNumber(), dsPro);
+									dataDto.getProcurementPersonnelNumber(), dsPro, dataDto.getShopCode());
 						}
 						// 写入一品多供应商关系表
 						PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
@@ -633,7 +633,7 @@ public class PcmUploadProductServiceImpl implements IPcmUploadProductService {
 								&& StringUtils.isNotBlank(dataDto.getOfferNumber())) {
 							createService.insertProductInput(shoppePro.getSid(),
 									dataDto.getOfferNumber(), dataDto.getEntryNumber(),
-									dataDto.getProcurementPersonnelNumber(), dsPro);
+									dataDto.getProcurementPersonnelNumber(), dsPro, dataDto.getShopCode());
 						}
 						// 写入一品多供应商关系表
 						PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
@@ -680,7 +680,7 @@ public class PcmUploadProductServiceImpl implements IPcmUploadProductService {
 						&& StringUtils.isNotBlank(dataDto.getOfferNumber())) {
 					createService.insertProductInput(shoppePro.getSid(), dataDto.getOfferNumber(),
 							dataDto.getEntryNumber(), dataDto.getProcurementPersonnelNumber(),
-							dsPro);
+							dsPro, dataDto.getShopCode());
 				}
 				// 写入一品多供应商关系表
 				PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
@@ -767,7 +767,7 @@ public class PcmUploadProductServiceImpl implements IPcmUploadProductService {
 					&& StringUtils.isNotBlank(dataDto.getProcurementPersonnelNumber())
 					&& StringUtils.isNotBlank(dataDto.getOfferNumber())) {
 				createService.insertProductInput(shoppePro.getSid(), dataDto.getOfferNumber(),
-						dataDto.getEntryNumber(), dataDto.getProcurementPersonnelNumber(), dsPro);
+						dataDto.getEntryNumber(), dataDto.getProcurementPersonnelNumber(), dsPro, dataDto.getShopCode());
 			}
 			// 写入一品多供应商关系表
 			PcmShoppeProductSupply psps = new PcmShoppeProductSupply();

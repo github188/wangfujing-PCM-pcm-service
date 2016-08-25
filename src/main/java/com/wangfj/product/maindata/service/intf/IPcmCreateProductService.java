@@ -62,7 +62,7 @@ public interface IPcmCreateProductService {
 	 * @throws Exception
 	 */
 	public void insertProductInput(Long spSid, String offerNum, String entryNumber, String ppNum,
-			PcmShoppeProductExtend dsPro) throws BleException;
+			PcmShoppeProductExtend dsPro, String StoreCode) throws BleException;
 
 	/**
 	 * 插入标签
