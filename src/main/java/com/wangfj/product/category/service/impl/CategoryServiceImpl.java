@@ -2687,7 +2687,7 @@ public class CategoryServiceImpl implements ICategoryService {
 						ComErrorCodeConstants.ErrorCode.CATEGORY_ADD_ERROR.getMemo());
 			}
 			logger.info("add success");
-			message = "添加成功";
+			message = Constants.ADDSUCCESS;
 			// 缓存删除
 			if("0".equals(cateType.getCategoryCode())){
 				deleteCateCache("0");
@@ -2736,7 +2736,7 @@ public class CategoryServiceImpl implements ICategoryService {
 						ComErrorCodeConstants.ErrorCode.CATEGORY_UPDATE_ERROR.getMemo());
 			}
 			logger.info("update success");
-			message = "修改成功";
+			message = Constants.UPDATESUCCESS;
 			return message;
 		}
 		return message;
@@ -2841,7 +2841,7 @@ public class CategoryServiceImpl implements ICategoryService {
 						ComErrorCodeConstants.ErrorCode.CATEGORY_ADD_ERROR.getMemo());
 			}
 			logger.info("add success");
-			message = "添加成功";
+			message = Constants.ADDSUCCESS;
 			// 缓存删除
 			if("0".equals(cateType.getCategoryCode())){
 				deleteCateCache("0");
@@ -2852,10 +2852,10 @@ public class CategoryServiceImpl implements ICategoryService {
 		} else {
 			// 查出要修改节点的上级
 			PcmCategory cate1 = cateMapper.selectByGLCategorySid(cateDto);
-			if (cate1 == null) {
+			if (cate1 == null || Constants.N.equals(cate1.getStatus())) {
 				throw new BleException(
-						ComErrorCodeConstants.ErrorCode.CATE_NOT_IS_EXIST.getErrorCode(),
-						ComErrorCodeConstants.ErrorCode.CATE_NOT_IS_EXIST.getMemo());
+						ComErrorCodeConstants.ErrorCode.CATEGORY_NO_STATUS.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATEGORY_NO_STATUS.getMemo());
 			}
 			
 			paramMap.clear();
@@ -2868,8 +2868,8 @@ public class CategoryServiceImpl implements ICategoryService {
 				logger.info("该分类名称已经存在，不能修改");
 				message = "该分类名称已经存在，不能修改";
 				throw new BleException(
-						ComErrorCodeConstants.ErrorCode.CATEGORY_UPDATE_ERROR.getErrorCode(),
-						ComErrorCodeConstants.ErrorCode.CATEGORY_UPDATE_ERROR.getMemo());
+						ComErrorCodeConstants.ErrorCode.CATENAME_IS_EXIST.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATENAME_IS_EXIST.getMemo());
 			}
 
 			BeanUtils.copyProperties(cateDto, pcmNewCate);
@@ -2895,7 +2895,7 @@ public class CategoryServiceImpl implements ICategoryService {
 						ComErrorCodeConstants.ErrorCode.CATEGORY_UPDATE_ERROR.getMemo());
 			}
 			logger.info("update success");
-			message = "修改成功";
+			message = Constants.UPDATESUCCESS;
 			//删除缓存
 			deleteCateCache(cate.getParentSid());
 			if(!pcmNewCate.getParentSid().equals(cate.getParentSid()) ){
