@@ -46,11 +46,6 @@ public class StockProCountDto {
 	 */
 	private String isPayReduce;
 
-	/**
-	 * 门店编号
-	 */
-	private String storeCode;
-
 	public String getSalesItemNo() {
 		return salesItemNo;
 	}
@@ -123,21 +118,12 @@ public class StockProCountDto {
 		this.isPayReduce = isPayReduce;
 	}
 
-	public String getStoreCode() {
-		return storeCode;
-	}
-
-	public void setStoreCode(String storeCode) {
-		this.storeCode = storeCode;
-	}
-
 	@Override
 	public String toString() {
 		return "StockProCountDto [saleNo=" + saleNo + ", salesItemNo=" + salesItemNo
 				+ ", supplyProductNo=" + supplyProductNo + ", shoppeProName=" + shoppeProName
 				+ ", saleSum=" + saleSum + ", erpProductNo=" + erpProductNo + ", stockType="
-				+ stockType + ", channelSid=" + channelSid + ", isPayReduce=" + isPayReduce
-				+ ", storeCode=" + storeCode + "]";
+				+ stockType + ", channelSid=" + channelSid + ", isPayReduce=" + isPayReduce + "]";
 	}
 
 }
