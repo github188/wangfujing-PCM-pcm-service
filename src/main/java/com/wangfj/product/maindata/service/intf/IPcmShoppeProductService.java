@@ -113,6 +113,17 @@ public interface IPcmShoppeProductService {
 	public Map<String, Object> selectStockInfo(String shoppeProSid);
 
 	/**
+	 * 查询专柜商品信息
+	 * 
+	 * @Methods Name selectStockInfo
+	 * @Create In 2016年8月22日 By kongqf
+	 * @param shoppeProSid
+	 * @param storeCode
+	 * @return Map<String,Object>
+	 */
+	public Map<String, Object> selectStockInfo(String shoppeProSid, String storeCode);
+
+	/**
 	 * 下发DTO数据处理
 	 *
 	 * @param list

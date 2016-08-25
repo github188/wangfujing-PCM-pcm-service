@@ -1127,6 +1127,23 @@ public class PcmShoppeProductServiceImpl implements IPcmShoppeProductService {
 	}
 
 	/**
+	 * 查询专柜商品信息(名称、是否可售、是否可包装、是否管库存、是否负库存销售、门店编号)
+	 * 
+	 * @Methods Name selectStockInfo
+	 * @Create In 2016年8月22日 By kongqf
+	 * @param shoppeProSid
+	 * @param storeCode
+	 * @return Map<String,Object>
+	 */
+	public Map<String, Object> selectStockInfo(String shoppeProSid, String storeCode) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("shoppeProSid", shoppeProSid);
+		paramMap.put("storeCode", storeCode);
+		Map<String, Object> map = shoppeProMapper.selectStockInFo(paramMap);
+		return map;
+	}
+
+	/**
 	 * 查询专柜商品信息(名称、是否可售、是否可包装、是否管库存、是否负库存销售)
 	 *
 	 * @param shoppeProSid
