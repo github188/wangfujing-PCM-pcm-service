@@ -680,7 +680,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		if (dsPro != null) {
 			dsPro.setShoppeProSid(spSid);
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String newtime = sdf.format(date);
 			dsPro.setField9(newtime);// 创建时间
 			dsPro.setField10(newtime);// 更新时间
@@ -881,7 +881,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		pspe.setOriginCountry(extendDto.getOriginCountry());// 原产国
 		pspe.setShoppeProSid(result.get(0).getSid());// 专柜商品sid
 		Date date = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String newtime = sdf.format(date);
 		pspe.setField10(newtime);// 修改时间，当前时间
 		pspe.setSid(sid);// 扩展表sid
@@ -1235,7 +1235,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		pspe.setOriginCountry(extendDto.getOriginCountry());// 原产国
 		pspe.setShoppeProSid(result.get(0).getSid());// 专柜商品sid
 		Date date = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String newtime = sdf.format(date);
 		pspe.setField10(newtime);// 修改时间，当前时间
 		pspe.setSid(sid);// 扩展表sid

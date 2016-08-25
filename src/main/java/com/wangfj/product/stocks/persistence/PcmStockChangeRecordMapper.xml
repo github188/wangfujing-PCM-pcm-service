@@ -98,6 +98,9 @@
 			<if test="proSum != null">
 				pro_sum,
 			</if>
+			<if test="field1 != null">
+				field1,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="sid != null">
@@ -126,6 +129,9 @@
 			</if>
 			<if test="proSum != null">
 				#{proSum,jdbcType=BIGINT},
+			</if>
+			<if test="field1 != null">
+				#{field1,jdbcType=BIGINT},
 			</if>
 		</trim>
 	</insert>
@@ -292,7 +298,8 @@
 				#{shoppeProSid,jdbcType=VARCHAR}
 			</if>
 			<if test="changeTypeSid =='1001'">
-				AND change_type_sid IN ( '1001', '1021','1022', '1023', '1012',
+				AND change_type_sid IN ( '1001', '1021','1022', '1023',
+				'1012',
 				'1013')
 			</if>
 			<if test="changeTypeSid !='1001'">
@@ -332,7 +339,8 @@
 				#{shoppeProSid,jdbcType=VARCHAR}
 			</if>
 			<if test="changeTypeSid =='1001'">
-				AND change_type_sid IN ( '1001','1021','1022', '1023', '1012',
+				AND change_type_sid IN ( '1001','1021','1022', '1023',
+				'1012',
 				'1013')
 			</if>
 			<if test="changeTypeSid !='1001'">

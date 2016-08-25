@@ -10,6 +10,7 @@
 			jdbcType="INTEGER" />
 		<result column="pro_sum" property="proSum" jdbcType="BIGINT" />
 		<result column="channel_sid" property="channelSid" jdbcType="VARCHAR" />
+		<result column="store_code" property="storeCode" jdbcType="VARCHAR" />
 	</resultMap>
 	<sql id="Base_Column_List">
 		sid, shoppe_pro_sid, stock_type_sid,
@@ -20,7 +21,7 @@
 	<insert id="saveOrUpdate" useGeneratedKeys="true" keyProperty="sid">
 		<selectKey resultType="int" keyProperty="count" order="BEFORE">
 			select
-			count(*) as count
+			count(sid) as count
 			from
 			pcm_stock
 			<where>
@@ -36,6 +37,9 @@
 				</if>
 				<if test="channelSid == null">
 					and channel_sid = '0'
+				</if>
+				<if test="storeCode == null">
+					and store_code = #{storeCode,jdbcType=VARCHAR}
 				</if>
 			</where>
 		</selectKey>
@@ -54,6 +58,9 @@
 				<if test="channelSid == null">
 					and channel_sid = '0'
 				</if>
+				<if test="storeCode == null">
+					and store_code = #{storeCode,jdbcType=VARCHAR}
+				</if>
 			</where>
 		</if>
 		<if test="count == 0">
@@ -69,6 +76,9 @@
 					pro_sum,
 				</if>
 				channel_sid,
+				<if test="storeCode != null">
+					store_code,
+				</if>
 			</trim>
 			<trim prefix="values (" suffix=")" suffixOverrides=",">
 				<if test="shoppeProSid != null">
@@ -86,6 +96,9 @@
 				<if test="channelSid == null">
 					'0',
 				</if>
+				<if test="storeCode != null">
+					#{storeCode,jdbcType=VARCHAR}
+				</if>
 			</trim>
 		</if>
 	</insert>
@@ -94,7 +107,7 @@
 	<insert id="stockImport" useGeneratedKeys="true" keyProperty="sid">
 		<selectKey resultType="int" keyProperty="count" order="BEFORE">
 			select
-			count(*) as count
+			count(sid) as count
 			from
 			pcm_stock
 			<where>
@@ -110,6 +123,9 @@
 				</if>
 				<if test="channelSid == null">
 					and channel_sid = '0'
+				</if>
+				<if test="storeCode == null">
+					and store_code = #{storeCode,jdbcType=VARCHAR}
 				</if>
 			</where>
 		</selectKey>
@@ -129,6 +145,9 @@
 				<if test="channelSid == null">
 					and channel_sid = '0'
 				</if>
+				<if test="storeCode == null">
+					and store_code = #{storeCode,jdbcType=VARCHAR}
+				</if>
 			</where>
 		</if>
 	</insert>
@@ -136,7 +155,7 @@
 	<insert id="addOrReduce" useGeneratedKeys="true" keyProperty="sid">
 		<selectKey resultType="int" keyProperty="count" order="BEFORE">
 			select
-			count(*) as count
+			count(sid) as count
 			from
 			pcm_stock
 			<where>
@@ -239,6 +258,9 @@
 			</if>
 			<if test="channelSid == null">
 				and channel_sid = '0'
+			</if>
+			<if test="storeCode != null">
+				and store_code = #{storeCode,jdbcType=VARCHAR}
 			</if>
 		</where>
 	</select>
@@ -911,29 +933,36 @@
 
 	<!-- 商品信息查询 拆分优化 -->
 	<select id="findProductInfoByPara"
-			parameterType="com.wangfj.product.stocks.domain.vo.QueryProductStockInfoDto"
-			resultType="com.wangfj.product.stocks.domain.vo.SelectProductStockInfoDto">
+		parameterType="com.wangfj.product.stocks.domain.vo.QueryProductStockInfoDto"
+		resultType="com.wangfj.product.stocks.domain.vo.SelectProductStockInfoDto">
 		SELECT
-			psp.sid AS sid,
-			ppd.product_detail_sid AS skuCode,
-			psp.shoppe_pro_sid AS productCode,
-			psp.shoppe_pro_name AS productName,
-			org.organization_name AS storeName,
-			ps.shoppe_name AS counterName,
-			psp.sale_unit_code AS unitCode,
-			psp.sale_unit_code AS unitName,
-			psi.supply_name AS supplierName,
-			br.brand_name AS brandName,
-			ch.channel_code AS channelSid,
-			ch.channel_name AS channelName,
-			psp.sale_status AS isSale
+		psp.sid AS sid,
+		ppd.product_detail_sid AS skuCode,
+		psp.shoppe_pro_sid AS productCode,
+		psp.shoppe_pro_name AS productName,
+		org.organization_name AS storeName,
+		ps.shoppe_name AS counterName,
+		psp.sale_unit_code AS unitCode,
+		psp.sale_unit_code AS unitName,
+		psi.supply_name AS supplierName,
+		br.brand_name AS brandName,
+		ch.channel_code AS channelSid,
+		ch.channel_name AS channelName,
+		psp.sale_status AS isSale
 		FROM
-			pcm_shoppe_product psp
-		LEFT JOIN pcm_pro_detail ppd ON psp.product_detail_sid = ppd.sid
-		INNER JOIN pcm_supply_info psi ON psi.sid = psp.supply_sid
-		INNER JOIN pcm_shoppe ps ON ps.sid = psp.shoppe_sid
-		INNER JOIN pcm_organization org ON ps.shop_sid = org.sid
-		INNER JOIN pcm_brand br ON br.sid = psp.brand_sid
+		pcm_shoppe_product psp
+		LEFT JOIN
+		pcm_pro_detail ppd ON psp.product_detail_sid = ppd.sid
+		INNER JOIN
+		pcm_supply_info psi ON psi.sid = psp.supply_sid
+		INNER JOIN
+		pcm_shoppe ps
+		ON ps.sid = psp.shoppe_sid
+		INNER JOIN pcm_organization
+		org ON
+		ps.shop_sid = org.sid
+		INNER JOIN pcm_brand br ON br.sid =
+		psp.brand_sid
 		LEFT JOIN pcm_channel ch ON ch.channel_code =
 		<if test="channelSid != null">
 			#{channelSid,jdbcType=VARCHAR}
@@ -942,42 +971,46 @@
 			'0'
 		</if>
 		WHERE
-			psp.sale_status = 0
-			AND org.organization_type = 3
-			<if test="productCode != null">
-				and psp.shoppe_pro_sid = #{productCode,jdbcType=VARCHAR}
-			</if>
-			<if test="skuCode != null">
-				and ppd.product_detail_sid = #{skuCode,jdbcType=VARCHAR}
-			</if>
-			<if test="counterCode != null">
-				and ps.shoppe_code = #{counterCode,jdbcType=VARCHAR}
-			</if>
-			<if test="storeCode != null">
-				and org.organization_code = #{storeCode,jdbcType=VARCHAR}
-			</if>
-			<if test="supplierCode != null">
-				AND ( psi.supply_code = #{supplierCode} OR psi.sid = #{supplierCode} )
-			</if>
-			ORDER BY
-			psp.sid DESC
-			<if test="limit != null">
-				LIMIT #{start}, #{limit}
-			</if>
+		psp.sale_status = 0
+		AND org.organization_type = 3
+		<if test="productCode != null">
+			and psp.shoppe_pro_sid = #{productCode,jdbcType=VARCHAR}
+		</if>
+		<if test="skuCode != null">
+			and ppd.product_detail_sid = #{skuCode,jdbcType=VARCHAR}
+		</if>
+		<if test="counterCode != null">
+			and ps.shoppe_code = #{counterCode,jdbcType=VARCHAR}
+		</if>
+		<if test="storeCode != null">
+			and org.organization_code = #{storeCode,jdbcType=VARCHAR}
+		</if>
+		<if test="supplierCode != null">
+			AND ( psi.supply_code = #{supplierCode} OR psi.sid =
+			#{supplierCode} )
+		</if>
+		ORDER BY
+		psp.sid DESC
+		<if test="limit != null">
+			LIMIT #{start}, #{limit}
+		</if>
 	</select>
 
 	<!-- 商品库存信息查询 拆分优化 -->
 	<select id="findStockInfoByProductPara"
-			parameterType="com.wangfj.product.stocks.domain.vo.QueryProductStockInfoDto"
-			resultType="com.wangfj.product.stocks.domain.vo.SelectProductStockInfoDto">
+		parameterType="com.wangfj.product.stocks.domain.vo.QueryProductStockInfoDto"
+		resultType="com.wangfj.product.stocks.domain.vo.SelectProductStockInfoDto">
 		SELECT
-			st.shoppe_pro_sid AS productCode,
-			SUM(IF(stock_type_sid = 1001, pro_sum, 0)) AS saleStock,
-			SUM(IF(stock_type_sid = 1002, pro_sum, 0)) AS edefectiveStock,
-			SUM(IF(stock_type_sid = 1003, pro_sum, 0)) AS returnStock,
-			SUM(IF(stock_type_sid = 1004, pro_sum, 0)) AS lockedStock
+		st.shoppe_pro_sid AS productCode,
+		SUM(IF(stock_type_sid = 1001,
+		pro_sum, 0)) AS saleStock,
+		SUM(IF(stock_type_sid = 1002, pro_sum, 0))
+		AS edefectiveStock,
+		SUM(IF(stock_type_sid = 1003, pro_sum, 0)) AS
+		returnStock,
+		SUM(IF(stock_type_sid = 1004, pro_sum, 0)) AS lockedStock
 		FROM
-			pcm_stock st
+		pcm_stock st
 		WHERE
 		st.channel_sid =
 		<if test="channelSid != null">
@@ -988,7 +1021,8 @@
 		</if>
 		<if test="productCodeList != null">
 			AND st.shoppe_pro_sid IN
-			<foreach collection="productCodeList" open="(" item="item" separator="," close=")">
+			<foreach collection="productCodeList" open="(" item="item"
+				separator="," close=")">
 				#{item}
 			</foreach>
 		</if>
@@ -1587,113 +1621,117 @@
 		)ps3 INNER JOIN pcm_pro_detail ppd on
 		ps3.skuSid =ppd.sid
 	</select>
-	
-	<select id="selectProStockPushByParam"
-		parameterType="java.util.Map"
+
+	<select id="selectProStockPushByParam" parameterType="java.util.Map"
 		resultType="com.wangfj.product.stocks.domain.vo.PcmStockWCSDto">
 		SELECT
-			1 AS type,
-			pss.shoppe_pro_sid AS matnr,
-			(pss.pro_sum + pss.pro_sum1) AS num,
-			pss.stock_mode AS flag
+		1 AS type,
+		pss.shoppe_pro_sid AS matnr,
+		(pss.pro_sum +
+		pss.pro_sum1) AS num,
+		pss.stock_mode AS flag
 		FROM
-			(
-				SELECT
-					ps.shoppe_pro_sid,
-					ps.pro_sum,
-					IFNULL(ps2.pro_sum, 0) AS pro_sum1,
-					ps.stock_mode
-				FROM
-					(
-						SELECT
-							ps1.shoppe_pro_sid,
-							ps1.pro_sum,
-							psp.stock_mode
-						FROM
-							pcm_stock ps1
-						JOIN pcm_shoppe_product psp ON ps1.shoppe_pro_sid = psp.shoppe_pro_sid
-						WHERE
-							ps1.stock_type_sid = '1001'
-						AND ps1.channel_sid = '0'
-						<if test="page!=null">
-							LIMIT #{page}, 50
-						</if>
-					) ps
-				LEFT JOIN pcm_stock ps2 ON ps.shoppe_pro_sid = ps2.shoppe_pro_sid
-				AND ps2.stock_type_sid = '1004'
-				AND ps2.stock_type_sid = '0'
-			) pss
+		(
+		SELECT
+		ps.shoppe_pro_sid,
+		ps.pro_sum,
+		IFNULL(ps2.pro_sum, 0) AS pro_sum1,
+		ps.stock_mode
+		FROM
+		(
+		SELECT
+		ps1.shoppe_pro_sid,
+		ps1.pro_sum,
+		psp.stock_mode
+		FROM
+		pcm_stock ps1
+		JOIN pcm_shoppe_product psp ON ps1.shoppe_pro_sid =
+		psp.shoppe_pro_sid
+		WHERE
+		ps1.stock_type_sid = '1001'
+		AND ps1.channel_sid
+		= '0'
+		<if test="page!=null">
+			LIMIT #{page}, 50
+		</if>
+		) ps
+		LEFT JOIN pcm_stock ps2 ON ps.shoppe_pro_sid = ps2.shoppe_pro_sid
+		AND ps2.stock_type_sid = '1004'
+		AND ps2.stock_type_sid = '0'
+		) pss
 	</select>
-	
-	<select id="selectProStockPushByPros"
-		parameterType="java.util.Map"
+
+	<select id="selectProStockPushByPros" parameterType="java.util.Map"
 		resultType="com.wangfj.product.stocks.domain.vo.PcmStockWCSDto">
 		SELECT
-			1 AS type,
-			pss.shoppe_pro_sid AS matnr,
-			(pss.pro_sum + pss.pro_sum1) AS num,
-			pss.stock_mode AS flag
+		1 AS type,
+		pss.shoppe_pro_sid AS matnr,
+		(pss.pro_sum +
+		pss.pro_sum1) AS num,
+		pss.stock_mode AS flag
 		FROM
-			(
-				SELECT
-					ps.shoppe_pro_sid,
-					ps.pro_sum,
-					IFNULL(ps2.pro_sum, 0) AS pro_sum1,
-					ps.stock_mode
-				FROM
-					(
-						SELECT
-							ps1.shoppe_pro_sid,
-							ps1.pro_sum,
-							psp.stock_mode
-						FROM
-							pcm_stock ps1
-						JOIN pcm_shoppe_product psp ON ps1.shoppe_pro_sid = psp.shoppe_pro_sid
-						WHERE
-							ps1.stock_type_sid = '1001'
-						<if test="channelSid != null">
-							AND ps1.channel_sid = #{channelSid,jdbcType=VARCHAR}
-						</if>
-						<if test="productCodeList != null">
-							AND ps1.shoppe_pro_sid IN
-							<foreach collection="productCodeList" open="(" item="item" separator="," close=")">
-								#{item}
-							</foreach>
-						</if>
-					) ps
-				LEFT JOIN pcm_stock ps2 ON ps.shoppe_pro_sid = ps2.shoppe_pro_sid
-				AND ps2.stock_type_sid = '1004'
-				<if test="channelSid != null">
-					AND ps2.channel_sid = #{channelSid,jdbcType=VARCHAR}
-				</if>
-			) pss
+		(
+		SELECT
+		ps.shoppe_pro_sid,
+		ps.pro_sum,
+		IFNULL(ps2.pro_sum, 0) AS pro_sum1,
+		ps.stock_mode
+		FROM
+		(
+		SELECT
+		ps1.shoppe_pro_sid,
+		ps1.pro_sum,
+		psp.stock_mode
+		FROM
+		pcm_stock ps1
+		JOIN pcm_shoppe_product psp ON ps1.shoppe_pro_sid =
+		psp.shoppe_pro_sid
+		WHERE
+		ps1.stock_type_sid = '1001'
+		<if test="channelSid != null">
+			AND ps1.channel_sid = #{channelSid,jdbcType=VARCHAR}
+		</if>
+		<if test="productCodeList != null">
+			AND ps1.shoppe_pro_sid IN
+			<foreach collection="productCodeList" open="(" item="item"
+				separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		) ps
+		LEFT JOIN pcm_stock ps2 ON ps.shoppe_pro_sid = ps2.shoppe_pro_sid
+		AND ps2.stock_type_sid = '1004'
+		<if test="channelSid != null">
+			AND ps2.channel_sid = #{channelSid,jdbcType=VARCHAR}
+		</if>
+		) pss
 	</select>
-	
-	<select id="selectProStockByParam"
-		parameterType="java.util.Map"
+
+	<select id="selectProStockByParam" parameterType="java.util.Map"
 		resultMap="BaseResultMap">
 		SELECT
-			ps.shoppe_pro_sid,
-			ps.channel_sid,
-			ps.pro_sum
+		ps.shoppe_pro_sid,
+		ps.channel_sid,
+		ps.pro_sum
 		FROM
-			pcm_stock ps
-		JOIN (
-			SELECT
-				field1,
-				COUNT(field1) AS aa
-			FROM
-				pcm_shoppe_product_edi_relation
-			WHERE
-				ifdel = 1
-			GROUP BY
-				field1
-			<if test="start != null">
-				<if test="limit != null">
-					limit
-					#{start}, #{limit}
-				</if>
+		pcm_stock ps
+		JOIN
+		(
+		SELECT
+		field1,
+		COUNT(field1) AS aa
+		FROM
+		pcm_shoppe_product_edi_relation
+		WHERE
+		ifdel = 1
+		GROUP BY
+		field1
+		<if test="start != null">
+			<if test="limit != null">
+				limit
+				#{start}, #{limit}
 			</if>
+		</if>
 		) psp ON psp.field1 = ps.shoppe_pro_sid
 		AND ps.stock_type_sid = 1001
 		<if test="channelSid !=null">

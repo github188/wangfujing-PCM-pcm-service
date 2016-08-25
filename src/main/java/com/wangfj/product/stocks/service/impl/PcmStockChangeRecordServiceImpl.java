@@ -45,6 +45,7 @@ public class PcmStockChangeRecordServiceImpl implements IPcmStockChangeRecordSer
 		pscr.setNote(getImpotNote(pcmStockDto.getType(), pcmStockDto.getSource(),
 				pcmStockDto.getOperator()));
 		pscr.setProSum((long) proSum);
+		pscr.setField1(pcmStockDto.getStoreCode());
 		int count = pcmStockChangeRecordMapper.insertSelective(pscr);
 		if (count == 0) {
 			throw new BleException(ErrorCode.STOCK_IMPORT_FAILED.getErrorCode(),

@@ -668,7 +668,7 @@ public class PcmProDetailServiceImpl implements IPcmProDetailService {
 		List<PcmProPhotoTwoDto> dtoList = spMapper.itemsListSelectTwo(dto);
 		if (dtoList != null && dtoList.size() != 0) {
 			for (PcmProPhotoTwoDto pcmProPhotoTwoDto : dtoList) {
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				pcmProPhotoTwoDto.setProAccessTime(sdf.format(pcmProPhotoTwoDto.getAccessTime()));
 				if (pcmProPhotoTwoDto.getContent() != null
 						&& pcmProPhotoTwoDto.getContent().length != 0) {

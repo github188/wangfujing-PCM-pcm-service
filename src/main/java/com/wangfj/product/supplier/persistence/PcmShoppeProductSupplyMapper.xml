@@ -94,9 +94,6 @@
                 shoppe_product_sid =
                 #{shoppeProductSid,jdbcType=BIGINT},
             </if>
-            <if test="shopSid != null">
-                shop_sid = #{shopSid,jdbcType=VARCHAR},
-            </if>
             <if test="productSid != null">
                 product_sid = #{productSid,jdbcType=VARCHAR},
             </if>
@@ -105,6 +102,9 @@
             </if>
         </set>
         where sid = #{sid,jdbcType=BIGINT}
+        <if test="shopSid != null">
+            AND shop_sid = #{shopSid}
+        </if>
     </update>
     <!-- 下面的不知道谁在用 -->
     <update id="updateByPrimaryKey"
