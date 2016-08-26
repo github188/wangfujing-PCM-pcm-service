@@ -374,8 +374,8 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 		pp.setShoppeProSid(entity.getProductCode());// 大码商品编码
 		pp.setAttribute2(entity.getStoreCode());// 门店编码
 		// 价格开始,结束时间
-		pp.setPromotionBeginTime(DateUtil.formatDate(DateUtil.formatToStr(new Date(), "yyyyMMdd"),
-				"yyyyMMdd")); // 开始时间
+		pp.setPromotionBeginTime(
+				DateUtil.formatDate(DateUtil.formatToStr(new Date(), "yyyyMMdd"), "yyyyMMdd")); // 开始时间
 		pp.setPromotionEndTime(DateUtil.formatDate("99991231235959", "yyyyMMddHHmmss"));// 结束时间
 		pp.setPriceType(Constants.PRICE_TYPE_1);// 永久变价
 		pp.setAttribute1(Constants.DEFAULT_CHANGE_CODE);// 变价号
@@ -756,8 +756,8 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 				erpProductChange.setIsScan(Constants.PUBLIC_0);
 				erpProductChange.setJsonText(dto.toString());
 				if (dto.getXGLB().equals("5")) {
-					erpProductChange.setNewValue(dto.getVALUE().substring(0, 7) + ";"
-							+ dto.getVALUE());
+					erpProductChange
+							.setNewValue(dto.getVALUE().substring(0, 7) + ";" + dto.getVALUE());
 				} else {
 					erpProductChange.setNewValue(dto.getVALUE());
 				}
@@ -912,7 +912,8 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 			}
 			Integer rec = erpProductMapper.updateByPrimaryKeySelective(pep);
 			if (rec != 1) {
-				logger.error("modifyErpChangeFromEFuture(),更换( " + xglb + " )信息失败" + dto.toString());
+				logger.error(
+						"modifyErpChangeFromEFuture(),更换( " + xglb + " )信息失败" + dto.toString());
 				throw new BleException(ErrorCode.DATA_OPER_ERROR.getErrorCode(),
 						ErrorCode.DATA_OPER_ERROR.getMemo());
 			}
@@ -946,8 +947,8 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 								"联营大码换供应商时修改一品多商失败！");
 					}
 
-                    //下发联营大码一品多商参数封装
-                    proDto.setErpProductSupplySid(pcmErpProductSupply.getSid());
+					// 下发联营大码一品多商参数封装
+					proDto.setErpProductSupplySid(pcmErpProductSupply.getSid());
 				} else if (listU.isEmpty()) {
 					throw new BleException(
 							ErrorCode.SHOPPEPRODUCT_SUPPLY_RELATION_ERROR.getErrorCode(),
@@ -1032,9 +1033,9 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 				if (res != 1) {
 					logger.error("专柜商品编码:" + entity.getShoppeProSid() + "--错误:"
 							+ ErrorCode.DATA_OPER_ERROR.getMemo());
-					throw new BleException(ErrorCode.DATA_OPER_ERROR.getErrorCode(), "专柜商品编码:"
-							+ entity.getShoppeProSid() + "--错误:"
-							+ ErrorCode.DATA_OPER_ERROR.getMemo());
+					throw new BleException(ErrorCode.DATA_OPER_ERROR.getErrorCode(),
+							"专柜商品编码:" + entity.getShoppeProSid() + "--错误:"
+									+ ErrorCode.DATA_OPER_ERROR.getMemo());
 				}
 			} else {
 				logger.error("专柜商品编码:" + entity.getShoppeProSid() + "--错误:"
@@ -1087,37 +1088,37 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 		if (paramMap.get("productType") != null) {
 			if (paramMap.get("productType").equals(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z1_STR)) {
 				paramMap.put("productType", Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z1);
-			} else if (paramMap.get("productType").equals(
-					Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z2_STR)) {
+			} else if (paramMap.get("productType")
+					.equals(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z2_STR)) {
 				paramMap.put("productType", Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z2);
-			} else if (paramMap.get("productType").equals(
-					Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3_STR)) {
+			} else if (paramMap.get("productType")
+					.equals(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3_STR)) {
 				paramMap.put("productType", Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3);
-			} else if (paramMap.get("productType").equals(
-					Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z4_STR)) {
+			} else if (paramMap.get("productType")
+					.equals(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z4_STR)) {
 				paramMap.put("productType", Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z4);
-			} else if (paramMap.get("productType").equals(
-					Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z5_STR)) {
+			} else if (paramMap.get("productType")
+					.equals(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z5_STR)) {
 				paramMap.put("productType", Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z5);
 			}
 		}
 		if (paramMap.get("proStatus") != null) {
 			if (paramMap.get("proStatus").equals(Constants.PCMERPPRODUCT_PRO_STATUS_NORMAL_STR)) {
 				paramMap.put("proStatus", Constants.PCMERPPRODUCT_PRO_STATUS_NORMAL);
-			} else if (paramMap.get("proStatus").equals(
-					Constants.PCMERPPRODUCT_PRO_STATUS_STOPSALE_STR)) {
+			} else if (paramMap.get("proStatus")
+					.equals(Constants.PCMERPPRODUCT_PRO_STATUS_STOPSALE_STR)) {
 				paramMap.put("proStatus", Constants.PCMERPPRODUCT_PRO_STATUS_STOPSALE);
-			} else if (paramMap.get("proStatus")
-					.equals(Constants.PCMERPPRODUCT_PRO_STATUS_STOP_STR)) {
+			} else
+				if (paramMap.get("proStatus").equals(Constants.PCMERPPRODUCT_PRO_STATUS_STOP_STR)) {
 				paramMap.put("proStatus", Constants.PCMERPPRODUCT_PRO_STATUS_STOP);
-			} else if (paramMap.get("proStatus").equals(
-					Constants.PCMERPPRODUCT_PRO_STATUS_PAUSE_STR)) {
-				paramMap.put("proStatus", Constants.PCMERPPRODUCT_PRO_STATUS_PAUSE);
-			} else if (paramMap.get("proStatus").equals(
-					Constants.PCMERPPRODUCT_PRO_STATUS_DELETE_STR)) {
-				paramMap.put("proStatus", Constants.PCMERPPRODUCT_PRO_STATUS_DELETE);
 			} else if (paramMap.get("proStatus")
-					.equals(Constants.PCMERPPRODUCT_PRO_STATUS_PASS_STR)) {
+					.equals(Constants.PCMERPPRODUCT_PRO_STATUS_PAUSE_STR)) {
+				paramMap.put("proStatus", Constants.PCMERPPRODUCT_PRO_STATUS_PAUSE);
+			} else if (paramMap.get("proStatus")
+					.equals(Constants.PCMERPPRODUCT_PRO_STATUS_DELETE_STR)) {
+				paramMap.put("proStatus", Constants.PCMERPPRODUCT_PRO_STATUS_DELETE);
+			} else
+				if (paramMap.get("proStatus").equals(Constants.PCMERPPRODUCT_PRO_STATUS_PASS_STR)) {
 				paramMap.put("proStatus", Constants.PCMERPPRODUCT_PRO_STATUS_PASS);
 			}
 		}
@@ -1198,7 +1199,8 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 	public List<PcmSearchErpProductDto> erpProductInfoToSearch(List<PcmErpProduct> erpList) {
 		List<PcmSearchErpProductDto> resList = new ArrayList<PcmSearchErpProductDto>();
 		for (PcmErpProduct entity : erpList) {
-			if (entity.getCodeType() != 4 && entity.getCodeType() != 5 && entity.getCodeType() != 6) {
+			if (entity.getCodeType() != 4 && entity.getCodeType() != 5
+					&& entity.getCodeType() != 6) {
 				PcmSearchErpProductDto dto = new PcmSearchErpProductDto();
 				dto.setManagerCateNo(entity.getManageCategory());
 				dto.setProductCode(entity.getProductCode());
@@ -1270,50 +1272,51 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 		if (paramMap.get("productType") != null) {
 			if (paramMap.get("productType").equals(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z1_STR)) {
 				paramMap.put("productType", Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z1);
-			} else if (paramMap.get("productType").equals(
-					Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z2_STR)) {
+			} else if (paramMap.get("productType")
+					.equals(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z2_STR)) {
 				paramMap.put("productType", Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z2);
-			} else if (paramMap.get("productType").equals(
-					Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3_STR)) {
+			} else if (paramMap.get("productType")
+					.equals(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3_STR)) {
 				paramMap.put("productType", Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z3);
-			} else if (paramMap.get("productType").equals(
-					Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z4_STR)) {
+			} else if (paramMap.get("productType")
+					.equals(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z4_STR)) {
 				paramMap.put("productType", Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z4);
-			} else if (paramMap.get("productType").equals(
-					Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z5_STR)) {
+			} else if (paramMap.get("productType")
+					.equals(Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z5_STR)) {
 				paramMap.put("productType", Constants.PCMERPPRODUCT_PRODUCT_TYPE_Z5);
 			}
 		}
 		if (paramMap.get("proStatus") != null) {
 			if (paramMap.get("proStatus").equals(Constants.PCMERPPRODUCT_PRO_STATUS_NORMAL_STR)) {
 				paramMap.put("proStatus", Constants.PCMERPPRODUCT_PRO_STATUS_NORMAL);
-			} else if (paramMap.get("proStatus").equals(
-					Constants.PCMERPPRODUCT_PRO_STATUS_STOPSALE_STR)) {
+			} else if (paramMap.get("proStatus")
+					.equals(Constants.PCMERPPRODUCT_PRO_STATUS_STOPSALE_STR)) {
 				paramMap.put("proStatus", Constants.PCMERPPRODUCT_PRO_STATUS_STOPSALE);
-			} else if (paramMap.get("proStatus")
-					.equals(Constants.PCMERPPRODUCT_PRO_STATUS_STOP_STR)) {
+			} else
+				if (paramMap.get("proStatus").equals(Constants.PCMERPPRODUCT_PRO_STATUS_STOP_STR)) {
 				paramMap.put("proStatus", Constants.PCMERPPRODUCT_PRO_STATUS_STOP);
-			} else if (paramMap.get("proStatus").equals(
-					Constants.PCMERPPRODUCT_PRO_STATUS_PAUSE_STR)) {
-				paramMap.put("proStatus", Constants.PCMERPPRODUCT_PRO_STATUS_PAUSE);
-			} else if (paramMap.get("proStatus").equals(
-					Constants.PCMERPPRODUCT_PRO_STATUS_DELETE_STR)) {
-				paramMap.put("proStatus", Constants.PCMERPPRODUCT_PRO_STATUS_DELETE);
 			} else if (paramMap.get("proStatus")
-					.equals(Constants.PCMERPPRODUCT_PRO_STATUS_PASS_STR)) {
+					.equals(Constants.PCMERPPRODUCT_PRO_STATUS_PAUSE_STR)) {
+				paramMap.put("proStatus", Constants.PCMERPPRODUCT_PRO_STATUS_PAUSE);
+			} else if (paramMap.get("proStatus")
+					.equals(Constants.PCMERPPRODUCT_PRO_STATUS_DELETE_STR)) {
+				paramMap.put("proStatus", Constants.PCMERPPRODUCT_PRO_STATUS_DELETE);
+			} else
+				if (paramMap.get("proStatus").equals(Constants.PCMERPPRODUCT_PRO_STATUS_PASS_STR)) {
 				paramMap.put("proStatus", Constants.PCMERPPRODUCT_PRO_STATUS_PASS);
 			}
 		}
 
-//		// 查询总数
-//		Integer count = erpProductMapper.getCountByParam(paramMap);
-//		page.setCount(count);
-//		if (paramMap.get("currentPage") != null && paramMap.get("pageSize") != null) {
-//			paramMap.put("start", page.getStart());
-//			paramMap.put("limit", page.getLimit());
-//		} else if (paramMap.get("start") == null) {
-//			paramMap.put("start", 0);
-//		}
+		// // 查询总数
+		// Integer count = erpProductMapper.getCountByParam(paramMap);
+		// page.setCount(count);
+		// if (paramMap.get("currentPage") != null && paramMap.get("pageSize")
+		// != null) {
+		// paramMap.put("start", page.getStart());
+		// paramMap.put("limit", page.getLimit());
+		// } else if (paramMap.get("start") == null) {
+		// paramMap.put("start", 0);
+		// }
 		List<PcmErpProduct> list = erpProductMapper.selectErpPageByParam(paramMap);
 		if (!list.isEmpty()) {
 			List<ErpProductDto> result = new ArrayList<ErpProductDto>();
@@ -1397,9 +1400,12 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
 	 * @Create In 2016年1月25日 By kongqf
 	 */
 	@Override
-	public PcmErpProduct selectErpProductByProCode(String productCode) {
+	public PcmErpProduct selectErpProductByProCode(String productCode, String storeCode) {
 		PcmErpProduct erpProduct = new PcmErpProduct();
-		erpProduct = erpProductMapper.selectByProCode(productCode);
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("productCode", productCode);
+		paramMap.put("storeCode", storeCode);
+		erpProduct = erpProductMapper.selectByProCode(paramMap);
 		return erpProduct;
 	}
 
