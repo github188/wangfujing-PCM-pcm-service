@@ -348,4 +348,6 @@ public interface PcmCategoryMapper extends BaseMapper<PcmCategory> {
 	 * @return List<PcmCategory>
 	 */
 	List<PcmCategory> getGlCateInfoForSAPModify(Map<String,Object> paraMap);
+	
+	List<PcmCategory> selectListByParam(SelectCategoryParamDto pcmcatedto);
 }

@@ -2911,4 +2911,9 @@ public class CategoryServiceImpl implements ICategoryService {
 			return message;
 		}
 	}
+	
+	@Override
+	public List<PcmCategory> getCategoryByParam(SelectCategoryParamDto pcmcatedto){
+		return cateMapper.selectListByParam(pcmcatedto);
+	}
 }
