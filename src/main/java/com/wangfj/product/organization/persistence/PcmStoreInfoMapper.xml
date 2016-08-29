@@ -48,7 +48,8 @@
         #{field1,jdbcType=VARCHAR}, #{field2,jdbcType=VARCHAR}, #{field3,jdbcType=VARCHAR},
         #{field4,jdbcType=VARCHAR}, #{field5,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="com.wangfj.product.organization.domain.entity.PcmStoreInfo" useGeneratedKeys="true" keyProperty="sid">
+    <insert id="insertSelective" parameterType="com.wangfj.product.organization.domain.entity.PcmStoreInfo"
+            useGeneratedKeys="true" keyProperty="sid">
         insert into pcm_store_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="sid != null">
@@ -292,7 +293,117 @@
         </where>
     </select>
 
+    <select id="selectPageByPara" parameterType="com.wangfj.product.organization.domain.vo.PcmStoreInfoQueryDto"
+            resultType="com.wangfj.product.organization.domain.vo.PcmStoreInfoResultDto">
+        SELECT
+        po.sid AS sid,
+        po.parent_sid AS parentSid,
+        po.group_sid AS groupSid,
+        po.organization_name AS organizationName,
+        po.organization_code AS organizationCode,
+        pop.organization_name AS organizationFatherName,
+        pop.organization_code AS organizationFatherCode,
+        po.organization_type AS organizationType,
+        po.organization_status AS organizationStatus,
+        po.store_type AS storeType,
+        po.area_code AS areaCode,
+        po.shipping_point AS shippingPoint,
+        psi.registered_address AS registeredAddress,
+        psi.post_code AS postCode,
+        psi.legal_representative AS legalRepresentative,
+        psi.agent AS agent,
+        psi.tax_registration_number AS taxRegistrationNumber,
+        psi.bank AS bank,
+        psi.bank_account AS bankAccount,
+        psi.telephone_number AS telephoneNumber,
+        psi.fax_number AS faxNumber,
+        psi.field1 AS field1,
+        psi.field2 AS field2,
+        psi.field3 AS field3,
+        psi.field4 AS field4,
+        psi.field5 AS field5
+        FROM
+        pcm_organization po
+        INNER JOIN pcm_organization pop ON po.parent_sid = pop.sid
+        AND po.group_sid = pop.group_sid
+        LEFT JOIN pcm_store_info psi ON po.organization_code = psi.store_code
+        AND po.group_sid = psi.group_sid
+        <where>
+            <if test="parentSid != null">
+                and po.parent_sid = #{parentSid,jdbcType=VARCHAR}
+            </if>
+            <if test="groupSid != null">
+                and po.group_sid = #{groupSid,jdbcType=BIGINT}
+            </if>
+            <if test="organizationName != null">
+                and po.organization_name like "%"#{organizationName,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="organizationCode != null">
+                and po.organization_code = #{organizationCode,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationType != null">
+                and po.organization_type = #{organizationType,jdbcType=INTEGER}
+            </if>
+            <if test="organizationType == null">
+                and po.organization_type = 3
+            </if>
+            <if test="storeType != null">
+                and po.store_type = #{storeType,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus != null">
+                and po.organization_status = #{organizationStatus,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus == null">
+                and po.organization_status = 0
+            </if>
+        </where>
+        ORDER BY
+        po.sid DESC
+        <if test="start != null and limit != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
 
+    <select id="getPageCountByPara" parameterType="com.wangfj.product.organization.domain.vo.PcmStoreInfoQueryDto"
+            resultType="java.lang.Integer">
+        SELECT
+        COUNT(po.sid)
+        FROM
+        pcm_organization po
+        INNER JOIN pcm_organization pop ON po.parent_sid = pop.sid
+        AND po.group_sid = pop.group_sid
+        LEFT JOIN pcm_store_info psi ON po.organization_code = psi.store_code
+        AND po.group_sid = psi.group_sid
+        <where>
+            <if test="parentSid != null">
+                and po.parent_sid = #{parentSid,jdbcType=VARCHAR}
+            </if>
+            <if test="groupSid != null">
+                and po.group_sid = #{groupSid,jdbcType=BIGINT}
+            </if>
+            <if test="organizationName != null">
+                and po.organization_name like "%"#{organizationName,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="organizationCode != null">
+                and po.organization_code = #{organizationCode,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationType != null">
+                and po.organization_type = #{organizationType,jdbcType=INTEGER}
+            </if>
+            <if test="organizationType == null">
+                and po.organization_type = 3
+            </if>
+            <if test="storeType != null">
+                and po.store_type = #{storeType,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus != null">
+                and po.organization_status = #{organizationStatus,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus == null">
+                and po.organization_status = 0
+            </if>
+        </where>
+    </select>
 
 
 </mapper>
