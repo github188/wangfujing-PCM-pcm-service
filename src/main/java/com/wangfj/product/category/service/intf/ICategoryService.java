@@ -356,4 +356,6 @@ public interface ICategoryService {
 	String uploadManagerCateFromErp(PcmAddCategoryDto cateDto);
 
 	String uploadManagerCateFromSap(PcmAddCategoryDto cateDto);
+
+	List<PcmCategory> getCategoryByParam(SelectCategoryParamDto pcmcatedto);
 }
