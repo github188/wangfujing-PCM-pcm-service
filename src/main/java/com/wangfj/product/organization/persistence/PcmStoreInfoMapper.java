@@ -41,7 +41,7 @@ public interface PcmStoreInfoMapper extends BaseMapper<PcmStoreInfo> {
     List<PcmStoreInfoResultDto> selectPageByPara(PcmStoreInfoQueryDto queryDto);
 
     /**
-     * 供应商平台根据门店编码查询门店信息
+     * 查询门店信息List
      *
      * @param queryDto
      * @return

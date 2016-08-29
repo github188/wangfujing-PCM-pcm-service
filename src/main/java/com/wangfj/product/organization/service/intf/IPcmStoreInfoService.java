@@ -22,6 +22,14 @@ public interface IPcmStoreInfoService {
     Page<PcmStoreInfoResultDto> findPageStoreInfo(PcmStoreInfoQueryDto queryDto);
 
     /**
+     * 查询门店信息List
+     *
+     * @param queryDto
+     * @return
+     */
+    List<PcmStoreInfoResultDto> findListStoreInfo(PcmStoreInfoQueryDto queryDto);
+
+    /**
      * 供应商平台根据门店编码查询门店信息
      *
      * @param queryDto

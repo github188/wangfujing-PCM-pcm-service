@@ -70,6 +70,20 @@ public class PcmStoreInfoServiceImpl implements IPcmStoreInfoService {
     }
 
     /**
+     * 查询门店信息List
+     *
+     * @param queryDto
+     * @return
+     */
+    @Override
+    public List<PcmStoreInfoResultDto> findListStoreInfo(PcmStoreInfoQueryDto queryDto) {
+        logger.debug("start findListStoreInfo(),param:" + queryDto.toString());
+        List<PcmStoreInfoResultDto> storeInfoResultDtoList = storeInfoMapper.selectPageByPara(queryDto);
+        logger.info("end findListStoreInfo(),return:" + storeInfoResultDtoList.toString());
+        return storeInfoResultDtoList;
+    }
+
+    /**
      * 供应商平台根据门店编码查询门店信息
      *
      * @param queryDto
