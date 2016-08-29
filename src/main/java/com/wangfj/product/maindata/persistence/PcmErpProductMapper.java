@@ -27,7 +27,7 @@ public interface PcmErpProductMapper extends BaseMapper<PcmErpProduct> {
 	 */
 	List<PcmErpProduct> selectRateCodeByParam(PcmErpProduct record);
 
-	PcmErpProduct selectByProCode(String productCode);
+	PcmErpProduct selectByProCode(Map<String, Object> paramMap);
 
 	int updateByPrimaryKeySelective(PcmErpProduct record);
 

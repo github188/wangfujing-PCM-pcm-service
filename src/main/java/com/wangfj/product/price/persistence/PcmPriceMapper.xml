@@ -420,6 +420,9 @@
 			<if test="promotionEndTime != null">
 				and #{promotionEndTime}>=promotion_end_time
 			</if>
+			<if test="storeCode != null">
+				and attribute2=#{storeCode}
+			</if>
 			and ifdel=0
 		</where>
 	</update>
@@ -574,11 +577,14 @@
 		1 AS type
 		FROM
 		pcm_change_price_record record
-		JOIN pcm_erp_product pep ON record.matnr = pep.product_code
-		AND record.store_code = pep.store_code
+		JOIN
+		pcm_erp_product pep ON record.matnr = pep.product_code
+		AND
+		record.store_code = pep.store_code
 		WHERE
 		attribute5 = '1'
-		AND DATE_FORMAT(bdate, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
+		AND
+		DATE_FORMAT(bdate, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
 		<if test="limit != null">
 			limit #{start}, #{limit}
 		</if>
