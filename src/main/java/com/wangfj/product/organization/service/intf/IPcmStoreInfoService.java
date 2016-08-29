@@ -3,6 +3,9 @@ package com.wangfj.product.organization.service.intf;
 import com.wangfj.core.framework.base.page.Page;
 import com.wangfj.product.organization.domain.vo.PcmStoreInfoQueryDto;
 import com.wangfj.product.organization.domain.vo.PcmStoreInfoResultDto;
+import com.wangfj.product.organization.domain.vo.PcmStoreInfoToSupplierDto;
+
+import java.util.List;
 
 /**
  * 门店信息
@@ -17,4 +20,12 @@ public interface IPcmStoreInfoService {
      * @return
      */
     Page<PcmStoreInfoResultDto> findPageStoreInfo(PcmStoreInfoQueryDto queryDto);
+
+    /**
+     * 供应商平台根据门店编码查询门店信息
+     *
+     * @param queryDto
+     * @return
+     */
+    List<PcmStoreInfoToSupplierDto> findStoreInfoByParaToSupplier(PcmStoreInfoQueryDto queryDto);
 }
