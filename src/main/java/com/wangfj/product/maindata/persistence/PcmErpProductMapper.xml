@@ -159,11 +159,12 @@
 		brand.brand_sid = #{brandCode}
 	</select>
 	<select id="selectByProCode" resultMap="BaseResultMap"
-		parameterType="java.lang.String">
+		parameterType="Map">
 		select
 		<include refid="Base_Column_List" />
 		from pcm_erp_product
 		where product_code = #{productCode}
+		and store_code=#{storeCode}
 		and
 		pro_status=0
 	</select>

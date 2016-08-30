@@ -585,7 +585,7 @@ public class PcmProductPictureServiceImpl implements IPcmProductPictureService {
 				PcmRedis redis = new PcmRedis();
 				redis.setCreatetime(new Date());
 				redis.setValue(pageJson);
-				redis.setRedisffield(DomainName.getCMSSHopperInfo);
+				redis.setRedisffield(DomainName.getShoppeInfo);
 				redis.setKeyname(code);
 				redisService.savePcmRedis(redis);
 			}

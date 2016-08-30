@@ -1436,6 +1436,7 @@ public class PcmPriceServiceImpl implements IPcmPriceService {
 			pcmPriceChangeDto.setShoppeProSid(pcmPriceB.getShoppeProSid());
 			pcmPriceChangeDto.setPromotionBeginTime(pcmPriceB.getPromotionBeginTime());
 			pcmPriceChangeDto.setPromotionEndTime(pcmPriceB.getPromotionEndTime());
+			pcmPriceChangeDto.setStoreCode(pcmPriceB.getAttribute2());
 			if (pcmPriceE != null) {
 				pcmPriceChangeDto.setPromotionEndTime(pcmPriceE.getPromotionEndTime());
 			}
@@ -1727,6 +1728,7 @@ public class PcmPriceServiceImpl implements IPcmPriceService {
 			pcmPriceChangeDto.setShoppeProSid(pcmPriceB.getShoppeProSid());
 			pcmPriceChangeDto.setPromotionBeginTime(pcmPriceB.getPromotionBeginTime());
 			pcmPriceChangeDto.setPromotionEndTime(pcmPriceB.getPromotionEndTime());
+			pcmPriceChangeDto.setStoreCode(pcmPriceB.getAttribute2());
 			if (pcmPriceE != null) {
 				pcmPriceChangeDto.setPromotionEndTime(pcmPriceE.getPromotionEndTime());
 			}

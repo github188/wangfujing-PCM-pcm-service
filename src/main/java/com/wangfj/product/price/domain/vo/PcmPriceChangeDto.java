@@ -23,6 +23,11 @@ public class PcmPriceChangeDto extends BaseDto {
 	 */
 	private Date promotionEndTime;
 
+	/**
+	 * 门店编号
+	 */
+	private String storeCode;
+
 	private List<PcmPrice> pcmPriceListN;
 
 	private List<PcmPrice> pcmPriceListU;
@@ -76,4 +81,13 @@ public class PcmPriceChangeDto extends BaseDto {
 	public void setPromotionEndTime(Date promotionEndTime) {
 		this.promotionEndTime = promotionEndTime;
 	}
+
+	public String getStoreCode() {
+		return storeCode;
+	}
+
+	public void setStoreCode(String storeCode) {
+		this.storeCode = storeCode;
+	}
+
 }

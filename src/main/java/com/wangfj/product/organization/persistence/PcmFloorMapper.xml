@@ -377,6 +377,38 @@
         where sid = #{sid,jdbcType=BIGINT}
     </select>
 
+    <!--供应商平台查询楼层List findFloorByParaToSupplier -->
+    <select id="findFloorByParaToSupplier"
+            resultType="com.wangfj.product.organization.domain.vo.PcmFloorResultDto"
+            parameterType="java.util.Map">
+        SELECT
+        pf.sid AS sid,
+        pf.shop_sid AS shopSid,
+        pf.floor_name AS floorName,
+        pf.floor_code AS floorCode,
+        pf.floor_status AS floorStatus,
+        po.organization_name AS shopName,
+        po.organization_code AS shopCode
+        FROM
+        pcm_floor pf
+        INNER JOIN pcm_organization po ON pf.shop_sid = po.sid
+        WHERE
+        po.organization_type = 3
+        AND po.organization_status = 0
+        AND pf.floor_status = 0
+        <if test="shopCode != null">
+            AND po.organization_code = #{shopCode}
+        </if>
+        <if test="floorName != null">
+            and pf.floor_name like "%"#{floorName}"%"
+        </if>
+        <if test="floorCode != null">
+            and pf.floor_code = #{floorCode}
+        </if>
+        ORDER BY
+        pf.floor_code
+    </select>
+
     <!--查询楼层List selectFloorListByParam -->
     <select id="selectFloorListByParam"
             resultType="com.wangfj.product.organization.domain.vo.PcmFloorResultDto"

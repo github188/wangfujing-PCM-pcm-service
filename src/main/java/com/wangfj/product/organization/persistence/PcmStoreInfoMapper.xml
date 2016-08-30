@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.organization.persistence.PcmStoreInfoMapper">
+    <resultMap id="BaseResultMap" type="com.wangfj.product.organization.domain.entity.PcmStoreInfo">
+        <id column="sid" property="sid" jdbcType="BIGINT"/>
+        <result column="group_sid" property="groupSid" jdbcType="BIGINT"/>
+        <result column="store_code" property="storeCode" jdbcType="VARCHAR"/>
+        <result column="registered_address" property="registeredAddress" jdbcType="VARCHAR"/>
+        <result column="post_code" property="postCode" jdbcType="VARCHAR"/>
+        <result column="legal_representative" property="legalRepresentative" jdbcType="VARCHAR"/>
+        <result column="agent" property="agent" jdbcType="VARCHAR"/>
+        <result column="tax_registration_number" property="taxRegistrationNumber" jdbcType="VARCHAR"/>
+        <result column="bank" property="bank" jdbcType="VARCHAR"/>
+        <result column="bank_account" property="bankAccount" jdbcType="VARCHAR"/>
+        <result column="telephone_number" property="telephoneNumber" jdbcType="VARCHAR"/>
+        <result column="fax_number" property="faxNumber" jdbcType="VARCHAR"/>
+        <result column="field1" property="field1" jdbcType="VARCHAR"/>
+        <result column="field2" property="field2" jdbcType="VARCHAR"/>
+        <result column="field3" property="field3" jdbcType="VARCHAR"/>
+        <result column="field4" property="field4" jdbcType="VARCHAR"/>
+        <result column="field5" property="field5" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        sid, group_sid, store_code, registered_address, post_code, legal_representative,
+        agent, tax_registration_number, bank, bank_account, telephone_number, fax_number,
+        field1, field2, field3, field4, field5
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_store_info
+        where sid = #{sid,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from pcm_store_info
+        where sid = #{sid,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.wangfj.product.organization.domain.entity.PcmStoreInfo">
+        insert into pcm_store_info (sid, group_sid, store_code,
+        registered_address, post_code, legal_representative,
+        agent, tax_registration_number, bank, bank_account, telephone_number,
+        fax_number, field1, field2, field3,
+        field4, field5)
+        values (#{sid,jdbcType=BIGINT}, #{groupSid,jdbcType=BIGINT}, #{storeCode,jdbcType=VARCHAR},
+        #{registeredAddress,jdbcType=VARCHAR}, #{postCode,jdbcType=VARCHAR}, #{legalRepresentative,jdbcType=VARCHAR},
+        #{agent,jdbcType=VARCHAR}, #{taxRegistrationNumber,jdbcType=VARCHAR}, #{bank,jdbcType=VARCHAR},
+        #{bankAccount,jdbcType=VARCHAR}, #{telephoneNumber,jdbcType=VARCHAR}, #{faxNumber,jdbcType=VARCHAR},
+        #{field1,jdbcType=VARCHAR}, #{field2,jdbcType=VARCHAR}, #{field3,jdbcType=VARCHAR},
+        #{field4,jdbcType=VARCHAR}, #{field5,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.wangfj.product.organization.domain.entity.PcmStoreInfo"
+            useGeneratedKeys="true" keyProperty="sid">
+        insert into pcm_store_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                sid,
+            </if>
+            <if test="groupSid != null">
+                group_sid,
+            </if>
+            <if test="storeCode != null">
+                store_code,
+            </if>
+            <if test="registeredAddress != null">
+                registered_address,
+            </if>
+            <if test="postCode != null">
+                post_code,
+            </if>
+            <if test="legalRepresentative != null">
+                legal_representative,
+            </if>
+            <if test="agent != null">
+                agent,
+            </if>
+            <if test="taxRegistrationNumber != null">
+                tax_registration_number,
+            </if>
+            <if test="bank != null">
+                bank,
+            </if>
+            <if test="bankAccount != null">
+                bank_account,
+            </if>
+            <if test="telephoneNumber != null">
+                telephone_number,
+            </if>
+            <if test="faxNumber != null">
+                fax_number,
+            </if>
+            <if test="field1 != null">
+                field1,
+            </if>
+            <if test="field2 != null">
+                field2,
+            </if>
+            <if test="field3 != null">
+                field3,
+            </if>
+            <if test="field4 != null">
+                field4,
+            </if>
+            <if test="field5 != null">
+                field5,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sid != null">
+                #{sid,jdbcType=BIGINT},
+            </if>
+            <if test="groupSid != null">
+                #{groupSid,jdbcType=BIGINT},
+            </if>
+            <if test="storeCode != null">
+                #{storeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="registeredAddress != null">
+                #{registeredAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="postCode != null">
+                #{postCode,jdbcType=VARCHAR},
+            </if>
+            <if test="legalRepresentative != null">
+                #{legalRepresentative,jdbcType=VARCHAR},
+            </if>
+            <if test="agent != null">
+                #{agent,jdbcType=VARCHAR},
+            </if>
+            <if test="taxRegistrationNumber != null">
+                #{taxRegistrationNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="bank != null">
+                #{bank,jdbcType=VARCHAR},
+            </if>
+            <if test="bankAccount != null">
+                #{bankAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="telephoneNumber != null">
+                #{telephoneNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="faxNumber != null">
+                #{faxNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="field1 != null">
+                #{field1,jdbcType=VARCHAR},
+            </if>
+            <if test="field2 != null">
+                #{field2,jdbcType=VARCHAR},
+            </if>
+            <if test="field3 != null">
+                #{field3,jdbcType=VARCHAR},
+            </if>
+            <if test="field4 != null">
+                #{field4,jdbcType=VARCHAR},
+            </if>
+            <if test="field5 != null">
+                #{field5,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.organization.domain.entity.PcmStoreInfo">
+        update pcm_store_info
+        <set>
+            <if test="groupSid != null">
+                group_sid = #{groupSid,jdbcType=BIGINT},
+            </if>
+            <if test="storeCode != null">
+                store_code = #{storeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="registeredAddress != null">
+                registered_address = #{registeredAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="postCode != null">
+                post_code = #{postCode,jdbcType=VARCHAR},
+            </if>
+            <if test="legalRepresentative != null">
+                legal_representative = #{legalRepresentative,jdbcType=VARCHAR},
+            </if>
+            <if test="agent != null">
+                agent = #{agent,jdbcType=VARCHAR},
+            </if>
+            <if test="taxRegistrationNumber != null">
+                tax_registration_number = #{taxRegistrationNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="bank != null">
+                bank = #{bank,jdbcType=VARCHAR},
+            </if>
+            <if test="bankAccount != null">
+                bank_account = #{bankAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="telephoneNumber != null">
+                telephone_number = #{telephoneNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="faxNumber != null">
+                fax_number = #{faxNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="field1 != null">
+                field1 = #{field1,jdbcType=VARCHAR},
+            </if>
+            <if test="field2 != null">
+                field2 = #{field2,jdbcType=VARCHAR},
+            </if>
+            <if test="field3 != null">
+                field3 = #{field3,jdbcType=VARCHAR},
+            </if>
+            <if test="field4 != null">
+                field4 = #{field4,jdbcType=VARCHAR},
+            </if>
+            <if test="field5 != null">
+                field5 = #{field5,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.wangfj.product.organization.domain.entity.PcmStoreInfo">
+        update pcm_store_info
+        set group_sid = #{groupSid,jdbcType=BIGINT},
+        store_code = #{storeCode,jdbcType=VARCHAR},
+        registered_address = #{registeredAddress,jdbcType=VARCHAR},
+        post_code = #{postCode,jdbcType=VARCHAR},
+        legal_representative = #{legalRepresentative,jdbcType=VARCHAR},
+        agent = #{agent,jdbcType=VARCHAR},
+        tax_registration_number = #{taxRegistrationNumber,jdbcType=VARCHAR},
+        bank = #{bank,jdbcType=VARCHAR},
+        bank_account = #{bankAccount,jdbcType=VARCHAR},
+        telephone_number = #{telephoneNumber,jdbcType=VARCHAR},
+        fax_number = #{faxNumber,jdbcType=VARCHAR},
+        field1 = #{field1,jdbcType=VARCHAR},
+        field2 = #{field2,jdbcType=VARCHAR},
+        field3 = #{field3,jdbcType=VARCHAR},
+        field4 = #{field4,jdbcType=VARCHAR},
+        field5 = #{field5,jdbcType=VARCHAR}
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from pcm_store_info
+        <where>
+            <if test="sid != null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="groupSid != null">
+                and group_sid = #{groupSid,jdbcType=BIGINT}
+            </if>
+            <if test="storeCode != null">
+                and store_code = #{storeCode,jdbcType=VARCHAR}
+            </if>
+            <if test="registeredAddress != null">
+                and registered_address = #{registeredAddress,jdbcType=VARCHAR}
+            </if>
+            <if test="postCode != null">
+                and post_code = #{postCode,jdbcType=INTEGER}
+            </if>
+            <if test="legalRepresentative != null">
+                and legal_representative = #{legalRepresentative,jdbcType=VARCHAR}
+            </if>
+            <if test="agent != null">
+                and agent = #{agent,jdbcType=VARCHAR}
+            </if>
+            <if test="taxRegistrationNumber != null">
+                and tax_registration_number = #{taxRegistrationNumber,jdbcType=VARCHAR}
+            </if>
+            <if test="bank != null">
+                and bank = #{bank,jdbcType=VARCHAR}
+            </if>
+            <if test="bankAccount != null">
+                and bank_account = #{bankAccount,jdbcType=VARCHAR}
+            </if>
+            <if test="telephoneNumber != null">
+                and telephone_number = #{telephoneNumber,jdbcType=VARCHAR}
+            </if>
+            <if test="faxNumber != null">
+                and fax_number = #{faxNumber,jdbcType=VARCHAR}
+            </if>
+            <if test="field1 != null">
+                and field1 = #{field1,jdbcType=VARCHAR}
+            </if>
+            <if test="field2 != null">
+                and field2 = #{field2,jdbcType=VARCHAR}
+            </if>
+            <if test="field3 != null">
+                and field3 = #{field3,jdbcType=VARCHAR}
+            </if>
+            <if test="field4 != null">
+                and field4 = #{field4,jdbcType=VARCHAR}
+            </if>
+            <if test="field5 != null">
+                and field5 = #{field5,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectPageByPara" parameterType="com.wangfj.product.organization.domain.vo.PcmStoreInfoQueryDto"
+            resultType="com.wangfj.product.organization.domain.vo.PcmStoreInfoResultDto">
+        SELECT
+        po.sid AS sid,
+        po.parent_sid AS parentSid,
+        po.group_sid AS groupSid,
+        po.organization_name AS organizationName,
+        po.organization_code AS organizationCode,
+        pop.organization_name AS organizationFatherName,
+        pop.organization_code AS organizationFatherCode,
+        po.organization_type AS organizationType,
+        po.organization_status AS organizationStatus,
+        po.store_type AS storeType,
+        po.area_code AS areaCode,
+        po.shipping_point AS shippingPoint,
+        psi.registered_address AS registeredAddress,
+        psi.post_code AS postCode,
+        psi.legal_representative AS legalRepresentative,
+        psi.agent AS agent,
+        psi.tax_registration_number AS taxRegistrationNumber,
+        psi.bank AS bank,
+        psi.bank_account AS bankAccount,
+        psi.telephone_number AS telephoneNumber,
+        psi.fax_number AS faxNumber,
+        psi.field1 AS field1,
+        psi.field2 AS field2,
+        psi.field3 AS field3,
+        psi.field4 AS field4,
+        psi.field5 AS field5
+        FROM
+        pcm_organization po
+        INNER JOIN pcm_organization pop ON po.parent_sid = pop.sid
+        AND po.group_sid = pop.group_sid
+        LEFT JOIN pcm_store_info psi ON po.organization_code = psi.store_code
+        AND po.group_sid = psi.group_sid
+        <where>
+            <if test="parentSid != null">
+                and po.parent_sid = #{parentSid,jdbcType=VARCHAR}
+            </if>
+            <if test="groupSid != null">
+                and po.group_sid = #{groupSid,jdbcType=BIGINT}
+            </if>
+            <if test="organizationName != null">
+                and po.organization_name like "%"#{organizationName,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="organizationCode != null">
+                and po.organization_code = #{organizationCode,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationType != null">
+                and po.organization_type = #{organizationType,jdbcType=INTEGER}
+            </if>
+            <if test="organizationType == null">
+                and po.organization_type = 3
+            </if>
+            <if test="storeType != null">
+                and po.store_type = #{storeType,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus != null">
+                and po.organization_status = #{organizationStatus,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus == null">
+                and po.organization_status = 0
+            </if>
+        </where>
+        ORDER BY
+        po.sid DESC
+        <if test="start != null and limit != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+    <select id="getPageCountByPara" parameterType="com.wangfj.product.organization.domain.vo.PcmStoreInfoQueryDto"
+            resultType="java.lang.Integer">
+        SELECT
+        COUNT(po.sid)
+        FROM
+        pcm_organization po
+        INNER JOIN pcm_organization pop ON po.parent_sid = pop.sid
+        AND po.group_sid = pop.group_sid
+        LEFT JOIN pcm_store_info psi ON po.organization_code = psi.store_code
+        AND po.group_sid = psi.group_sid
+        <where>
+            <if test="parentSid != null">
+                and po.parent_sid = #{parentSid,jdbcType=VARCHAR}
+            </if>
+            <if test="groupSid != null">
+                and po.group_sid = #{groupSid,jdbcType=BIGINT}
+            </if>
+            <if test="organizationName != null">
+                and po.organization_name like "%"#{organizationName,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="organizationCode != null">
+                and po.organization_code = #{organizationCode,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationType != null">
+                and po.organization_type = #{organizationType,jdbcType=INTEGER}
+            </if>
+            <if test="organizationType == null">
+                and po.organization_type = 3
+            </if>
+            <if test="storeType != null">
+                and po.store_type = #{storeType,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus != null">
+                and po.organization_status = #{organizationStatus,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus == null">
+                and po.organization_status = 0
+            </if>
+        </where>
+    </select>
+
+    <select id="findListByPara" parameterType="com.wangfj.product.organization.domain.vo.PcmStoreInfoQueryDto"
+            resultType="com.wangfj.product.organization.domain.vo.PcmStoreInfoResultDto">
+        SELECT
+        po.sid AS sid,
+        po.parent_sid AS parentSid,
+        po.group_sid AS groupSid,
+        po.organization_name AS organizationName,
+        po.organization_code AS organizationCode,
+        po.organization_type AS organizationType,
+        po.organization_status AS organizationStatus,
+        po.store_type AS storeType,
+        po.area_code AS areaCode,
+        po.shipping_point AS shippingPoint,
+        psi.registered_address AS registeredAddress,
+        psi.post_code AS postCode,
+        psi.legal_representative AS legalRepresentative,
+        psi.agent AS agent,
+        psi.tax_registration_number AS taxRegistrationNumber,
+        psi.bank AS bank,
+        psi.bank_account AS bankAccount,
+        psi.telephone_number AS telephoneNumber,
+        psi.fax_number AS faxNumber,
+        psi.field1 AS field1,
+        psi.field2 AS field2,
+        psi.field3 AS field3,
+        psi.field4 AS field4,
+        psi.field5 AS field5
+        FROM
+        pcm_organization po
+        INNER JOIN pcm_store_info psi ON po.organization_code = psi.store_code
+        AND po.group_sid = psi.group_sid
+        <where>
+            <if test="parentSid != null">
+                and po.parent_sid = #{parentSid,jdbcType=VARCHAR}
+            </if>
+            <if test="groupSid != null">
+                and po.group_sid = #{groupSid,jdbcType=BIGINT}
+            </if>
+            <if test="organizationName != null">
+                and po.organization_name like "%"#{organizationName,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="organizationCode != null">
+                and po.organization_code = #{organizationCode,jdbcType=VARCHAR}
+            </if>
+            <if test="organizationType != null">
+                and po.organization_type = #{organizationType,jdbcType=INTEGER}
+            </if>
+            <if test="organizationType == null">
+                and po.organization_type = 3
+            </if>
+            <if test="storeType != null">
+                and po.store_type = #{storeType,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus != null">
+                and po.organization_status = #{organizationStatus,jdbcType=INTEGER}
+            </if>
+            <if test="organizationStatus == null">
+                and po.organization_status = 0
+            </if>
+        </where>
+        <if test="start != null and limit != null">
+            limit #{start}, #{limit}
+        </if>
+    </select>
+
+
+</mapper>

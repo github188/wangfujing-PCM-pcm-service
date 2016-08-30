@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.wangfj.product.organization.domain.entity.PcmStoreInfo;
+import com.wangfj.product.organization.persistence.PcmStoreInfoMapper;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +43,10 @@ import com.wangfj.util.Constants;
 public class PcmOrganizationServiceImpl implements IPcmOrganizationService {
 
     @Autowired
-    public PcmOrganizationMapper pcmOrganizationMapper;
+    private PcmOrganizationMapper pcmOrganizationMapper;
+
+    @Autowired
+    private PcmStoreInfoMapper storeInfoMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(PcmOrganizationServiceImpl.class);
 
@@ -500,11 +505,13 @@ public class PcmOrganizationServiceImpl implements IPcmOrganizationService {
         Integer result = Constants.PUBLIC_0;
 
         String actionCode = dto.getActionCode();
+        Integer organizationType = dto.getOrganizationType();
 
         if (StringUtils.isNotEmpty(actionCode)) {
 
             Map<String, Object> paramMap = null;
             PcmOrganization organization = null;
+            PcmStoreInfo storeInfo = null;
             if (Constants.A.equals(actionCode.trim().toUpperCase())) {
                 paramMap = new HashMap<String, Object>();
                 paramMap.clear();
@@ -517,8 +524,14 @@ public class PcmOrganizationServiceImpl implements IPcmOrganizationService {
                     org.springframework.beans.BeanUtils.copyProperties(dto, organization);
                     organization.setOrganizationStatus(Constants.PUBLIC_0);
                     organization.setCreateTime(new Date());
-                    result = pcmOrganizationMapper.insertSelective(organization);
+                    result = pcmOrganizationMapper.insertSelective(organization);//组织机构插入
 
+                    if (Constants.PCMORGANIZATION_TYPE_STORE_INT == organizationType) {//判断是否为门店
+                        storeInfo = new PcmStoreInfo();
+                        org.springframework.beans.BeanUtils.copyProperties(dto, storeInfo);
+                        storeInfo.setStoreCode(dto.getOrganizationCode());
+                        storeInfoMapper.insertSelective(storeInfo);//门店信息插入
+                    }
                     if (result == 1) {
                         // 返回下发的sid
                         resultMap.put("sid", organization.getSid());
@@ -557,8 +570,26 @@ public class PcmOrganizationServiceImpl implements IPcmOrganizationService {
                         }
 
                         if (!isExistence(paramMap)) {
-                            result = pcmOrganizationMapper
-                                    .updateByPrimaryKeySelective(organization);
+                            result = pcmOrganizationMapper.updateByPrimaryKeySelective(organization);
+                        }
+
+                        if (Constants.PCMORGANIZATION_TYPE_STORE_INT == organizationType) {//判断是否为门店
+                            storeInfo = new PcmStoreInfo();
+                            org.springframework.beans.BeanUtils.copyProperties(dto, storeInfo);
+                            storeInfo.setSid(null);//去掉组织机构表sid
+                            storeInfo.setStoreCode(dto.getOrganizationCode());
+
+                            paramMap.clear();
+                            paramMap.put("groupSid", dto.getGroupSid());
+                            paramMap.put("storeCode", dto.getOrganizationCode());
+                            List<PcmStoreInfo> storeInfoList = storeInfoMapper.selectListByParam(paramMap);
+                            if (storeInfoList != null && storeInfoList.size() == 1) {
+                                storeInfo.setSid(storeInfoList.get(0).getSid());
+                                storeInfoMapper.updateByPrimaryKeySelective(storeInfo);//门店信息修改
+                            }
+                            if (storeInfoList == null || storeInfoList.size() == 0) {
+                                storeInfoMapper.insertSelective(storeInfo);//门店信息插入
+                            }
                         }
 
                         if (result == 1) {

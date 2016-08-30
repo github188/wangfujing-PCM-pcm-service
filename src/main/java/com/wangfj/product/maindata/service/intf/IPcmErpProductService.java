@@ -144,7 +144,7 @@ public interface IPcmErpProductService {
 	 * @param productCode
 	 * @return PcmErpProduct
 	 */
-	public PcmErpProduct selectErpProductByProCode(String productCode);
+	public PcmErpProduct selectErpProductByProCode(String productCode, String storeCode);
 
 	/**
 	 * 根据供应商门店查询专柜列表（扣率码信息）
