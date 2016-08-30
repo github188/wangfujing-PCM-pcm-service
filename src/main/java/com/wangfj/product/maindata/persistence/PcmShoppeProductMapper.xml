@@ -6077,7 +6077,7 @@
 		SELECT
 			input.contract_code logCode,
 			shoppe.shoppe_code shoppeCode,
-			supply.supply_code suppluCode
+			supply.supply_code supplyCode
 		FROM
 			pcm_shoppe_product pro
 		JOIN pcm_pro_input input ON input.shoppe_pro_sid = pro.sid
