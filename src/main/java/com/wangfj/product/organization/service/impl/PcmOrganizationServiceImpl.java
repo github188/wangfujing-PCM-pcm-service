@@ -576,6 +576,7 @@ public class PcmOrganizationServiceImpl implements IPcmOrganizationService {
                         if (Constants.PCMORGANIZATION_TYPE_STORE_INT == organizationType) {//判断是否为门店
                             storeInfo = new PcmStoreInfo();
                             org.springframework.beans.BeanUtils.copyProperties(dto, storeInfo);
+                            storeInfo.setSid(null);//去掉组织机构表sid
                             storeInfo.setStoreCode(dto.getOrganizationCode());
 
                             paramMap.clear();
