@@ -659,12 +659,13 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 	 * @return int
 	 */
 	public void insertProductInput(Long spSid, String offerNum, String entryNumber, String ppNum,
-			PcmShoppeProductExtend dsPro) throws BleException {
+			PcmShoppeProductExtend dsPro, String storeCode) throws BleException {
 		PcmProInput ppi = new PcmProInput();
 		ppi.setContractCode(offerNum);
 		ppi.setInputUserCode(entryNumber);
 		ppi.setProcurementUserCode(ppNum);
 		ppi.setShoppeProSid(spSid);
+		ppi.setCol1(storeCode);
 		int i = ppiMapper.insertSelective(ppi);
 		if (i != 1) {
 			throw new BleException(ErrorCode.PRO_INPUT_ERROR.getErrorCode(),
@@ -683,6 +684,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 			String newtime = sdf.format(date);
 			dsPro.setField9(newtime);// 创建时间
 			dsPro.setField10(newtime);// 更新时间
+			dsPro.setStoreCode(storeCode);
 			int i2 = dsProMapper.insertSelective(dsPro);
 			if (i2 != 1) {
 				throw new BleException(ErrorCode.PRO_INPUT_ERROR.getErrorCode(),
@@ -1255,7 +1257,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 	@Transactional
 	public void getLogSupShoppeByProCode(Map<String, Object> paraMap, PullDataDto dataDto) {
 		Map<String, Object> map = shoppeProMapper.getLogSupShoppeByProCode(paraMap);
-		if (map != null) {
+		if (map != null && map.size() != 0) {
 			Map<String, Object> excepMap = new HashMap<String, Object>();
 			if (!map.get("shoppeCode").equals(dataDto.getCounterCode())) {
 				// 专柜不一致

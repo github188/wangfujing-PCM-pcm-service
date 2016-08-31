@@ -468,6 +468,8 @@ public class PcmStockServiceImpl implements IPcmStockService {
 		for (StockProCountDto stockProCountDto : products) {
 			if (StringUtils.isNotBlank(stockProCountDto.getSupplyProductNo())) {
 				map = pcmShoppeProSid.selectStockInfo(stockProCountDto.getSupplyProductNo());
+				System.out.println(map.get("storeCode").toString());
+				stockProCountDto.setStoreCode(map.get("storeCode").toString());
 			}
 			/* 判断是否为专柜商品 */
 			if (map != null && stockProCountDto.getSupplyProductNo() != null) {
@@ -1476,6 +1478,7 @@ public class PcmStockServiceImpl implements IPcmStockService {
 		List<StockProCountDto> list = stockPublicMethod1(products);
 		dto.setProducts(list);
 		/* 调入core进行第二步判断及加减库操作 */
+		System.out.println(JsonUtil.getJSONString(dto));
 		String response = HttpUtil.doPost(stockCore, JsonUtil.getJSONString(dto));
 		return response;
 	}
