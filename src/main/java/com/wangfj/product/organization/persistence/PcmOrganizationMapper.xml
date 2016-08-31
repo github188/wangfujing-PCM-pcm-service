@@ -263,9 +263,6 @@
             <if test="organizationName != null">
                 organization_name = #{organizationName,jdbcType=VARCHAR},
             </if>
-            <if test="organizationCode != null">
-                organization_code = #{organizationCode,jdbcType=VARCHAR},
-            </if>
             <if test="organizationType != null">
                 organization_type = #{organizationType,jdbcType=INTEGER},
             </if>
