@@ -468,7 +468,6 @@ public class PcmStockServiceImpl implements IPcmStockService {
 		for (StockProCountDto stockProCountDto : products) {
 			if (StringUtils.isNotBlank(stockProCountDto.getSupplyProductNo())) {
 				map = pcmShoppeProSid.selectStockInfo(stockProCountDto.getSupplyProductNo());
-				System.out.println(map.get("storeCode").toString());
 				stockProCountDto.setStoreCode(map.get("storeCode").toString());
 			}
 			/* 判断是否为专柜商品 */
