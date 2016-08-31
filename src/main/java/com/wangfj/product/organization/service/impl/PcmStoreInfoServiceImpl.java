@@ -108,6 +108,7 @@ public class PcmStoreInfoServiceImpl implements IPcmStoreInfoService {
                 toSupplierDto.setShopName(resultDto.getOrganizationName());
                 toSupplierDto.setTaxNo(resultDto.getTaxRegistrationNumber());
                 toSupplierDto.setTel(resultDto.getTelephoneNumber());
+                resultList.add(toSupplierDto);
             }
         }
         logger.info("end findStoreInfoByParaToSupplier(),return:" + resultList.toString());
