@@ -1257,7 +1257,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 	@Transactional
 	public void getLogSupShoppeByProCode(Map<String, Object> paraMap, PullDataDto dataDto) {
 		Map<String, Object> map = shoppeProMapper.getLogSupShoppeByProCode(paraMap);
-		if (map != null) {
+		if (map != null && map.size() != 0) {
 			Map<String, Object> excepMap = new HashMap<String, Object>();
 			if (!map.get("shoppeCode").equals(dataDto.getCounterCode())) {
 				// 专柜不一致

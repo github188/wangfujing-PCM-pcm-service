@@ -901,11 +901,12 @@ public class ValidProductServiceImpl implements IValidProductService {
 	 * @param sid
 	 * @param inventory
 	 */
-	private void saveInventory(String code, String inventory, String source, String operator, String StoreCode) {
+	private void saveInventory(String code, String inventory, String source, String operator, String storeCode) {
 		PcmStock record = new PcmStock();
 		record.setShoppeProSid(code);
 		record.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
 		record.setProSum(Long.parseLong(inventory));
+		record.setStoreCode(storeCode);
 		int i = stockMapper.insertSelective(record);
 		if (i != 1) {
 			throw new BleException(ErrorCode.STOCK_INPUT_ERROR.getErrorCode(),
@@ -919,6 +920,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 			pcmStockDto.setStockTypeSid(1001);
 			pcmStockDto.setSource(source);
 			pcmStockDto.setOperator(operator);
+			pcmStockDto.setStoreCode(storeCode);
 			scrsService.changRecord(pcmStockDto, null, 0);
 			PcmProductStockInfoDto dto = new PcmProductStockInfoDto();
 			dto.setShoppeProSid(code);

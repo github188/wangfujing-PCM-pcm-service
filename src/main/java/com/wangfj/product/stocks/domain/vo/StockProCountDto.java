@@ -40,11 +40,22 @@ public class StockProCountDto {
 	private Integer stockType;
 
 	private String channelSid;
+	
+	private String storeCode;
 
 	/**
 	 * 是否支付减库存 0,否;1,是;
 	 */
 	private String isPayReduce;
+
+	
+	public String getStoreCode() {
+		return storeCode;
+	}
+
+	public void setStoreCode(String storeCode) {
+		this.storeCode = storeCode;
+	}
 
 	public String getSalesItemNo() {
 		return salesItemNo;
