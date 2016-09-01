@@ -219,7 +219,8 @@ public class PcmStockServiceImpl implements IPcmStockService {
 		logger.info("start findStockImportFromPcm(),param" + dto.toString());
 		validImportStockData(dto);
 		Map<String, Object> map = pcmShoppeProSid.selectStockInfo(dto.getShoppeProSid());
-		List<StockProResultDto> redisList = new ArrayList<StockProResultDto>();
+		// List<StockProResultDto> redisList = new
+		// ArrayList<StockProResultDto>();
 		if (map != null) {/* 存在该专柜商品 */
 			if (StringUtils.isNotEmpty(map.get("storeCode") + "")) {
 				dto.setStoreCode(map.get("storeCode") + "");
@@ -233,6 +234,7 @@ public class PcmStockServiceImpl implements IPcmStockService {
 				PcmStock pcmStock = new PcmStock();
 				record.setShoppeProSid(dto.getShoppeProSid());
 				record.setStockTypeSid(dto.getStockTypeSid());
+				record.setStoreCode(dto.getStoreCode());
 				pcmStock = getPcmStock(record);
 				dto.setSid(null);
 				if (pcmStock != null) {
@@ -252,9 +254,11 @@ public class PcmStockServiceImpl implements IPcmStockService {
 							PcmStockDto lockRecord = new PcmStockDto();
 							lockRecord.setShoppeProSid(dto.getShoppeProSid());
 							lockRecord.setStockTypeSid(Constants.PCMSTOCK_TYPE_LOCK);
+							lockRecord.setStoreCode(dto.getStoreCode());
 							PcmStockDto saleRecord = new PcmStockDto();
 							saleRecord.setShoppeProSid(dto.getShoppeProSid());
 							saleRecord.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
+							saleRecord.setStoreCode(dto.getStoreCode());
 							saleSum = findStockCountFromPcm(saleRecord);
 							int lockSum = 0;
 							lockSum = findStockCountFromPcm(lockRecord);
@@ -480,6 +484,7 @@ public class PcmStockServiceImpl implements IPcmStockService {
 						PcmStockDto record = new PcmStockDto();
 						record.setShoppeProSid(stockProCountDto.getSupplyProductNo());
 						record.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
+						record.setStoreCode(stockProCountDto.getStoreCode());
 						if (Arrays.asList(Constants.PCMSTOCK_SALE_REDUCE)
 								.contains(stockProCountDto.getStockType())) {
 							if (StringUtils.isNotBlank(stockProCountDto.getChannelSid())) {
@@ -2180,7 +2185,7 @@ public class PcmStockServiceImpl implements IPcmStockService {
 	 * @Create In 2016年3月10日 By kongqf
 	 */
 	@Override
-	public void updateImportStockCache(String shoppeProSid, String channelSid) {
+	public void updateImportStockCache(String shoppeProSid, String channelSid, String storeCode) {
 		if (StringUtils.isBlank(channelSid)) {
 			channelSid = Constants.DEFAULT_CHANNEL_SID;
 		}
@@ -2188,11 +2193,12 @@ public class PcmStockServiceImpl implements IPcmStockService {
 		saleRecord.setShoppeProSid(shoppeProSid);
 		saleRecord.setChannelSid(channelSid);
 		saleRecord.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
+		saleRecord.setStoreCode(storeCode);
 		// 查询可售库存数
 		Integer stockCount = findStockCountFromPcm(saleRecord);
 		String key = DomainName.getStock + shoppeProSid + channelSid;
 		boolean flag = redisUtil.set(key, stockCount.toString());
-		if (!CacheUtils.cacheFlag) {
+		if (!CacheUtils.cacheFlag || !flag) {
 			PcmRedis pcmRedisDto = new PcmRedis();
 			pcmRedisDto.setRedisffield(DomainName.getStock);
 			pcmRedisDto.setKeyname(key);
