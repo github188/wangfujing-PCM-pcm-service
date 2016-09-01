@@ -243,7 +243,7 @@ public interface IPcmStockService {
      * @Methods Name updateImportStockCache
      * @Create In 2016年3月10日 By kongqf
      */
-    public void updateImportStockCache(String shoppeProSid, String channelSid);
+    public void updateImportStockCache(String shoppeProSid, String channelSid,String storeCode);
     
     /**
      * 根据参数查询下发给wcs的库存数据信息
