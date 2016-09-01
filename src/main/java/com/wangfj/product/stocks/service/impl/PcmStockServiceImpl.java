@@ -266,8 +266,8 @@ public class PcmStockServiceImpl implements IPcmStockService {
 								if (lockSum <= dto.getProSum()) {
 									dto.setProSum(dto.getProSum() - lockSum);
 								} else {
-									boolean isNegativeStock = checkIsNegativeStock(
-											dto.getShoppeProSid());
+									boolean isNegativeStock = isNegativeStock(
+											map.get("negative") + "");
 									if (isNegativeStock) {
 										if (FlagType.zookeeper_lock == 0) {
 											ZKlock.unlock();
@@ -1725,6 +1725,14 @@ public class PcmStockServiceImpl implements IPcmStockService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map = pcmShoppeProSid.selectStockInfo(supplyProductNo);
 		if (((Integer) map.get("negative")).equals(0)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	private boolean isNegativeStock(String negative) {
+		if ("0".equals(negative)) {
 			return false;
 		} else {
 			return true;
