@@ -38,12 +38,13 @@ public interface PcmErpProductMapper extends BaseMapper<PcmErpProduct> {
 	List<PcmErpProduct> selectErpPageByParam(Map<String, Object> paramMap);
 
 	List<PcmErpProduct> selectPageListByParam1newPrice(Map<String, Object> paramMap);
-	
+
 	List<ErpProPageDto> selectPageByParamPage(Map<String, Object> paramMap);
 
 	Integer getCountByParam(Map<String, Object> paramMap);
+
 	/**
 	 * 查询专柜信息
 	 */
-	GetSupAndErpInfoDto GetShoppeInfoAndErp(Map<String,String> paraMap);
+	GetSupAndErpInfoDto GetShoppeInfoAndErp(Map<String, String> paraMap);
 }

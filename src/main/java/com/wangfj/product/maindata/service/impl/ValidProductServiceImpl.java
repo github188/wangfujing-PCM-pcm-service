@@ -437,6 +437,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 		map.clear();
 		map.put("categorySid", dataDto.getManageCateGory());
 		map.put("categoryType", Constants.MANAGECATEGORY);// 分类类型为 1管理分类
+		map.put("shopSid", org.getOrganizationCode());// 门店编码
 		map.put("isLeaf", Constants.Y);// 是否为叶子节点
 		map.put("status", Constants.Y);// 是否启用
 		List<PcmCategory> glcateList = categoryMapper.selectListByParam(map);
