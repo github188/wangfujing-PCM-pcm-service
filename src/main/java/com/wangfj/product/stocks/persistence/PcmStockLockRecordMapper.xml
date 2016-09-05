@@ -156,7 +156,6 @@
 			</if>
 		</set>
 		<where>
-			1=1
 			<if test="billsNo != null">
 				and bills_no = #{billsNo,jdbcType=VARCHAR}
 			</if>
@@ -172,7 +171,6 @@
 		<include refid="Base_Column_List" />
 		from pcm_stock_lock_record
 		<where>
-			1=1
 			<if test="billsNo != null">
 				and bills_no = #{billsNo,jdbcType=VARCHAR}
 			</if>
@@ -256,7 +254,6 @@
 		<include refid="Base_Column_List" />
 		from pcm_stock_lock_record
 		<where>
-			1=1
 			<if test="billsNo != null">
 				and bills_no = #{billsNo,jdbcType=VARCHAR}
 			</if>
