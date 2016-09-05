@@ -38,7 +38,7 @@
 				<if test="channelSid == null">
 					and channel_sid = '0'
 				</if>
-				<if test="storeCode == null">
+				<if test="storeCode != null">
 					and store_code = #{storeCode,jdbcType=VARCHAR}
 				</if>
 			</where>
@@ -58,7 +58,7 @@
 				<if test="channelSid == null">
 					and channel_sid = '0'
 				</if>
-				<if test="storeCode == null">
+				<if test="storeCode != null">
 					and store_code = #{storeCode,jdbcType=VARCHAR}
 				</if>
 			</where>
@@ -124,7 +124,7 @@
 				<if test="channelSid == null">
 					and channel_sid = '0'
 				</if>
-				<if test="storeCode == null">
+				<if test="storeCode != null">
 					and store_code = #{storeCode,jdbcType=VARCHAR}
 				</if>
 			</where>
@@ -145,7 +145,7 @@
 				<if test="channelSid == null">
 					and channel_sid = '0'
 				</if>
-				<if test="storeCode == null">
+				<if test="storeCode != null">
 					and store_code = #{storeCode,jdbcType=VARCHAR}
 				</if>
 			</where>
@@ -258,6 +258,9 @@
 			</if>
 			<if test="channelSid == null">
 				and channel_sid = '0'
+			</if>
+			<if test="storeCode != null">
+				and store_code = #{storeCode,jdbcType=VARCHAR}
 			</if>
 		</where>
 	</select>
@@ -408,8 +411,10 @@
 			<if test="channelSid == null">
 				and channel_sid = '0'
 			</if>
+			<if test="storeCode != null">
+				and store_code = #{storeCode,jdbcType=VARCHAR}
+			</if>
 		</where>
-
 	</select>
 
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">

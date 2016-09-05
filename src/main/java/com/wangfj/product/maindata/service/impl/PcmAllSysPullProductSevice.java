@@ -414,7 +414,7 @@ public class PcmAllSysPullProductSevice implements IPcmAllSysPullProductSevice {
 				&& StringUtils.isNotBlank(dataDto.getOfferNumber())) {
 			createService.insertProductInput(shoppePro.getSid(),
 					dataDto.getOfferNumber(), dataDto.getEntryNumber(),
-					dataDto.getProcurementPersonnelNumber(), dsPro);
+					dataDto.getProcurementPersonnelNumber(), dsPro, dataDto.getShopCode());
 		}
 		// 写入一品多供应商关系表
 		PcmShoppeProductSupply psps = new PcmShoppeProductSupply();

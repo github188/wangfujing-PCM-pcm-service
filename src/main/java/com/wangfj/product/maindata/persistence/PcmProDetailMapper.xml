@@ -1250,8 +1250,8 @@
 				and photo_status = #{photoStatus,jdbcType=INTEGER}
 			</if>
 		</where>
-		order by
-		sku.sid desc
+		<!-- order by
+		sku.sid desc -->
 		<if test="limit !=null">
 			limit
 			<if test="start !=null">

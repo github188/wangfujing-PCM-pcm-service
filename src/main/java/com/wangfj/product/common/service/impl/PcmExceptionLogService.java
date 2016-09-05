@@ -150,7 +150,7 @@ public class PcmExceptionLogService implements IPcmExceptionLogService {
 		try {
 			result = pcmExceptionLogMapper.insertSelective(pcmExceptionLogdto);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("调用addExceptionLogInfo异常:", e);
 		}
 		return result;
 	}

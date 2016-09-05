@@ -437,6 +437,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 		map.clear();
 		map.put("categorySid", dataDto.getManageCateGory());
 		map.put("categoryType", Constants.MANAGECATEGORY);// 分类类型为 1管理分类
+		map.put("shopSid", org.getOrganizationCode());// 门店编码
 		map.put("isLeaf", Constants.Y);// 是否为叶子节点
 		map.put("status", Constants.Y);// 是否启用
 		List<PcmCategory> glcateList = categoryMapper.selectListByParam(map);
@@ -702,10 +703,10 @@ public class ValidProductServiceImpl implements IValidProductService {
 						// 写入库存
 						if (StringUtils.isNotBlank(dataDto.getInventory())) {
 							saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(),
-									source, dataDto.getEntryNumber());
+									source, dataDto.getEntryNumber(),dataDto.getShopCode());
 						} else {
 							saveInventory(shoppePro.getShoppeProSid(), "0", source,
-									dataDto.getEntryNumber());
+									dataDto.getEntryNumber(),dataDto.getShopCode());
 						}
 						// 写入临时表
 						if (StringUtils.isNotBlank(dataDto.getEntryNumber())
@@ -713,7 +714,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 								&& StringUtils.isNotBlank(dataDto.getOfferNumber())) {
 							createService.insertProductInput(shoppePro.getSid(),
 									dataDto.getOfferNumber(), dataDto.getEntryNumber(),
-									dataDto.getProcurementPersonnelNumber(), dsPro);
+									dataDto.getProcurementPersonnelNumber(), dsPro,dataDto.getShopCode());
 						}
 						// 写入一品多供应商关系表
 						PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
@@ -756,10 +757,10 @@ public class ValidProductServiceImpl implements IValidProductService {
 						// 写入库存
 						if (StringUtils.isNotBlank(dataDto.getInventory())) {
 							saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(),
-									source, dataDto.getEntryNumber());
+									source, dataDto.getEntryNumber(),dataDto.getShopCode());
 						} else {
 							saveInventory(shoppePro.getShoppeProSid(), "0", source,
-									dataDto.getEntryNumber());
+									dataDto.getEntryNumber(),dataDto.getShopCode());
 						}
 						// 写入临时表
 						if (StringUtils.isNotBlank(dataDto.getEntryNumber())
@@ -767,7 +768,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 								&& StringUtils.isNotBlank(dataDto.getOfferNumber())) {
 							createService.insertProductInput(shoppePro.getSid(),
 									dataDto.getOfferNumber(), dataDto.getEntryNumber(),
-									dataDto.getProcurementPersonnelNumber(), dsPro);
+									dataDto.getProcurementPersonnelNumber(), dsPro,dataDto.getShopCode());
 						}
 						// 写入一品多供应商关系表
 						PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
@@ -790,10 +791,10 @@ public class ValidProductServiceImpl implements IValidProductService {
 				// 写入库存
 				if (StringUtils.isNotBlank(dataDto.getInventory())) {
 					saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(), source,
-							dataDto.getEntryNumber());
+							dataDto.getEntryNumber(),dataDto.getShopCode());
 				} else {
 					saveInventory(shoppePro.getShoppeProSid(), "0", source,
-							dataDto.getEntryNumber());
+							dataDto.getEntryNumber(),dataDto.getShopCode());
 				}
 				// 写入临时表
 				if (StringUtils.isNotBlank(dataDto.getEntryNumber())
@@ -801,7 +802,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 						&& StringUtils.isNotBlank(dataDto.getOfferNumber())) {
 					createService.insertProductInput(shoppePro.getSid(), dataDto.getOfferNumber(),
 							dataDto.getEntryNumber(), dataDto.getProcurementPersonnelNumber(),
-							dsPro);
+							dsPro,dataDto.getShopCode());
 				}
 				// 写入一品多供应商关系表
 				PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
@@ -867,16 +868,16 @@ public class ValidProductServiceImpl implements IValidProductService {
 			// 写入库存
 			if (StringUtils.isNotBlank(dataDto.getInventory())) {
 				saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(), source,
-						dataDto.getEntryNumber());
+						dataDto.getEntryNumber(),dataDto.getShopCode());
 			} else {
-				saveInventory(shoppePro.getShoppeProSid(), "0", source, dataDto.getEntryNumber());
+				saveInventory(shoppePro.getShoppeProSid(), "0", source, dataDto.getEntryNumber(),dataDto.getShopCode());
 			}
 			// 写入临时表
 			if (StringUtils.isNotBlank(dataDto.getEntryNumber())
 					&& StringUtils.isNotBlank(dataDto.getProcurementPersonnelNumber())
 					&& StringUtils.isNotBlank(dataDto.getOfferNumber())) {
 				createService.insertProductInput(shoppePro.getSid(), dataDto.getOfferNumber(),
-						dataDto.getEntryNumber(), dataDto.getProcurementPersonnelNumber(), dsPro);
+						dataDto.getEntryNumber(), dataDto.getProcurementPersonnelNumber(), dsPro,dataDto.getShopCode());
 			}
 			// 写入一品多供应商关系表
 			PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
@@ -901,11 +902,12 @@ public class ValidProductServiceImpl implements IValidProductService {
 	 * @param sid
 	 * @param inventory
 	 */
-	private void saveInventory(String code, String inventory, String source, String operator) {
+	private void saveInventory(String code, String inventory, String source, String operator, String storeCode) {
 		PcmStock record = new PcmStock();
 		record.setShoppeProSid(code);
 		record.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
 		record.setProSum(Long.parseLong(inventory));
+		record.setStoreCode(storeCode);
 		int i = stockMapper.insertSelective(record);
 		if (i != 1) {
 			throw new BleException(ErrorCode.STOCK_INPUT_ERROR.getErrorCode(),
@@ -919,6 +921,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 			pcmStockDto.setStockTypeSid(1001);
 			pcmStockDto.setSource(source);
 			pcmStockDto.setOperator(operator);
+			pcmStockDto.setStoreCode(storeCode);
 			scrsService.changRecord(pcmStockDto, null, 0);
 			PcmProductStockInfoDto dto = new PcmProductStockInfoDto();
 			dto.setShoppeProSid(code);
@@ -2304,10 +2307,10 @@ public class ValidProductServiceImpl implements IValidProductService {
 				// 写入库存
 				if (StringUtils.isNotBlank(dataDto.getInventory())) {
 					saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(), source,
-							dataDto.getEntryNumber());
+							dataDto.getEntryNumber(),dataDto.getShopCode());
 				} else {
 					saveInventory(shoppePro.getShoppeProSid(), "0", source,
-							dataDto.getEntryNumber());
+							dataDto.getEntryNumber(),dataDto.getShopCode());
 				}
 				// 写入临时表
 				if (StringUtils.isNotBlank(dataDto.getEntryNumber())
@@ -2315,7 +2318,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 						&& StringUtils.isNotBlank(dataDto.getOfferNumber())) {
 					createService.insertProductInput(shoppePro.getSid(), dataDto.getOfferNumber(),
 							dataDto.getEntryNumber(), dataDto.getProcurementPersonnelNumber(),
-							dsPro);
+							dsPro,dataDto.getShopCode());
 				}
 				// // 写入标签
 				// if (dataDto.getTags() != null && dataDto.getTags().size() !=
@@ -2327,6 +2330,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 				PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
 				psps.setShoppeProductSid((shoppePro.getSid()));// 专柜商品SID
 				psps.setSupplySid((supplyInfoList.get(0).getSid()));// 供应商SID
+				psps.setShopSid(orgList.get(0).getOrganizationCode());//一品多商加门店编码
 				insertShoppeProductSupply(psps);
 			}
 		} else {
@@ -2361,14 +2365,14 @@ public class ValidProductServiceImpl implements IValidProductService {
 				// 写入库存
 				if (StringUtils.isNotBlank(dataDto.getInventory())) {
 					saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(), source,
-							dataDto.getEntryNumber());
+							dataDto.getEntryNumber(),dataDto.getShopCode());
 				} else {
 					saveInventory(shoppePro.getShoppeProSid(), "0", source,
-							dataDto.getEntryNumber());
+							dataDto.getEntryNumber(),dataDto.getShopCode());
 				}
 				// 写入临时表
 				createService.insertProductInput(shoppePro.getSid(), dataDto.getOfferNumber(),
-						dataDto.getEntryNumber(), dataDto.getProcurementPersonnelNumber(), dsPro);
+						dataDto.getEntryNumber(), dataDto.getProcurementPersonnelNumber(), dsPro,dataDto.getShopCode());
 				// // 写入标签
 				// if (dataDto.getTags() != null && dataDto.getTags().size() !=
 				// 0) {
@@ -2379,6 +2383,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 				PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
 				psps.setShoppeProductSid((shoppePro.getSid()));// 专柜商品SID
 				psps.setSupplySid((supplyInfoList.get(0).getSid()));// 供应商SID
+				psps.setShopSid(orgList.get(0).getOrganizationCode());//一品多商加门店编码
 				insertShoppeProductSupply(psps);
 			}
 		}
@@ -2647,18 +2652,19 @@ public class ValidProductServiceImpl implements IValidProductService {
 				// 写入库存
 				if (StringUtils.isNotBlank(dataDto.getInventory())) {
 					saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(), source,
-							dataDto.getEntryNumber());
+							dataDto.getEntryNumber(),dataDto.getShopCode());
 				} else {
 					saveInventory(shoppePro.getShoppeProSid(), "0", source,
-							dataDto.getEntryNumber());
+							dataDto.getEntryNumber(),dataDto.getShopCode());
 				}
 				// 写入临时表
 				createService.insertProductInput(shoppePro.getSid(), dataDto.getOfferNumber(),
-						dataDto.getEntryNumber(), dataDto.getProcurementPersonnelNumber(), dsPro);
+						dataDto.getEntryNumber(), dataDto.getProcurementPersonnelNumber(), dsPro,dataDto.getShopCode());
 				// 写入一品多供应商关系表
 				PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
 				psps.setShoppeProductSid((shoppePro.getSid()));// 专柜商品SID
 				psps.setSupplySid((supplyInfoList.get(0).getSid()));// 供应商SID
+				psps.setShopSid(orgList.get(0).getOrganizationCode());//一品多商加门店编码
 				insertShoppeProductSupply(psps);
 			}
 		} else {
@@ -2693,18 +2699,19 @@ public class ValidProductServiceImpl implements IValidProductService {
 				// 写入库存
 				if (StringUtils.isNotBlank(dataDto.getInventory())) {
 					saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(), source,
-							dataDto.getEntryNumber());
+							dataDto.getEntryNumber(),dataDto.getShopCode());
 				} else {
 					saveInventory(shoppePro.getShoppeProSid(), "0", source,
-							dataDto.getEntryNumber());
+							dataDto.getEntryNumber(),dataDto.getShopCode());
 				}
 				// 写入临时表
 				createService.insertProductInput(shoppePro.getSid(), dataDto.getOfferNumber(),
-						dataDto.getEntryNumber(), dataDto.getProcurementPersonnelNumber(), dsPro);
+						dataDto.getEntryNumber(), dataDto.getProcurementPersonnelNumber(), dsPro,dataDto.getShopCode());
 				// 写入一品多供应商关系表
 				PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
 				psps.setShoppeProductSid((shoppePro.getSid()));// 专柜商品SID
 				psps.setSupplySid((supplyInfoList.get(0).getSid()));// 供应商SID
+				psps.setShopSid(orgList.get(0).getOrganizationCode());//一品多商加门店编码
 				insertShoppeProductSupply(psps);
 			}
 		}
@@ -3124,7 +3131,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 						// 写入临时表
 						createService.insertProductInput(shoppePro.getSid(),
 								dataDto.getOfferNumber(), dataDto.getEntryNumber(),
-								dataDto.getProcurementPersonnelNumber(), extendDto);
+								dataDto.getProcurementPersonnelNumber(), extendDto,dataDto.getShopCode());
 						// 写入一品多供应商关系表
 						PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
 						psps.setShoppeProductSid((shoppePro.getSid()));// 专柜商品SID
@@ -3190,7 +3197,7 @@ public class ValidProductServiceImpl implements IValidProductService {
 						// 写入临时表
 						createService.insertProductInput(shoppePro.getSid(),
 								dataDto.getOfferNumber(), dataDto.getEntryNumber(),
-								dataDto.getProcurementPersonnelNumber(), extendDto);
+								dataDto.getProcurementPersonnelNumber(), extendDto,dataDto.getShopCode());
 						// 写入一品多供应商关系表
 						PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
 						psps.setShoppeProductSid((shoppePro.getSid()));// 专柜商品SID
@@ -3222,15 +3229,15 @@ public class ValidProductServiceImpl implements IValidProductService {
 				// 写入库存
 				if (StringUtils.isNotBlank(dataDto.getInventory())) {
 					saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(), source,
-							dataDto.getEntryNumber());
+							dataDto.getEntryNumber(),dataDto.getShopCode());
 				} else {
 					saveInventory(shoppePro.getShoppeProSid(), "0", source,
-							dataDto.getEntryNumber());
+							dataDto.getEntryNumber(),dataDto.getShopCode());
 				}
 				// 写入临时表
 				createService.insertProductInput(shoppePro.getSid(), dataDto.getOfferNumber(),
 						dataDto.getEntryNumber(), dataDto.getProcurementPersonnelNumber(),
-						extendDto);
+						extendDto,dataDto.getShopCode());
 				// 写入一品多供应商关系表
 				PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
 				psps.setShoppeProductSid((shoppePro.getSid()));// 专柜商品SID
@@ -3306,13 +3313,13 @@ public class ValidProductServiceImpl implements IValidProductService {
 			// 写入库存
 			if (StringUtils.isNotBlank(dataDto.getInventory())) {
 				saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(), source,
-						dataDto.getEntryNumber());
+						dataDto.getEntryNumber(),dataDto.getShopCode());
 			} else {
-				saveInventory(shoppePro.getShoppeProSid(), "0", source, dataDto.getEntryNumber());
+				saveInventory(shoppePro.getShoppeProSid(), "0", source, dataDto.getEntryNumber(),dataDto.getShopCode());
 			}
 			// 写入临时表
 			createService.insertProductInput(shoppePro.getSid(), dataDto.getOfferNumber(),
-					dataDto.getEntryNumber(), dataDto.getProcurementPersonnelNumber(), extendDto);
+					dataDto.getEntryNumber(), dataDto.getProcurementPersonnelNumber(), extendDto,dataDto.getShopCode());
 			// 写入一品多供应商关系表
 			PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
 			psps.setShoppeProductSid((shoppePro.getSid()));// 专柜商品SID
@@ -3813,10 +3820,10 @@ public class ValidProductServiceImpl implements IValidProductService {
 						// 写入库存
 						if (StringUtils.isNotBlank(dataDto.getInventory())) {
 							saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(),
-									source, dataDto.getEntryNumber());
+									source, dataDto.getEntryNumber(),dataDto.getShopCode());
 						} else {
 							saveInventory(shoppePro.getShoppeProSid(), "0", source,
-									dataDto.getEntryNumber());
+									dataDto.getEntryNumber(),dataDto.getShopCode());
 						}
 						// 写入临时表
 						if (StringUtils.isNotBlank(dataDto.getEntryNumber())
@@ -3824,12 +3831,13 @@ public class ValidProductServiceImpl implements IValidProductService {
 								&& StringUtils.isNotBlank(dataDto.getOfferNumber())) {
 							createService.insertProductInput(shoppePro.getSid(),
 									dataDto.getOfferNumber(), dataDto.getEntryNumber(),
-									dataDto.getProcurementPersonnelNumber(), dsPro);
+									dataDto.getProcurementPersonnelNumber(), dsPro,dataDto.getShopCode());
 						}
 						// 写入一品多供应商关系表
 						PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
 						psps.setShoppeProductSid((shoppePro.getSid()));// 专柜商品SID
 						psps.setSupplySid((supplyInfoList.get(0).getSid()));// 供应商SID
+						psps.setShopSid(org.getOrganizationCode());//一品多商加门店编码
 						insertShoppeProductSupply(psps);
 					}
 				} else {
@@ -3866,10 +3874,10 @@ public class ValidProductServiceImpl implements IValidProductService {
 						// 写入库存
 						if (StringUtils.isNotBlank(dataDto.getInventory())) {
 							saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(),
-									source, dataDto.getEntryNumber());
+									source, dataDto.getEntryNumber(),dataDto.getShopCode());
 						} else {
 							saveInventory(shoppePro.getShoppeProSid(), "0", source,
-									dataDto.getEntryNumber());
+									dataDto.getEntryNumber(),dataDto.getShopCode());
 						}
 						// 写入临时表
 						if (StringUtils.isNotBlank(dataDto.getEntryNumber())
@@ -3877,12 +3885,13 @@ public class ValidProductServiceImpl implements IValidProductService {
 								&& StringUtils.isNotBlank(dataDto.getOfferNumber())) {
 							createService.insertProductInput(shoppePro.getSid(),
 									dataDto.getOfferNumber(), dataDto.getEntryNumber(),
-									dataDto.getProcurementPersonnelNumber(), dsPro);
+									dataDto.getProcurementPersonnelNumber(), dsPro,dataDto.getShopCode());
 						}
 						// 写入一品多供应商关系表
 						PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
 						psps.setShoppeProductSid((shoppePro.getSid()));// 专柜商品SID
 						psps.setSupplySid((supplyInfoList.get(0).getSid()));// 供应商SID
+						psps.setShopSid(org.getOrganizationCode());//一品多商加门店编码
 						insertShoppeProductSupply(psps);
 					}
 				}
@@ -3899,10 +3908,10 @@ public class ValidProductServiceImpl implements IValidProductService {
 				// 写入库存
 				if (StringUtils.isNotBlank(dataDto.getInventory())) {
 					saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(), source,
-							dataDto.getEntryNumber());
+							dataDto.getEntryNumber(),dataDto.getShopCode());
 				} else {
 					saveInventory(shoppePro.getShoppeProSid(), "0", source,
-							dataDto.getEntryNumber());
+							dataDto.getEntryNumber(),dataDto.getShopCode());
 				}
 				// 写入临时表
 				if (StringUtils.isNotBlank(dataDto.getEntryNumber())
@@ -3910,12 +3919,13 @@ public class ValidProductServiceImpl implements IValidProductService {
 						&& StringUtils.isNotBlank(dataDto.getOfferNumber())) {
 					createService.insertProductInput(shoppePro.getSid(), dataDto.getOfferNumber(),
 							dataDto.getEntryNumber(), dataDto.getProcurementPersonnelNumber(),
-							dsPro);
+							dsPro,dataDto.getShopCode());
 				}
 				// 写入一品多供应商关系表
 				PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
 				psps.setShoppeProductSid((shoppePro.getSid()));// 专柜商品SID
 				psps.setSupplySid((supplyInfoList.get(0).getSid()));// 供应商SID
+				psps.setShopSid(org.getOrganizationCode());//一品多商加门店编码
 				insertShoppeProductSupply(psps);
 			} else {
 				throw new BleException(ErrorCode.SKU_IS_EXIST1.getErrorCode(),
@@ -3960,21 +3970,22 @@ public class ValidProductServiceImpl implements IValidProductService {
 			// 写入库存
 			if (StringUtils.isNotBlank(dataDto.getInventory())) {
 				saveInventory(shoppePro.getShoppeProSid(), dataDto.getInventory(), source,
-						dataDto.getEntryNumber());
+						dataDto.getEntryNumber(),dataDto.getShopCode());
 			} else {
-				saveInventory(shoppePro.getShoppeProSid(), "0", source, dataDto.getEntryNumber());
+				saveInventory(shoppePro.getShoppeProSid(), "0", source, dataDto.getEntryNumber(),dataDto.getShopCode());
 			}
 			// 写入临时表
 			if (StringUtils.isNotBlank(dataDto.getEntryNumber())
 					&& StringUtils.isNotBlank(dataDto.getProcurementPersonnelNumber())
 					&& StringUtils.isNotBlank(dataDto.getOfferNumber())) {
 				createService.insertProductInput(shoppePro.getSid(), dataDto.getOfferNumber(),
-						dataDto.getEntryNumber(), dataDto.getProcurementPersonnelNumber(), dsPro);
+						dataDto.getEntryNumber(), dataDto.getProcurementPersonnelNumber(), dsPro,dataDto.getShopCode());
 			}
 			// 写入一品多供应商关系表
 			PcmShoppeProductSupply psps = new PcmShoppeProductSupply();
 			psps.setShoppeProductSid((shoppePro.getSid()));// 专柜商品SID
 			psps.setSupplySid((supplyInfoList.get(0).getSid()));// 供应商SID
+			psps.setShopSid(org.getOrganizationCode());//一品多商加门店编码
 			insertShoppeProductSupply(psps);
 		}
 		logger.info("end savePullProductFromEFuture()");
