@@ -527,6 +527,7 @@ public class PcmOrganizationServiceImpl implements IPcmOrganizationService {
                     result = pcmOrganizationMapper.insertSelective(organization);//组织机构插入
 
                     if (Constants.PCMORGANIZATION_TYPE_STORE_INT == organizationType) {//判断是否为门店
+                    	checkShopInfo(dto);
                         storeInfo = new PcmStoreInfo();
                         org.springframework.beans.BeanUtils.copyProperties(dto, storeInfo);
                         storeInfo.setStoreCode(dto.getOrganizationCode());
@@ -765,6 +766,36 @@ public class PcmOrganizationServiceImpl implements IPcmOrganizationService {
 
         logger.info("end selectPcmOrganizationByTypeAndCode(),return:" + resultList.toString());
         return resultList;
+    }
+    
+    private void checkShopInfo(PcmOrgDto dto){
+    	if(dto.getRegisteredAddress() == null || "".equals(dto.getRegisteredAddress())){
+    		throw new BleException(null, "注册地址不能为空");
+    	}
+    	if(dto.getPostCode() == null || "".equals(dto.getPostCode())){
+    		throw new BleException(null, "邮编不能为空");
+    	}
+    	if(dto.getLegalRepresentative() == null || "".equals(dto.getLegalRepresentative())){
+    		throw new BleException(null, "法定代表人不能为空");
+    	}
+    	if(dto.getAgent() == null || "".equals(dto.getAgent())){
+    		throw new BleException(null, "委托代理人不能为空");
+    	}
+    	if(dto.getTaxRegistrationNumber() == null || "".equals(dto.getTaxRegistrationNumber())){
+    		throw new BleException(null, "税务登记号不能为空");
+    	}
+    	if(dto.getBank() == null || "".equals(dto.getBank())){
+    		throw new BleException(null, "开户行不能为空");
+    	}
+    	if(dto.getBankAccount() == null || "".equals(dto.getBankAccount())){
+    		throw new BleException(null, "开户行账号不能为空");
+    	}
+    	if(dto.getTelephoneNumber() == null || "".equals(dto.getTelephoneNumber())){
+    		throw new BleException(null, "电话不能为空");
+    	}
+    	if(dto.getFaxNumber() == null || "".equals(dto.getFaxNumber())){
+    		throw new BleException(null, "传真不能为空");
+    	}
     }
 
 }
