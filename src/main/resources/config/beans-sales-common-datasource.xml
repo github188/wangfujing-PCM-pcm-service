@@ -38,10 +38,9 @@
 	</bean>
 
 	<bean id="springDataSourceBeanPostProcessor"
-		class="com.wfj.netty.monitor.handler.spring.SpringDataSourceBeanPostProcessor" />
+		class="com.wfj.netty.servlet.handler.spring.SpringDataSourceBeanPostProcessor" />
 	<bean id="wrappedDataSource"
-		class="com.wfj.netty.monitor.handler.factory.SpringDataSourceFactoryBean">
+		class="com.wfj.netty.servlet.handler.factory.SpringDataSourceFactoryBean">
 		<property name="targetName" value="dataSource" />
 	</bean>
-
 </beans>
