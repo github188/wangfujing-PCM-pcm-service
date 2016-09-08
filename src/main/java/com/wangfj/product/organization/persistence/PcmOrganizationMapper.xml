@@ -473,7 +473,7 @@
     <select id="getCountByParam" resultType="java.lang.Integer"
             parameterType="java.util.Map">
         select
-        count(*)
+        count(sid)
         from pcm_organization
         <where>
             <if test="storeCode != null">
@@ -521,7 +521,7 @@
     <select id="getCountByParamOrg" resultType="java.lang.Integer"
             parameterType="com.wangfj.product.organization.domain.vo.PcmOrganizationDto">
         select
-        count(*)
+        count(sid)
         from pcm_organization
         <where>
             <if test="sid != null">

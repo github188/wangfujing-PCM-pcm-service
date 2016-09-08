@@ -182,11 +182,10 @@
     <select id="selectCountByFloor" resultType="java.lang.Integer"
             parameterType="java.util.Map">
         SELECT
-        COUNT(*)
+        COUNT(sid)
         FROM
         pcm_floor
         <where>
-            1=1
             <if test="shopSid != null">
                 and shop_sid = #{shopSid,jdbcType=BIGINT}
             </if>
@@ -198,11 +197,10 @@
     <select id="selectFloorByParam" resultType="java.lang.Integer"
             parameterType="com.wangfj.product.organization.domain.vo.PcmFloorDto">
         SELECT
-        COUNT(*)
+        COUNT(sid)
         FROM
         pcm_floor
         <where>
-            1=1
             <if test="storeCode != null">
                 and shop_sid = #{storeCode,jdbcType=BIGINT}
             </if>
@@ -214,7 +212,7 @@
     <select id="selectCountByFloors" resultType="java.lang.Integer"
             parameterType="java.util.Map">
         SELECT
-        COUNT(*)
+        COUNT(sid)
         FROM
         pcm_floor
         <where>
@@ -261,7 +259,7 @@
     <select id="getFloorCount" resultType="java.lang.Integer"
             parameterType="java.util.Map">
         SELECT
-        count(*)
+        count(pf.sid)
         FROM
         pcm_floor pf
         JOIN pcm_organization po ON pf.shop_sid
@@ -324,7 +322,7 @@
     <select id="getCountByParam" resultType="java.lang.Integer"
             parameterType="java.util.Map">
         select
-        count(*)
+        count(sid)
         from pcm_floor
         <where>
             <if test="storeCode != null">

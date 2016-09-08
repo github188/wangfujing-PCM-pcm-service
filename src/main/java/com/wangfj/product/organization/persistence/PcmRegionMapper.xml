@@ -138,7 +138,7 @@
     <select id="getCountByParam" resultType="java.lang.Integer"
             parameterType="java.util.Map">
         select
-        count(*)
+        count(sid)
         from
         pcm_region
         <where>
@@ -232,7 +232,7 @@
             parameterType="com.wangfj.product.organization.domain.vo.PcmRegionQueryDto"
             resultType="java.lang.Integer">
         SELECT
-        COUNT(*)
+        COUNT(pr.sid)
         FROM
         (SELECT
         <include refid="Base_Column_List"/>

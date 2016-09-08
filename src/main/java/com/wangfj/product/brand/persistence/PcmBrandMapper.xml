@@ -234,7 +234,7 @@
     <select id="getCountByParam" resultType="java.lang.Integer"
             parameterType="java.util.Map">
         select
-        count(*)
+        count(sid)
         from pcm_brand
         <where>
             <if test="sid != null">
@@ -847,7 +847,7 @@
     <select id="selectCountPartInfoByParam" resultType="java.lang.Integer"
             parameterType="com.wangfj.product.brand.domain.vo.SelectPcmBrandPageDto">
         select
-        COUNT(*)
+        COUNT(sid)
         from pcm_brand
         <where>
             <if test="sid != null">

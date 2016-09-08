@@ -567,7 +567,7 @@
 	<select id="getCountByParam" resultType="java.lang.Integer"
 		parameterType="java.util.Map">
 		select
-		count(*)
+		count(sid)
 		from pcm_supply_info
 		<where>
 			<if test="sid != null">
@@ -800,7 +800,7 @@
 	<select id="getPageCountByPara" resultType="java.lang.Integer"
 		parameterType="java.util.Map">
 		select
-		count(*)
+		count(sid)
 		from pcm_supply_info
 		<where>
 			<if test="sid != null">
@@ -852,7 +852,6 @@
 		from
 		pcm_supply_info
 		<where>
-			1=1
 			<if test="supplyName != null">
 				and supply_name like "%"#{supplyName,jdbcType=VARCHAR}"%"
 			</if>
@@ -891,7 +890,6 @@
 		FROM
 		pcm_supply_info
 		<where>
-			1=1
 			<if test="supplyCode != null">
 				and supply_code = #{supplyCode,jdbcType=VARCHAR}
 			</if>
@@ -930,11 +928,10 @@
 	<select id="selectCountBySupply" resultType="java.lang.Integer"
 		parameterType="java.util.Map">
 		SELECT
-		COUNT(*)
+		COUNT(sid)
 		FROM
 		pcm_supply_info
 		<where>
-			1=1
 			<if test="supplyCode != null">
 				and supply_code = #{supplyCode,jdbcType=VARCHAR}
 			</if>
