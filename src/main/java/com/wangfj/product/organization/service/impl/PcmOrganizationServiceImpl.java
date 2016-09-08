@@ -527,7 +527,7 @@ public class PcmOrganizationServiceImpl implements IPcmOrganizationService {
                     result = pcmOrganizationMapper.insertSelective(organization);//组织机构插入
 
                     if (Constants.PCMORGANIZATION_TYPE_STORE_INT == organizationType) {//判断是否为门店
-                    	checkShopInfo(dto);
+                        checkStoreInfo(dto);
                         storeInfo = new PcmStoreInfo();
                         org.springframework.beans.BeanUtils.copyProperties(dto, storeInfo);
                         storeInfo.setStoreCode(dto.getOrganizationCode());
@@ -572,30 +572,31 @@ public class PcmOrganizationServiceImpl implements IPcmOrganizationService {
 
                         if (!isExistence(paramMap)) {
                             result = pcmOrganizationMapper.updateByPrimaryKeySelective(organization);
-                        }
 
-                        if (Constants.PCMORGANIZATION_TYPE_STORE_INT == organizationType) {//判断是否为门店
-                            storeInfo = new PcmStoreInfo();
-                            org.springframework.beans.BeanUtils.copyProperties(dto, storeInfo);
-                            storeInfo.setSid(null);//去掉组织机构表sid
-                            storeInfo.setStoreCode(dto.getOrganizationCode());
+                            if (Constants.PCMORGANIZATION_TYPE_STORE_INT == organizationType) {//判断是否为门店
+                                checkStoreInfo(dto);
+                                storeInfo = new PcmStoreInfo();
+                                org.springframework.beans.BeanUtils.copyProperties(dto, storeInfo);
+                                storeInfo.setSid(null);//去掉组织机构表sid
+                                storeInfo.setStoreCode(dto.getOrganizationCode());
 
-                            paramMap.clear();
-                            paramMap.put("groupSid", dto.getGroupSid());
-                            paramMap.put("storeCode", dto.getOrganizationCode());
-                            List<PcmStoreInfo> storeInfoList = storeInfoMapper.selectListByParam(paramMap);
-                            if (storeInfoList != null && storeInfoList.size() == 1) {
-                                storeInfo.setSid(storeInfoList.get(0).getSid());
-                                storeInfoMapper.updateByPrimaryKeySelective(storeInfo);//门店信息修改
+                                paramMap.clear();
+                                paramMap.put("groupSid", dto.getGroupSid());
+                                paramMap.put("storeCode", dto.getOrganizationCode());
+                                List<PcmStoreInfo> storeInfoList = storeInfoMapper.selectListByParam(paramMap);
+                                if (storeInfoList != null && storeInfoList.size() == 1) {
+                                    storeInfo.setSid(storeInfoList.get(0).getSid());
+                                    storeInfoMapper.updateByPrimaryKeySelective(storeInfo);//门店信息修改
+                                }
+                                if (storeInfoList == null || storeInfoList.size() == 0) {
+                                    storeInfoMapper.insertSelective(storeInfo);//门店信息插入
+                                }
                             }
-                            if (storeInfoList == null || storeInfoList.size() == 0) {
-                                storeInfoMapper.insertSelective(storeInfo);//门店信息插入
-                            }
-                        }
 
-                        if (result == 1) {
-                            // 返回下发的sid
-                            resultMap.put("sid", organization.getSid());
+                            if (result == 1) {
+                                // 返回下发的sid
+                                resultMap.put("sid", organization.getSid());
+                            }
                         }
                     }
                 }
@@ -767,35 +768,80 @@ public class PcmOrganizationServiceImpl implements IPcmOrganizationService {
         logger.info("end selectPcmOrganizationByTypeAndCode(),return:" + resultList.toString());
         return resultList;
     }
-    
-    private void checkShopInfo(PcmOrgDto dto){
-    	if(dto.getRegisteredAddress() == null || "".equals(dto.getRegisteredAddress())){
-    		throw new BleException(null, "注册地址不能为空");
-    	}
-    	if(dto.getPostCode() == null || "".equals(dto.getPostCode())){
-    		throw new BleException(null, "邮编不能为空");
-    	}
-    	if(dto.getLegalRepresentative() == null || "".equals(dto.getLegalRepresentative())){
-    		throw new BleException(null, "法定代表人不能为空");
-    	}
-    	if(dto.getAgent() == null || "".equals(dto.getAgent())){
-    		throw new BleException(null, "委托代理人不能为空");
-    	}
-    	if(dto.getTaxRegistrationNumber() == null || "".equals(dto.getTaxRegistrationNumber())){
-    		throw new BleException(null, "税务登记号不能为空");
-    	}
-    	if(dto.getBank() == null || "".equals(dto.getBank())){
-    		throw new BleException(null, "开户行不能为空");
-    	}
-    	if(dto.getBankAccount() == null || "".equals(dto.getBankAccount())){
-    		throw new BleException(null, "开户行账号不能为空");
-    	}
-    	if(dto.getTelephoneNumber() == null || "".equals(dto.getTelephoneNumber())){
-    		throw new BleException(null, "电话不能为空");
-    	}
-    	if(dto.getFaxNumber() == null || "".equals(dto.getFaxNumber())){
-    		throw new BleException(null, "传真不能为空");
-    	}
+
+    /**
+     * 门店信息校验
+     *
+     * @param dto
+     */
+    @Override
+    public void checkStoreInfo(PcmOrgDto dto) {
+        String registeredAddress = dto.getRegisteredAddress();
+        String postCode = dto.getPostCode();
+        String legalRepresentative = dto.getLegalRepresentative();
+        String agent = dto.getAgent();
+        String taxRegistrationNumber = dto.getTaxRegistrationNumber();
+        String bank = dto.getBank();
+        String bankAccount = dto.getBankAccount();
+        String telephoneNumber = dto.getTelephoneNumber();
+        String faxNumber = dto.getFaxNumber();
+        if (!StringUtils.isNotEmpty(registeredAddress)) {
+            throw new BleException(ComErrorCodeConstants.ErrorCode.ORGANIZATION_IS_EXIST.getErrorCode(), "注册地址不能为空");
+        }
+        if (!StringUtils.isNotEmpty(postCode)) {
+            throw new BleException(ComErrorCodeConstants.ErrorCode.ORGANIZATION_IS_EXIST.getErrorCode(), "邮编不能为空");
+        } else {
+            boolean matches = postCode.matches("^[1-9]\\d{5}$");
+            if (!matches) {
+                throw new BleException(ComErrorCodeConstants.ErrorCode.ORGANIZATION_IS_EXIST.getErrorCode(), "邮政编码是1-9开头的6位数字");
+            }
+        }
+        if (!StringUtils.isNotEmpty(legalRepresentative)) {
+            throw new BleException(ComErrorCodeConstants.ErrorCode.ORGANIZATION_IS_EXIST.getErrorCode(), "法定代表人不能为空");
+        } else {
+            boolean matches = legalRepresentative.matches("^[A-Za-z\\.\\s\u4e00-\u9fa5]{1,20}$");
+            if (!matches) {
+                throw new BleException(ComErrorCodeConstants.ErrorCode.ORGANIZATION_IS_EXIST.getErrorCode(), "法定代理人必须是中文或英文或点或空格且不超过20位");
+            }
+        }
+        if (!StringUtils.isNotEmpty(agent)) {
+            throw new BleException(ComErrorCodeConstants.ErrorCode.ORGANIZATION_IS_EXIST.getErrorCode(), "委托代理人不能为空");
+        } else {
+            boolean matches = agent.matches("^[A-Za-z\\.\\s\u4e00-\u9fa5]{1,20}$");
+            if (!matches) {
+                throw new BleException(ComErrorCodeConstants.ErrorCode.ORGANIZATION_IS_EXIST.getErrorCode(), "委托代理人必须是中文或英文或点或空格且不超过20位");
+            }
+        }
+        if (!StringUtils.isNotEmpty(taxRegistrationNumber)) {
+            throw new BleException(ComErrorCodeConstants.ErrorCode.ORGANIZATION_IS_EXIST.getErrorCode(), "税务登记号不能为空");
+        } else {
+            boolean matches = taxRegistrationNumber.matches("^[A-Za-z0-9]{1,20}$");
+            if (!matches) {
+                throw new BleException(ComErrorCodeConstants.ErrorCode.ORGANIZATION_IS_EXIST.getErrorCode(), "税务登记号必须是数字或英文且不超过20位");
+            }
+        }
+        if (!StringUtils.isNotEmpty(bank)) {
+            throw new BleException(ComErrorCodeConstants.ErrorCode.ORGANIZATION_IS_EXIST.getErrorCode(), "开户行不能为空");
+        }
+        if (!StringUtils.isNotEmpty(bankAccount)) {
+            throw new BleException(ComErrorCodeConstants.ErrorCode.ORGANIZATION_IS_EXIST.getErrorCode(), "开户行账号不能为空");
+        } else {
+            boolean matches = bankAccount.matches("^[A-Za-z0-9]{1,30}$");
+            if (!matches) {
+                throw new BleException(ComErrorCodeConstants.ErrorCode.ORGANIZATION_IS_EXIST.getErrorCode(), "开户行账号必须是数字或英文且不超过30位");
+            }
+        }
+        if (!StringUtils.isNotEmpty(telephoneNumber)) {
+            throw new BleException(ComErrorCodeConstants.ErrorCode.ORGANIZATION_IS_EXIST.getErrorCode(), "电话不能为空");
+        } else {
+            boolean matches = telephoneNumber.matches("^\\d{3}-\\d{8}|\\d{4}-\\d{7}$");
+            if (!matches) {
+                throw new BleException(ComErrorCodeConstants.ErrorCode.ORGANIZATION_IS_EXIST.getErrorCode(), "电话格式不正确");
+            }
+        }
+        if (!StringUtils.isNotEmpty(faxNumber)) {
+            throw new BleException(ComErrorCodeConstants.ErrorCode.ORGANIZATION_IS_EXIST.getErrorCode(), "传真不能为空");
+        }
     }
 
 }

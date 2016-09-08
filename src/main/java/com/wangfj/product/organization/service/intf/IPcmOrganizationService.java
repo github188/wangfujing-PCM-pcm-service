@@ -101,4 +101,11 @@ public interface IPcmOrganizationService {
     Map<String, Object> saveOrUpdateOrg(PcmOrgDto dto);
 
     List<PcmOrgPartInfoDto> findListOrgPartInfo(SelectPcmOrganizationDto dto);
+
+    /**
+     * 校验门店信息
+     *
+     * @param dto
+     */
+    void checkStoreInfo(PcmOrgDto dto);
 }
