@@ -222,7 +222,7 @@
 	</select>
 	<select id="selectPageTotal" resultType="int"
 		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropsDict">
-		select count(1)
+		select count(sid)
 		from pcm_category_props_dict
 		<where>
 			1=1
@@ -272,7 +272,7 @@
 	</select>
 	<select id="selectPageLikeTotal" resultType="int"
 		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropsDict">
-		select count(1)
+		select count(sid)
 		from pcm_category_props_dict
 		<where>
 			1=1
@@ -640,7 +640,7 @@
 	<select id="getCountByParam" resultType="java.lang.Integer"
 		parameterType="java.util.Map">
 		select
-		count(*)
+		count(sid)
 		from pcm_category_props_dict
 		<where>
 			1=1
@@ -702,7 +702,7 @@
 
 	<select id="selectCountPropsDictByParentSid" resultType="java.lang.Integer"
 		parameterType="com.wangfj.product.category.domain.vo.PcmPropsDictsDto">
-		SELECT count(1) from pcm_category_props_dict AS
+		SELECT count(sid) from pcm_category_props_dict AS
 		pcpd
 		INNER JOIN pcm_category_prop_values AS pcpv
 		ON
@@ -770,7 +770,7 @@
 	<!-- 根据叶子节点查询属性字典 -->
 	<select id="selectCountPropsDictByCateSid" resultType="java.lang.Integer"
 		parameterType="com.wangfj.product.category.domain.vo.PcmPropsDictsDto">
-		SELECT count(1) from pcm_category_props_dict as pcpd
+		SELECT count(sid) from pcm_category_props_dict as pcpd
 		INNER JOIN
 		pcm_category_prop_values as
 		pcpv ON

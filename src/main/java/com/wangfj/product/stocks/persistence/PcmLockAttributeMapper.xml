@@ -83,7 +83,7 @@
     <select id="getCountByParam" resultType="java.lang.Integer"
             parameterType="com.wangfj.product.stocks.domain.entity.PcmLockAttribute">
         select
-        count(*)
+        count(sid)
         from pcm_lock_attribute
         <where>
             <if test="distributedLock != null">

@@ -353,7 +353,7 @@
 	<select id="getCountByParam" resultType="java.lang.Integer"
 		parameterType="java.util.Map">
 		select
-		count(*)
+		count(sid)
 		from pcm_product_category
 		<where>
 			<if test="sid != null">
@@ -391,7 +391,7 @@
 	<!-- 根据工业分类sid 查询产品信息count -->
 	<select id="getCountSPUByCateSid" resultType="java.lang.Long"
 		parameterType="java.lang.Long">
-		SELECT count(1) from pcm_product as pp INNER JOIN
+		SELECT count(sid) from pcm_product as pp INNER JOIN
 		pcm_product_category as
 		ppc ON pp.product_sid=ppc.product_sid
 		INNER JOIN
@@ -422,7 +422,7 @@
 	<select id="getCountSKUByCateSid" resultType="java.lang.Long"
 		parameterType="java.lang.Long">
 		SELECT
-		count(1)
+		count(sid)
 		FROM
 		pcm_product AS pp
 		INNER JOIN

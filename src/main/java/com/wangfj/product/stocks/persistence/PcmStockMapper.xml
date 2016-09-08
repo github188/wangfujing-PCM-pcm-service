@@ -25,7 +25,6 @@
 			from
 			pcm_stock
 			<where>
-				1 = 1
 				<if test="shoppeProSid != null">
 					and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
 				</if>
@@ -111,7 +110,6 @@
 			from
 			pcm_stock
 			<where>
-				1 = 1
 				<if test="shoppeProSid != null">
 					and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
 				</if>
@@ -159,7 +157,6 @@
 			from
 			pcm_stock
 			<where>
-				1 = 1
 				<if test="shoppeProSid != null">
 					and shoppe_pro_sid = #{shoppeProSid,jdbcType=VARCHAR}
 				</if>
@@ -369,7 +366,7 @@
 	<select id="getCountByParam" resultType="java.lang.Integer"
 		parameterType="java.util.Map">
 		select
-		count(*)
+		count(sid)
 		from pcm_stock
 		<where>
 			<if test="shoppeProSid != null">
@@ -1483,7 +1480,7 @@
 	<select id="SelecProductStockInfoCountByPara"
 		parameterType="com.wangfj.product.stocks.domain.vo.QueryProductStockInfoDto"
 		resultType="java.lang.Integer">
-		SELECT count(*) from (
+		SELECT count(sid) from (
 		SELECT DISTINCT v.sid
 		FROM
 		(

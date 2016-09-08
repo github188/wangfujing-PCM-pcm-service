@@ -247,7 +247,7 @@
 	<select id="getCountByParam" resultType="java.lang.Integer"
 		parameterType="java.util.Map">
 		select
-		count(*)
+		count(sid)
 		from pcm_stock_change_record
 		<where>
 			<if test="billsNo != null">
@@ -324,7 +324,7 @@
 	<select id="selectStockChangeHisRecordbyStockTypeCount"
 		resultType="java.lang.Integer"
 		parameterType="com.wangfj.product.stocks.domain.vo.PcmStockChangeRecordHisDto">
-		SELECT count(1)
+		SELECT count(sid)
 		FROM
 		pcm_stock_change_record pscr
 		INNER JOIN pcm_stock

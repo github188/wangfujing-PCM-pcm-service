@@ -476,7 +476,7 @@
 
 	<select id="selectPageTotal" resultType="int"
 		parameterType="com.wangfj.product.category.domain.entity.PcmCategoryPropValues">
-		select count(1)
+		select count(sid)
 		from pcm_category_prop_values
 		<where>
 			1=1
@@ -780,7 +780,7 @@
 	<select id="getCountByParam" resultType="java.lang.Integer"
 		parameterType="java.util.Map">
 		select
-		count(*)
+		count(sid)
 		from pcm_category_prop_values
 		<where>
 			1=1

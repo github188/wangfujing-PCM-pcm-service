@@ -23,7 +23,7 @@
 		parameterType="com.wangfj.product.stocks.domain.entity.PcmStockLockRecord"
 		resultType="java.lang.Integer">
 		select
-		count(*)
+		count(sid)
 		from
 		pcm_stock_lock_record
 		where bills_no =
@@ -225,7 +225,7 @@
 	<select id="getCountByParam" resultType="java.lang.Integer"
 		parameterType="java.util.Map">
 		select
-		count(*)
+		count(sid)
 		from pcm_stock_lock_record
 		<where>
 			<if test="billsNo != null">
