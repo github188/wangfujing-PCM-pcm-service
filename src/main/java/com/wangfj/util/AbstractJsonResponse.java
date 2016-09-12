@@ -1,10 +1,10 @@
 package com.wangfj.util;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AbstractJsonResponse<T> {
 	private String resCode;
-	
+
 	@JsonProperty("msg")
 	private String message;
 
@@ -19,7 +19,8 @@ public class AbstractJsonResponse<T> {
 	}
 
 	/**
-	 * @param resCode the resCode to set
+	 * @param resCode
+	 *            the resCode to set
 	 */
 	public void setResCode(String resCode) {
 		this.resCode = resCode;
@@ -33,7 +34,8 @@ public class AbstractJsonResponse<T> {
 	}
 
 	/**
-	 * @param message the message to set
+	 * @param message
+	 *            the message to set
 	 */
 	public void setMessage(String message) {
 		this.message = message;
@@ -47,7 +49,8 @@ public class AbstractJsonResponse<T> {
 	}
 
 	/**
-	 * @param restObject the restObject to set
+	 * @param restObject
+	 *            the restObject to set
 	 */
 	public void setRestObject(T restObject) {
 		this.restObject = restObject;

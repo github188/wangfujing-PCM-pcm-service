@@ -1,6 +1,6 @@
 package com.wangfj.product.maindata.domain.vo;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import com.wangfj.core.framework.base.dto.BaseDto;
 
@@ -397,8 +397,8 @@ public class GetErpProductFromEfutureDto extends BaseDto {
 				+ ", salesPrice=" + salesPrice + ", inputTax=" + inputTax + ", outputTax="
 				+ outputTax + ", salesTax=" + salesTax + ", status=" + status + ", isPromotion="
 				+ isPromotion + ", isAdjustPrice=" + isAdjustPrice + ", manageCategory="
-				+ manageCategory + ", discountLimit=" + discountLimit + ", originLand="
-				+ originLand + ", serviceFeeType=" + serviceFeeType + ", formatType=" + formatType
+				+ manageCategory + ", discountLimit=" + discountLimit + ", originLand=" + originLand
+				+ ", serviceFeeType=" + serviceFeeType + ", formatType=" + formatType
 				+ ", statCategory=" + statCategory + ", commissionRate=" + commissionRate
 				+ ", ACTION_CODE=" + ACTION_CODE + ", ACTION_DATE=" + ACTION_DATE
 				+ ", ACTION_PERSON=" + ACTION_PERSON + "]";

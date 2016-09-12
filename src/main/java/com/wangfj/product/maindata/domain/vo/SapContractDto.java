@@ -3,10 +3,6 @@ package com.wangfj.product.maindata.domain.vo;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-
-import org.codehaus.jackson.annotate.JsonProperty;
-
 public class SapContractDto {
 	private String GLFL;
 	
