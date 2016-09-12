@@ -105,7 +105,7 @@
 	<select id="getCountByTimeFrame" resultType="java.lang.Integer"
 		parameterType="java.util.HashMap">
 		select
-		count(*)
+		count(sid)
 		from pcm_price
 		<where>
 			<if test="ifDel != null">
