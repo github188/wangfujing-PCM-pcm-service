@@ -136,7 +136,7 @@
 	<select id="getCountByParam" resultType="java.lang.Integer"
 		parameterType="java.util.Map">
 		select
-		count(*)
+		count(sid)
 		from pcm_pack_unit_dict
 		<where>
 			<if test="sid != null">

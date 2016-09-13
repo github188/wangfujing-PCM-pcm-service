@@ -141,7 +141,7 @@
 	<select id="getCountByParam" resultType="java.lang.Integer"
 		parameterType="java.util.Map">
 		select
-		count(*)
+		count(sid)
 		from pcm_color_code_dict
 		<where>
 			<if test="sid != null">

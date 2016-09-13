@@ -447,7 +447,7 @@
 	<select id="getCountByParam" resultType="java.lang.Integer"
 		parameterType="java.util.Map">
 		select
-		count(*)
+		count(sid)
 		from pcm_shoppe_product_edi_relation
 		<where>
 			<if test="sid != null">

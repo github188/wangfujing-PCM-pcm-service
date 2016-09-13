@@ -53,7 +53,7 @@
 	</select>
 	<select id="getTagCountByStartTimeFrame" resultType="java.lang.Integer"
 		parameterType="java.util.HashMap">
-		select count(*)
+		select count(sid)
 		from pcm_tag
 		<where>
 			<if test="status != null">
@@ -99,7 +99,7 @@
 	</select>
 	<select id="getTagCountByEndTimeFrame" resultType="java.lang.Integer"
 		parameterType="java.util.HashMap">
-		select count(*)
+		select count(sid)
 		from pcm_tag
 		<where>
 			<if test="status != null">
@@ -142,7 +142,7 @@
 	</select>
 	<select id="getActiveCountByTimePoint" resultType="java.lang.Integer" parameterType="java.util.Map">
 	  select 
-	  count(*)
+	  count(sid)
 	  from pcm_tag
 	  <where>
 	    <if test="status != null">
@@ -510,7 +510,7 @@
 	<select id="getCountByParam" resultType="java.lang.Integer"
 		parameterType="java.util.Map">
 		select
-		count(*)
+		count(sid)
 		from pcm_tag
 		<where>
 			<if test="sid != null">

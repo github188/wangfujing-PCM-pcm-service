@@ -994,7 +994,7 @@
 	<select id="getCountByParam" resultType="java.lang.Integer"
 		parameterType="java.util.Map">
 		select
-		count(*)
+		count(sid)
 		from pcm_pro_detail
 		<where>
 			<if test="sid != null">
@@ -1181,7 +1181,7 @@
 		and cate.category_type=0 and cate.is_leaf='Y' and
 		cate.status='Y' and cate.is_display = 1
 		<where>
-			1=1
+			
 			<if test="sid != null">
 				and sku.sid = #{sid,jdbcType=BIGINT}
 			</if>
@@ -1339,7 +1339,7 @@
 		and cate.category_type=0 and cate.is_leaf='Y' and
 		cate.status='Y' and cate.is_display = 1 and cate.is_display = 1
 		<where>
-			1=1
+			
 			<if test="sidList != null">
 				and sku.sid in 
 				<foreach collection="sidList" index="index" item="skuSid" open="("
@@ -1499,7 +1499,7 @@
 		and cate.category_type=0 and cate.is_leaf='Y' and
 		cate.status='Y' and cate.is_display = 1 and cate.is_display = 1
 		<where>
-			1=1
+			
 			<if test="sid != null">
 				and sku.sid = #{sid,jdbcType=BIGINT}
 			</if>
@@ -1585,7 +1585,7 @@
             join pcm_product spu on sku.product_sid=spu.sid
         </if>
 		<where>
-			1=1
+			
 			<if test="sid != null">
 				and sku.sid = #{sid,jdbcType=BIGINT}
 			</if>
@@ -1688,7 +1688,7 @@
 		cate.category_type=0 and cate.is_leaf='Y' and
 		cate.status='Y' and cate.is_display = 1
 		<where>
-			1=1
+			
 			<if test="colorSid != null">
 				and cd.sid = #{colorSid,jdbcType=VARCHAR}
 			</if>
@@ -1721,7 +1721,7 @@
 		LEFT JOIN pcm_color_dict cd ON
 		sku.pro_color_sid = cd.sid
 		<where>
-			1=1
+			
 			<if test="colorCode != null">
 				and cd.sid = #{colorCode,jdbcType=VARCHAR}
 			</if>
@@ -1762,7 +1762,6 @@
 		cate.category_type=0 and cate.is_leaf='Y' and
 		cate.status='Y' and cate.is_display = 1
 		<where>
-			1=1
 			<if test="colorCode != null">
 				and cd.sid = #{colorCode,jdbcType=VARCHAR}
 			</if>
@@ -2280,7 +2279,7 @@
 		ppt1.product_sid,
 		GROUP_CONCAT(pt1.tag_name separator
 		'|') as tag_name,
-		count(*) AS count
+		count(ppt1.sid) AS count
 		FROM
 		pcm_product_tag ppt1
 		JOIN pcm_tag
@@ -2302,7 +2301,7 @@
 	<select id="judgeproDetailRepeat" parameterType="Map" resultType="Map">
 		SELECT
 			sku.product_detail_sid,
-			count(1)
+			count(sku.sid)
 		FROM
 			pcm_pro_detail AS sku
 		GROUP BY
@@ -2316,6 +2315,6 @@
 				,sku.features
 			</if>
 		HAVING
-			count(1) > 1
+			count(sku.sid) > 1
 	</select>
 </mapper>

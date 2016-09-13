@@ -403,7 +403,7 @@
     <select id="getCountByParam" resultType="java.lang.Integer"
             parameterType="java.util.Map">
         select
-        count(*)
+        count(sid)
         from pcm_contract_log
         <where>
             <if test="sid != null">
@@ -531,7 +531,7 @@
             resultType="java.lang.Integer"
             parameterType="com.wangfj.product.maindata.domain.vo.PcmContractLogQueryDto">
         SELECT
-        COUNT(*)
+        COUNT(sid)
         FROM
         pcm_contract_log
         <where>
@@ -621,7 +621,7 @@
     <select id="getContractLogCountFromPcmToSup"
 	parameterType="com.wangfj.product.maindata.domain.vo.GetContractLogForSupDto"
 	resultType="Integer">
-	SELECT count(*)
+	SELECT count(clog.sid)
 	FROM
 	(SELECT * from pcm_contract_log
 	<where>  
@@ -667,7 +667,7 @@
     <select id="getContractLogCountFromPcmToSupByTime"
 	parameterType="com.wangfj.product.maindata.domain.vo.ContractLogFromPcmToSupDto"
 	resultType="Integer">
-	select count(*) from
+	select count(clog.sid) from
 	(
 	SELECT
 	*

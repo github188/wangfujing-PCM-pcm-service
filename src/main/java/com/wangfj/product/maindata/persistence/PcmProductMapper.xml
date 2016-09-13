@@ -749,7 +749,7 @@
 	<select id="getCountByParam" resultType="java.lang.Integer"
 		parameterType="java.util.Map">
 		select
-		count(*)
+		count(sid)
 		from pcm_product
 		<where>
 			<if test="sid != null">
@@ -892,10 +892,9 @@
 
 	<select id="selectCount" resultType="java.lang.Integer"
 		parameterType="com.wangfj.product.maindata.domain.vo.PcmProductDto">
-		select count(1)
+		select count(sid)
 		from pcm_product
 		<where>
-			1=1
 			<if test="productName != null">
 				and product_name like
 				"%"#{productName,jdbcType=VARCHAR}"%"
@@ -916,7 +915,6 @@
 		on ssdproduct.brand_sid =
 		ssdbrand.SID
 		<where>
-			1=1
 			<if test="productSku != null">
 				and ssdproduct.product_sku like
 				"%"#{productSku,jdbcType=VARCHAR}"%"
@@ -960,7 +958,6 @@
 		pcm_season_dict psd on
 		psd.sid=spu.season_code
 		<where>
-			1=1
 			<if test="sid != null">
 				and spu.sid = #{sid,jdbcType=BIGINT}
 			</if>
@@ -1079,7 +1076,6 @@
 		<!-- pcm_product_desc ppd on -->
 		<!-- spu.pro_desc_sid=ppd.sid -->
 		<where>
-			1=1
 			<if test="sid != null">
 				and spu.sid = #{sid,jdbcType=BIGINT}
 			</if>
@@ -1211,7 +1207,6 @@
 		<!-- pcm_product_desc ppd on -->
 		<!-- spu.pro_desc_sid=ppd.sid -->
 		<where>
-			1=1
 			<if test="sidList != null">
 				and spu.sid in
 				<foreach collection="sidList" item="itemSid" index="index"
@@ -1347,7 +1342,6 @@
 		pcm_season_dict psd on
 		psd.sid=spu.season_code
 		<where>
-			1=1
 			<if test="sidList != null">
 				and spu.sid in
 				<foreach collection="sidList" item="itemSid" index="index"
@@ -1385,7 +1379,7 @@
 	<select id="selectSpuCountByIsLeaf" resultType="java.lang.Integer"
 		parameterType="com.wangfj.product.category.domain.vo.SelectCategoryParamDto">
 		SELECT
-		count(1)
+		count(pp.sid)
 		FROM
 		pcm_product AS pp,
 		pcm_category c,
@@ -1508,8 +1502,7 @@
 		) ppp
 		on ppp.product_sid = spu.sid
 		<where>
-			1=1
-			AND spu.pro_selling = 1
+			spu.pro_selling = 1
 			<if test="code != null">and spu.product_sid = #{code}</if>
 			<if test="sidList != null">
 				and spu.sid in
@@ -1549,7 +1542,7 @@
 	<select id="judgeproductRepeat" parameterType="Map" resultType="Map">
 		SELECT
 			spu.product_sid,
-			count(1)
+			count(spu.sid)
 		FROM
 			pcm_product AS spu
 		GROUP BY
@@ -1561,6 +1554,6 @@
 				,spu.primary_attr
 			</if>
 		HAVING
-			count(1) > 1
+			count(spu.sid) > 1
 	</select>
 </mapper>

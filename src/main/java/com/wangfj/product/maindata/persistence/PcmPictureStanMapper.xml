@@ -92,7 +92,7 @@
   </select>
   <select id="getCountByParam" resultType="java.lang.Integer" parameterType="java.util.Map" >
     select 
-    	count(*)
+    	count(sid)
     from pcm_picture_stan
     <where>
       <if test="pictureWidth != null" >

@@ -456,7 +456,7 @@
 	<select id="getCountByParam" resultType="java.lang.Integer"
 		parameterType="com.wangfj.product.maindata.domain.entity.PcmPictureUrl">
 		select
-		count(*)
+		count(sid)
 		from pcm_picture_url
 		<where>
 			<if test="sid != null">

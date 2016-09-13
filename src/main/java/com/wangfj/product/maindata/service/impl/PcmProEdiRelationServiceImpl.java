@@ -10,11 +10,13 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.wangfj.core.utils.DistributedLock;
 import com.wangfj.core.utils.JsonUtil;
-import com.wangfj.product.common.domain.entity.PcmExceptionLog;
+import com.wangfj.core.utils.PropertyUtil;
 import com.wangfj.product.common.domain.vo.PcmExceptionLogDto;
 import com.wangfj.product.common.persistence.PcmExceptionLogMapper;
 import com.wangfj.product.common.service.impl.PcmExceptionLogService;
+import com.wangfj.product.constants.FlagType;
 import com.wangfj.product.constants.StatusCodeConstants.StatusCode;
 import com.wangfj.product.maindata.domain.entity.PcmShoppeProduct;
 import com.wangfj.product.maindata.domain.entity.PcmShoppeProductEdiRelation;
@@ -62,6 +64,7 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 	@Override
 	public ResultDto addShoppeProFromEdi(List<EdiProDto> dtoList) {
 		String errorMag = null;
+		String lockURL = PropertyUtil.getSystemUrl("lockURL");
 		List<ResultDto> resultList = new ArrayList<ResultDto>();
 		for (EdiProDto ediProDto : dtoList) {
 			ResultDto dto = new ResultDto();
@@ -91,6 +94,12 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 			}
 			if (errorMag == null) {
 				if (ediProDto.getActionCode().equals(Constants.A)) {
+					DistributedLock ZKlock = new DistributedLock(lockURL,
+							ediProDto.getShoppeProCode() + ediProDto.getEDIProCode()
+									+ ediProDto.getChannelCode());
+					if (FlagType.zookeeper_lock == 0) {
+						ZKlock.lock();
+					}
 					PcmShoppeProduct pro = new PcmShoppeProduct();
 					if (ediProDto.getShoppeProCode().length() == 18) {
 						pro.setField4(ediProDto.getShoppeProCode());
@@ -118,18 +127,17 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 							List<PcmShoppeProductEdiRelation> ediList = proEdiMapper
 									.selectListByParam(proEdi);// 查询Edi关联关系是否存在
 							if (ediList != null && ediList.size() > 0) {// 如果存在
-								if(ediList.get(0).getChannelProSid().equals(ediProDto.getEDIProCode())){
+								if (ediList.get(0).getChannelProSid()
+										.equals(ediProDto.getEDIProCode())) {
 									proEdi.setField1(ediList.get(0).getField1());
 									PcmStock entity = new PcmStock();
 									entity.setShoppeProSid(proEdi.getField1());
 									entity.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
 									entity.setChannelSid(ediProDto.getChannelCode());
-									List<PcmStock> stock =
-											stockMapper.selectListByParam(entity);
+									List<PcmStock> stock = stockMapper.selectListByParam(entity);
 									if (stock != null && stock.size() > 0) {
 										if (stock.get(0).getProSum() == 0) {
-											if
-											(Constants.PCMSTOCK_ISPUSH_EDI.equals("1")) {
+											if (Constants.PCMSTOCK_ISPUSH_EDI.equals("1")) {
 												PcmStock entity1 = new PcmStock();
 												entity1.setShoppeProSid(ediList.get(0).getField1());
 												entity1.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
@@ -137,7 +145,8 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 												List<PcmStock> stock1 = stockMapper
 														.selectListByParam(entity1);
 												if (stock1 != null && stock1.size() > 0) {
-													dto.setProNum(stock1.get(0).getProSum().toString());
+													dto.setProNum(stock1.get(0).getProSum()
+															.toString());
 												}
 											} else {
 												dto.setProNum(stock.get(0).getProSum().toString());
@@ -146,8 +155,7 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 											dto.setProNum(stock.get(0).getProSum().toString());
 										}
 									} else {
-										if
-										(Constants.PCMSTOCK_ISPUSH_EDI.equals("1")) {
+										if (Constants.PCMSTOCK_ISPUSH_EDI.equals("1")) {
 											PcmStock entity1 = new PcmStock();
 											entity1.setShoppeProSid(ediList.get(0).getField1());
 											entity1.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
@@ -162,9 +170,9 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 											errorMag = "开关关闭-库存不足";
 										}
 									}
-								}else{
+								} else {
 									dto.setStatus("0");// 已上架
-									errorMag = "已上架";									
+									errorMag = "已上架";
 								}
 							} else {
 								proEdi.setChannelProSid(ediProDto.getEDIProCode());
@@ -233,11 +241,15 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 							errorMag = "渠道不可售";
 						}
 					}
+					if (FlagType.zookeeper_lock == 0) {
+						ZKlock.unlock();
+					}
 				} else if (ediProDto.getActionCode().equals(Constants.D)) {
-					if(ediProDto.getShoppeProCode().equals("") || ediProDto.getShoppeProCode().equals(null)){
+					if (ediProDto.getShoppeProCode().equals("")
+							|| ediProDto.getShoppeProCode().equals(null)) {
 						dto.setStatus("0");//
 						errorMag = "下架商品编码不能为空";
-					}else{
+					} else {
 						PcmShoppeProductEdiRelation proEdi = new PcmShoppeProductEdiRelation();
 						proEdi.setChannelCode(ediProDto.getChannelCode());
 						proEdi.setShoppeProSid(ediProDto.getShoppeProCode());
@@ -274,7 +286,7 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 				pcmExceptionLogDto.setDataContent(resultList.get(0).toString());
 				pcmExceptionLogDto.setUuid(UUID.randomUUID().toString());
 				exLogMapper.insertSelective(pcmExceptionLogDto);
-//				pcmExceptionLogService.saveExceptionLogInfo(pcmExceptionLogDto);
+				// pcmExceptionLogService.saveExceptionLogInfo(pcmExceptionLogDto);
 			}
 		}
 		return resultList.get(0);

@@ -1238,7 +1238,7 @@
 		pp.promotion_begin_time
 		AND pp.promotion_end_time
 		<where>
-			1=1
+			
 			<if test="sidList != null">
 				and erp.sid in
 				<foreach collection="sidList" item="itemSid" index="index"
@@ -1447,7 +1447,7 @@
 			AND supply.shop_sid = erp.store_code
 		</if>
 		<where>
-			1=1
+			
 			<if test="erpSid != null">
 				and erp.sid &lt; #{erpSid,jdbcType=BIGINT}
 			</if>

@@ -553,7 +553,7 @@
 	<select id="searchOnlinePageProCount" resultType="Integer"
 		parameterType="java.util.Map">
 		SELECT
-		count(*)
+		count(pro.sid)
 		FROM
 		pcm_shoppe_product AS pro
 		JOIN
@@ -2130,7 +2130,7 @@
 	<select id="getCountByParam" resultType="java.lang.Integer"
 		parameterType="java.util.Map">
 		select
-		count(*)
+		count(sid)
 		from pcm_shoppe_product
 		<where>
 			<if test="sid != null">
@@ -4020,7 +4020,7 @@
 	<!-- getCount专柜商品下发MQ -->
 	<select id="getCountShoppePro" resultType="java.lang.Integer">
 		select
-		count(*)
+		count(sp.sid)
 		from
 		pcm_shoppe_product sp
 		left join
@@ -4194,7 +4194,7 @@
 		s.field2
 		from pcm_shoppe_product s
 		<where>
-			1=1
+			
 			<if test="sid != null">
 				and s.sid = #{sid}
 			</if>
@@ -4263,7 +4263,7 @@
 	<select id="getCountProPageBySku" resultType="java.lang.Integer"
 		parameterType="com.wangfj.product.maindata.domain.vo.ShoppeProductDto">
 		select
-		count(*)
+		count(ss.sid)
 		from
 		(
 		select
@@ -4281,7 +4281,7 @@
 		from
 		pcm_shoppe_product s
 		<where>
-			1=1
+			
 			<if test="sid != null">
 				and s.sid = #{sid}
 			</if>
@@ -4389,7 +4389,7 @@
 	<select id="getCountShoppeProductByBrandSid" parameterType="java.util.Map"
 		resultType="java.lang.Integer">
 		SELECT
-		COUNT(*)
+		COUNT(psp.sid)
 		FROM
 		pcm_shoppe_product psp
 		INNER JOIN
@@ -4521,7 +4521,7 @@
 		shoppe.industry_condition_sid
 		as industrySid,
 		pro.sale_unit_code as saleUnit,
-		count(1) as Num
+		count(pro.sid) as Num
 		FROM
 		pcm_shoppe_product AS pro
 		JOIN pcm_supply_info AS supply ON supply.sid
@@ -4542,7 +4542,7 @@
 		AND
 		shoppe.industry_condition_sid =
 		#{industryCondition,jdbcType=INTEGER}
-		AND count(1) > 1
+		AND count(pro.sid) > 1
 		ORDER BY
 		pro.sid
 		ASC
@@ -5325,7 +5325,7 @@
 	<select id="searchSpCountByStore" parameterType="Map"
 		resultType="Integer">
 		SELECT
-		count(*)
+		count(pro.sid)
 		FROM
 		pcm_shoppe_product AS pro
 		JOIN pcm_pro_detail AS sku

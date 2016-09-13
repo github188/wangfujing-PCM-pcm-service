@@ -117,7 +117,7 @@
 	<select id="getCountByParam" resultType="java.lang.Integer"
 		parameterType="java.util.Map">
 		select
-		count(*)
+		count(sid)
 		from pcm_product_type_dict
 		<where>
 			<if test="sid != null">
