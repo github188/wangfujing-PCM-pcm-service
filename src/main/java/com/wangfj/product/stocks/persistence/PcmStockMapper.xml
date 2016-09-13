@@ -462,7 +462,7 @@
 				#{proSum,jdbcType=BIGINT},
 			</if>
 			<if test="storeCode != null">
-				#{store_code,jdbcType=VARCHAR},
+				#{storeCode,jdbcType=VARCHAR},
 			</if>
 			<if test="channelSid != null">
 				#{channelSid,jdbcType=INTEGER},
