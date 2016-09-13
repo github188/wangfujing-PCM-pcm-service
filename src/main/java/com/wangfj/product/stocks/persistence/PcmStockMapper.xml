@@ -198,7 +198,6 @@
 				<if test="channelSid != null">
 					#{channelSid,jdbcType=INTEGER},
 				</if>
-
 				<if test="channelSid == null">
 					0,
 				</if>
@@ -444,6 +443,9 @@
 			<if test="proSum != null">
 				pro_sum,
 			</if>
+			<if test="storeCode != null">
+				store_code,
+			</if>
 			channel_sid,
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -458,6 +460,9 @@
 			</if>
 			<if test="proSum != null">
 				#{proSum,jdbcType=BIGINT},
+			</if>
+			<if test="storeCode != null">
+				#{store_code,jdbcType=VARCHAR},
 			</if>
 			<if test="channelSid != null">
 				#{channelSid,jdbcType=INTEGER},

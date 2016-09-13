@@ -1482,7 +1482,6 @@ public class PcmStockServiceImpl implements IPcmStockService {
 		List<StockProCountDto> list = stockPublicMethod1(products);
 		dto.setProducts(list);
 		/* 调入core进行第二步判断及加减库操作 */
-		System.out.println(JsonUtil.getJSONString(dto));
 		String response = HttpUtil.doPost(stockCore, JsonUtil.getJSONString(dto));
 		return response;
 	}
