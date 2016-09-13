@@ -21,6 +21,18 @@
     <result column="field8" property="field8" jdbcType="VARCHAR" />
     <result column="field9" property="field9" jdbcType="VARCHAR" />
     <result column="field10" property="field10" jdbcType="VARCHAR" />
+    <result column="field11" property="field11" jdbcType="VARCHAR" />
+    <result column="field12" property="field12" jdbcType="VARCHAR" />
+    <result column="field13" property="field13" jdbcType="VARCHAR" />
+    <result column="field14" property="field14" jdbcType="VARCHAR" />
+    <result column="field15" property="field15" jdbcType="VARCHAR" />
+    <result column="field16" property="field16" jdbcType="VARCHAR" />
+    <result column="field17" property="field17" jdbcType="VARCHAR" />
+    <result column="field18" property="field18" jdbcType="VARCHAR" />
+    <result column="field19" property="field19" jdbcType="VARCHAR" />
+    <result column="field20" property="field20" jdbcType="VARCHAR" />
+    <result column="field21" property="field21" jdbcType="VARCHAR" />
+    <result column="store_code" property="storeCode" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     sid, shoppe_pro_sid, is_card, base_unit_code, origin_country, is_origin_package, 
@@ -153,7 +165,7 @@
       <if test="field21 != null" >
         field21,
       </if>
-      <if test="storeCdoe != null" >
+      <if test="storeCode != null" >
         store_code,
       </if>
     </trim>
@@ -249,7 +261,7 @@
         #{field21,jdbcType=VARCHAR},
       </if>
       <if test="storeCode != null" >
-        #{store_code,jdbcType=VARCHAR},
+        #{storeCode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
