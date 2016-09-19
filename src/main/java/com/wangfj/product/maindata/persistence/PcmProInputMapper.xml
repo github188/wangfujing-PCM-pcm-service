@@ -173,9 +173,6 @@
 			<if test="col1 != null">
 				col1 = #{col1,jdbcType=VARCHAR},
 			</if>
-			<if test="col2 != null">
-				col2 = #{col2,jdbcType=VARCHAR},
-			</if>
 			<if test="col3 != null">
 				col3 = #{col3,jdbcType=VARCHAR},
 			</if>
@@ -203,9 +200,6 @@
 			</if>
 			<if test="col1 != null">
 				col1 = #{col1,jdbcType=VARCHAR},
-			</if>
-			<if test="col2 != null">
-				col2 = #{col2,jdbcType=VARCHAR},
 			</if>
 			<if test="col3 != null">
 				col3 = #{col3,jdbcType=VARCHAR},
