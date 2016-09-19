@@ -180,7 +180,7 @@
 				order_no=#{orderNo,jdbcType=VARCHAR},
 			</if>
 		</set>
-		where sid = #{sid,jdbcType=BIGINT}
+		where sid = #{sid,jdbcType=BIGINT} and col2 = #{col2,jdbcType=VARCHAR}
 	</update>
 	<update id="updateByProSidSelective"
 		parameterType="com.wangfj.product.maindata.domain.entity.PcmProInput">
