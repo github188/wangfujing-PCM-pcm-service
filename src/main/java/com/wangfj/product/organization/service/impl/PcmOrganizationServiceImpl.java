@@ -535,12 +535,12 @@ public class PcmOrganizationServiceImpl implements IPcmOrganizationService {
                         String organizationCode = dto.getOrganizationCode();
                         storeInfo.setStoreCode(organizationCode);//门店编码
 
-                        try {
-                            byte[] encodeBase64 = Base64.encodeBase64(organizationCode.getBytes("UTF-8"));
-                            storeInfo.setField1(new String(encodeBase64));//门店标识
-                        } catch (UnsupportedEncodingException e) {
-                            logger.info("添加门店生成门店标识获得门店编码字节码异常" + e.getMessage());
-                        }
+//                        try {
+//                            byte[] encodeBase64 = Base64.encodeBase64(organizationCode.getBytes("UTF-8"));
+//                            storeInfo.setField1(new String(encodeBase64));//门店标识
+//                        } catch (UnsupportedEncodingException e) {
+//                            logger.info("添加门店生成门店标识获得门店编码字节码异常" + e.getMessage());
+//                        }
 
                         storeInfoMapper.insertSelective(storeInfo);//门店信息插入
                     }
