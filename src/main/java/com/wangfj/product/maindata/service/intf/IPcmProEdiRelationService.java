@@ -30,4 +30,14 @@ public interface IPcmProEdiRelationService {
 	 * @return List<PcmEdiProductStockDto>
 	 */
 	List<PcmEdiProductStockDto> selectEdiProStockInfo(QueryEdiProductStockDto dto);
+
+	/**
+	 * edi查询渠道库存
+	 * 
+	 * @Methods Name selectEdiProStockInfoByChannelId
+	 * @Create In 2016年9月27日 By kongqf
+	 * @param dto
+	 * @return List<PcmEdiProductStockDto>
+	 */
+	List<PcmEdiProductStockDto> selectEdiProStockInfoByChannelId(QueryEdiProductStockDto dto);
 }
