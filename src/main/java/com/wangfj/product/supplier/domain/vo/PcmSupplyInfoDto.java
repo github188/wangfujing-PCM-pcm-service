@@ -3,8 +3,10 @@ package com.wangfj.product.supplier.domain.vo;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wangfj.core.framework.base.dto.BaseDto;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PcmSupplyInfoDto extends BaseDto {
 
 	/**

@@ -1,5 +1,6 @@
 package com.wangfj.product.organization.service.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.Map;
 import com.wangfj.product.organization.domain.entity.PcmStoreInfo;
 import com.wangfj.product.organization.persistence.PcmStoreInfoMapper;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -530,7 +532,16 @@ public class PcmOrganizationServiceImpl implements IPcmOrganizationService {
                         checkStoreInfo(dto);
                         storeInfo = new PcmStoreInfo();
                         org.springframework.beans.BeanUtils.copyProperties(dto, storeInfo);
-                        storeInfo.setStoreCode(dto.getOrganizationCode());
+                        String organizationCode = dto.getOrganizationCode();
+                        storeInfo.setStoreCode(organizationCode);//门店编码
+
+//                        try {
+//                            byte[] encodeBase64 = Base64.encodeBase64(organizationCode.getBytes("UTF-8"));
+//                            storeInfo.setField1(new String(encodeBase64));//门店标识
+//                        } catch (UnsupportedEncodingException e) {
+//                            logger.info("添加门店生成门店标识获得门店编码字节码异常" + e.getMessage());
+//                        }
+
                         storeInfoMapper.insertSelective(storeInfo);//门店信息插入
                     }
                     if (result == 1) {

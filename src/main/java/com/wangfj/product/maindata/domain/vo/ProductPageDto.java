@@ -3,6 +3,7 @@ package com.wangfj.product.maindata.domain.vo;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wangfj.core.framework.base.dto.BaseDto;
 import com.wangfj.product.maindata.domain.entity.PcmBarcode;
 
@@ -13,6 +14,7 @@ import com.wangfj.product.maindata.domain.entity.PcmBarcode;
  * @Author zhangxy
  * @Create In 2015年7月15日
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductPageDto extends BaseDto {
 	private String cateZSCode;// 展示分类编码
 	private String cateZSName;// 展示分类

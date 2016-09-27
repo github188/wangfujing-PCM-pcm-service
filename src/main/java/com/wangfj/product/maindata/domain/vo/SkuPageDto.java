@@ -3,6 +3,7 @@ package com.wangfj.product.maindata.domain.vo;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wangfj.core.framework.base.dto.BaseDto;
 
 /**
@@ -12,6 +13,7 @@ import com.wangfj.core.framework.base.dto.BaseDto;
  * @Author zhangxy
  * @Create In 2015年7月2日
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SkuPageDto extends BaseDto {
 	private Long sid;
 	private String spuSid;// spuSid
