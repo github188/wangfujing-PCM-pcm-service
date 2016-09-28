@@ -1,5 +1,6 @@
 package com.wangfj.product.brand.persistence;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +37,14 @@ public interface PcmShopBrandRelationMapper extends BaseMapper<PcmShopBrandRelat
 	 * @return List<PcmShopBrandRelation>
 	 */
 	List<PcmShopBrandRelation> getShopBrandRelationUpload(Map<String, Object> relationPara);
+
+    /**
+     * 门店类型联合门店的门店类型查询门店品牌
+     *
+     * @param paramMap
+     * @return
+     */
+    List<HashMap<String, Object>> getShopBrandRelation(Map<String, Object> paramMap);
 
 	List<PcmShopBrandResultDto> getListShopBrandFromRelation(Map<String, Object> paramMap);
 
