@@ -866,10 +866,10 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
             String xglb = "";
             // 判断操作代码是否为 1(改品牌)；3（换专柜）5(换供应商）
             if (Constants.PUBLIC_1 == Integer.parseInt(dto.getXGLB())) {
-                PcmBrand entity = new PcmBrand();
-                entity.setBrandSid(dto.getVALUE());
-                entity.setBrandType(1);// 门店品牌
-                List<PcmBrand> brList = brMapper.selectListByParam(entity);
+                Map<String, Object> shopBrandMap = new HashMap<String, Object>();
+                shopBrandMap.put("shopCode", dto.getSTORE());
+                shopBrandMap.put("brandCode", dto.getVALUE());
+                List<HashMap<String, Object>> brList = shopBrandRelationMapper.getShopBrandRelation(shopBrandMap);
                 if (brList == null || brList.size() != 1) {
                     throw new BleException(ErrorCode.BRAND_NOT_EXIST.getErrorCode(),
                             ErrorCode.BRAND_NOT_EXIST.getMemo());
