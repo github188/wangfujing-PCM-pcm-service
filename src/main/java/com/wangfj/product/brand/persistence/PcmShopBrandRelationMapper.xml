@@ -211,6 +211,35 @@
 		</where>
 	</select>
 
+    <!-- 门店类型联合门店的门店类型查询门店品牌 getShopBrandRelation wangxuan -->
+    <select id="getShopBrandRelation" parameterType="java.util.Map"
+            resultType="java.util.Map">
+        SELECT
+        pb.sid AS brandSid,
+        pb.brand_sid AS brandCode,
+        pb.brand_name AS brandName,
+        po.sid AS shopSid,
+        po.organization_code AS shopCode,
+        po.organization_name AS shopName
+        FROM
+        pcm_brand pb
+        INNER JOIN pcm_organization po ON pb.shop_type = po.store_type
+        <where>
+            po.organization_status = 0
+            AND po.organization_type = 3
+            AND pb.brand_type = 1
+            <if test="status != null">
+                AND pb.status = 0
+            </if>
+            <if test="brandCode != null">
+                AND pb.brand_sid = #{brandCode}
+            </if>
+            <if test="shopCode != null">
+                AND po.organization_code = #{shopCode}
+            </if>
+        </where>
+    </select>
+
 	<!-- 门店与门店品牌关系上传时的查询所需数据 getShopBrandRelationUpload wangxuan -->
 	<select id="getShopBrandRelationUpload" parameterType="java.util.Map"
 		resultMap="BaseResultMap">
