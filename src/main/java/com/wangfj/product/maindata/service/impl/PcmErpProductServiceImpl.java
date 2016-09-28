@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.wangfj.product.brand.persistence.PcmShopBrandRelationMapper;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -79,6 +80,8 @@ public class PcmErpProductServiceImpl implements IPcmErpProductService {
     IPcmShoppeProductService proService;
     @Autowired
     PcmBrandMapper brMapper;
+    @Autowired
+    private PcmShopBrandRelationMapper shopBrandRelationMapper;
     @Autowired
     IPcmChangeProductService cpService;
     @Autowired
