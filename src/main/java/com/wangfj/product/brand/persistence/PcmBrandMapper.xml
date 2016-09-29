@@ -1370,6 +1370,7 @@
         AND pb.shop_type = po.store_type
         WHERE
         pb.status = 0
+        AND psb.status = 0
         AND po.organization_status = 0
         AND po.organization_type = 3
         AND pb.brand_type = 1
