@@ -926,6 +926,33 @@ public class PcmBrandServiceImpl implements IPcmBrandService {
     }
 
     /**
+     * 门店品牌与门店号下发给搜索查询
+     *
+     * @param paramMap
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> pushShopBrandToSearch(Map<String, Object> paramMap) {
+        logger.info("start com.wangfj.product.brand.service.impl.PcmBrandServiceImpl#pushShopBrandToSearch(),para:" + paramMap.toString());
+
+        List<HashMap<String, Object>> hashMapList = brandMapper.pushShopBrandToSearch(paramMap);
+        List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+        if (hashMapList != null && hashMapList.size() > 0) {
+            for (Map<String, Object> tempMap : hashMapList) {
+                Map<String, Object> resultMap = new HashMap<String, Object>();
+                resultMap.put("sid", tempMap.get("brandSid"));
+                resultMap.put("brandGroupCode", tempMap.get("storeBrandCode"));
+                resultMap.put("brandGroupName", tempMap.get("storeBrandName"));
+                resultMap.put("storeCode", tempMap.get("storeCode"));
+                resultList.add(resultMap);
+            }
+        }
+
+        logger.info("end com.wangfj.product.brand.service.impl.PcmBrandServiceImpl#pushShopBrandToSearch(),return:" + resultList.toString());
+        return resultList;
+    }
+
+    /**
      * 根据sid查询
      *
      * @param para
@@ -934,6 +961,7 @@ public class PcmBrandServiceImpl implements IPcmBrandService {
      * @Create In 2015-8-26 By wangxuan
      */
     @Override
+
     public PcmBrand findBrandBySid(Map<String, Object> para) {
 
         logger.info("start findBrandBySid(),para:" + para.toString());

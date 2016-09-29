@@ -1356,6 +1356,34 @@
         </if>
     </select>
 
+    <!--门店品牌与门店号下发给搜索查询-->
+    <select id="pushShopBrandToSearch" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        pb.sid AS brandSid,
+        pb.brand_sid AS storeBrandCode,
+        pb.brand_name AS storeBrandName,
+        po.organization_code AS storeCode
+        FROM
+        pcm_organization po
+        INNER JOIN pcm_shop_brand_relation psb ON po.sid = psb.shop_sid
+        INNER JOIN pcm_brand pb ON pb.sid = psb.brand_sid
+        AND pb.shop_type = po.store_type
+        WHERE
+        pb.status = 0
+        AND po.organization_status = 0
+        AND po.organization_type = 3
+        AND pb.brand_type = 1
+        <if test="sid != null">
+            AND pb.sid = #{sid}
+        </if>
+        <if test="storeCode != null">
+            AND po.organization_code = #{storeCode}
+        </if>
+        <if test="storeBrandCode != null">
+            AND pb.brand_sid = #{storeBrandCode}
+        </if>
+    </select>
+
     <!-- 搜索线上下发品牌信息 -->
     <select id="pushSearchOnlineBrandBySid" parameterType="java.util.Map"
             resultType="java.util.Map">

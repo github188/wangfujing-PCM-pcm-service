@@ -151,6 +151,14 @@ public interface IPcmBrandService {
 
 
     /**
+     * 门店品牌与门店号下发给搜索查询
+     *
+     * @param paramMap
+     * @return
+     */
+    List<Map<String, Object>> pushShopBrandToSearch(Map<String, Object> paramMap);
+
+    /**
      * 根据sid查询
      *
      * @param para
