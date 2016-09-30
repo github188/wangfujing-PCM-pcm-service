@@ -166,6 +166,9 @@ public class PcmShopBrandRelationServiceImpl implements IPcmShopBrandRelationSer
 
             resultMap.put("sid", relationUploadList.get(0).getBrandSid());
 
+        } else {
+            throw new BleException(ErrorCode.BRAND_SHOP_RELATION_EXISTENCE.getErrorCode(),
+                    "存在品牌和门店的门店类型一样的重复数据！");
         }
 
         resultMap.put("result", flag);
