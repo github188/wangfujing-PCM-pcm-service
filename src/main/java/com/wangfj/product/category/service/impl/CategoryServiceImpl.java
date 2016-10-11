@@ -88,7 +88,6 @@ public class CategoryServiceImpl implements ICategoryService {
 	private IPcmRedisService redisService;
 	@Autowired
 	private RedisUtil redisUtil;
-	
 
 	/*
 	 * (non-Javadoc)
@@ -170,7 +169,7 @@ public class CategoryServiceImpl implements ICategoryService {
 		pcmcate.setIsSelfBuilt(Constants.PUBLIC_1);// 默认设为自建
 		HashMap<String, Object> paramMap = new HashMap<String, Object>();
 		HashMap<String, Object> paramMapcate = new HashMap<String, Object>();
-//		Date curren = new Date();
+		// Date curren = new Date();
 		String message = "";
 		int result = 0;
 		// 首先在系统中查询需新增工业分类的上级分类，再进行本级工业分类的新增。若未查询到本级分类的上级分类，应先对上级分类依次新增
@@ -381,12 +380,12 @@ public class CategoryServiceImpl implements ICategoryService {
 						uppcm.setIsParent(Constants.PUBLIC_1);
 						uppcm.setIsLeaf(Constants.N);
 						cateMapper.updateByPrimaryKey(uppcm);
-//						RedisVo vo2 = new RedisVo();
-//						vo2.setKey(uppcm.getParentSid());
-//						vo2.setField(DomainName.selectCateGory);
-//						vo2.setType(CacheUtils.HDEL);
-//						CacheUtils.setRedisData(vo2);
-						deleteCateCache(uppcm.getSid()+"");
+						// RedisVo vo2 = new RedisVo();
+						// vo2.setKey(uppcm.getParentSid());
+						// vo2.setField(DomainName.selectCateGory);
+						// vo2.setType(CacheUtils.HDEL);
+						// CacheUtils.setRedisData(vo2);
+						deleteCateCache(uppcm.getSid() + "");
 					}
 					// 生成编码
 					// 如果传入的是管理分类增，编码不自动生成
@@ -420,11 +419,11 @@ public class CategoryServiceImpl implements ICategoryService {
 					logger.info("add success");
 					message = "添加成功";
 					// 缓存删除
-//					RedisVo vo2 = new RedisVo();
-//					vo2.setKey(pcmcate.getParentSid());
-//					vo2.setField(DomainName.selectCateGory);
-//					vo2.setType(CacheUtils.HDEL);
-//					CacheUtils.setRedisData(vo2);
+					// RedisVo vo2 = new RedisVo();
+					// vo2.setKey(pcmcate.getParentSid());
+					// vo2.setField(DomainName.selectCateGory);
+					// vo2.setType(CacheUtils.HDEL);
+					// CacheUtils.setRedisData(vo2);
 					deleteCateCache(uppcm.getParentSid());
 					return message;
 				} else {
@@ -575,11 +574,11 @@ public class CategoryServiceImpl implements ICategoryService {
 					logger.info("add success");
 					message = "添加成功";
 					// 缓存删除
-//					RedisVo vo2 = new RedisVo();
-//					vo2.setKey("0");
-//					vo2.setField(DomainName.selectCateGory);
-//					vo2.setType(CacheUtils.HDEL);
-//					CacheUtils.setRedisData(vo2);
+					// RedisVo vo2 = new RedisVo();
+					// vo2.setKey("0");
+					// vo2.setField(DomainName.selectCateGory);
+					// vo2.setType(CacheUtils.HDEL);
+					// CacheUtils.setRedisData(vo2);
 					deleteCateCache("0");
 					return message;
 				} else {
@@ -742,28 +741,28 @@ public class CategoryServiceImpl implements ICategoryService {
 			}
 			logger.info("update success");
 			message = "修改成功";
-//			RedisVo vo2 = new RedisVo();
+			// RedisVo vo2 = new RedisVo();
 			if (StringUtils.isNotBlank(pcmcate.getParentSid())) {
-//				vo2.setKey(pcmcate.getParentSid());
+				// vo2.setKey(pcmcate.getParentSid());
 				deleteCateCache(pcmcate.getParentSid());
 			} else {
-//				vo2.setKey("0");
+				// vo2.setKey("0");
 				deleteCateCache("0");
 			}
-//			vo2.setField(DomainName.selectCateGory);
-//			vo2.setType(CacheUtils.HDEL);
-//			CacheUtils.setRedisData(vo2);
-//			RedisVo vo = new RedisVo();
+			// vo2.setField(DomainName.selectCateGory);
+			// vo2.setType(CacheUtils.HDEL);
+			// CacheUtils.setRedisData(vo2);
+			// RedisVo vo = new RedisVo();
 			if (StringUtils.isNotBlank(cate1.getParentSid())) {
-//				vo.setKey(cate1.getParentSid());
+				// vo.setKey(cate1.getParentSid());
 				deleteCateCache(cate1.getParentSid());
 			} else {
-//				vo.setKey("0");
+				// vo.setKey("0");
 				deleteCateCache("0");
 			}
-//			vo.setField(DomainName.selectCateGory);
-//			vo.setType(CacheUtils.HDEL);
-//			CacheUtils.setRedisData(vo);
+			// vo.setField(DomainName.selectCateGory);
+			// vo.setType(CacheUtils.HDEL);
+			// CacheUtils.setRedisData(vo);
 			return message;
 		} else if (Constants.D.equals(cateDto.getActionCode())) {
 			PcmCategory cate1 = null;
@@ -780,17 +779,17 @@ public class CategoryServiceImpl implements ICategoryService {
 				pcmcate.setIsDisplay(0);
 			}
 			result = cateMapper.updateByPrimaryKeySelective(pcmcate);
-//			RedisVo vo = new RedisVo();
+			// RedisVo vo = new RedisVo();
 			if (StringUtils.isNotBlank(cate1.getParentSid())) {
-//				vo.setKey(cate1.getParentSid());
+				// vo.setKey(cate1.getParentSid());
 				deleteCateCache(cate1.getParentSid());
 			} else {
-//				vo.setKey("0");
+				// vo.setKey("0");
 				deleteCateCache("0");
 			}
-//			vo.setField(DomainName.selectCateGory);
-//			vo.setType(CacheUtils.HDEL);
-//			CacheUtils.setRedisData(vo);
+			// vo.setField(DomainName.selectCateGory);
+			// vo.setType(CacheUtils.HDEL);
+			// CacheUtils.setRedisData(vo);
 			if (result == Constants.PUBLIC_0) {
 				logger.error("修改状态失败");
 				message = "修改失败";
@@ -814,7 +813,7 @@ public class CategoryServiceImpl implements ICategoryService {
 		pcmcate.setIsSelfBuilt(Constants.PUBLIC_1);// 默认设为自建
 		HashMap<String, Object> paramMap = new HashMap<String, Object>();
 		HashMap<String, Object> paramMapcate = new HashMap<String, Object>();
-//		Date curren = new Date();
+		// Date curren = new Date();
 		String message = "";
 		int result = 0;
 		// 首先在系统中查询需新增工业分类的上级分类，再进行本级工业分类的新增。若未查询到本级分类的上级分类，应先对上级分类依次新增
@@ -1012,11 +1011,11 @@ public class CategoryServiceImpl implements ICategoryService {
 						uppcm.setIsParent(Constants.PUBLIC_1);
 						uppcm.setIsLeaf(Constants.N);
 						cateMapper.updateByPrimaryKey(uppcm);
-//						RedisVo vo2 = new RedisVo();
-//						vo2.setKey(uppcm.getParentSid());
-//						vo2.setField(DomainName.selectCateGory);
-//						vo2.setType(CacheUtils.HDEL);
-//						CacheUtils.setRedisData(vo2);
+						// RedisVo vo2 = new RedisVo();
+						// vo2.setKey(uppcm.getParentSid());
+						// vo2.setField(DomainName.selectCateGory);
+						// vo2.setType(CacheUtils.HDEL);
+						// CacheUtils.setRedisData(vo2);
 						deleteCateCache(uppcm.getParentSid());
 					}
 					// 生成编码
@@ -1060,22 +1059,22 @@ public class CategoryServiceImpl implements ICategoryService {
 						paramMap1.put("parentSid", pcmcate.getSid());
 						paramMap1.put("list", cateList);
 						cateMapper.updateByListSelective(paramMap1);
-//						RedisVo vo = new RedisVo();
-//						vo.setKey(pcmcate.getSid() + "");
-//						vo.setField(DomainName.selectCateGory);
-//						vo.setType(CacheUtils.HDEL);
-//						CacheUtils.setRedisData(vo);
+						// RedisVo vo = new RedisVo();
+						// vo.setKey(pcmcate.getSid() + "");
+						// vo.setField(DomainName.selectCateGory);
+						// vo.setType(CacheUtils.HDEL);
+						// CacheUtils.setRedisData(vo);
 						deleteCateCache(pcmcate.getSid() + "");
 					}
 
 					logger.info("add success");
 					message = "添加成功";
 					// 缓存删除
-//					RedisVo vo2 = new RedisVo();
-//					vo2.setKey(pcmcate.getParentSid());
-//					vo2.setField(DomainName.selectCateGory);
-//					vo2.setType(CacheUtils.HDEL);
-//					CacheUtils.setRedisData(vo2);
+					// RedisVo vo2 = new RedisVo();
+					// vo2.setKey(pcmcate.getParentSid());
+					// vo2.setField(DomainName.selectCateGory);
+					// vo2.setType(CacheUtils.HDEL);
+					// CacheUtils.setRedisData(vo2);
 					deleteCateCache(pcmcate.getParentSid());
 					return message;
 				} else {
@@ -1214,11 +1213,11 @@ public class CategoryServiceImpl implements ICategoryService {
 					logger.info("add success");
 					message = "添加成功";
 					// 缓存删除
-//					RedisVo vo2 = new RedisVo();
-//					vo2.setKey("0");
-//					vo2.setField(DomainName.selectCateGory);
-//					vo2.setType(CacheUtils.HDEL);
-//					CacheUtils.setRedisData(vo2);
+					// RedisVo vo2 = new RedisVo();
+					// vo2.setKey("0");
+					// vo2.setField(DomainName.selectCateGory);
+					// vo2.setType(CacheUtils.HDEL);
+					// CacheUtils.setRedisData(vo2);
 					deleteCateCache("0");
 					return message;
 				} else {
@@ -1250,25 +1249,25 @@ public class CategoryServiceImpl implements ICategoryService {
 				paramMap1.put("parentSid", cate1.getShopSid() + cate1.getCategorySid());
 				paramMap1.put("list", cateList);
 				cateMapper.updateByListSelective(paramMap1);
-//				RedisVo vo = new RedisVo();
-//				vo.setKey(cate1.getSid() + "");
-//				vo.setField(DomainName.selectCateGory);
-//				vo.setType(CacheUtils.HDEL);
-//				CacheUtils.setRedisData(vo);
+				// RedisVo vo = new RedisVo();
+				// vo.setKey(cate1.getSid() + "");
+				// vo.setField(DomainName.selectCateGory);
+				// vo.setType(CacheUtils.HDEL);
+				// CacheUtils.setRedisData(vo);
 				deleteCateCache(cate1.getSid() + "");
 			}
 
-//			RedisVo vo = new RedisVo();
+			// RedisVo vo = new RedisVo();
 			if (StringUtils.isNotBlank(cate1.getParentSid())) {
-//				vo.setKey(cate1.getParentSid());
+				// vo.setKey(cate1.getParentSid());
 				deleteCateCache(cate1.getParentSid());
 			} else {
-//				vo.setKey("0");
+				// vo.setKey("0");
 				deleteCateCache("0");
 			}
-//			vo.setField(DomainName.selectCateGory);
-//			vo.setType(CacheUtils.HDEL);
-//			CacheUtils.setRedisData(vo);
+			// vo.setField(DomainName.selectCateGory);
+			// vo.setType(CacheUtils.HDEL);
+			// CacheUtils.setRedisData(vo);
 			if (result == Constants.PUBLIC_0) {
 				logger.error("修改状态失败");
 				message = "修改失败";
@@ -1295,13 +1294,13 @@ public class CategoryServiceImpl implements ICategoryService {
 		String message = "";
 		int result = 0;
 		// 首先在系统中查询需新增工业分类的上级分类，再进行本级工业分类的新增。若未查询到本级分类的上级分类，应先对上级分类依次新增
-		
+
 		paramMap.put("categoryCode", cateDto.getCategoryCode());
 		paramMap.put("isDisplay", 1);
 		paramMap.put("shopSid", cateDto.getShopSid());
 		List<PcmCategory> cateListes = cateMapper.selectListByParam(paramMap);
-		
-		if(cateListes == null || cateListes.size() == 0){
+
+		if (cateListes == null || cateListes.size() == 0) {
 			// 判断新增的分类是不是父级分类（既不是父节点，也没有对应的父类节点）
 			if (Constants.PUBLIC_0 == cateDto.getIsParent() || !cateDto.getParentSid().equals("0")) {
 				// 如果不是父级分类并且没有对应的上级分类
@@ -1317,7 +1316,7 @@ public class CategoryServiceImpl implements ICategoryService {
 				// 根据当前传入的parent_sid 判断它的上级状态是不是可用
 				if (cateDto.getCategoryType() == 1) {
 					cateType = cateMapper.selectByGLCategorySid(cateDto);
-				} 
+				}
 				// 如果状态=N时，状态不可用
 				if (cateType == null || Constants.N.equals(cateType.getStatus())) {
 					logger.error("上级分类状态为不可用");
@@ -1479,7 +1478,7 @@ public class CategoryServiceImpl implements ICategoryService {
 					PcmCategory uppcm = new PcmCategory();
 					if (cateDto.getCategoryType() == 1) {
 						uppcm = cateMapper.selectByGLCategorySid(cateDto);
-					} 
+					}
 					// PcmCategory uppcm = new PcmCategory();
 					if (uppcm != null) {
 						// uppcm =
@@ -1699,13 +1698,13 @@ public class CategoryServiceImpl implements ICategoryService {
 			pcmcate.setName(cateDto.getName().trim());
 			pcmcate.setIsMarket(cateDto.getIsMarket());
 			pcmcate.setCategorySid(cateDto.getCategorySid());
-			pcmcate.setParentSid(cate1.getSid()+"");
+			pcmcate.setParentSid(cate1.getSid() + "");
 			if (StringUtils.isNotBlank(cateDto.getCategoryCode())) {
 				pcmcate.setCategoryCode(cateDto.getCategoryCode());// 手工录入编码
 			}
-			
+
 			PcmCategory cate = cateListes.get(0);
-			
+
 			pcmcate.setSid(cate.getSid());
 			result = cateMapper.updateByPrimaryKeySelective(pcmcate);
 			paramMap.clear();
@@ -1721,16 +1720,16 @@ public class CategoryServiceImpl implements ICategoryService {
 			}
 			logger.info("update success");
 			message = "修改成功";
-			//删除缓存
+			// 删除缓存
 			deleteCateCache(cate.getParentSid());
-			if(!pcmcate.getParentSid().equals(cate.getParentSid()) ){
+			if (!pcmcate.getParentSid().equals(cate.getParentSid())) {
 				deleteCateCache(pcmcate.getParentSid());
 			}
 			return message;
 		}
 		return message;
 	}
-	
+
 	/**
 	 * 返回同一父类下的子类最大的序列号
 	 *
@@ -1841,7 +1840,7 @@ public class CategoryServiceImpl implements ICategoryService {
 		if (i == 1) {
 			record.setRootSid(record.getSid());
 			record.setCategorySid(record.getCategoryCode());
-//			record.setCategoryCode(record.getSid().toString());
+			// record.setCategoryCode(record.getSid().toString());
 			cateMapper.updateByPrimaryKeySelective(record);
 			return record;
 		}
@@ -2070,7 +2069,7 @@ public class CategoryServiceImpl implements ICategoryService {
 					return map;
 				}
 				// }
-//				Map<String, Object> paramMap = new HashMap<String, Object>();
+				// Map<String, Object> paramMap = new HashMap<String, Object>();
 				// 拖拽后修改当前品类的信息
 				PcmCategory upcate = new PcmCategory();
 				// paramMap.put("parentSid", parentSid);
@@ -2127,17 +2126,17 @@ public class CategoryServiceImpl implements ICategoryService {
 					publishList.add(parent);
 				}
 				// 缓存
-//				RedisVo vo = new RedisVo();
-//				vo.setKey(category.getParentSid());
-//				vo.setField(DomainName.selectCateGory);
-//				vo.setType(CacheUtils.HDEL);
-//				CacheUtils.setRedisData(vo);
+				// RedisVo vo = new RedisVo();
+				// vo.setKey(category.getParentSid());
+				// vo.setField(DomainName.selectCateGory);
+				// vo.setType(CacheUtils.HDEL);
+				// CacheUtils.setRedisData(vo);
 				deleteCateCache(category.getParentSid());
-//				RedisVo vo2 = new RedisVo();
-//				vo2.setKey(upcate.getParentSid());
-//				vo2.setField(DomainName.selectCateGory);
-//				vo2.setType(CacheUtils.HDEL);
-//				CacheUtils.setRedisData(vo2);
+				// RedisVo vo2 = new RedisVo();
+				// vo2.setKey(upcate.getParentSid());
+				// vo2.setField(DomainName.selectCateGory);
+				// vo2.setType(CacheUtils.HDEL);
+				// CacheUtils.setRedisData(vo2);
 				deleteCateCache(upcate.getParentSid());
 			} else {
 				if (targetCategory.getParentSid().equals(0)) {
@@ -2231,17 +2230,17 @@ public class CategoryServiceImpl implements ICategoryService {
 					publishList.add(parent);
 				}
 				// 缓存
-//				RedisVo vo = new RedisVo();
-//				vo.setKey(category.getParentSid());
-//				vo.setField(DomainName.selectCateGory);
-//				vo.setType(CacheUtils.HDEL);
-//				CacheUtils.setRedisData(vo);
+				// RedisVo vo = new RedisVo();
+				// vo.setKey(category.getParentSid());
+				// vo.setField(DomainName.selectCateGory);
+				// vo.setType(CacheUtils.HDEL);
+				// CacheUtils.setRedisData(vo);
 				deleteCateCache(category.getParentSid());
-//				RedisVo vo2 = new RedisVo();
-//				vo2.setKey(upcate.getParentSid());
-//				vo2.setField(DomainName.selectCateGory);
-//				vo2.setType(CacheUtils.HDEL);
-//				CacheUtils.setRedisData(vo2);
+				// RedisVo vo2 = new RedisVo();
+				// vo2.setKey(upcate.getParentSid());
+				// vo2.setField(DomainName.selectCateGory);
+				// vo2.setType(CacheUtils.HDEL);
+				// CacheUtils.setRedisData(vo2);
 				deleteCateCache(upcate.getParentSid());
 			}
 		} else if (isParent.equals("true")) {
@@ -2316,17 +2315,17 @@ public class CategoryServiceImpl implements ICategoryService {
 				publishList.add(parent);
 			}
 			// 缓存
-//			RedisVo vo = new RedisVo();
-//			vo.setKey(category.getParentSid());
-//			vo.setField(DomainName.selectCateGory);
-//			vo.setType(CacheUtils.HDEL);
-//			CacheUtils.setRedisData(vo);
+			// RedisVo vo = new RedisVo();
+			// vo.setKey(category.getParentSid());
+			// vo.setField(DomainName.selectCateGory);
+			// vo.setType(CacheUtils.HDEL);
+			// CacheUtils.setRedisData(vo);
 			deleteCateCache(category.getParentSid());
-//			RedisVo vo2 = new RedisVo();
-//			vo2.setKey(catecount.getParentSid());
-//			vo2.setField(DomainName.selectCateGory);
-//			vo2.setType(CacheUtils.HDEL);
-//			CacheUtils.setRedisData(vo2);
+			// RedisVo vo2 = new RedisVo();
+			// vo2.setKey(catecount.getParentSid());
+			// vo2.setField(DomainName.selectCateGory);
+			// vo2.setType(CacheUtils.HDEL);
+			// CacheUtils.setRedisData(vo2);
 			deleteCateCache(catecount.getParentSid());
 		} else {
 			// 非跨级拖拽
@@ -2354,11 +2353,11 @@ public class CategoryServiceImpl implements ICategoryService {
 			}
 			publishList.addAll(listcate);// 下发LIST
 			// 缓存
-//			RedisVo vo = new RedisVo();
-//			vo.setKey(parentSid);
-//			vo.setField(DomainName.selectCateGory);
-//			vo.setType(CacheUtils.HDEL);
-//			CacheUtils.setRedisData(vo);
+			// RedisVo vo = new RedisVo();
+			// vo.setKey(parentSid);
+			// vo.setField(DomainName.selectCateGory);
+			// vo.setType(CacheUtils.HDEL);
+			// CacheUtils.setRedisData(vo);
 			deleteCateCache(parentSid);
 		}
 
@@ -2531,42 +2530,43 @@ public class CategoryServiceImpl implements ICategoryService {
 		logger.info("end findAllParentCategoryByParam(),return:" + childList.toString());
 		return childList;
 	}
-	
+
 	@Override
-	public void deleteCateCache(String key){
-		boolean b = redisUtil.del(DomainName.selectCateGory+key);
-		if(!b){
+	public void deleteCateCache(String key) {
+		boolean b = redisUtil.del(DomainName.selectCateGory + key);
+		if (!b) {
 			PcmCategory cate = cateMapper.get(Long.valueOf(key));
-//			String id = cate.getSid().toString();
+			// String id = cate.getSid().toString();
 			// 查询一级节点
 			List<PcmCategory> list = null;
 			if (cate == null || "".equals(cate)) {
-				list = this.categoryService.getByParentSidAndChannelSid("0", null,
-						null, null);
+				list = this.categoryService.getByParentSidAndChannelSid("0", null, null, null);
 			} else {
-//				PcmCategory s = this.categoryService.get(Long.valueOf(id));
+				// PcmCategory s = this.categoryService.get(Long.valueOf(id));
 				list = this.categoryService.getByParentSidAndChannelSid(cate.getCategorySid(),
 						cate.getChannelSid(), null, null);
 			}
 			PcmRedis redis = new PcmRedis();
 			redis.setRedisffield(DomainName.selectCateGory);
-			redis.setKeyname(DomainName.selectCateGory+key);
+			redis.setKeyname(DomainName.selectCateGory + key);
 			redis.setValue(JsonUtil.getJSONString(list));
-//			redis.setStatus(0);
+			// redis.setStatus(0);
 			redisService.savePcmRedis(redis);
 		}
 	}
 
 	/**
-	 * 根据管理分类编码获取子节点编码 
+	 * 根据管理分类编码获取子节点编码
 	 */
 	@Override
 	public List<Map<String, String>> getChildNodeCode(Map<String, Object> paraMap) {
-		List<Map<String,String>> resultList = cateMapper.getChildNodeCodeByParentCode(paraMap);
+		List<Map<String, String>> resultList = cateMapper.getChildNodeCodeByParentCode(paraMap);
 		return resultList;
 	}
+
 	/**
 	 * 根据专柜商品编码获取对应的展示分类属性属性值
+	 * 
 	 * @Methods Name getPropNameAndValueByShoprosid
 	 * @Create In 2016年6月7日 By wangc
 	 * @param paraMap
@@ -2574,29 +2574,27 @@ public class CategoryServiceImpl implements ICategoryService {
 	 */
 	@Override
 	public List<Map<String, String>> getPropNameAndValueByShoprosid(Map<String, Object> paraMap) {
-		List<Map<String,String>> resultList = new ArrayList<Map<String,String>>();
+		List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
 		resultList = cateMapper.getPropNameAndValueByShoprosid(paraMap);
 		return resultList;
 	}
-	
+
 	/**
-	 * zdl
-	 * 门店管理分类上传
+	 * zdl 门店管理分类上传
 	 */
 	@Override
-	public String uploadManagerCateFromErp(PcmAddCategoryDto cateDto){
+	public String uploadManagerCateFromErp(PcmAddCategoryDto cateDto) {
 		String message = "";
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		PcmCategory pcmNewCate = new PcmCategory();
-		
-		if(Constants.A.equals(cateDto.getActionCode())){
+
+		if (Constants.A.equals(cateDto.getActionCode())) {
 			// 如果不是父级分类并且没有对应的上级分类
 			if ("".equals(cateDto.getParentSid()) || null == cateDto.getParentSid()) {
 				logger.error("该工业分类没有对应的上级分类，需先添加上级分类");
 				message = "该工业分类没有对应的上级分类，需先添加上级分类";
 				throw new BleException(
-						ComErrorCodeConstants.ErrorCode.CATEGORY_SUPERIOR_NOT_EXIST
-								.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATEGORY_SUPERIOR_NOT_EXIST.getErrorCode(),
 						ComErrorCodeConstants.ErrorCode.CATEGORY_SUPERIOR_NOT_EXIST.getMemo());
 			}
 			// 根据当前传入的parent_sid 判断它的上级状态是不是可用
@@ -2619,8 +2617,7 @@ public class CategoryServiceImpl implements ICategoryService {
 				logger.error("分类编码重复");
 				message = "分类编码重复";
 				throw new BleException(
-						ComErrorCodeConstants.ErrorCode.CATEGORY_CATEGORYSID_HAVA
-								.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATEGORY_CATEGORYSID_HAVA.getErrorCode(),
 						ComErrorCodeConstants.ErrorCode.CATEGORY_CATEGORYSID_HAVA.getMemo());
 			}
 			// 如果状态可用并且不是父级节点但有对应的上级分类（即叶子节点），则需进行添加
@@ -2630,7 +2627,7 @@ public class CategoryServiceImpl implements ICategoryService {
 			paramMap.put("categoryType", cateDto.getCategoryType());
 			paramMap.put("parentSid", cateType.getSid());
 			Integer count = cateMapper.getCountByParam(paramMap);
-			if(count != 0){
+			if (count != 0) {
 				logger.info("该分类已经存在");
 				message = "该分类已经存在";
 				throw new BleException(
@@ -2638,13 +2635,13 @@ public class CategoryServiceImpl implements ICategoryService {
 						ComErrorCodeConstants.ErrorCode.CATEGORY_IS_HAVA.getMemo());
 			}
 			BeanUtils.copyProperties(cateDto, pcmNewCate);
-			pcmNewCate.setParentSid(cateType.getSid()+"");//设置父级id
+			pcmNewCate.setParentSid(cateType.getSid() + "");// 设置父级id
 			String cateName = cateDto.getName();
 			pcmNewCate.setName(cateName.trim());
 			// 管理分类是全渠道
 			pcmNewCate.setChannelSid((Long.parseLong(Constants.PUBLIC_0 + "")));
-			
-			if(Constants.Y.equals(cateDto.getIsLeaf())){
+
+			if (Constants.Y.equals(cateDto.getIsLeaf())) {
 				pcmNewCate.setIsParent(Constants.PUBLIC_0);
 				// 赋值到is_leaf字段
 				pcmNewCate.setIsLeaf(Constants.Y);
@@ -2653,19 +2650,19 @@ public class CategoryServiceImpl implements ICategoryService {
 				// 赋值到is_leaf字段
 				pcmNewCate.setIsLeaf(Constants.N);
 			}
-			//分类的根id
+			// 分类的根id
 			pcmNewCate.setRootSid(cateType.getRootSid());
 			// 获取同一父类和渠道的排序最大值
-			Integer sortorder = this.getMaxSortOrder(cateType.getSid()+"");
+			Integer sortorder = this.getMaxSortOrder(cateType.getSid() + "");
 			pcmNewCate.setSortOrder(sortorder + 1);
 
 			pcmNewCate.setIsDisplay(Constants.PUBLIC_1);// 默认为显示
 			pcmNewCate.setIsSelfBuilt(Constants.PUBLIC_1);
-			//添加分类
+			// 添加分类
 			Integer results = cateMapper.insertSelective(pcmNewCate);
-			
-			//如果添加的是非叶子节点，则查找是否是先删除的添加
-			if(Constants.N.equals(cateDto.getIsLeaf())){
+
+			// 如果添加的是非叶子节点，则查找是否是先删除的添加
+			if (Constants.N.equals(cateDto.getIsLeaf())) {
 				paramMap.clear();
 				paramMap.put("parent_sid", pcmNewCate.getShopSid() + pcmNewCate.getCategorySid());
 				paramMap.put("categoryType", pcmNewCate.getCategoryType());
@@ -2678,7 +2675,7 @@ public class CategoryServiceImpl implements ICategoryService {
 					deleteCateCache(pcmNewCate.getSid() + "");
 				}
 			}
-			
+
 			if (results.intValue() != Constants.PUBLIC_1) {
 				logger.error("添加失败");
 				message = "添加失败";
@@ -2689,13 +2686,13 @@ public class CategoryServiceImpl implements ICategoryService {
 			logger.info("add success");
 			message = Constants.ADDSUCCESS;
 			// 缓存删除
-			if("0".equals(cateType.getCategoryCode())){
+			if ("0".equals(cateType.getCategoryCode())) {
 				deleteCateCache("0");
 			} else {
-				deleteCateCache(cateType.getSid()+"");
+				deleteCateCache(cateType.getSid() + "");
 			}
 			return message;
-		} else if(Constants.D.equals(cateDto.getActionCode())){
+		} else if (Constants.D.equals(cateDto.getActionCode())) {
 			PcmCategory cate1 = null, pcmcate = new PcmCategory();
 			PcmCategory pcmCate = new PcmCategory();
 			pcmCate.setCategoryCode(cateDto.getCategoryCode());
@@ -2741,30 +2738,29 @@ public class CategoryServiceImpl implements ICategoryService {
 		}
 		return message;
 	}
-	
+
 	/**
-	 * zdl
-	 * SAP管理分类上传
+	 * zdl SAP管理分类上传
 	 */
 	@Override
-	public String uploadManagerCateFromSap(PcmAddCategoryDto cateDto){
+	public String uploadManagerCateFromSap(PcmAddCategoryDto cateDto) {
 		String message = "";
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		PcmCategory pcmNewCate = new PcmCategory();
-		
+
 		paramMap.put("categoryCode", cateDto.getCategoryCode());
 		paramMap.put("isDisplay", 1);
 		paramMap.put("shopSid", cateDto.getShopSid());
+		paramMap.put("status", "Y");
 		List<PcmCategory> cateListes = cateMapper.selectListByParam(paramMap);
-		
-		if(cateListes == null || cateListes.size() == 0){
+
+		if (cateListes == null || cateListes.size() == 0) {
 			// 如果不是父级分类并且没有对应的上级分类
 			if ("".equals(cateDto.getParentSid()) || null == cateDto.getParentSid()) {
 				logger.error("该工业分类没有对应的上级分类，需先添加上级分类");
 				message = "该工业分类没有对应的上级分类，需先添加上级分类";
 				throw new BleException(
-						ComErrorCodeConstants.ErrorCode.CATEGORY_SUPERIOR_NOT_EXIST
-								.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATEGORY_SUPERIOR_NOT_EXIST.getErrorCode(),
 						ComErrorCodeConstants.ErrorCode.CATEGORY_SUPERIOR_NOT_EXIST.getMemo());
 			}
 			// 根据当前传入的parent_sid 判断它的上级状态是不是可用
@@ -2783,13 +2779,13 @@ public class CategoryServiceImpl implements ICategoryService {
 			paramMap.put("isDisplay", 1);
 			paramMap.put("categoryType", cateDto.getCategoryType());
 			paramMap.put("shopSid", cateDto.getShopSid());
+			paramMap.put("status", "Y");
 			Integer count2 = cateMapper.getCountByParam(paramMap);
 			if (count2 > 0) {
 				logger.error("分类编码重复");
 				message = "分类编码重复";
 				throw new BleException(
-						ComErrorCodeConstants.ErrorCode.CATEGORY_CATEGORYSID_HAVA
-								.getErrorCode(),
+						ComErrorCodeConstants.ErrorCode.CATEGORY_CATEGORYSID_HAVA.getErrorCode(),
 						ComErrorCodeConstants.ErrorCode.CATEGORY_CATEGORYSID_HAVA.getMemo());
 			}
 			// 如果状态可用并且不是父级节点但有对应的上级分类（即叶子节点），则需进行添加
@@ -2798,22 +2794,23 @@ public class CategoryServiceImpl implements ICategoryService {
 			paramMap.put("isDisplay", 1);
 			paramMap.put("categoryType", cateDto.getCategoryType());
 			paramMap.put("parentSid", cateType.getSid());
+			paramMap.put("status", "Y");
 			Integer count = cateMapper.getCountByParam(paramMap);
-			if(count != 0){
-				logger.info("该分类已经存在");
+			if (count != 0) {
+				logger.info("该分类名称已经存在");
 				message = "该分类已经存在";
 				throw new BleException(
 						ComErrorCodeConstants.ErrorCode.CATEGORY_IS_HAVA.getErrorCode(),
 						ComErrorCodeConstants.ErrorCode.CATEGORY_IS_HAVA.getMemo());
 			}
 			BeanUtils.copyProperties(cateDto, pcmNewCate);
-			pcmNewCate.setParentSid(cateType.getSid()+"");//设置父级id
+			pcmNewCate.setParentSid(cateType.getSid() + "");// 设置父级id
 			String cateName = cateDto.getName();
 			pcmNewCate.setName(cateName.trim());
 			// 管理分类是全渠道
 			pcmNewCate.setChannelSid((Long.parseLong(Constants.PUBLIC_0 + "")));
-			
-			if(Constants.Y.equals(cateDto.getIsLeaf())){
+
+			if (Constants.Y.equals(cateDto.getIsLeaf())) {
 				pcmNewCate.setIsParent(Constants.PUBLIC_0);
 				// 赋值到is_leaf字段
 				pcmNewCate.setIsLeaf(Constants.Y);
@@ -2822,17 +2819,17 @@ public class CategoryServiceImpl implements ICategoryService {
 				// 赋值到is_leaf字段
 				pcmNewCate.setIsLeaf(Constants.N);
 			}
-			//分类的根id
+			// 分类的根id
 			pcmNewCate.setRootSid(cateType.getRootSid());
 			// 获取同一父类和渠道的排序最大值
-			Integer sortorder = this.getMaxSortOrder(cateType.getSid()+"");
+			Integer sortorder = this.getMaxSortOrder(cateType.getSid() + "");
 			pcmNewCate.setSortOrder(sortorder + 1);
 
 			pcmNewCate.setIsDisplay(Constants.PUBLIC_1);// 默认为显示
 			pcmNewCate.setIsSelfBuilt(Constants.PUBLIC_1);
-			//添加分类
+			// 添加分类
 			Integer results = cateMapper.insertSelective(pcmNewCate);
-			
+
 			if (results.intValue() != Constants.PUBLIC_1) {
 				logger.error("添加失败");
 				message = "添加失败";
@@ -2843,16 +2840,16 @@ public class CategoryServiceImpl implements ICategoryService {
 			logger.info("add success");
 			message = Constants.ADDSUCCESS;
 			// 缓存删除
-			if("0".equals(cateType.getCategoryCode())){
+			if ("0".equals(cateType.getCategoryCode())) {
 				deleteCateCache("0");
 			} else {
-				deleteCateCache(cateType.getSid()+"");
+				deleteCateCache(cateType.getSid() + "");
 			}
 			return message;
 		} else {
-			PcmCategory cate = cateListes.get(0);//查出修改节点
-			
-			if(!cateDto.getName().equals(cate.getName())){
+			PcmCategory cate = cateListes.get(0);// 查出修改节点
+
+			if (!cateDto.getName().equals(cate.getName())) {
 				// 查出要修改节点的上级
 				PcmCategory cate1 = cateMapper.selectByGLCategorySid(cateDto);
 				if (cate1 == null || Constants.N.equals(cate1.getStatus())) {
@@ -2860,14 +2857,14 @@ public class CategoryServiceImpl implements ICategoryService {
 							ComErrorCodeConstants.ErrorCode.CATEGORY_NO_STATUS.getErrorCode(),
 							ComErrorCodeConstants.ErrorCode.CATEGORY_NO_STATUS.getMemo());
 				}
-				
+
 				paramMap.clear();
 				paramMap.put("name", cateDto.getName());
 				paramMap.put("isDisplay", 1);
 				paramMap.put("categoryType", cateDto.getCategoryType());
 				paramMap.put("parentSid", cate1.getSid());
 				Integer count = cateMapper.getCountByParam(paramMap);
-				if(count != 0){
+				if (count != 0) {
 					logger.info("该分类名称已经存在，不能修改");
 					message = "该分类名称已经存在，不能修改";
 					throw new BleException(
@@ -2879,11 +2876,9 @@ public class CategoryServiceImpl implements ICategoryService {
 				pcmNewCate.setName(cateDto.getName().trim());
 				pcmNewCate.setIsMarket(cateDto.getIsMarket());
 				pcmNewCate.setCategorySid(cateDto.getCategorySid());
-				pcmNewCate.setParentSid(cate1.getSid()+"");
+				pcmNewCate.setParentSid(cate1.getSid() + "");
 				pcmNewCate.setCategoryCode(cateDto.getCategoryCode());
-				
-				
-				
+
 				pcmNewCate.setSid(cate.getSid());
 				Integer result = cateMapper.updateByPrimaryKeySelective(pcmNewCate);
 				paramMap.clear();
@@ -2899,9 +2894,9 @@ public class CategoryServiceImpl implements ICategoryService {
 				}
 				logger.info("update success");
 				message = Constants.UPDATESUCCESS;
-				//删除缓存
+				// 删除缓存
 				deleteCateCache(cate.getParentSid());
-				if(!pcmNewCate.getParentSid().equals(cate.getParentSid()) ){
+				if (!pcmNewCate.getParentSid().equals(cate.getParentSid())) {
 					deleteCateCache(pcmNewCate.getParentSid());
 				}
 			} else {
@@ -2911,9 +2906,9 @@ public class CategoryServiceImpl implements ICategoryService {
 			return message;
 		}
 	}
-	
+
 	@Override
-	public List<PcmCategory> getCategoryByParam(SelectCategoryParamDto pcmcatedto){
+	public List<PcmCategory> getCategoryByParam(SelectCategoryParamDto pcmcatedto) {
 		return cateMapper.selectListByParam(pcmcatedto);
 	}
 }
