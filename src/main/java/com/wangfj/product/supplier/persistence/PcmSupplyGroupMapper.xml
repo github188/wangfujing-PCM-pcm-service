@@ -1,0 +1,744 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangfj.product.supplier.persistence.PcmSupplyGroupMapper" >
+    <resultMap id="BaseResultMap" type="com.wangfj.product.supplier.domain.entity.PcmSupplyGroup" >
+        <id column="sid" property="sid" jdbcType="BIGINT" />
+        <result column="shop_sid" property="shopSid" jdbcType="VARCHAR" />
+        <result column="supply_name" property="supplyName" jdbcType="VARCHAR" />
+        <result column="supply_code" property="supplyCode" jdbcType="VARCHAR" />
+        <result column="business_pattern" property="businessPattern" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="VARCHAR" />
+        <result column="apart_order" property="apartOrder" jdbcType="INTEGER" />
+        <result column="postcode" property="postcode" jdbcType="VARCHAR" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="country" property="country" jdbcType="VARCHAR" />
+        <result column="zone" property="zone" jdbcType="VARCHAR" />
+        <result column="shop_region" property="shopRegion" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="fax" property="fax" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="last_opt_user" property="lastOptUser" jdbcType="VARCHAR" />
+        <result column="last_opt_date" property="lastOptDate" jdbcType="TIMESTAMP" />
+        <result column="supply_type" property="supplyType" jdbcType="INTEGER" />
+        <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+        <result column="street" property="street" jdbcType="VARCHAR" />
+        <result column="org_code" property="orgCode" jdbcType="VARCHAR" />
+        <result column="industry" property="industry" jdbcType="VARCHAR" />
+        <result column="biz_certificate_no" property="bizCertificateNo" jdbcType="VARCHAR" />
+        <result column="tax_type" property="taxType" jdbcType="VARCHAR" />
+        <result column="tax_numbe" property="taxNumbe" jdbcType="VARCHAR" />
+        <result column="bank" property="bank" jdbcType="VARCHAR" />
+        <result column="bank_no" property="bankNo" jdbcType="VARCHAR" />
+        <result column="registered_capital" property="registeredCapital" jdbcType="VARCHAR" />
+        <result column="enterprise_property" property="enterpriseProperty" jdbcType="VARCHAR" />
+        <result column="business_category" property="businessCategory" jdbcType="VARCHAR" />
+        <result column="legal_person" property="legalPerson" jdbcType="VARCHAR" />
+        <result column="legal_person_ic_code" property="legalPersonIcCode" jdbcType="VARCHAR" />
+        <result column="legal_person_contact" property="legalPersonContact" jdbcType="VARCHAR" />
+        <result column="agent" property="agent" jdbcType="VARCHAR" />
+        <result column="agent_ic_code" property="agentIcCode" jdbcType="VARCHAR" />
+        <result column="agent_contact" property="agentContact" jdbcType="VARCHAR" />
+        <result column="contact" property="contact" jdbcType="VARCHAR" />
+        <result column="contact_title" property="contactTitle" jdbcType="VARCHAR" />
+        <result column="contact_ic_code" property="contactIcCode" jdbcType="VARCHAR" />
+        <result column="contact_way" property="contactWay" jdbcType="VARCHAR" />
+        <result column="business_scope" property="businessScope" jdbcType="VARCHAR" />
+        <result column="key_supplier" property="keySupplier" jdbcType="INTEGER" />
+        <result column="tax_rate" property="taxRate" jdbcType="DECIMAL" />
+        <result column="in_out_city" property="inOutCity" jdbcType="VARCHAR" />
+        <result column="admission_date" property="admissionDate" jdbcType="VARCHAR" />
+        <result column="return_supply" property="returnSupply" jdbcType="INTEGER" />
+        <result column="join_site" property="joinSite" jdbcType="VARCHAR" />
+        <result column="dropship" property="dropship" jdbcType="INTEGER" />
+        <result column="erp_supplier_code" property="erpSupplierCode" jdbcType="VARCHAR" />
+        <result column="zly_flag" property="zlyFlag" jdbcType="VARCHAR" />
+        <result column="zzxxhc_flag" property="zzxxhcFlag" jdbcType="VARCHAR" />
+        <result column="taxpayer_certificate" property="taxpayerCertificate" jdbcType="VARCHAR" />
+        <result column="account_number" property="accountNumber" jdbcType="VARCHAR" />
+        <result column="field1" property="field1" jdbcType="VARCHAR" />
+        <result column="field2" property="field2" jdbcType="VARCHAR" />
+        <result column="field3" property="field3" jdbcType="VARCHAR" />
+        <result column="field4" property="field4" jdbcType="VARCHAR" />
+        <result column="field5" property="field5" jdbcType="VARCHAR" />
+        <result column="field6" property="field6" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        sid, shop_sid, supply_name, supply_code, business_pattern, status, apart_order, postcode,
+        city, country, zone, shop_region, address, phone, fax, email, last_opt_user, last_opt_date,
+        supply_type, short_name, street, org_code, industry, biz_certificate_no, tax_type,
+        tax_numbe, bank, bank_no, registered_capital, enterprise_property, business_category,
+        legal_person, legal_person_ic_code, legal_person_contact, agent, agent_ic_code, agent_contact,
+        contact, contact_title, contact_ic_code, contact_way, business_scope, key_supplier,
+        tax_rate, in_out_city, admission_date, return_supply, join_site, dropship, erp_supplier_code,
+        zly_flag, zzxxhc_flag, taxpayer_certificate, account_number, field1, field2, field3,
+        field4, field5, field6
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+        <include refid="Base_Column_List" />
+        from pcm_supply_group
+        where sid = #{sid,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from pcm_supply_group
+        where sid = #{sid,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.wangfj.product.supplier.domain.entity.PcmSupplyGroup" >
+        insert into pcm_supply_group (sid, shop_sid, supply_name,
+        supply_code, business_pattern, status,
+        apart_order, postcode, city,
+        country, zone, shop_region,
+        address, phone, fax,
+        email, last_opt_user, last_opt_date,
+        supply_type, short_name, street,
+        org_code, industry, biz_certificate_no,
+        tax_type, tax_numbe, bank,
+        bank_no, registered_capital, enterprise_property,
+        business_category, legal_person, legal_person_ic_code,
+        legal_person_contact, agent, agent_ic_code,
+        agent_contact, contact, contact_title,
+        contact_ic_code, contact_way, business_scope,
+        key_supplier, tax_rate, in_out_city,
+        admission_date, return_supply, join_site,
+        dropship, erp_supplier_code, zly_flag,
+        zzxxhc_flag, taxpayer_certificate, account_number,
+        field1, field2, field3,
+        field4, field5, field6
+        )
+        values (#{sid,jdbcType=BIGINT}, #{shopSid,jdbcType=VARCHAR}, #{supplyName,jdbcType=VARCHAR},
+        #{supplyCode,jdbcType=VARCHAR}, #{businessPattern,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR},
+        #{apartOrder,jdbcType=INTEGER}, #{postcode,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR},
+        #{country,jdbcType=VARCHAR}, #{zone,jdbcType=VARCHAR}, #{shopRegion,jdbcType=VARCHAR},
+        #{address,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{fax,jdbcType=VARCHAR},
+        #{email,jdbcType=VARCHAR}, #{lastOptUser,jdbcType=VARCHAR}, #{lastOptDate,jdbcType=TIMESTAMP},
+        #{supplyType,jdbcType=INTEGER}, #{shortName,jdbcType=VARCHAR}, #{street,jdbcType=VARCHAR},
+        #{orgCode,jdbcType=VARCHAR}, #{industry,jdbcType=VARCHAR}, #{bizCertificateNo,jdbcType=VARCHAR},
+        #{taxType,jdbcType=VARCHAR}, #{taxNumbe,jdbcType=VARCHAR}, #{bank,jdbcType=VARCHAR},
+        #{bankNo,jdbcType=VARCHAR}, #{registeredCapital,jdbcType=VARCHAR}, #{enterpriseProperty,jdbcType=VARCHAR},
+        #{businessCategory,jdbcType=VARCHAR}, #{legalPerson,jdbcType=VARCHAR}, #{legalPersonIcCode,jdbcType=VARCHAR},
+        #{legalPersonContact,jdbcType=VARCHAR}, #{agent,jdbcType=VARCHAR}, #{agentIcCode,jdbcType=VARCHAR},
+        #{agentContact,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, #{contactTitle,jdbcType=VARCHAR},
+        #{contactIcCode,jdbcType=VARCHAR}, #{contactWay,jdbcType=VARCHAR}, #{businessScope,jdbcType=VARCHAR},
+        #{keySupplier,jdbcType=INTEGER}, #{taxRate,jdbcType=DECIMAL}, #{inOutCity,jdbcType=VARCHAR},
+        #{admissionDate,jdbcType=VARCHAR}, #{returnSupply,jdbcType=INTEGER}, #{joinSite,jdbcType=VARCHAR},
+        #{dropship,jdbcType=INTEGER}, #{erpSupplierCode,jdbcType=VARCHAR}, #{zlyFlag,jdbcType=VARCHAR},
+        #{zzxxhcFlag,jdbcType=VARCHAR}, #{taxpayerCertificate,jdbcType=VARCHAR}, #{accountNumber,jdbcType=VARCHAR},
+        #{field1,jdbcType=VARCHAR}, #{field2,jdbcType=VARCHAR}, #{field3,jdbcType=VARCHAR},
+        #{field4,jdbcType=VARCHAR}, #{field5,jdbcType=VARCHAR}, #{field6,jdbcType=VARCHAR}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.wangfj.product.supplier.domain.entity.PcmSupplyGroup" >
+        insert into pcm_supply_group
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="sid != null" >
+                sid,
+            </if>
+            <if test="shopSid != null" >
+                shop_sid,
+            </if>
+            <if test="supplyName != null" >
+                supply_name,
+            </if>
+            <if test="supplyCode != null" >
+                supply_code,
+            </if>
+            <if test="businessPattern != null" >
+                business_pattern,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+            <if test="apartOrder != null" >
+                apart_order,
+            </if>
+            <if test="postcode != null" >
+                postcode,
+            </if>
+            <if test="city != null" >
+                city,
+            </if>
+            <if test="country != null" >
+                country,
+            </if>
+            <if test="zone != null" >
+                zone,
+            </if>
+            <if test="shopRegion != null" >
+                shop_region,
+            </if>
+            <if test="address != null" >
+                address,
+            </if>
+            <if test="phone != null" >
+                phone,
+            </if>
+            <if test="fax != null" >
+                fax,
+            </if>
+            <if test="email != null" >
+                email,
+            </if>
+            <if test="lastOptUser != null" >
+                last_opt_user,
+            </if>
+            <if test="lastOptDate != null" >
+                last_opt_date,
+            </if>
+            <if test="supplyType != null" >
+                supply_type,
+            </if>
+            <if test="shortName != null" >
+                short_name,
+            </if>
+            <if test="street != null" >
+                street,
+            </if>
+            <if test="orgCode != null" >
+                org_code,
+            </if>
+            <if test="industry != null" >
+                industry,
+            </if>
+            <if test="bizCertificateNo != null" >
+                biz_certificate_no,
+            </if>
+            <if test="taxType != null" >
+                tax_type,
+            </if>
+            <if test="taxNumbe != null" >
+                tax_numbe,
+            </if>
+            <if test="bank != null" >
+                bank,
+            </if>
+            <if test="bankNo != null" >
+                bank_no,
+            </if>
+            <if test="registeredCapital != null" >
+                registered_capital,
+            </if>
+            <if test="enterpriseProperty != null" >
+                enterprise_property,
+            </if>
+            <if test="businessCategory != null" >
+                business_category,
+            </if>
+            <if test="legalPerson != null" >
+                legal_person,
+            </if>
+            <if test="legalPersonIcCode != null" >
+                legal_person_ic_code,
+            </if>
+            <if test="legalPersonContact != null" >
+                legal_person_contact,
+            </if>
+            <if test="agent != null" >
+                agent,
+            </if>
+            <if test="agentIcCode != null" >
+                agent_ic_code,
+            </if>
+            <if test="agentContact != null" >
+                agent_contact,
+            </if>
+            <if test="contact != null" >
+                contact,
+            </if>
+            <if test="contactTitle != null" >
+                contact_title,
+            </if>
+            <if test="contactIcCode != null" >
+                contact_ic_code,
+            </if>
+            <if test="contactWay != null" >
+                contact_way,
+            </if>
+            <if test="businessScope != null" >
+                business_scope,
+            </if>
+            <if test="keySupplier != null" >
+                key_supplier,
+            </if>
+            <if test="taxRate != null" >
+                tax_rate,
+            </if>
+            <if test="inOutCity != null" >
+                in_out_city,
+            </if>
+            <if test="admissionDate != null" >
+                admission_date,
+            </if>
+            <if test="returnSupply != null" >
+                return_supply,
+            </if>
+            <if test="joinSite != null" >
+                join_site,
+            </if>
+            <if test="dropship != null" >
+                dropship,
+            </if>
+            <if test="erpSupplierCode != null" >
+                erp_supplier_code,
+            </if>
+            <if test="zlyFlag != null" >
+                zly_flag,
+            </if>
+            <if test="zzxxhcFlag != null" >
+                zzxxhc_flag,
+            </if>
+            <if test="taxpayerCertificate != null" >
+                taxpayer_certificate,
+            </if>
+            <if test="accountNumber != null" >
+                account_number,
+            </if>
+            <if test="field1 != null" >
+                field1,
+            </if>
+            <if test="field2 != null" >
+                field2,
+            </if>
+            <if test="field3 != null" >
+                field3,
+            </if>
+            <if test="field4 != null" >
+                field4,
+            </if>
+            <if test="field5 != null" >
+                field5,
+            </if>
+            <if test="field6 != null" >
+                field6,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="sid != null" >
+                #{sid,jdbcType=BIGINT},
+            </if>
+            <if test="shopSid != null" >
+                #{shopSid,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyName != null" >
+                #{supplyName,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyCode != null" >
+                #{supplyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="businessPattern != null" >
+                #{businessPattern,jdbcType=INTEGER},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="apartOrder != null" >
+                #{apartOrder,jdbcType=INTEGER},
+            </if>
+            <if test="postcode != null" >
+                #{postcode,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null" >
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="country != null" >
+                #{country,jdbcType=VARCHAR},
+            </if>
+            <if test="zone != null" >
+                #{zone,jdbcType=VARCHAR},
+            </if>
+            <if test="shopRegion != null" >
+                #{shopRegion,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null" >
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null" >
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="fax != null" >
+                #{fax,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null" >
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="lastOptUser != null" >
+                #{lastOptUser,jdbcType=VARCHAR},
+            </if>
+            <if test="lastOptDate != null" >
+                #{lastOptDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="supplyType != null" >
+                #{supplyType,jdbcType=INTEGER},
+            </if>
+            <if test="shortName != null" >
+                #{shortName,jdbcType=VARCHAR},
+            </if>
+            <if test="street != null" >
+                #{street,jdbcType=VARCHAR},
+            </if>
+            <if test="orgCode != null" >
+                #{orgCode,jdbcType=VARCHAR},
+            </if>
+            <if test="industry != null" >
+                #{industry,jdbcType=VARCHAR},
+            </if>
+            <if test="bizCertificateNo != null" >
+                #{bizCertificateNo,jdbcType=VARCHAR},
+            </if>
+            <if test="taxType != null" >
+                #{taxType,jdbcType=VARCHAR},
+            </if>
+            <if test="taxNumbe != null" >
+                #{taxNumbe,jdbcType=VARCHAR},
+            </if>
+            <if test="bank != null" >
+                #{bank,jdbcType=VARCHAR},
+            </if>
+            <if test="bankNo != null" >
+                #{bankNo,jdbcType=VARCHAR},
+            </if>
+            <if test="registeredCapital != null" >
+                #{registeredCapital,jdbcType=VARCHAR},
+            </if>
+            <if test="enterpriseProperty != null" >
+                #{enterpriseProperty,jdbcType=VARCHAR},
+            </if>
+            <if test="businessCategory != null" >
+                #{businessCategory,jdbcType=VARCHAR},
+            </if>
+            <if test="legalPerson != null" >
+                #{legalPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="legalPersonIcCode != null" >
+                #{legalPersonIcCode,jdbcType=VARCHAR},
+            </if>
+            <if test="legalPersonContact != null" >
+                #{legalPersonContact,jdbcType=VARCHAR},
+            </if>
+            <if test="agent != null" >
+                #{agent,jdbcType=VARCHAR},
+            </if>
+            <if test="agentIcCode != null" >
+                #{agentIcCode,jdbcType=VARCHAR},
+            </if>
+            <if test="agentContact != null" >
+                #{agentContact,jdbcType=VARCHAR},
+            </if>
+            <if test="contact != null" >
+                #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="contactTitle != null" >
+                #{contactTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="contactIcCode != null" >
+                #{contactIcCode,jdbcType=VARCHAR},
+            </if>
+            <if test="contactWay != null" >
+                #{contactWay,jdbcType=VARCHAR},
+            </if>
+            <if test="businessScope != null" >
+                #{businessScope,jdbcType=VARCHAR},
+            </if>
+            <if test="keySupplier != null" >
+                #{keySupplier,jdbcType=INTEGER},
+            </if>
+            <if test="taxRate != null" >
+                #{taxRate,jdbcType=DECIMAL},
+            </if>
+            <if test="inOutCity != null" >
+                #{inOutCity,jdbcType=VARCHAR},
+            </if>
+            <if test="admissionDate != null" >
+                #{admissionDate,jdbcType=VARCHAR},
+            </if>
+            <if test="returnSupply != null" >
+                #{returnSupply,jdbcType=INTEGER},
+            </if>
+            <if test="joinSite != null" >
+                #{joinSite,jdbcType=VARCHAR},
+            </if>
+            <if test="dropship != null" >
+                #{dropship,jdbcType=INTEGER},
+            </if>
+            <if test="erpSupplierCode != null" >
+                #{erpSupplierCode,jdbcType=VARCHAR},
+            </if>
+            <if test="zlyFlag != null" >
+                #{zlyFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="zzxxhcFlag != null" >
+                #{zzxxhcFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="taxpayerCertificate != null" >
+                #{taxpayerCertificate,jdbcType=VARCHAR},
+            </if>
+            <if test="accountNumber != null" >
+                #{accountNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="field1 != null" >
+                #{field1,jdbcType=VARCHAR},
+            </if>
+            <if test="field2 != null" >
+                #{field2,jdbcType=VARCHAR},
+            </if>
+            <if test="field3 != null" >
+                #{field3,jdbcType=VARCHAR},
+            </if>
+            <if test="field4 != null" >
+                #{field4,jdbcType=VARCHAR},
+            </if>
+            <if test="field5 != null" >
+                #{field5,jdbcType=VARCHAR},
+            </if>
+            <if test="field6 != null" >
+                #{field6,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.wangfj.product.supplier.domain.entity.PcmSupplyGroup" >
+        update pcm_supply_group
+        <set >
+            <if test="shopSid != null" >
+                shop_sid = #{shopSid,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyName != null" >
+                supply_name = #{supplyName,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyCode != null" >
+                supply_code = #{supplyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="businessPattern != null" >
+                business_pattern = #{businessPattern,jdbcType=INTEGER},
+            </if>
+            <if test="status != null" >
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="apartOrder != null" >
+                apart_order = #{apartOrder,jdbcType=INTEGER},
+            </if>
+            <if test="postcode != null" >
+                postcode = #{postcode,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null" >
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="country != null" >
+                country = #{country,jdbcType=VARCHAR},
+            </if>
+            <if test="zone != null" >
+                zone = #{zone,jdbcType=VARCHAR},
+            </if>
+            <if test="shopRegion != null" >
+                shop_region = #{shopRegion,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null" >
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null" >
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="fax != null" >
+                fax = #{fax,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null" >
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="lastOptUser != null" >
+                last_opt_user = #{lastOptUser,jdbcType=VARCHAR},
+            </if>
+            <if test="lastOptDate != null" >
+                last_opt_date = #{lastOptDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="supplyType != null" >
+                supply_type = #{supplyType,jdbcType=INTEGER},
+            </if>
+            <if test="shortName != null" >
+                short_name = #{shortName,jdbcType=VARCHAR},
+            </if>
+            <if test="street != null" >
+                street = #{street,jdbcType=VARCHAR},
+            </if>
+            <if test="orgCode != null" >
+                org_code = #{orgCode,jdbcType=VARCHAR},
+            </if>
+            <if test="industry != null" >
+                industry = #{industry,jdbcType=VARCHAR},
+            </if>
+            <if test="bizCertificateNo != null" >
+                biz_certificate_no = #{bizCertificateNo,jdbcType=VARCHAR},
+            </if>
+            <if test="taxType != null" >
+                tax_type = #{taxType,jdbcType=VARCHAR},
+            </if>
+            <if test="taxNumbe != null" >
+                tax_numbe = #{taxNumbe,jdbcType=VARCHAR},
+            </if>
+            <if test="bank != null" >
+                bank = #{bank,jdbcType=VARCHAR},
+            </if>
+            <if test="bankNo != null" >
+                bank_no = #{bankNo,jdbcType=VARCHAR},
+            </if>
+            <if test="registeredCapital != null" >
+                registered_capital = #{registeredCapital,jdbcType=VARCHAR},
+            </if>
+            <if test="enterpriseProperty != null" >
+                enterprise_property = #{enterpriseProperty,jdbcType=VARCHAR},
+            </if>
+            <if test="businessCategory != null" >
+                business_category = #{businessCategory,jdbcType=VARCHAR},
+            </if>
+            <if test="legalPerson != null" >
+                legal_person = #{legalPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="legalPersonIcCode != null" >
+                legal_person_ic_code = #{legalPersonIcCode,jdbcType=VARCHAR},
+            </if>
+            <if test="legalPersonContact != null" >
+                legal_person_contact = #{legalPersonContact,jdbcType=VARCHAR},
+            </if>
+            <if test="agent != null" >
+                agent = #{agent,jdbcType=VARCHAR},
+            </if>
+            <if test="agentIcCode != null" >
+                agent_ic_code = #{agentIcCode,jdbcType=VARCHAR},
+            </if>
+            <if test="agentContact != null" >
+                agent_contact = #{agentContact,jdbcType=VARCHAR},
+            </if>
+            <if test="contact != null" >
+                contact = #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="contactTitle != null" >
+                contact_title = #{contactTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="contactIcCode != null" >
+                contact_ic_code = #{contactIcCode,jdbcType=VARCHAR},
+            </if>
+            <if test="contactWay != null" >
+                contact_way = #{contactWay,jdbcType=VARCHAR},
+            </if>
+            <if test="businessScope != null" >
+                business_scope = #{businessScope,jdbcType=VARCHAR},
+            </if>
+            <if test="keySupplier != null" >
+                key_supplier = #{keySupplier,jdbcType=INTEGER},
+            </if>
+            <if test="taxRate != null" >
+                tax_rate = #{taxRate,jdbcType=DECIMAL},
+            </if>
+            <if test="inOutCity != null" >
+                in_out_city = #{inOutCity,jdbcType=VARCHAR},
+            </if>
+            <if test="admissionDate != null" >
+                admission_date = #{admissionDate,jdbcType=VARCHAR},
+            </if>
+            <if test="returnSupply != null" >
+                return_supply = #{returnSupply,jdbcType=INTEGER},
+            </if>
+            <if test="joinSite != null" >
+                join_site = #{joinSite,jdbcType=VARCHAR},
+            </if>
+            <if test="dropship != null" >
+                dropship = #{dropship,jdbcType=INTEGER},
+            </if>
+            <if test="erpSupplierCode != null" >
+                erp_supplier_code = #{erpSupplierCode,jdbcType=VARCHAR},
+            </if>
+            <if test="zlyFlag != null" >
+                zly_flag = #{zlyFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="zzxxhcFlag != null" >
+                zzxxhc_flag = #{zzxxhcFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="taxpayerCertificate != null" >
+                taxpayer_certificate = #{taxpayerCertificate,jdbcType=VARCHAR},
+            </if>
+            <if test="accountNumber != null" >
+                account_number = #{accountNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="field1 != null" >
+                field1 = #{field1,jdbcType=VARCHAR},
+            </if>
+            <if test="field2 != null" >
+                field2 = #{field2,jdbcType=VARCHAR},
+            </if>
+            <if test="field3 != null" >
+                field3 = #{field3,jdbcType=VARCHAR},
+            </if>
+            <if test="field4 != null" >
+                field4 = #{field4,jdbcType=VARCHAR},
+            </if>
+            <if test="field5 != null" >
+                field5 = #{field5,jdbcType=VARCHAR},
+            </if>
+            <if test="field6 != null" >
+                field6 = #{field6,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.wangfj.product.supplier.domain.entity.PcmSupplyGroup" >
+        update pcm_supply_group
+        set shop_sid = #{shopSid,jdbcType=VARCHAR},
+        supply_name = #{supplyName,jdbcType=VARCHAR},
+        supply_code = #{supplyCode,jdbcType=VARCHAR},
+        business_pattern = #{businessPattern,jdbcType=INTEGER},
+        status = #{status,jdbcType=VARCHAR},
+        apart_order = #{apartOrder,jdbcType=INTEGER},
+        postcode = #{postcode,jdbcType=VARCHAR},
+        city = #{city,jdbcType=VARCHAR},
+        country = #{country,jdbcType=VARCHAR},
+        zone = #{zone,jdbcType=VARCHAR},
+        shop_region = #{shopRegion,jdbcType=VARCHAR},
+        address = #{address,jdbcType=VARCHAR},
+        phone = #{phone,jdbcType=VARCHAR},
+        fax = #{fax,jdbcType=VARCHAR},
+        email = #{email,jdbcType=VARCHAR},
+        last_opt_user = #{lastOptUser,jdbcType=VARCHAR},
+        last_opt_date = #{lastOptDate,jdbcType=TIMESTAMP},
+        supply_type = #{supplyType,jdbcType=INTEGER},
+        short_name = #{shortName,jdbcType=VARCHAR},
+        street = #{street,jdbcType=VARCHAR},
+        org_code = #{orgCode,jdbcType=VARCHAR},
+        industry = #{industry,jdbcType=VARCHAR},
+        biz_certificate_no = #{bizCertificateNo,jdbcType=VARCHAR},
+        tax_type = #{taxType,jdbcType=VARCHAR},
+        tax_numbe = #{taxNumbe,jdbcType=VARCHAR},
+        bank = #{bank,jdbcType=VARCHAR},
+        bank_no = #{bankNo,jdbcType=VARCHAR},
+        registered_capital = #{registeredCapital,jdbcType=VARCHAR},
+        enterprise_property = #{enterpriseProperty,jdbcType=VARCHAR},
+        business_category = #{businessCategory,jdbcType=VARCHAR},
+        legal_person = #{legalPerson,jdbcType=VARCHAR},
+        legal_person_ic_code = #{legalPersonIcCode,jdbcType=VARCHAR},
+        legal_person_contact = #{legalPersonContact,jdbcType=VARCHAR},
+        agent = #{agent,jdbcType=VARCHAR},
+        agent_ic_code = #{agentIcCode,jdbcType=VARCHAR},
+        agent_contact = #{agentContact,jdbcType=VARCHAR},
+        contact = #{contact,jdbcType=VARCHAR},
+        contact_title = #{contactTitle,jdbcType=VARCHAR},
+        contact_ic_code = #{contactIcCode,jdbcType=VARCHAR},
+        contact_way = #{contactWay,jdbcType=VARCHAR},
+        business_scope = #{businessScope,jdbcType=VARCHAR},
+        key_supplier = #{keySupplier,jdbcType=INTEGER},
+        tax_rate = #{taxRate,jdbcType=DECIMAL},
+        in_out_city = #{inOutCity,jdbcType=VARCHAR},
+        admission_date = #{admissionDate,jdbcType=VARCHAR},
+        return_supply = #{returnSupply,jdbcType=INTEGER},
+        join_site = #{joinSite,jdbcType=VARCHAR},
+        dropship = #{dropship,jdbcType=INTEGER},
+        erp_supplier_code = #{erpSupplierCode,jdbcType=VARCHAR},
+        zly_flag = #{zlyFlag,jdbcType=VARCHAR},
+        zzxxhc_flag = #{zzxxhcFlag,jdbcType=VARCHAR},
+        taxpayer_certificate = #{taxpayerCertificate,jdbcType=VARCHAR},
+        account_number = #{accountNumber,jdbcType=VARCHAR},
+        field1 = #{field1,jdbcType=VARCHAR},
+        field2 = #{field2,jdbcType=VARCHAR},
+        field3 = #{field3,jdbcType=VARCHAR},
+        field4 = #{field4,jdbcType=VARCHAR},
+        field5 = #{field5,jdbcType=VARCHAR},
+        field6 = #{field6,jdbcType=VARCHAR}
+        where sid = #{sid,jdbcType=BIGINT}
+    </update>
+</mapper>
