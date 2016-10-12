@@ -603,4 +603,70 @@ public class PcmSupplyGroup {
     public void setField6(String field6) {
         this.field6 = field6;
     }
+
+    @Override
+    public String toString() {
+        return "PcmSupplyGroup{" +
+                "sid=" + sid +
+                ", shopSid='" + shopSid + '\'' +
+                ", supplyName='" + supplyName + '\'' +
+                ", supplyCode='" + supplyCode + '\'' +
+                ", businessPattern=" + businessPattern +
+                ", status='" + status + '\'' +
+                ", apartOrder=" + apartOrder +
+                ", postcode='" + postcode + '\'' +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", zone='" + zone + '\'' +
+                ", shopRegion='" + shopRegion + '\'' +
+                ", address='" + address + '\'' +
+                ", phone='" + phone + '\'' +
+                ", fax='" + fax + '\'' +
+                ", email='" + email + '\'' +
+                ", lastOptUser='" + lastOptUser + '\'' +
+                ", lastOptDate=" + lastOptDate +
+                ", supplyType=" + supplyType +
+                ", shortName='" + shortName + '\'' +
+                ", street='" + street + '\'' +
+                ", orgCode='" + orgCode + '\'' +
+                ", industry='" + industry + '\'' +
+                ", bizCertificateNo='" + bizCertificateNo + '\'' +
+                ", taxType='" + taxType + '\'' +
+                ", taxNumbe='" + taxNumbe + '\'' +
+                ", bank='" + bank + '\'' +
+                ", bankNo='" + bankNo + '\'' +
+                ", registeredCapital='" + registeredCapital + '\'' +
+                ", enterpriseProperty='" + enterpriseProperty + '\'' +
+                ", businessCategory='" + businessCategory + '\'' +
+                ", legalPerson='" + legalPerson + '\'' +
+                ", legalPersonIcCode='" + legalPersonIcCode + '\'' +
+                ", legalPersonContact='" + legalPersonContact + '\'' +
+                ", agent='" + agent + '\'' +
+                ", agentIcCode='" + agentIcCode + '\'' +
+                ", agentContact='" + agentContact + '\'' +
+                ", contact='" + contact + '\'' +
+                ", contactTitle='" + contactTitle + '\'' +
+                ", contactIcCode='" + contactIcCode + '\'' +
+                ", contactWay='" + contactWay + '\'' +
+                ", businessScope='" + businessScope + '\'' +
+                ", keySupplier=" + keySupplier +
+                ", taxRate=" + taxRate +
+                ", inOutCity='" + inOutCity + '\'' +
+                ", admissionDate='" + admissionDate + '\'' +
+                ", returnSupply=" + returnSupply +
+                ", joinSite='" + joinSite + '\'' +
+                ", dropship=" + dropship +
+                ", erpSupplierCode='" + erpSupplierCode + '\'' +
+                ", zlyFlag='" + zlyFlag + '\'' +
+                ", zzxxhcFlag='" + zzxxhcFlag + '\'' +
+                ", taxpayerCertificate='" + taxpayerCertificate + '\'' +
+                ", accountNumber='" + accountNumber + '\'' +
+                ", field1='" + field1 + '\'' +
+                ", field2='" + field2 + '\'' +
+                ", field3='" + field3 + '\'' +
+                ", field4='" + field4 + '\'' +
+                ", field5='" + field5 + '\'' +
+                ", field6='" + field6 + '\'' +
+                '}';
+    }
 }

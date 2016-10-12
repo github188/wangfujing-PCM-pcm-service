@@ -128,7 +128,7 @@
         #{field4,jdbcType=VARCHAR}, #{field5,jdbcType=VARCHAR}, #{field6,jdbcType=VARCHAR}
         )
     </insert>
-    <insert id="insertSelective" parameterType="com.wangfj.product.supplier.domain.entity.PcmSupplyGroup" >
+    <insert id="insertSelective" parameterType="com.wangfj.product.supplier.domain.entity.PcmSupplyGroup" useGeneratedKeys="true" keyProperty="sid">
         insert into pcm_supply_group
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="sid != null" >
@@ -741,4 +741,202 @@
         field6 = #{field6,jdbcType=VARCHAR}
         where sid = #{sid,jdbcType=BIGINT}
     </update>
+
+    <select id="selectListByParam" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List" />
+        from pcm_supply_group
+        <where>
+            <if test="sid!=null">
+                and sid = #{sid,jdbcType=BIGINT}
+            </if>
+            <if test="supplyName!=null">
+                and supply_name = #{supplyName,jdbcType=VARCHAR}
+            </if>
+            <if test="postcode!=null">
+                and postcode = #{postcode,jdbcType=VARCHAR}
+            </if>
+            <if test="city!=null">
+                and city=#{city,jdbcType=VARCHAR}
+            </if>
+            <if test="country!=null">
+                and country=#{country,jdbcType=VARCHAR}
+            </if>
+            <if test="zone!=null">
+                and zone=#{zone,jdbcType=VARCHAR}
+            </if>
+            <if test="shopRegion != null">
+                and shop_region=#{shopRegion,jdbcType=VARCHAR}
+            </if>
+            <if test="address != null">
+                and address=#{address,jdbcType=VARCHAR}
+            </if>
+            <if test="phone != null">
+                and phone={#phone,jdbcType=VARCHAR}
+            </if>
+            <if test="fax != null">
+                and fax=#{fax,jdbcType=VARCHAR}
+            </if>
+            <if test="email != null">
+                and email=#{email,jdbcType=VARCHAR}
+            </if>
+            <if test="lastOptUser !=null">
+                and last_opt_user=#{lastOptUser,jdbcType=VARCHAR}
+            </if>
+            <if test="lastOptDate != null">
+                and last_opt_date=#{lastOptDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="shopSid != null">
+                and shop_sid=#{shopSid,jdbcType=VARCHAR}
+            </if>
+            <if test="supplyCode != null">
+                and supply_code=#{supplyCode,jdbcType=VARCHAR}
+            </if>
+            <if test="supplyType != null">
+                and supply_type=#{supplyType,jdbcType=INTEGER}
+            </if>
+            <if test="status != null">
+                and status=#{status,jdbcType=VARCHAR}
+            </if>
+            <if test="shortName != null">
+                and short_name=#{shortName,jdbcType=VARCHAR}
+            </if>
+            <if test="businessPattern != null">
+                and business_pattern=#{businessPattern,jdbcType=INTEGER}
+            </if>
+            <if test="street != null">
+                and street=#{street,jdbcType=VARCHAR}
+            </if>
+            <if test="orgCode != null">
+                and org_code=#{orgCode,jdbcType=VARCHAR}
+            </if>
+            <if test="industry != null">
+                and industry=#{industry,jdbcType=VARCHAR}
+            </if>
+            <if test="bizCertificateNo != null">
+                and
+                biz_certificate_no=#{bizCertificateNo,jdbcType=VARCHAR}
+            </if>
+            <if test="taxType !=null">
+                and tax_type=#{taxType,jdbcType=VARCHAR}
+            </if>
+            <if test="taxNumbe != null">
+                and tax_numbe=#{taxNumbe,jdbcType=VARCHAR}
+            </if>
+            <if test="bank != null">
+                and bank=#{bank,jdbcType=VARCHAR}
+            </if>
+            <if test="bankNo != null">
+                and bank_no=#{bankNo,jdbcType=VARCHAR}
+            </if>
+            <if test="registeredCapital != null">
+                and
+                registered_capital=#{registeredCapital,jdbcType=VARCHAR}
+            </if>
+            <if test="enterpriseProperty != null">
+                and
+                enterprise_property=#{enterpriseProperty,jdbcType=VARCHAR}
+            </if>
+            <if test="businessCategory != null">
+                and
+                business_category=#{businessCategory,jdbcType=VARCHAR}
+            </if>
+            <if test="legalPerson != null">
+                and legal_person=#{legalPerson,jdbcType=VARCHAR}
+            </if>
+            <if test="legalPersonIcCode != null">
+                and
+                legal_person_ic_code=#{legalPersonIcCode,jdbcType=VARCHAR}
+            </if>
+            <if test="legalPersonContact != null">
+                and
+                legal_person_contact=#{legalPersonContact,jdbcType=VARCHAR}
+            </if>
+            <if test="agent != null">
+                and agent=#{agent,jdbcType=VARCHAR}
+            </if>
+            <if test="agentIcCode != null">
+                and agent_ic_code=#{agentIcCode,jdbcType=VARCHAR}
+            </if>
+            <if test="agentContact != null">
+                and agent_contact=#{agentContact,jdbcType=VARCHAR}
+            </if>
+            <if test="contact!=null">
+                and contact=#{contact,jdbcType=VARCHAR}
+            </if>
+            <if test="contactTitle != null">
+                and contact_title=#{contactTitle,jdbcType=VARCHAR}
+            </if>
+            <if test="contactIcCode != null">
+                and contact_ic_code=#{contactIcCode,jdbcType=VARCHAR}
+            </if>
+            <if test="contactWay != null">
+                and contact_way=#{contactWay,jdbcType=VARCHAR}
+            </if>
+            <if test="businessScope != null">
+                and business_scope=#{businessScope,jdbcType=VARCHAR}
+            </if>
+            <if test="keySupplier != null">
+                and key_supplier=#{keySupplier,jdbcType=INTEGER}
+            </if>
+            <if test="taxRate != null">
+                and tax_rate=#{taxRate,jdbcType=DECIMAL}
+            </if>
+            <if test="inOutCity != null">
+                and in_out_city=#{inOutCity,jdbcType=VARCHAR}
+            </if>
+            <if test="admissionDate != null">
+                and admission_date=#{admissionDate,jdbcType=VARCHAR}
+            </if>
+            <if test="returnSupply != null">
+                and return_supply=#{returnSupply,jdbcType=INTEGER}
+            </if>
+            <if test="joinSite != null">
+                and join_site=#{joinSite,jdbcType=VARCHAR}
+            </if>
+            <if test="apartOrder != null">
+                and apart_order=#{apartOrder,jdbcType=INTEGER}
+            </if>
+            <if test="dropship != null">
+                and dropship=#{dropship,jdbcType=INTEGER}
+            </if>
+            <if test="erpSupplierCode != null">
+                and erp_supplier_code=#{erpSupplierCode,jdbcType=VARCHAR}
+            </if>
+            <if test="zlyFlag != null">
+                and zly_flag = #{zlyFlag,jdbcType=VARCHAR}
+            </if>
+            <if test="zzxxhcFlag != null">
+                and zzxxhc_flag = #{zzxxhcFlag,jdbcType=VARCHAR}
+            </if>
+            <if test="taxpayerCertificate != null">
+                and taxpayer_certificate = #{taxpayerCertificate,jdbcType=VARCHAR}
+            </if>
+            <if test="accountNumber != null">
+                and account_number = #{accountNumber,jdbcType=VARCHAR}
+            </if>
+            <if test="field1 != null">
+                and field1 = #{field1,jdbcType=VARCHAR}
+            </if>
+            <if test="field2 != null">
+                and field2 = #{field2,jdbcType=VARCHAR}
+            </if>
+            <if test="field3 != null">
+                and field3 = #{field3,jdbcType=VARCHAR}
+            </if>
+            <if test="field4 != null">
+                and field4 = #{field4,jdbcType=VARCHAR}
+            </if>
+            <if test="field5 != null">
+                and field5 = #{field5,jdbcType=VARCHAR}
+            </if>
+            <if test="field6 != null">
+                and field6 = #{field6,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+
+
 </mapper>
