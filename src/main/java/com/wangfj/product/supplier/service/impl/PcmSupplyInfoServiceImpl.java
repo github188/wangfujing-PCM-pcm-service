@@ -138,7 +138,7 @@ public class PcmSupplyInfoServiceImpl implements IPcmSupplyInfoService {
     @Transactional
     public Map<String, Object> uploadSupplierFromEFutureERP(PcmSupplyInfo supplyInfo) {
 
-        logger.info("start uploadSupplierFromEBusiness(),param:" + supplyInfo.toString());
+        logger.info("start uploadSupplierFromEFutureERP(),param:" + supplyInfo.toString());
         Map<String, Object> resultMap = new HashMap<String, Object>();
         Integer result = Constants.PUBLIC_0;
 
@@ -172,7 +172,7 @@ public class PcmSupplyInfoServiceImpl implements IPcmSupplyInfoService {
         }
         resultMap.put("result", result);
 
-        logger.info("end uploadSupplierFromEBusiness(),return:" + resultMap.toString());
+        logger.info("end uploadSupplierFromEFutureERP(),return:" + resultMap.toString());
         return resultMap;
     }
 
