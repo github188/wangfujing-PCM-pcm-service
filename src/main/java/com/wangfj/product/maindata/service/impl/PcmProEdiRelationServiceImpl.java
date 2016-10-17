@@ -140,14 +140,13 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 											if (Constants.PCMSTOCK_ISPUSH_EDI.equals("1")) {
 												PcmStock entity1 = new PcmStock();
 												entity1.setShoppeProSid(ediList.get(0).getField1());
-												entity1.setStockTypeSid(
-														Constants.PCMSTOCK_TYPE_SALE);
+												entity1.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
 												entity1.setChannelSid("0");
 												List<PcmStock> stock1 = stockMapper
 														.selectListByParam(entity1);
 												if (stock1 != null && stock1.size() > 0) {
-													dto.setProNum(
-															stock1.get(0).getProSum().toString());
+													dto.setProNum(stock1.get(0).getProSum()
+															.toString());
 												}
 											} else {
 												dto.setProNum(stock.get(0).getProSum().toString());
@@ -218,11 +217,11 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 									}
 								}
 								if (errorMag == null) {
-									proEdi.setIsPayReducestock(
-											Integer.parseInt(ediProDto.getIsPayReduceStock()));
+									proEdi.setIsPayReducestock(Integer.parseInt(ediProDto
+											.getIsPayReduceStock()));
 									if (StringUtils.isNotBlank(ediProDto.getIsPresell())) {
-										proEdi.setIsPresell(
-												Integer.parseInt(ediProDto.getIsPresell()));
+										proEdi.setIsPresell(Integer.parseInt(ediProDto
+												.getIsPresell()));
 									}
 									SimpleDateFormat df = new SimpleDateFormat(
 											"yyyy-MM-dd HH:mm:ss");
@@ -244,6 +243,25 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 					}
 					if (FlagType.zookeeper_lock == 0) {
 						ZKlock.unlock();
+					}
+				} else if (ediProDto.getActionCode().equals(Constants.U)) {
+					PcmShoppeProductEdiRelation proEdi = new PcmShoppeProductEdiRelation();
+					proEdi.setChannelCode(ediProDto.getChannelCode());
+					proEdi.setShoppeProSid(ediProDto.getShoppeProCode());
+					proEdi.setChannelProSid(ediProDto.getEDIProCode());
+					proEdi.setIfdel(Constants.PUBLIC_1);
+					List<PcmShoppeProductEdiRelation> proEdiList = proEdiMapper
+							.selectListByParam(proEdi);
+					if (proEdiList != null && proEdiList.size() > 0) {
+						PcmShoppeProductEdiRelation proEdi_1 = new PcmShoppeProductEdiRelation();
+						proEdi_1.setSid(proEdiList.get(0).getSid());
+						proEdi_1.setIsPayReducestock(Integer.parseInt(ediProDto
+								.getIsPayReduceStock()));
+						int u = proEdiMapper.updateByPrimaryKeySelective(proEdi_1);
+						if (u == 0) {
+							dto.setStatus("0");// 数据库错误
+							errorMag = "update数据库错误";
+						}
 					}
 				} else if (ediProDto.getActionCode().equals(Constants.D)) {
 					if (ediProDto.getShoppeProCode().equals("")
@@ -322,8 +340,8 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 							result = null;
 							PcmExceptionLogDto pcmExceptionLogDto = new PcmExceptionLogDto();
 							pcmExceptionLogDto.setInterfaceName("pushstocktoedi");
-							pcmExceptionLogDto
-									.setExceptionType(StatusCode.EXCEPTION_STOCK.getStatus());
+							pcmExceptionLogDto.setExceptionType(StatusCode.EXCEPTION_STOCK
+									.getStatus());
 							pcmExceptionLogDto.setErrorMessage(e.getMessage());
 							pcmExceptionLogDto.setDataContent(JsonUtil.getJSONString(tempDto));
 							pcmExceptionLogDto.setUuid(UUID.randomUUID().toString());
@@ -371,8 +389,7 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 	}
 
 	@Override
-	public List<PcmEdiProductStockDto> selectEdiProStockInfoByChannelId(
-			QueryEdiProductStockDto dto) {
+	public List<PcmEdiProductStockDto> selectEdiProStockInfoByChannelId(QueryEdiProductStockDto dto) {
 		List<PcmEdiProductStockDto> resultList = new ArrayList<PcmEdiProductStockDto>();
 		List<PcmEdiProductStockDto> tempList = null;
 		QueryEdiProductStockDto query = null;
@@ -393,8 +410,8 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 							result = null;
 							PcmExceptionLogDto pcmExceptionLogDto = new PcmExceptionLogDto();
 							pcmExceptionLogDto.setInterfaceName("pushstocktoedi");
-							pcmExceptionLogDto
-									.setExceptionType(StatusCode.EXCEPTION_STOCK.getStatus());
+							pcmExceptionLogDto.setExceptionType(StatusCode.EXCEPTION_STOCK
+									.getStatus());
 							pcmExceptionLogDto.setErrorMessage(e.getMessage());
 							pcmExceptionLogDto.setDataContent(JsonUtil.getJSONString(tempDto));
 							pcmExceptionLogDto.setUuid(UUID.randomUUID().toString());
