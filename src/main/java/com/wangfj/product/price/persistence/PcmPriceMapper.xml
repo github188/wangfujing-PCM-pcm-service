@@ -1275,6 +1275,7 @@
 		promotion_price as promotionPrice,
 		DATE_FORMAT(promotion_begin_time,'%Y-%m-%d %H:%i:%S') AS
 		promotionBeginTime,
+        promotion_begin_time,
 		DATE_FORMAT(promotion_end_time,'%Y-%m-%d %H:%i:%S')
 		AS promotionEndTime,
 		unit as
