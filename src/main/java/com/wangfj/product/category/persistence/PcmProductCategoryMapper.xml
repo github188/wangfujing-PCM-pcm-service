@@ -118,35 +118,35 @@
 	</delete>
 	<delete id="deleteGYCateByRecord"
 		parameterType="com.wangfj.product.category.domain.entity.PcmProductCategory">
-		delete ppc from pcm_product_category ppc
-		join pcm_category cate on cate.sid=ppc.category_sid
-		and cate.category_type=0
+		delete pcm_product_category from pcm_product_category
+		join pcm_category on pcm_category.sid=pcm_product_category.category_sid
+		and pcm_category.category_type=0
 		<where>
 			<if test="productSid != null">
-				and product_sid = #{productSid,jdbcType=BIGINT}
+				and pcm_product_category.product_sid = #{productSid,jdbcType=BIGINT}
 			</if>
 			<if test="channelSid != null">
-				and channel_sid = #{channelSid,jdbcType=BIGINT}
+				and pcm_product_category.channel_sid = #{channelSid,jdbcType=BIGINT}
 			</if>
 			<if test="categorySid != null">
-				and category_sid = #{categorySid,jdbcType=BIGINT}
+				and pcm_product_category.category_sid = #{categorySid,jdbcType=BIGINT}
 			</if>
 		</where>
 	</delete>
 	<delete id="deleteZSCateByRecord"
 		parameterType="com.wangfj.product.category.domain.entity.PcmProductCategory">
-		delete ppc from pcm_product_category ppc
-		join pcm_category cate on cate.sid=ppc.category_sid
-		and cate.category_type=3
+		delete pcm_product_category from pcm_product_category
+		join pcm_category on pcm_category.sid=pcm_product_category.category_sid
+		and pcm_category.category_type=3
 		<where>
 			<if test="productSid != null">
-				and product_sid = #{productSid,jdbcType=BIGINT}
+				and pcm_product_category.product_sid = #{productSid,jdbcType=BIGINT}
 			</if>
 			<if test="channelSid != null">
-				and channel_sid = #{channelSid,jdbcType=BIGINT}
+				and pcm_product_category.channel_sid = #{channelSid,jdbcType=BIGINT}
 			</if>
 			<if test="categorySid != null">
-				and category_sid = #{categorySid,jdbcType=BIGINT}
+				and pcm_product_category.category_sid = #{categorySid,jdbcType=BIGINT}
 			</if>
 		</where>
 	</delete>

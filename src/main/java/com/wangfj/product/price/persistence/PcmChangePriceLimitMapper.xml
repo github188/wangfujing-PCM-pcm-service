@@ -191,7 +191,6 @@
 		SELECT COUNT(T.shop_sid) FROM
 		(SELECT shop_sid FROM `pcm_change_price_limit`
 		 <where>
-		 1=1
 		    <if test="shopSid != null">
 				and shop_sid = #{shopSid,jdbcType=VARCHAR}
 	        </if>

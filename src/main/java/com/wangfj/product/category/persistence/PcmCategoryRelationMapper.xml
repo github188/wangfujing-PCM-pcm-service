@@ -27,7 +27,6 @@
 		<include refid="Base_Column_List" />
 		from pcm_category_relation
 		<where>
-			1=1
 			<if test="sid != null">
 				and sid = #{sid,jdbcType=BIGINT}
 			</if>
@@ -110,7 +109,6 @@
 		<include refid="Base_Column_List" />
 		from pcm_category_relation
 		<where>
-			1=1
 			<if test="gyCategorySid != null">
 				and gy_category_sid = #{gyCategorySid,jdbcType=BIGINT}
 			</if>
@@ -127,7 +125,6 @@
 		<include refid="Base_Column_List" />
 		from pcm_category_relation
 		<where>
-			1=1
 			<if test="gyCategorySid != null">
 				and gy_category_sid = #{gyCategorySid,jdbcType=BIGINT}
 			</if>
@@ -146,7 +143,6 @@
 		count(sid)
 		from pcm_category_relation
 		<where>
-			1=1
 			<if test="gyCategorySid != null">
 				and gy_category_sid = #{gyCategorySid,jdbcType=BIGINT},
 			</if>

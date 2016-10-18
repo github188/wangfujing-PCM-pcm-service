@@ -62,7 +62,6 @@
 		<include refid="Base_Column_List" />
 		from pcm_category_props_dict
 		<where>
-			1=1
 			<if test="propsSid != null">
 				and props_sid = #{propsSid,jdbcType=BIGINT}
 			</if>
@@ -114,7 +113,6 @@
 		<include refid="Base_Column_List" />
 		from pcm_category_props_dict
 		<where>
-			1=1
 			<if test="propsSid != null">
 				and props_sid = #{propsSid,jdbcType=BIGINT}
 			</if>
@@ -172,7 +170,6 @@
 		channel_name
 		from pcm_category_props_dict
 		<where>
-			1=1
 			<if test="propsSid != null">
 				and props_sid = #{propsSid,jdbcType=BIGINT}
 			</if>
@@ -225,7 +222,6 @@
 		select count(sid)
 		from pcm_category_props_dict
 		<where>
-			1=1
 			<if test="propsSid != null">
 				and props_sid = #{propsSid,jdbcType=BIGINT}
 			</if>
@@ -275,7 +271,6 @@
 		select count(sid)
 		from pcm_category_props_dict
 		<where>
-			1=1
 			<if test="propsSid != null">
 				and props_sid = #{propsSid,jdbcType=BIGINT}
 			</if>
@@ -535,7 +530,6 @@
 		<include refid="Base_Column_List" />
 		from pcm_category_props_dict
 		<where>
-			1=1
 			<if test="propsSid != null">
 				and props_sid = #{propsSid,jdbcType=BIGINT}
 			</if>
@@ -588,7 +582,6 @@
 		<include refid="Base_Column_List" />
 		from pcm_category_props_dict
 		<where>
-			1=1
 			<if test="propsSid != null">
 				and props_sid = #{propsSid,jdbcType=BIGINT}
 			</if>
@@ -643,7 +636,6 @@
 		count(sid)
 		from pcm_category_props_dict
 		<where>
-			1=1
 			<if test="propsSid != null">
 				and props_sid = #{propsSid,jdbcType=BIGINT}
 			</if>
