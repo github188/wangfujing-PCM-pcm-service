@@ -283,15 +283,15 @@
 		change_type_sid,
 		ps.channel_sid,
 		pc.channel_name,
-		DATE_FORMAT(pscr.change_time,'%Y-%m-%d %H:%i:%S') as change_time
+		DATE_FORMAT(pscr.change_time,'%Y-%m-%d %H:%i:%S') as change_time,
+		pscr.sid
 		FROM
 		pcm_stock_change_record pscr
 		INNER JOIN pcm_stock
 		ps ON ps.sid =
 		pscr.stock_sid
 		INNER JOIN pcm_channel pc on
-		pc.channel_code=ps.channel_sid,
-		pscr.sid
+		pc.channel_code=ps.channel_sid
 		<where>
 			<if test="shoppeProSid != null">
 				and pscr.shoppe_pro_sid =
