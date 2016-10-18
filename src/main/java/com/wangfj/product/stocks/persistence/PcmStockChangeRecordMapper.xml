@@ -290,7 +290,8 @@
 		ps ON ps.sid =
 		pscr.stock_sid
 		INNER JOIN pcm_channel pc on
-		pc.channel_code=ps.channel_sid
+		pc.channel_code=ps.channel_sid,
+		pscr.sid
 		<where>
 			<if test="shoppeProSid != null">
 				and pscr.shoppe_pro_sid =
