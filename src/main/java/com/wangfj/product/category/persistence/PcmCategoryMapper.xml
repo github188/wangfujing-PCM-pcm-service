@@ -240,7 +240,6 @@
         from
         pcm_category
         <where>
-            1=1
             <if test="categoryType != null">
                 and category_Type = #{categoryType,jdbcType=INTEGER}
             </if>
@@ -751,7 +750,6 @@
         <include refid="Base_Column_List"/>
         from pcm_category
         <where>
-            1=1
             <if test="sid != null">
                 and sid = #{sid,jdbcType=BIGINT}
             </if>
@@ -827,7 +825,6 @@
         <include refid="Base_Column_List"/>
         from pcm_category
         <where>
-            1=1
             <if test="sid != null">
                 and sid = #{sid,jdbcType=BIGINT}
             </if>
@@ -902,7 +899,6 @@
         <include refid="Base_Column_List"/>
         from ssd_category
         <where>
-            1=1
             <if test="sid != null">
                 and sid = #{sid,jdbcType=BIGINT}
             </if>
@@ -987,7 +983,6 @@
         inner join pcm_channel as pch on
         pca.channel_sid=pch.sid
         <where>
-            1=1
             <if test="name != null">
                 and name = #{name,jdbcType=VARCHAR}
             </if>
@@ -1004,7 +999,6 @@
         <include refid="Base_Column_List"/>
         from pcm_category
         <where>
-            1=1
             <if test="name != null">
                 and name LIKE '%${name}%'
             </if>
@@ -1081,7 +1075,6 @@
         from
         pcm_category
         <where>
-            1=1
             <if test="name != null">
                 and name LIKE '%${name}%'
             </if>
@@ -1151,7 +1144,6 @@
         <include refid="Base_Column_List"/>
         from pcm_category
         <where>
-            1=1
             <if test="name != null">
                 and name = #{name,jdbcType=VARCHAR}
             </if>
@@ -1177,7 +1169,7 @@
         <include refid="Base_Column_List"/>
         from pcm_category
         <where>
-            1=1 and is_display=1
+            is_display=1
             <if test="sid != null">
                 and sid = #{sid}
             </if>
@@ -1251,7 +1243,7 @@
         <include refid="Base_Column_List"/>
         from pcm_category
         <where>
-            1=1 and is_display=1
+            is_display=1
             <if test="name != null">
                 and name LIKE '%${name}%'
             </if>
@@ -1326,7 +1318,6 @@
         count(sid)
         from pcm_category
         <where>
-            1=1
             <if test="name != null">
                 and name = #{name,jdbcType=VARCHAR}
             </if>
@@ -1403,8 +1394,7 @@
         <include refid="Base_Column_List"/>
         from pcm_category
         <where>
-            1=1
-            and is_display=1
+            is_display=1
             <if test="parent_sid != null">
                 and parent_sid = #{parent_sid,jdbcType=BIGINT}
             </if>
@@ -1489,7 +1479,6 @@
         FROM
         ssd_category
         <where>
-            1=1
             <if test="channelSid != null">
                 and channel_sid = #{channelSid,jdbcType=BIGINT}
             </if>
@@ -1548,7 +1537,6 @@
         <include refid="Base_Column_List"/>
         from pcm_category
         <where>
-            1=1
             <if test="name != null">
                 and name LIKE '%${name}%'
             </if>
@@ -1644,8 +1632,7 @@
         <include refid="Base_Column_List"/>
         from pcm_category
         <where>
-            1=1
-            and is_display=1
+            is_display=1
             <if test="name != null">
                 and name LIKE '%${name}%'
             </if>

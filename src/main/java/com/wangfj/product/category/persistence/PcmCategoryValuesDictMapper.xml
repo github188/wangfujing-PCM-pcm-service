@@ -300,7 +300,6 @@
 		as pcpv on
 		pcpd.props_sid=pcpv.props_sid
 		<where>
-			1=1
 			<if test="propsSid != null">
 				and props_sid = #{propsSid,jdbcType=BIGINT}
 			</if>
@@ -357,7 +356,6 @@
 		channel_name
 		from pcm_category_values_dict
 		<where>
-			1=1
 			<if test="sid != null">
 				and sid = #{sid,jdbcType=BIGINT}
 			</if>
@@ -400,7 +398,6 @@
 		select count(sid)
 		from pcm_category_values_dict
 		<where>
-			1=1
 			<if test="sid != null">
 				and sid = #{sid,jdbcType=BIGINT}
 			</if>
@@ -443,7 +440,6 @@
 		<include refid="Base_Column_List" />
 		from pcm_category_values_dict
 		<where>
-			1=1
 			<if test="valuesSid != null">
 				and values_sid = #{valuesSid,jdbcType=BIGINT}
 			</if>
@@ -483,7 +479,6 @@
 		<include refid="Base_Column_List" />
 		from pcm_category_values_dict
 		<where>
-			1=1
 			<if test="valuesSid != null">
 				and values_sid = #{valuesSid,jdbcType=BIGINT},
 			</if>
@@ -526,7 +521,6 @@
 		count(sid)
 		from pcm_category_values_dict
 		<where>
-			1=1
 			<if test="valuesSid != null">
 				and values_sid = #{valuesSid,jdbcType=BIGINT},
 			</if>

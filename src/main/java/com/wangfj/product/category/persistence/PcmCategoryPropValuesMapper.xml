@@ -382,7 +382,6 @@
 		<include refid="Base_Column_List" />
 		from pcm_category_prop_values
 		<where>
-			1=1
 			<if test="sid != null">
 				and sid = #{sid,jdbcType=BIGINT}
 			</if>
@@ -430,7 +429,6 @@
 		<include refid="Base_Column_List" />
 		from pcm_category_prop_values
 		<where>
-			1=1
 			<if test="sid != null">
 				and sid = #{sid,jdbcType=BIGINT}
 			</if>
@@ -479,7 +477,6 @@
 		select count(sid)
 		from pcm_category_prop_values
 		<where>
-			1=1
 			<if test="sid != null">
 				and sid = #{sid,jdbcType=BIGINT}
 			</if>
@@ -528,7 +525,6 @@
 		props_sid,props_name,category_name,category_sid,channel_sid,not_null
 		from pcm_category_prop_values
 		<where>
-			1=1
 			<if test="categorySid != null">
 				and category_sid = #{categorySid,jdbcType=VARCHAR}
 			</if>
@@ -560,7 +556,6 @@
 		where
 		pc.category_sid in (categorySids)
 		<where>
-			1=1
 			<if test="categorySid != null">
 				and pc.category_sid in (categorySids)
 			</if>
@@ -621,7 +616,6 @@
 		select count(distinct props_sid)
 		from pcm_category_prop_values
 		<where>
-			1=1
 			<if test="categorySid != null">
 				and category_sid = #{categorySid,jdbcType=VARCHAR}
 			</if>
@@ -646,7 +640,6 @@
 		<include refid="Base_Column_List" />
 		from pcm_category_prop_values
 		<where>
-			1=1
 			<if test="propsSid != null">
 				and props_sid = #{propsSid,jdbcType=BIGINT}
 			</if>
@@ -661,7 +654,6 @@
 		parameterType="java.util.Map">
 		select values_sid,values_name from pcm_category_prop_values
 		<where>
-			1=1
 			<if test="categorySid != null">
 				and category_sid = #{categorySid,jdbcType=VARCHAR}
 			</if>
@@ -687,7 +679,6 @@
 		<include refid="Base_Column_List" />
 		from pcm_category_prop_values
 		<where>
-			1=1
 			<if test="categorySid != null">
 				and category_sid = #{categorySid,jdbcType=VARCHAR}
 			</if>
@@ -734,7 +725,6 @@
 		<include refid="Base_Column_List" />
 		from pcm_category_prop_values
 		<where>
-			1=1
 			<if test="categorySid != null">
 				and category_sid = #{categorySid,jdbcType=VARCHAR}
 			</if>
@@ -783,7 +773,6 @@
 		count(sid)
 		from pcm_category_prop_values
 		<where>
-			1=1
 			<if test="categorySid != null">
 				and category_sid = #{categorySid,jdbcType=VARCHAR}
 			</if>
@@ -837,7 +826,6 @@
 		INNER JOIN pcm_channel as pch ON
 		pd.channel_sid=pch.sid
 		<where>
-			1=1
 			<if test="categorySid != null">
 				and category_sid = #{categorySid,jdbcType=VARCHAR}
 			</if>

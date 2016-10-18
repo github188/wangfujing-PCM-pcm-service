@@ -186,7 +186,6 @@
 		<include refid="Base_Column_List" />
 		from pcm_stock_change_record
 		<where>
-			1=1
 			<if test="billsNo != null">
 				and bills_no = #{billsNo,jdbcType=VARCHAR}
 			</if>
