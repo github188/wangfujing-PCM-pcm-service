@@ -324,7 +324,7 @@
 	<select id="selectStockChangeHisRecordbyStockTypeCount"
 		resultType="java.lang.Integer"
 		parameterType="com.wangfj.product.stocks.domain.vo.PcmStockChangeRecordHisDto">
-		SELECT count(sid)
+		SELECT count(pscr.sid)
 		FROM
 		pcm_stock_change_record pscr
 		INNER JOIN pcm_stock
