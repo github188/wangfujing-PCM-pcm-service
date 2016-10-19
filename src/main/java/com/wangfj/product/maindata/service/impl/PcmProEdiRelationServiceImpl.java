@@ -245,6 +245,7 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 						ZKlock.unlock();
 					}
 				} else if (ediProDto.getActionCode().equals(Constants.U)) {
+					dto.setSubStock(ediProDto.getIsPayReduceStock());
 					dto.setProNum(null);
 					PcmShoppeProductEdiRelation proEdi = new PcmShoppeProductEdiRelation();
 					proEdi.setChannelCode(ediProDto.getChannelCode());

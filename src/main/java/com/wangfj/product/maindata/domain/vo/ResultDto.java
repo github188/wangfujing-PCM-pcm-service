@@ -6,6 +6,15 @@ public class ResultDto {
 	private String channelCode; // 渠道编码 否 string
 	private String proNum; // 推送库存数量 是 string
 	private String status; // EDI是否可创建该商品关联关系（1：可创建，0：不可创建）
+	private String subStock;// 支付减，拍下减
+
+	public String getSubStock() {
+		return subStock;
+	}
+
+	public void setSubStock(String subStock) {
+		this.subStock = subStock;
+	}
 
 	public String getNumIid() {
 		return numIid;
@@ -50,7 +59,8 @@ public class ResultDto {
 	@Override
 	public String toString() {
 		return "ResultDto [numIid=" + numIid + ", outerId=" + outerId + ", channelCode="
-				+ channelCode + ", proNum=" + proNum + ", status=" + status + "]";
+				+ channelCode + ", proNum=" + proNum + ", status=" + status + ", subStock="
+				+ subStock + "]";
 	}
 
 }
