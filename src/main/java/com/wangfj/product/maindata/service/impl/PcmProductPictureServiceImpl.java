@@ -218,7 +218,7 @@ public class PcmProductPictureServiceImpl implements IPcmProductPictureService {
 							ErrorCode.PICTURE_NOT_ONLY.getMemo());
 				} else {
 					PcmProDetail record = new PcmProDetail();
-					record.setProductSid(Long.parseLong(dto.getProductCode()));
+					record.setProductSid(Long.parseLong(dto.getProductCode()) - Constants.SPU_CODE);
 					record.setProColorSid(Long.valueOf(dto.getColorCode()));
 					record.setPhotoStatus(3);
 					int i = skuMapper.updatePhotoStatusByProSidColorSid(record);
@@ -541,9 +541,9 @@ public class PcmProductPictureServiceImpl implements IPcmProductPictureService {
 			record.setProductSid((Long.parseLong(dto.getProductCode()) - Constants.SPU_CODE));
 			record.setProColorSid(Long.valueOf(dto.getColor()));
 			List<PcmProDetail> skuList = skuMapper.selectListByParam(record);
-			record.setProductSid(Long.parseLong(dto.getProductCode()));
 			if (skuList != null && skuList.size() > 0) {
 				if (skuList.get(0).getPhotoStatus() != 4) {
+					record.setProductSid(skuList.get(0).getProductSid());
 					if (dto.getStatus() != null) {
 						record.setPhotoStatus(dto.getStatus());
 					}
@@ -551,6 +551,7 @@ public class PcmProductPictureServiceImpl implements IPcmProductPictureService {
 						record.setPhotoPlanSid(dto.getPhotoPlanSid());
 					}
 					int i = skuMapper.updatePhotoStatusByProSidColorSid(record);
+
 					if (i == 0) {
 						throw new BleException(ErrorCode.DATA_OPER_ERROR.getErrorCode(),
 								ErrorCode.DATA_OPER_ERROR.getMemo());

@@ -648,9 +648,7 @@
 	<!--修改图片状态 -->
 	<update id="updatePhotoStatusByProSidColorSid"
 		parameterType="com.wangfj.product.maindata.domain.entity.PcmProDetail">
-		update pcm_pro_detail sku
-		join pcm_product spu on
-		spu.sid=sku.product_sid
+		update pcm_pro_detail 
 		<set>
 			<if test="photoStatus != null">
 				photo_status = #{photoStatus,jdbcType=INTEGER},
@@ -659,7 +657,7 @@
 				photo_plan_sid = #{photoPlanSid,jdbcType=INTEGER},
 			</if>
 		</set>
-		where spu.product_sid = #{productSid,jdbcType=BIGINT}
+		where product_sid = #{productSid,jdbcType=BIGINT}
 		and
 		pro_color_sid = #{proColorSid,jdbcType=BIGINT}
 	</update>
