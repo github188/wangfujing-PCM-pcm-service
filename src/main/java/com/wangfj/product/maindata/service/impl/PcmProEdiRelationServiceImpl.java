@@ -245,6 +245,7 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 						ZKlock.unlock();
 					}
 				} else if (ediProDto.getActionCode().equals(Constants.U)) {
+					dto.setProNum(null);
 					PcmShoppeProductEdiRelation proEdi = new PcmShoppeProductEdiRelation();
 					proEdi.setChannelCode(ediProDto.getChannelCode());
 					proEdi.setShoppeProSid(ediProDto.getShoppeProCode());
@@ -262,6 +263,10 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 							dto.setStatus("0");// 数据库错误
 							errorMag = "update数据库错误";
 						}
+					} else {
+						dto.setStatus("0");// 该商品不存在
+						errorMag = ediProDto.getShoppeProCode() + ediProDto.getEDIProCode()
+								+ "该商品不存在";
 					}
 				} else if (ediProDto.getActionCode().equals(Constants.D)) {
 					if (ediProDto.getShoppeProCode().equals("")
