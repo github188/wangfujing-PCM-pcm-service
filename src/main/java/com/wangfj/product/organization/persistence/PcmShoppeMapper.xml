@@ -1446,11 +1446,13 @@
         SELECT
         ps.shoppe_code AS counterCode,
         ps.shoppe_name AS counterName,
+        ps.industry_condition_sid AS businessType,
         ps.negative_stock AS negativeStock,
         po.organization_code AS storeCode,
         po.organization_name AS storeName,
         psi.supply_code AS supplyCode,
-        psi.supply_name AS supplyName
+        psi.supply_name AS supplyName,
+        psi.business_pattern AS businessPattern
         FROM
         pcm_shoppe ps
         INNER JOIN pcm_organization po ON ps.shop_sid = po.sid

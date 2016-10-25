@@ -2,81 +2,108 @@ package com.wangfj.product.organization.domain.vo;
 
 public class PcmPadShoppeResultDto {
 
-	private String storeCode;// 门店编码
+    private String storeCode;// 门店编码
 
-	private String storeName;// 门店名称
+    private String storeName;// 门店名称
 
-	private String negativeStock;// 是否库存销售
+    private String businessType;//业态(0百货, 1超市,2电商)
 
-	private String counterCode;// 专柜编码
+    private String negativeStock;// 是否库存销售
 
-	private String counterName;// 专柜名称
+    private String counterCode;// 专柜编码
 
-	private String supplyCode;// 供应商编码
+    private String counterName;// 专柜名称
 
-	private String supplyName;// 供应商名称
+    private String supplyCode;// 供应商编码
 
-	public String getStoreCode() {
-		return storeCode;
-	}
+    private String supplyName;// 供应商名称
 
-	public void setStoreCode(String storeCode) {
-		this.storeCode = storeCode;
-	}
+    private String businessPattern;//商品经营方式:0-(Z001 经销);1-(Z002 代销);2-(Z003 联营);3-(Z004 平台服务);4-(Z005 租赁);
 
-	public String getStoreName() {
-		return storeName;
-	}
+    public String getStoreCode() {
+        return storeCode;
+    }
 
-	public void setStoreName(String storeName) {
-		this.storeName = storeName;
-	}
+    public void setStoreCode(String storeCode) {
+        this.storeCode = storeCode;
+    }
 
-	public String getCounterCode() {
-		return counterCode;
-	}
+    public String getStoreName() {
+        return storeName;
+    }
 
-	public void setCounterCode(String counterCode) {
-		this.counterCode = counterCode;
-	}
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
 
-	public String getCounterName() {
-		return counterName;
-	}
+    public String getCounterCode() {
+        return counterCode;
+    }
 
-	public void setCounterName(String counterName) {
-		this.counterName = counterName;
-	}
+    public void setCounterCode(String counterCode) {
+        this.counterCode = counterCode;
+    }
 
-	public String getNegativeStock() {
-		return negativeStock;
-	}
+    public String getCounterName() {
+        return counterName;
+    }
 
-	public void setNegativeStock(String negativeStock) {
-		this.negativeStock = negativeStock;
-	}
+    public void setCounterName(String counterName) {
+        this.counterName = counterName;
+    }
 
-	public String getSupplyCode() {
-		return supplyCode;
-	}
+    public String getNegativeStock() {
+        return negativeStock;
+    }
 
-	public void setSupplyCode(String supplyCode) {
-		this.supplyCode = supplyCode;
-	}
+    public void setNegativeStock(String negativeStock) {
+        this.negativeStock = negativeStock;
+    }
 
-	public String getSupplyName() {
-		return supplyName;
-	}
+    public String getSupplyCode() {
+        return supplyCode;
+    }
 
-	public void setSupplyName(String supplyName) {
-		this.supplyName = supplyName;
-	}
+    public void setSupplyCode(String supplyCode) {
+        this.supplyCode = supplyCode;
+    }
 
-	@Override
-	public String toString() {
-		return "PcmPadShoppeResultDto{" + "storeCode='" + storeCode + '\'' + ", storeName='"
-				+ storeName + '\'' + ", negativeStock='" + negativeStock + '\'' + ", counterCode='"
-				+ counterCode + '\'' + ", counterName='" + counterName + '\'' + ", supplyCode='"
-				+ supplyCode + '\'' + ", supplyName='" + supplyName + '\'' + '}';
-	}
+    public String getSupplyName() {
+        return supplyName;
+    }
+
+    public void setSupplyName(String supplyName) {
+        this.supplyName = supplyName;
+    }
+
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
+    }
+
+    public String getBusinessPattern() {
+        return businessPattern;
+    }
+
+    public void setBusinessPattern(String businessPattern) {
+        this.businessPattern = businessPattern;
+    }
+
+    @Override
+    public String toString() {
+        return "PcmPadShoppeResultDto{" +
+                "storeCode='" + storeCode + '\'' +
+                ", storeName='" + storeName + '\'' +
+                ", businessType='" + businessType + '\'' +
+                ", negativeStock='" + negativeStock + '\'' +
+                ", counterCode='" + counterCode + '\'' +
+                ", counterName='" + counterName + '\'' +
+                ", supplyCode='" + supplyCode + '\'' +
+                ", supplyName='" + supplyName + '\'' +
+                ", businessPattern='" + businessPattern + '\'' +
+                '}';
+    }
 }
