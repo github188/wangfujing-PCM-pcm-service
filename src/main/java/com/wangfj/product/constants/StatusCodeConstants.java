@@ -12,8 +12,16 @@ public class StatusCodeConstants {
 		EXCEPTION_REGION("00112001","行政区域"),
 		EXCEPTION_PRICE("00300001","价格"),
 		EXCEPTION_STOCK("00301101","库存"),
-		EXCEPTION_REDIS("00302001","Redis");
+		EXCEPTION_REDIS("00302001","Redis"),
 
+		EDITYPE_CREATERELATION("0","创建订单时推库存"),
+		EDITYPE_GOODSUPDATE("1","商品更新时退库存"),
+		EDITYPE_INCREMENTFROMSAP("2","SAP全量推送库存"),
+		EDITYPE_PULLFORMSAP("3","SAP增量推送库存"),
+		EDITYPE_REDUCTIONFROMORDER("4","OMS订单减库存"),
+		EDITYPE_LOCKFROMORDER("5","OMS订单锁定库存"),
+		EDITYPE_INCREMENTFROMORDER("6","OMS未支付订单取消后，还PCM库存");
+		
 		private String status;
 		private String comment;
 		private StatusCode(){}
