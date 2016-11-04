@@ -4101,7 +4101,9 @@
 		psp.is_stock AS isStock,
 		psp.shoppe_pro_sid,
 		pse.negative_stock AS negative,
-		po.organization_code as storeCode
+		po.organization_code as storeCode,
+		pse.sid AS shoppeSid,
+		po.sid AS shopSid
 		FROM pcm_shoppe_product AS psp
 		JOIN pcm_shoppe AS pse ON psp.shoppe_sid = pse.sid
 		JOIN pcm_organization as po on po.sid=pse.shop_sid
