@@ -2043,6 +2043,14 @@
 		AND
 		c.category_type = 0
 		AND c.`status` = 'Y'
+		AND psp.field5 IN (
+			SELECT
+				org.organization_code
+			FROM
+				pcm_organization AS org
+			WHERE
+				org.organization_type = 3
+		)
 		<where>
 			<if test="color != null">
 				<if test="spuSid != null">
