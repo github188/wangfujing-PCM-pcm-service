@@ -22,6 +22,7 @@ import com.wangfj.product.maindata.domain.entity.PcmShoppeProduct;
 import com.wangfj.product.maindata.domain.entity.PcmShoppeProductEdiRelation;
 import com.wangfj.product.maindata.domain.vo.EdiProDto;
 import com.wangfj.product.maindata.domain.vo.PcmEdiProductStockDto;
+import com.wangfj.product.maindata.domain.vo.QueryEdiProStockDto;
 import com.wangfj.product.maindata.domain.vo.QueryEdiProductStockDto;
 import com.wangfj.product.maindata.domain.vo.ResultDto;
 import com.wangfj.product.maindata.persistence.PcmShoppeProductEdiRelationMapper;
@@ -30,6 +31,7 @@ import com.wangfj.product.maindata.service.intf.IPcmProEdiRelationService;
 import com.wangfj.product.organization.domain.entity.PcmChannelSaleConfig;
 import com.wangfj.product.organization.persistence.PcmChannelSaleConfigMapper;
 import com.wangfj.product.stocks.domain.entity.PcmStock;
+import com.wangfj.product.stocks.domain.vo.EdiStockDto;
 import com.wangfj.product.stocks.persistence.PcmStockMapper;
 import com.wangfj.util.Constants;
 
@@ -140,13 +142,14 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 											if (Constants.PCMSTOCK_ISPUSH_EDI.equals("1")) {
 												PcmStock entity1 = new PcmStock();
 												entity1.setShoppeProSid(ediList.get(0).getField1());
-												entity1.setStockTypeSid(Constants.PCMSTOCK_TYPE_SALE);
+												entity1.setStockTypeSid(
+														Constants.PCMSTOCK_TYPE_SALE);
 												entity1.setChannelSid("0");
 												List<PcmStock> stock1 = stockMapper
 														.selectListByParam(entity1);
 												if (stock1 != null && stock1.size() > 0) {
-													dto.setProNum(stock1.get(0).getProSum()
-															.toString());
+													dto.setProNum(
+															stock1.get(0).getProSum().toString());
 												}
 											} else {
 												dto.setProNum(stock.get(0).getProSum().toString());
@@ -217,11 +220,11 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 									}
 								}
 								if (errorMag == null) {
-									proEdi.setIsPayReducestock(Integer.parseInt(ediProDto
-											.getIsPayReduceStock()));
+									proEdi.setIsPayReducestock(
+											Integer.parseInt(ediProDto.getIsPayReduceStock()));
 									if (StringUtils.isNotBlank(ediProDto.getIsPresell())) {
-										proEdi.setIsPresell(Integer.parseInt(ediProDto
-												.getIsPresell()));
+										proEdi.setIsPresell(
+												Integer.parseInt(ediProDto.getIsPresell()));
 									}
 									SimpleDateFormat df = new SimpleDateFormat(
 											"yyyy-MM-dd HH:mm:ss");
@@ -257,8 +260,8 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 					if (proEdiList != null && proEdiList.size() > 0) {
 						PcmShoppeProductEdiRelation proEdi_1 = new PcmShoppeProductEdiRelation();
 						proEdi_1.setSid(proEdiList.get(0).getSid());
-						proEdi_1.setIsPayReducestock(Integer.parseInt(ediProDto
-								.getIsPayReduceStock()));
+						proEdi_1.setIsPayReducestock(
+								Integer.parseInt(ediProDto.getIsPayReduceStock()));
 						int u = proEdiMapper.updateByPrimaryKeySelective(proEdi_1);
 						if (u == 0) {
 							dto.setStatus("0");// 数据库错误
@@ -318,6 +321,54 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 	}
 
 	/**
+	 * 根据专柜商品查询渠道商品的库存信息--推送EDI带推送原因
+	 * 
+	 * @Methods Name selectEdiProStockInfo
+	 * @Create In 2016年1月21日 By kongqf
+	 * @param dto
+	 * @return List<PcmEdiProductStockDto>
+	 */
+	@Override
+	public List<PcmEdiProductStockDto> selectEdiProStockInfo(QueryEdiProStockDto dto) {
+		List<PcmEdiProductStockDto> resultList = new ArrayList<PcmEdiProductStockDto>();
+		List<PcmEdiProductStockDto> tempList = null;
+		QueryEdiProductStockDto query = null;
+		if (dto != null && dto.getShoppeProSids().size() > 0) {
+			for (EdiStockDto ediStockDto : dto.getShoppeProSids()) {
+				query = new QueryEdiProductStockDto();
+				query.setShoppeProSid(ediStockDto.getProSid());
+				tempList = new ArrayList<PcmEdiProductStockDto>();
+				tempList = proEdiMapper.selectEdiProtListByProCode(query);
+				PcmEdiProductStockDto result = new PcmEdiProductStockDto();
+
+				if (tempList != null && tempList.size() > 0) {
+					for (PcmEdiProductStockDto tempDto : tempList) {
+						try {
+							result = getEdiStockList(tempDto, dto.getChannelCode());
+						} catch (Exception e) {
+							result = null;
+							PcmExceptionLogDto pcmExceptionLogDto = new PcmExceptionLogDto();
+							pcmExceptionLogDto.setInterfaceName("pushstocktoedi");
+							pcmExceptionLogDto
+									.setExceptionType(StatusCode.EXCEPTION_STOCK.getStatus());
+							pcmExceptionLogDto.setErrorMessage(e.getMessage());
+							pcmExceptionLogDto.setDataContent(JsonUtil.getJSONString(tempDto));
+							pcmExceptionLogDto.setUuid(UUID.randomUUID().toString());
+							pcmExceptionLogService.saveExceptionLogInfo(pcmExceptionLogDto);
+						}
+						if (result != null) {
+							result.setField3(ediStockDto.getType());
+							result.setField4(ediStockDto.getRemerks());
+							resultList.add(result);
+						}
+					}
+				}
+			}
+		}
+		return resultList;
+	}
+
+	/**
 	 * 根据专柜商品查询渠道商品的库存信息
 	 * 
 	 * @Methods Name selectEdiProStockInfo
@@ -346,8 +397,8 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 							result = null;
 							PcmExceptionLogDto pcmExceptionLogDto = new PcmExceptionLogDto();
 							pcmExceptionLogDto.setInterfaceName("pushstocktoedi");
-							pcmExceptionLogDto.setExceptionType(StatusCode.EXCEPTION_STOCK
-									.getStatus());
+							pcmExceptionLogDto
+									.setExceptionType(StatusCode.EXCEPTION_STOCK.getStatus());
 							pcmExceptionLogDto.setErrorMessage(e.getMessage());
 							pcmExceptionLogDto.setDataContent(JsonUtil.getJSONString(tempDto));
 							pcmExceptionLogDto.setUuid(UUID.randomUUID().toString());
@@ -395,7 +446,8 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 	}
 
 	@Override
-	public List<PcmEdiProductStockDto> selectEdiProStockInfoByChannelId(QueryEdiProductStockDto dto) {
+	public List<PcmEdiProductStockDto> selectEdiProStockInfoByChannelId(
+			QueryEdiProductStockDto dto) {
 		List<PcmEdiProductStockDto> resultList = new ArrayList<PcmEdiProductStockDto>();
 		List<PcmEdiProductStockDto> tempList = null;
 		QueryEdiProductStockDto query = null;
@@ -416,8 +468,8 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 							result = null;
 							PcmExceptionLogDto pcmExceptionLogDto = new PcmExceptionLogDto();
 							pcmExceptionLogDto.setInterfaceName("pushstocktoedi");
-							pcmExceptionLogDto.setExceptionType(StatusCode.EXCEPTION_STOCK
-									.getStatus());
+							pcmExceptionLogDto
+									.setExceptionType(StatusCode.EXCEPTION_STOCK.getStatus());
 							pcmExceptionLogDto.setErrorMessage(e.getMessage());
 							pcmExceptionLogDto.setDataContent(JsonUtil.getJSONString(tempDto));
 							pcmExceptionLogDto.setUuid(UUID.randomUUID().toString());
@@ -432,4 +484,5 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 		}
 		return resultList;
 	}
+
 }
