@@ -26,7 +26,7 @@ public class PcmPushSupplyInfoDto extends BaseDto {
 
     private Date lastOptDates;// 操作时间
 
-    private String shopSid;// 门店sid(组织结构编码)
+    private String shopSid;// 门店编码
 
     private String supplyCode;// 供应商编码
 
