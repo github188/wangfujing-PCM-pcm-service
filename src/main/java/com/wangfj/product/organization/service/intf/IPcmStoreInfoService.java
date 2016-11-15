@@ -15,6 +15,8 @@ public interface IPcmStoreInfoService {
 
 	public List<PcmStoreInfo> selectListByParam(PcmStoreInfo storeInfo);
 
+	public boolean getPublish(String storeCode);
+
 	/**
 	 * 门店信息分页查询
 	 *

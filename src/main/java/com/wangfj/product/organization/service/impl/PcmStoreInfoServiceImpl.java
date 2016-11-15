@@ -32,6 +32,21 @@ public class PcmStoreInfoServiceImpl implements IPcmStoreInfoService {
 		return storeInfoMapper.selectListByParam(storeInfo);
 	}
 
+	public boolean getPublish(String storeCode) {
+		PcmStoreInfo storeInfo = new PcmStoreInfo();
+		storeInfo.setStoreCode(storeCode);
+		List<PcmStoreInfo> storeList = selectListByParam(storeInfo);
+		if (storeList != null && storeList.size() > 0) {
+			if (storeList.get(0).getField5().equals("1")) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	}
+
 	/**
 	 * 门店信息分页查询
 	 *
