@@ -73,6 +73,8 @@ public class PcmProEdiRelationServiceImpl implements IPcmProEdiRelationService {
 			dto.setNumIid(ediProDto.getEDIProCode());
 			dto.setOuterId(ediProDto.getShoppeProCode());
 			dto.setChannelCode(ediProDto.getChannelCode());
+			dto.setType(ediProDto.getType());
+			dto.setRemerks(ediProDto.getRemerks());
 			dto.setProNum("0");
 			dto.setStatus("1");
 			if (ediProDto.getActionCode().equals(Constants.A)) {

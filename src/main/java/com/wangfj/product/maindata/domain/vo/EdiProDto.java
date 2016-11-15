@@ -9,6 +9,24 @@ public class EdiProDto {
 	private String actionCode;// 操作类型
 	private String actionDate;// 操作时间
 	private String actionPerson;// 操作人
+	private String type;
+	private String remerks;
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getRemerks() {
+		return remerks;
+	}
+
+	public void setRemerks(String remerks) {
+		this.remerks = remerks;
+	}
 
 	public String getShoppeProCode() {
 		return shoppeProCode;
@@ -76,10 +94,11 @@ public class EdiProDto {
 
 	@Override
 	public String toString() {
-		return "EdiProPara [shoppeProCode=" + shoppeProCode + ", EDIProCode=" + EDIProCode
+		return "EdiProDto [shoppeProCode=" + shoppeProCode + ", EDIProCode=" + EDIProCode
 				+ ", channelCode=" + channelCode + ", isPresell=" + isPresell
 				+ ", isPayReduceStock=" + isPayReduceStock + ", actionCode=" + actionCode
-				+ ", actionDate=" + actionDate + ", actionPerson=" + actionPerson + "]";
+				+ ", actionDate=" + actionDate + ", actionPerson=" + actionPerson + ", type=" + type
+				+ ", remerks=" + remerks + "]";
 	}
 
 }

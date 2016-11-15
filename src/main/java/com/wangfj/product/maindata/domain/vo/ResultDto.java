@@ -7,6 +7,24 @@ public class ResultDto {
 	private String proNum; // 推送库存数量 是 string
 	private String status; // EDI是否可创建该商品关联关系（1：可创建，0：不可创建）
 	private String subStock;// 支付减，拍下减
+	private String type;
+	private String remerks;
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getRemerks() {
+		return remerks;
+	}
+
+	public void setRemerks(String remerks) {
+		this.remerks = remerks;
+	}
 
 	public String getSubStock() {
 		return subStock;
@@ -60,7 +78,7 @@ public class ResultDto {
 	public String toString() {
 		return "ResultDto [numIid=" + numIid + ", outerId=" + outerId + ", channelCode="
 				+ channelCode + ", proNum=" + proNum + ", status=" + status + ", subStock="
-				+ subStock + "]";
+				+ subStock + ", type=" + type + ", remerks=" + remerks + "]";
 	}
 
 }

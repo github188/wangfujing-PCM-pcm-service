@@ -543,8 +543,8 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		pp.setAttribute2(createShoppePro.getShopCode());// 门店编码
 		// pp.setProductSid(Long.valueOf(spuCode));// SPU编码
 		// 价格开始,结束时间
-		pp.setPromotionBeginTime(DateUtil.formatDate(DateUtil.formatToStr(new Date(), "yyyyMMdd"),
-				"yyyyMMdd")); // 开始时间
+		pp.setPromotionBeginTime(
+				DateUtil.formatDate(DateUtil.formatToStr(new Date(), "yyyyMMdd"), "yyyyMMdd")); // 开始时间
 		pp.setPromotionEndTime(DateUtil.formatDate("99991231235959", "yyyyMMddHHmmss"));// 结束时间
 		pp.setPriceType(Constants.PRICE_TYPE_1);// 永久变价
 		pp.setAttribute1(Constants.DEFAULT_CHANGE_CODE);// 变价号
@@ -752,9 +752,8 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		}
 		// 判断专柜状态
 		if (shoppeList.get(0).getShoppeStatus() == null
-				|| shoppeList.get(0).getShoppeStatus() != Constants.PUBLIC_1
-				|| shoppeList.get(0).getIndustryConditionSid() != Integer.parseInt(dataDto
-						.getType())) {
+				|| shoppeList.get(0).getShoppeStatus() != Constants.PUBLIC_1 || shoppeList.get(0)
+						.getIndustryConditionSid() != Integer.parseInt(dataDto.getType())) {
 			throw new BleException(ErrorCode.SHOPPE_STATUS_ERROR.getErrorCode(),
 					ErrorCode.SHOPPE_STATUS_ERROR.getMemo());
 		}
@@ -774,15 +773,15 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 					ErrorCode.SUPPLYINFO_NULL.getMemo());
 		}
 		// 判断供应商状态
-		if (supplyInfoList.get(0).getStatus() == null
-				|| !supplyInfoList.get(0).getStatus().equals(Constants.PCMSUPPLYINFO_STATUS_Y_CODE)) {
+		if (supplyInfoList.get(0).getStatus() == null || !supplyInfoList.get(0).getStatus()
+				.equals(Constants.PCMSUPPLYINFO_STATUS_Y_CODE)) {
 			throw new BleException(ErrorCode.SUPPLYINFO_STATUS_ERROR.getErrorCode(),
 					ErrorCode.SUPPLYINFO_STATUS_ERROR.getMemo());
 		}
 		// 判断供应商经营方式
 		if (supplyInfoList.get(0).getBusinessPattern() == null
-				|| !String.valueOf(supplyInfoList.get(0).getBusinessPattern()).equals(
-						dataDto.getOperateMode())) {
+				|| !String.valueOf(supplyInfoList.get(0).getBusinessPattern())
+						.equals(dataDto.getOperateMode())) {
 			throw new BleException(ErrorCode.SUPPLYINFO_BUSSINESS_ERROR.getErrorCode(),
 					ErrorCode.SUPPLYINFO_BUSSINESS_ERROR.getMemo());
 		}
@@ -1009,7 +1008,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 	@Transactional
 	public PcmShoppeProduct updateSProductBySProductCode2(PullDataDto dataDto,
 			PcmShoppeProductExtend extendDto, String shoppeProSid) {
-		logger.error("updateSProductBySProductCode2() start");
+		logger.info("updateSProductBySProductCode2() start");
 		NotEmptyCheck(dataDto);// 参数校验
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		// 查询专柜商品信息
@@ -1061,17 +1060,16 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 								ErrorCode.SUPPLYINFO_NULL.getMemo());
 					}
 					// 判断供应商状态
-					if (supplyInfoList.get(0).getStatus() == null
-							|| !supplyInfoList.get(0).getStatus()
-									.equals(Constants.PCMSUPPLYINFO_STATUS_Y_CODE)) {
+					if (supplyInfoList.get(0).getStatus() == null || !supplyInfoList.get(0)
+							.getStatus().equals(Constants.PCMSUPPLYINFO_STATUS_Y_CODE)) {
 						logger.error(ErrorCode.SUPPLYINFO_STATUS_ERROR.getMemo());
 						throw new BleException(ErrorCode.SUPPLYINFO_STATUS_ERROR.getErrorCode(),
 								ErrorCode.SUPPLYINFO_STATUS_ERROR.getMemo());
 					}
 					// 判断供应商经营方式
 					if (supplyInfoList.get(0).getBusinessPattern() == null
-							|| !String.valueOf(supplyInfoList.get(0).getBusinessPattern()).equals(
-									dataDto.getOperateMode())) {
+							|| !String.valueOf(supplyInfoList.get(0).getBusinessPattern())
+									.equals(dataDto.getOperateMode())) {
 						logger.error(ErrorCode.SUPPLYINFO_BUSSINESS_ERROR.getMemo());
 						throw new BleException(ErrorCode.SUPPLYINFO_BUSSINESS_ERROR.getErrorCode(),
 								ErrorCode.SUPPLYINFO_BUSSINESS_ERROR.getMemo());
@@ -1122,17 +1120,16 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 								ErrorCode.SUPPLYINFO_NULL.getMemo());
 					}
 					// 判断供应商状态
-					if (supplyInfoList.get(0).getStatus() == null
-							|| !supplyInfoList.get(0).getStatus()
-									.equals(Constants.PCMSUPPLYINFO_STATUS_Y_CODE)) {
+					if (supplyInfoList.get(0).getStatus() == null || !supplyInfoList.get(0)
+							.getStatus().equals(Constants.PCMSUPPLYINFO_STATUS_Y_CODE)) {
 						logger.error(ErrorCode.SUPPLYINFO_STATUS_ERROR.getMemo());
 						throw new BleException(ErrorCode.SUPPLYINFO_STATUS_ERROR.getErrorCode(),
 								ErrorCode.SUPPLYINFO_STATUS_ERROR.getMemo());
 					}
 					// 判断供应商经营方式
 					if (supplyInfoList.get(0).getBusinessPattern() == null
-							|| !String.valueOf(supplyInfoList.get(0).getBusinessPattern()).equals(
-									dataDto.getOperateMode())) {
+							|| !String.valueOf(supplyInfoList.get(0).getBusinessPattern())
+									.equals(dataDto.getOperateMode())) {
 						logger.error(ErrorCode.SUPPLYINFO_BUSSINESS_ERROR.getMemo());
 						throw new BleException(ErrorCode.SUPPLYINFO_BUSSINESS_ERROR.getErrorCode(),
 								ErrorCode.SUPPLYINFO_BUSSINESS_ERROR.getMemo());
@@ -1180,8 +1177,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 			int res = pspsMapper.insertSelective(psps);
 			if (res != 1) {
 				logger.error(ErrorCode.SHOPPEPRODUCT_SUPPLY_RELATION_ERROR.getMemo());
-				throw new BleException(
-						ErrorCode.SHOPPEPRODUCT_SUPPLY_RELATION_ERROR.getErrorCode(),
+				throw new BleException(ErrorCode.SHOPPEPRODUCT_SUPPLY_RELATION_ERROR.getErrorCode(),
 						ErrorCode.SHOPPEPRODUCT_SUPPLY_RELATION_ERROR.getMemo());
 			}
 			psp.setSupplySid(psps.getSupplySid());// 设置专柜商品主供应商
@@ -1252,7 +1248,7 @@ public class PcmCreateProductServiceImpl implements IPcmCreateProductService {
 		pspe.setField10(newtime);// 修改时间，当前时间
 		pspe.setSid(sid);// 扩展表sid
 		dsProMapper.updateByPrimaryKeySelective(pspe);
-		logger.error("updateSProductBySProductCode2 end");
+		logger.info("updateSProductBySProductCode2 end");
 		return result.get(0);
 	}
 
