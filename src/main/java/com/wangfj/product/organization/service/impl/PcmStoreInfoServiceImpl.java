@@ -29,10 +29,14 @@ public class PcmStoreInfoServiceImpl implements IPcmStoreInfoService {
     private static final Logger logger = LoggerFactory.getLogger(PcmStoreInfoServiceImpl.class);
 
     public List<PcmStoreInfo> selectListByParam(PcmStoreInfo storeInfo) {
-        return storeInfoMapper.selectListByParam(storeInfo);
+        logger.info("start com.wangfj.product.organization.service.impl.PcmStoreInfoServiceImpl#selectListByParam(),para:" + storeInfo.toString());
+        List<PcmStoreInfo> storeInfoList = storeInfoMapper.selectListByParam(storeInfo);
+        logger.info("end com.wangfj.product.organization.service.impl.PcmStoreInfoServiceImpl#selectListByParam(),return:" + storeInfoList.toString());
+        return storeInfoList;
     }
 
     public boolean getPublish(String storeCode) {
+        logger.info("start com.wangfj.product.organization.service.impl.PcmStoreInfoServiceImpl#getPublish(),para:" + storeCode);
         PcmStoreInfo storeInfo = new PcmStoreInfo();
         storeInfo.setStoreCode(storeCode);
         List<PcmStoreInfo> storeList = selectListByParam(storeInfo);
