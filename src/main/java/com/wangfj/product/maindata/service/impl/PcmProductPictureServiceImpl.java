@@ -223,9 +223,9 @@ public class PcmProductPictureServiceImpl implements IPcmProductPictureService {
 					record.setPhotoStatus(3);
 					int i = skuMapper.updatePhotoStatusByProSidColorSid(record);
 					if (i == 0) {
-						throw new BleException(ErrorCode.PRODUCT_IS_NULL.getErrorCode(), "产品:"
-								+ dto.getProductCode() + ",色系:" + dto.getColorCode() + "-----"
-								+ ErrorCode.PRODUCT_IS_NULL.getMemo());
+						throw new BleException(ErrorCode.PRODUCT_IS_NULL.getErrorCode(),
+								"产品:" + dto.getProductCode() + ",色系:" + dto.getColorCode() + "-----"
+										+ ErrorCode.PRODUCT_IS_NULL.getMemo());
 					}
 				}
 			}
@@ -412,9 +412,11 @@ public class PcmProductPictureServiceImpl implements IPcmProductPictureService {
 		ProSkuSpuPublishDto proSkuSpu = new ProSkuSpuPublishDto();
 		String falg = "3";
 		for (PcmPictureUrlDto dto : dtoList) {
-			PcmPictureUrl entity = pcmPictureUrlMapper.selectByPrimaryKey(Long.parseLong(dto
-					.getSid()));
-			redisSpuCMSSHopperInfo(entity.getSkuSid());
+			PcmPictureUrl entity = pcmPictureUrlMapper
+					.selectByPrimaryKey(Long.parseLong(dto.getSid()));
+			if (entity != null) {
+				redisSpuCMSSHopperInfo(entity.getSkuSid());
+			}
 			if (dto.getUrl() != null && dto.getUrl() != "") {// 如果url存在，设置主图，修改其他主图标记，修改缩略图为无效，生成新缩略图
 				try {
 					Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -558,9 +560,9 @@ public class PcmProductPictureServiceImpl implements IPcmProductPictureService {
 					}
 				}
 			} else {
-				throw new BleException(ErrorCode.PRODUCT_IS_NULL.getErrorCode(), "产品:"
-						+ dto.getProductCode() + ",色系:" + dto.getColor() + "-----"
-						+ ErrorCode.PRODUCT_IS_NULL.getMemo());
+				throw new BleException(ErrorCode.PRODUCT_IS_NULL.getErrorCode(),
+						"产品:" + dto.getProductCode() + ",色系:" + dto.getColor() + "-----"
+								+ ErrorCode.PRODUCT_IS_NULL.getMemo());
 			}
 		}
 	}
